@@ -278,6 +278,96 @@
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== Aurora background pulse ===== */
+  body:before{
+    content:'';position:fixed;inset:-20%;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(600px 400px at 20% 30%, rgba(255,126,182,.35), transparent 60%),
+      radial-gradient(500px 400px at 80% 70%, rgba(133,190,219,.4), transparent 60%),
+      radial-gradient(700px 500px at 60% 20%, rgba(255,184,108,.25), transparent 60%);
+    animation:aurora 14s ease-in-out infinite alternate;
+    filter:blur(20px);
+  }
+  @keyframes aurora{
+    0%{transform:translate(0,0) rotate(0)}
+    50%{transform:translate(-3%,2%) rotate(2deg)}
+    100%{transform:translate(3%,-2%) rotate(-2deg)}
+  }
+
+  /* ===== Sparkles ===== */
+  .sparkle{
+    position:fixed;pointer-events:none;font-size:18px;z-index:8;
+    animation:sparkleAnim .9s ease-out forwards;will-change:transform,opacity;
+  }
+  @keyframes sparkleAnim{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(0) rotate(0)}
+    30%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(120deg)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(360deg)}
+  }
+
+  /* ===== Floating hearts (result) ===== */
+  .float-heart{
+    position:absolute;bottom:-40px;font-size:34px;
+    animation:floatUp linear forwards;will-change:transform,opacity;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}
+    10%{opacity:1}
+    100%{transform:translateY(-110vh) translateX(var(--dx,40px)) rotate(360deg);opacity:0}
+  }
+
+  /* ===== Question text wiggle ===== */
+  .question{animation:slideDown .6s ease, qWiggle 3.5s ease-in-out infinite 1s}
+  @keyframes qWiggle{
+    0%,100%{transform:rotate(0)}
+    25%{transform:rotate(-1.2deg)}
+    75%{transform:rotate(1.2deg)}
+  }
+
+  /* ===== Yes pulse-grow effect ===== */
+  .btn-yes.pulse{animation:glow 1.6s ease-in-out infinite, yesPulse .5s ease}
+  @keyframes yesPulse{
+    0%{transform:translate(-50%,-50%) scale(1)}
+    50%{transform:translate(-50%,-50%) scale(1.25)}
+    100%{transform:translate(-50%,-50%) scale(1)}
+  }
+
+  /* ===== No shake when it dodges ===== */
+  .btn-no.shake{animation:noShake .35s ease}
+  @keyframes noShake{
+    0%,100%{transform:scale(var(--ns,1)) rotate(0)}
+    25%{transform:scale(var(--ns,1)) rotate(-15deg)}
+    75%{transform:scale(var(--ns,1)) rotate(15deg)}
+  }
+
+  /* ===== Wheel speed lines while spinning ===== */
+  .wheel-wrap.spinning:after{
+    content:'';position:absolute;inset:-12px;border-radius:50%;
+    border:3px dashed rgba(255,77,141,.3);
+    animation:wheelHalo 1.2s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes wheelHalo{to{transform:rotate(360deg)}}
+
+  /* ===== Sound toggle button ===== */
+  .sound-toggle{
+    position:fixed;top:14px;right:14px;z-index:1001;
+    width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(8px);
+    box-shadow:0 6px 18px -4px rgba(70,130,180,.4);
+    font-size:22px;display:flex;align-items:center;justify-content:center;
+    transition:transform .2s;
+  }
+  .sound-toggle:hover{transform:scale(1.1)}
+  .sound-toggle.on{background:linear-gradient(135deg,#ff7eb6,#ffb86c);color:#fff}
+
+  /* ===== Result yay shake-bounce ===== */
+  .yay{animation:rainbow 3s linear infinite, bounceIn 1s cubic-bezier(.3,1.6,.5,1), yayShake 2s ease-in-out infinite 1s}
+  @keyframes yayShake{
+    0%,100%{letter-spacing:0}
+    50%{letter-spacing:4px}
+  }
+
   /* Mobile tweaks */
   @media (max-width:480px){
     .typed{font-size:18px;min-height:140px}
@@ -290,6 +380,7 @@
 </head>
 <body>
 
+<button class="sound-toggle" id="soundToggle" title="Musik latar">🔇</button>
 <div class="bubbles" id="bubbles"></div>
 
 <!-- INTRO -->
@@ -404,29 +495,120 @@ function ac(){
   }
   return audioCtx;
 }
-function beep(freq, dur, type='sine', vol=.15){
+function beep(freq, dur, type='sine', vol=.15, when=0){
   const c = ac(); if(!c) return;
+  const t0 = c.currentTime + when;
   const o = c.createOscillator(), g = c.createGain();
-  o.type = type; o.frequency.value = freq;
-  g.gain.value = vol;
+  o.type = type; o.frequency.setValueAtTime(freq, t0);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0+0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
   o.connect(g); g.connect(c.destination);
-  o.start();
-  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+dur);
-  o.stop(c.currentTime+dur);
+  o.start(t0); o.stop(t0+dur+0.02);
+}
+// Tone sweep (slide between two freqs)
+function sweep(f1, f2, dur, type='sine', vol=.12){
+  const c = ac(); if(!c) return;
+  const t0 = c.currentTime;
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(f1, t0);
+  o.frequency.exponentialRampToValueAtTime(f2, t0+dur);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(t0); o.stop(t0+dur+0.02);
+}
+// Noise burst (for confetti/poof)
+function noise(dur=.2, vol=.08, freq=2000){
+  const c = ac(); if(!c) return;
+  const buf = c.createBuffer(1, c.sampleRate*dur, c.sampleRate);
+  const data = buf.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i] = (Math.random()*2-1) * (1 - i/data.length);
+  const src = c.createBufferSource(); src.buffer = buf;
+  const filt = c.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = freq; filt.Q.value = 0.7;
+  const g = c.createGain(); g.gain.value = vol;
+  src.connect(filt); filt.connect(g); g.connect(c.destination);
+  src.start(); src.stop(c.currentTime+dur);
 }
 function soundNo(){
-  // descending sad "yahhh"
-  beep(440,.12,'sawtooth',.1);
-  setTimeout(()=>beep(330,.18,'sawtooth',.1),100);
-  setTimeout(()=>beep(220,.25,'sawtooth',.1),250);
+  // sad descending "yahhh" + woosh
+  sweep(500, 180, .35, 'sawtooth', .1);
+  setTimeout(()=>noise(.15, .04, 800), 50);
+}
+function soundBoing(){
+  // bouncy boing for No moving
+  sweep(180, 600, .12, 'sine', .12);
+  setTimeout(()=>sweep(600, 380, .1, 'sine', .1), 100);
 }
 function soundYes(){
-  // happy fanfare
-  const notes = [523, 659, 784, 1047];
-  notes.forEach((f,i)=>setTimeout(()=>beep(f,.18,'triangle',.16), i*100));
-  setTimeout(()=>{ beep(1047,.4,'triangle',.18); beep(1318,.4,'sine',.12); }, 450);
+  // celebratory ascending arpeggio
+  const notes = [523, 659, 784, 1047, 1319];
+  notes.forEach((f,i)=>beep(f,.16,'triangle',.16, i*0.07));
+  // fanfare top
+  setTimeout(()=>{ beep(1047,.5,'triangle',.18); beep(1568,.5,'sine',.1); beep(2093,.5,'sine',.06); }, 400);
 }
-function soundClick(){ beep(800,.05,'square',.06); }
+function soundClick(){ beep(880,.05,'square',.06); }
+function soundPop(){ sweep(1200, 400, .08, 'sine', .1); }
+function soundDrumroll(dur=1.5){
+  // rapid noise hits accelerating
+  const c = ac(); if(!c) return;
+  let t = 0, gap = .12;
+  while(t < dur){
+    setTimeout(()=>noise(.04, .07, 200), t*1000);
+    gap = Math.max(.02, gap*0.92);
+    t += gap;
+  }
+}
+function soundTaDa(){
+  // ta-da! result reveal
+  beep(523,.18,'triangle',.16);
+  beep(659,.18,'triangle',.16, .12);
+  beep(880,.5,'triangle',.18, .25);
+  beep(1319,.5,'sine',.1, .25);
+}
+function soundHeartbeat(){
+  // double thump
+  sweep(120, 60, .12, 'sine', .15);
+  setTimeout(()=>sweep(120, 60, .12, 'sine', .12), 220);
+}
+function soundSparkle(){
+  // shimmery up sweep + high tinkle
+  const notes = [1568, 1865, 2349, 3136];
+  notes.forEach((f,i)=>beep(f, .1, 'sine', .07, i*0.05));
+}
+// Optional ambient pad (off by default — user can toggle)
+let ambient = null;
+function ambientStart(){
+  const c = ac(); if(!c || ambient) return;
+  const g = c.createGain(); g.gain.value = 0; g.connect(c.destination);
+  const oscs = [261.63, 329.63, 392.0].map(f=>{
+    const o = c.createOscillator(); o.type='sine'; o.frequency.value=f;
+    const og = c.createGain(); og.gain.value = .04;
+    o.connect(og); og.connect(g); o.start();
+    // slow detune drift for a "floaty" pad feel
+    const lfo = c.createOscillator(); lfo.frequency.value = 0.1 + Math.random()*0.2;
+    const lfoG = c.createGain(); lfoG.gain.value = 2;
+    lfo.connect(lfoG); lfoG.connect(o.detune); lfo.start();
+    return {o, og, lfo};
+  });
+  g.gain.linearRampToValueAtTime(0.5, c.currentTime + 1.5);
+  ambient = { g, oscs };
+}
+function ambientStop(){
+  if(!ambient) return;
+  const c = ac();
+  ambient.g.gain.linearRampToValueAtTime(0, c.currentTime + 0.8);
+  setTimeout(()=>{
+    ambient.oscs.forEach(({o,lfo})=>{ try{o.stop();}catch{} try{lfo.stop();}catch{} });
+    ambient = null;
+  }, 1000);
+}
+function ambientToggle(){
+  if(ambient) ambientStop(); else ambientStart();
+  return !!ambient;
+}
 
 /* ======================================================
  * INTRO TYPING
@@ -468,9 +650,39 @@ document.getElementById('intro').addEventListener('click', (e)=>{
 startBtn.addEventListener('click',()=>{
   ac(); // unlock audio on user gesture
   soundClick();
+  soundSparkle();
+  burstSparkles(window.innerWidth/2, window.innerHeight/2, 12);
   document.getElementById('intro').style.display='none';
   document.getElementById('game').classList.add('show');
 });
+
+// Sound toggle button
+const soundToggle = document.getElementById('soundToggle');
+soundToggle.addEventListener('click', ()=>{
+  ac();
+  const on = ambientToggle();
+  soundToggle.textContent = on ? '🎵' : '🔇';
+  soundToggle.classList.toggle('on', on);
+  soundClick();
+});
+
+// Sparkle burst helper (visual)
+const sparkleEmojis = ['✨','💫','⭐','🌟','💖','💕'];
+function burstSparkles(x, y, count=8){
+  for(let i=0;i<count;i++){
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = sparkleEmojis[Math.floor(Math.random()*sparkleEmojis.length)];
+    const angle = Math.random()*Math.PI*2;
+    const dist = 40 + Math.random()*80;
+    const dx = Math.cos(angle)*dist, dy = Math.sin(angle)*dist;
+    s.style.left = (x+dx)+'px';
+    s.style.top  = (y+dy)+'px';
+    s.style.fontSize = (14 + Math.random()*16)+'px';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 950);
+  }
+}
 
 /* ======================================================
  * MAIN GAME LOGIC
@@ -581,8 +793,16 @@ function makeNoMoveOnHover(){
   const taunt = noTaunts[Math.min(noClicks-1, noTaunts.length-1)].replace('{n}', noClicks);
   counter.textContent = taunt;
   counter.classList.remove('bump'); void counter.offsetWidth; counter.classList.add('bump');
-  // sound
-  soundNo();
+  // sound — alternate for variety
+  if(noClicks % 3 === 0) soundBoing(); else soundNo();
+  // burst sparkles around YES button (it just grew!)
+  const yr = btnYes.getBoundingClientRect();
+  burstSparkles(yr.left + yr.width/2, yr.top + yr.height/2, 6);
+  // pulse the yes button
+  btnYes.classList.remove('pulse'); void btnYes.offsetWidth; btnYes.classList.add('pulse');
+  // shake the no
+  btnNo.style.setProperty('--ns', noScale);
+  btnNo.classList.remove('shake'); void btnNo.offsetWidth; btnNo.classList.add('shake');
   // move
   setTimeout(moveNoButton, 0);
   // sub-question evolves
@@ -606,8 +826,11 @@ btnNo.addEventListener('click',(e)=>{
   makeNoMoveOnHover();
 });
 
-btnYes.addEventListener('click',()=>{
+btnYes.addEventListener('click',(e)=>{
   soundClick();
+  soundSparkle();
+  const r = btnYes.getBoundingClientRect();
+  burstSparkles(r.left + r.width/2, r.top + r.height/2, 18);
   startSpinner();
 });
 
@@ -722,15 +945,22 @@ function startSpinner(){
 
   // tick sound while spinning (slows down)
   let lastTick = 0;
-  function maybeTick(t, eased){
-    // tick rate slows as spinning slows
+  let drumrolled = false;
+  function maybeTick(t, eased, p){
     const speed = 1 - eased;
-    const interval = 60 + (1-speed)*300; // ms
+    const interval = 60 + (1-speed)*300;
     if(t - lastTick > interval){
       beep(900 + Math.random()*200, .03, 'square', .04);
       lastTick = t;
     }
+    // drumroll near the end
+    if(!drumrolled && p > 0.78){
+      drumrolled = true;
+      soundDrumroll(1.6);
+    }
   }
+  // wheel halo while spinning
+  document.querySelector('.wheel-wrap').classList.add('spinning');
 
   // ease-out cubic
   function easeOutCubic(p){ return 1 - Math.pow(1-p, 3); }
@@ -752,7 +982,7 @@ function startSpinner(){
     const eased = easeOutCubic(p);
     const rot = finalRot * eased;
     wheel.style.transform = `rotate(${rot}deg)`;
-    maybeTick(now, eased);
+    maybeTick(now, eased, p);
     // status text every ~1.4s
     const idx = Math.min(messages.length-1, Math.floor(p * messages.length));
     if(idx !== lastMsg){
@@ -769,7 +999,9 @@ function startSpinner(){
 
   function finishSpin(idx){
     spinning = false;
-    soundYes();
+    document.querySelector('.wheel-wrap').classList.remove('spinning');
+    soundTaDa();
+    setTimeout(soundSparkle, 300);
     const outfit = OUTFITS[idx];
     resultVal.textContent = outfit.emoji + ' ' + outfit.name + ' ' + outfit.emoji;
     resultVal.classList.add('show');
@@ -785,6 +1017,11 @@ function startSpinner(){
       ss.appendChild(c);
       setTimeout(()=>c.remove(), 5000);
     }
+    // sparkle bursts around the result
+    setTimeout(()=>{
+      const rect = resultVal.getBoundingClientRect();
+      burstSparkles(rect.left + rect.width/2, rect.top + rect.height/2, 24);
+    }, 200);
   }
 }
 
@@ -801,6 +1038,32 @@ const result = document.getElementById('result');
 const yaySub = document.getElementById('yaySub');
 function showResult(){
   result.classList.add('show');
+  // grand finale sounds
+  soundTaDa();
+  setTimeout(soundYes, 400);
+  setTimeout(soundSparkle, 800);
+  // heartbeat thumps
+  let beats = 0;
+  const hb = setInterval(()=>{ soundHeartbeat(); if(++beats >= 3) clearInterval(hb); }, 700);
+  // burst sparkles all over the screen
+  for(let i=0;i<5;i++){
+    setTimeout(()=>{
+      burstSparkles(Math.random()*window.innerWidth, Math.random()*window.innerHeight, 10);
+    }, i*250);
+  }
+  // floating hearts
+  for(let i=0;i<25;i++){
+    const h = document.createElement('div');
+    h.className = 'float-heart';
+    h.textContent = ['❤️','💕','💖','💗','💞','💘','💝','🌹','🥰'][Math.floor(Math.random()*9)];
+    h.style.left = Math.random()*100+'vw';
+    h.style.fontSize = (24 + Math.random()*30)+'px';
+    h.style.animationDuration = (4 + Math.random()*4)+'s';
+    h.style.animationDelay = (Math.random()*2)+'s';
+    h.style.setProperty('--dx', ((Math.random()-.5)*200)+'px');
+    result.appendChild(h);
+    setTimeout(()=>h.remove(), 9000);
+  }
   // confetti
   for(let i=0;i<80;i++){
     const c = document.createElement('div');
@@ -848,7 +1111,7 @@ document.getElementById('restartBtn').addEventListener('click',()=>{
   counter.textContent = '';
   document.querySelector('.sub-question').textContent = 'Boleh ya? please pleaseeee 🙏✨';
   // remove confetti & rain
-  result.querySelectorAll('.confetti, .emoji-rain').forEach(n=>n.remove());
+  result.querySelectorAll('.confetti, .emoji-rain, .float-heart').forEach(n=>n.remove());
   result.classList.remove('show');
   // reset spinner state
   document.getElementById('spinResultValue').classList.remove('show');
