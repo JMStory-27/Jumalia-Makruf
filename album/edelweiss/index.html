@@ -675,6 +675,12 @@
     gate.dataset.opened = '1';
     gate.classList.add('opening');
 
+    // CRITICAL: start audio FIRST (synchronous within click gesture window)
+    // before any heavy DOM work, so browsers don't reject the autoplay.
+    if (audioPlayerApi && audioPlayerApi.startPlayback) {
+      audioPlayerApi.startPlayback();
+    }
+
     // Burst of hearts in random directions from the center
     const heartChars = ['❤','💕','💖','💗','💝','♡'];
     for (let i = 0; i < 18; i++) {
@@ -705,11 +711,6 @@
       c.style.animationDelay = (Math.random() * 0.3) + 's';
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3200);
-    }
-
-    // Start audio playback (this click is a guaranteed user gesture, so unmuted autoplay works)
-    if (audioPlayerApi && audioPlayerApi.startPlayback) {
-      audioPlayerApi.startPlayback();
     }
 
     // Fade out the gate after the envelope opening animation completes
@@ -826,11 +827,29 @@
     ['click','touchstart','pointerdown','keydown'].forEach(ev =>
       window.addEventListener(ev, gestureStart, { passive: true }));
     const startPlayback = async () => {
+      // iOS Safari trick: try muted play first to unlock the audio context,
+      // then unmute. This works around stricter autoplay policies on mobile.
       try {
-        await audio.play();
-        onPlayingSuccess();
+        audio.muted = false;
+        audio.volume = 0.6;
+        const p = audio.play();
+        if (p && p.then) {
+          p.then(onPlayingSuccess).catch(async () => {
+            // Try muted-unlock fallback
+            try {
+              audio.muted = true;
+              await audio.play();
+              audio.muted = false;
+              onPlayingSuccess();
+            } catch {
+              fab.classList.add('attention');
+              showHint('🔊 Tap tombol musik buat putar lagu', 8000);
+            }
+          });
+        } else {
+          onPlayingSuccess();
+        }
       } catch (e) {
-        // Autoplay blocked — make the FAB pulse + show banner asking user to tap.
         fab.classList.add('attention');
         showHint('🔊 Tap tombol musik buat putar lagu', 8000);
       }
