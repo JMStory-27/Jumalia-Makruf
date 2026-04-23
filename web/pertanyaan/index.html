@@ -136,8 +136,8 @@
     background:linear-gradient(135deg,#ff4d8d 0%,#ff7eb6 100%);
     color:#fff;
     padding:0;
-    width:160px;height:160px;
-    font-size:32px;
+    width:90px;height:90px;
+    font-size:18px;
     box-shadow:0 14px 30px -6px rgba(255,77,141,.6), 0 0 0 0 rgba(255,77,141,.5);
     animation:glow 1.6s ease-in-out infinite;
     z-index:5;
@@ -201,6 +201,72 @@
     box-shadow:0 8px 20px -6px rgba(0,0,0,.2);
   }
 
+  /* ===== Spinner wheel screen ===== */
+  #spinScreen{
+    display:none;position:absolute;inset:0;flex-direction:column;
+    align-items:center;justify-content:center;z-index:25;padding:20px;
+    background:linear-gradient(180deg,#dff1ff 0%, #b6dffb 100%);
+  }
+  #spinScreen.show{display:flex;animation:fadeIn .5s}
+  .spin-title{
+    font-family:'Caveat',cursive;font-size:clamp(30px,6vw,46px);
+    text-align:center;color:#1d3557;
+    text-shadow:2px 2px 0 #fff;margin-bottom:6px;
+  }
+  .spin-sub{font-size:15px;color:#456787;text-align:center;margin-bottom:16px;font-weight:500}
+  .wheel-wrap{
+    position:relative;width:min(360px,88vw);aspect-ratio:1/1;
+    filter:drop-shadow(0 14px 28px rgba(70,130,180,.35));
+  }
+  .wheel{
+    width:100%;height:100%;border-radius:50%;
+    transform:rotate(0deg);
+    transition:none;
+    background:#fff;
+    border:8px solid #fff;
+    box-shadow:inset 0 0 0 4px rgba(255,255,255,.6);
+  }
+  .pointer{
+    position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+    width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;
+    border-top:32px solid #ff4d8d;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,.3));
+    z-index:3;
+  }
+  .wheel-center{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:54px;height:54px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #fff, #ffd1dc);
+    box-shadow:0 4px 10px rgba(0,0,0,.25), inset 0 -3px 6px rgba(0,0,0,.1);
+    z-index:2;display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+  }
+  .spin-result{
+    margin-top:24px;text-align:center;min-height:90px;
+  }
+  .spin-result-label{font-size:15px;color:#456787;font-weight:500}
+  .spin-result-value{
+    font-family:'Caveat',cursive;font-size:clamp(36px,8vw,56px);
+    background:linear-gradient(135deg,#ff4d8d,#ffb86c);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-weight:700;line-height:1.1;margin-top:6px;
+    opacity:0;transform:scale(.5);
+    transition:all .5s cubic-bezier(.3,1.6,.5,1);
+  }
+  .spin-result-value.show{opacity:1;transform:scale(1)}
+  .spin-status{
+    font-size:14px;color:#d6336c;font-weight:600;margin-top:10px;
+    min-height:20px;
+  }
+  .spin-cta{
+    margin-top:20px;display:none;
+    padding:12px 28px;border:none;border-radius:999px;cursor:pointer;
+    background:linear-gradient(135deg,#ff7eb6,#ffb86c);color:#fff;
+    font-family:inherit;font-weight:600;font-size:16px;
+    box-shadow:0 8px 20px -6px rgba(255,126,182,.6);
+  }
+  .spin-cta.show{display:inline-block;animation:pop .4s cubic-bezier(.3,1.6,.5,1)}
+
   /* Toast */
   .toast{
     position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
@@ -249,6 +315,23 @@
     <button class="btn btn-yes" id="btnYes">YA 🔥</button>
     <button class="btn btn-no" id="btnNo">Tidak</button>
   </div>
+</div>
+
+<!-- SPINNER -->
+<div id="spinScreen">
+  <div class="spin-title">🎰 Roda Takdir Mode Baju 🎰</div>
+  <div class="spin-sub">Lagi muter... 10 detik lagi sayanggg 💕</div>
+  <div class="wheel-wrap">
+    <div class="pointer"></div>
+    <svg class="wheel" id="wheel" viewBox="0 0 200 200"></svg>
+    <div class="wheel-center">💖</div>
+  </div>
+  <div class="spin-result">
+    <div class="spin-result-label">Hari ini istriku pakai...</div>
+    <div class="spin-result-value" id="spinResultValue">???</div>
+    <div class="spin-status" id="spinStatus">Memutar takdir... 🌀</div>
+  </div>
+  <button class="spin-cta" id="spinCta">Lanjutt 🔥</button>
 </div>
 
 <!-- RESULT -->
@@ -421,21 +504,55 @@ const noTaunts = [
 ];
 const yesLabels = ['YA 🔥','YA SAYANG! 💖','IYA DONG! 😘','MAU BANGET! 🥰','YAAA! 💕','YES! 🎉'];
 
+function rectsOverlap(a, b, pad=8){
+  return !(a.right+pad < b.left || a.left > b.right+pad ||
+           a.bottom+pad < b.top || a.top > b.bottom+pad);
+}
 function moveNoButton(){
   const area = playArea.getBoundingClientRect();
   const btn  = btnNo.getBoundingClientRect();
+  const yes  = btnYes.getBoundingClientRect();
   const padding = 10;
-  const maxX = area.width  - btn.width  - padding;
-  const maxY = area.height - btn.height - padding;
+  const w = btn.width, h = btn.height;
+  const maxX = area.width  - w - padding;
+  const maxY = area.height - h - padding;
   if(maxX <= 0 || maxY <= 0) return;
-  // pick a random position inside play area, but bias away from current
-  let nx, ny, tries=0;
-  do{
+  // candidate rect in viewport coords (since we use position:absolute relative to playArea)
+  let nx, ny, tries = 0;
+  let ok = false;
+  while(tries < 60 && !ok){
     nx = padding + Math.random()*maxX;
     ny = padding + Math.random()*maxY;
+    const candidate = {
+      left:   area.left + nx,
+      top:    area.top  + ny,
+      right:  area.left + nx + w,
+      bottom: area.top  + ny + h,
+    };
+    // must NOT overlap the YES button (with margin)
+    if(!rectsOverlap(candidate, yes, 14)) ok = true;
     tries++;
-  }while(tries<5 && Math.abs(nx-(btn.left-area.left))<60 && Math.abs(ny-(btn.top-area.top))<60);
-  btnNo.style.transform = 'none';
+  }
+  if(!ok){
+    // fallback: place along the edge furthest from yes button
+    const yesCx = (yes.left + yes.right)/2 - area.left;
+    const yesCy = (yes.top  + yes.bottom)/2 - area.top;
+    // try corners
+    const corners = [
+      {x:padding, y:padding},
+      {x:maxX,    y:padding},
+      {x:padding, y:maxY},
+      {x:maxX,    y:maxY},
+    ];
+    let best = corners[0], bestD = -1;
+    for(const c of corners){
+      const cx = c.x + w/2, cy = c.y + h/2;
+      const d = (cx-yesCx)**2 + (cy-yesCy)**2;
+      if(d > bestD){ bestD = d; best = c; }
+    }
+    nx = best.x; ny = best.y;
+  }
+  btnNo.style.transform = 'scale('+noScale+')';
   btnNo.style.left = nx+'px';
   btnNo.style.top  = ny+'px';
 }
@@ -454,12 +571,12 @@ function makeNoMoveOnHover(){
   } else {
     btnYes.textContent = yesLabels[yesLabels.length-1];
   }
-  // resize yes
-  const baseW = window.innerWidth < 480 ? 130 : 160;
-  const newSize = Math.min(280, baseW * yesScale);
+  // resize yes — start small, grow with each rejection
+  const baseW = window.innerWidth < 480 ? 80 : 90;
+  const newSize = Math.min(300, baseW * yesScale);
   btnYes.style.width = newSize+'px';
   btnYes.style.height= newSize+'px';
-  btnYes.style.fontSize = (24 + noClicks*1.5) + 'px';
+  btnYes.style.fontSize = Math.min(40, 16 + noClicks*1.6) + 'px';
   // counter
   const taunt = noTaunts[Math.min(noClicks-1, noTaunts.length-1)].replace('{n}', noClicks);
   counter.textContent = taunt;
@@ -490,7 +607,190 @@ btnNo.addEventListener('click',(e)=>{
 });
 
 btnYes.addEventListener('click',()=>{
-  soundYes();
+  soundClick();
+  startSpinner();
+});
+
+/* ======================================================
+ * SPINNER WHEEL — 8 outfits, equal probability, 10s spin
+ * ====================================================== */
+const OUTFITS = [
+  { name: 'BAJU SEKOLAH (SMK)', emoji: '🎒', color: '#ff8fa3' },
+  { name: 'BAJU PRAMUKA',       emoji: '🏕️', color: '#7ed957' },
+  { name: 'DASTER PINK',        emoji: '🌸', color: '#ff6fb5' },
+  { name: 'GAMIS PUTIH',        emoji: '🤍', color: '#e9ecef' },
+  { name: 'DASTER OREN',        emoji: '🍊', color: '#ffa94d' },
+  { name: 'GAMIS HITAM',        emoji: '🖤', color: '#495057' },
+  { name: 'GAMIS MOCCA',        emoji: '☕', color: '#b08968' },
+  { name: 'ROK PUTIH',          emoji: '👗', color: '#ffd6e0' },
+];
+
+function buildWheel(){
+  const svg = document.getElementById('wheel');
+  svg.innerHTML = '';
+  const n = OUTFITS.length;
+  const angle = 360 / n;
+  const cx = 100, cy = 100, r = 98;
+  // slices
+  for(let i=0;i<n;i++){
+    const a1 = (i*angle - 90) * Math.PI/180;
+    const a2 = ((i+1)*angle - 90) * Math.PI/180;
+    const x1 = cx + r*Math.cos(a1), y1 = cy + r*Math.sin(a1);
+    const x2 = cx + r*Math.cos(a2), y2 = cy + r*Math.sin(a2);
+    const large = angle > 180 ? 1 : 0;
+    const path = `M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2} Z`;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d', path);
+    p.setAttribute('fill', OUTFITS[i].color);
+    p.setAttribute('stroke','#fff');
+    p.setAttribute('stroke-width','1.2');
+    svg.appendChild(p);
+    // label
+    const mid = (i*angle + angle/2 - 90) * Math.PI/180;
+    const lr = r*0.62;
+    const lx = cx + lr*Math.cos(mid), ly = cy + lr*Math.sin(mid);
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('transform', `translate(${lx},${ly}) rotate(${i*angle + angle/2})`);
+    const emo = document.createElementNS('http://www.w3.org/2000/svg','text');
+    emo.setAttribute('text-anchor','middle');
+    emo.setAttribute('y','-5');
+    emo.setAttribute('font-size','13');
+    emo.textContent = OUTFITS[i].emoji;
+    g.appendChild(emo);
+    // short label (split into max 2 lines)
+    const words = OUTFITS[i].name.split(' ');
+    const lines = [];
+    if(words.length <= 2) lines.push(words.join(' '));
+    else { lines.push(words[0]); lines.push(words.slice(1).join(' ')); }
+    lines.forEach((ln, k)=>{
+      const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('text-anchor','middle');
+      t.setAttribute('y', (8 + k*8) + '');
+      t.setAttribute('font-size','6.2');
+      t.setAttribute('font-weight','700');
+      t.setAttribute('fill','#1d3557');
+      t.setAttribute('font-family','Fredoka, sans-serif');
+      t.textContent = ln;
+      g.appendChild(t);
+    });
+    svg.appendChild(g);
+  }
+}
+buildWheel();
+
+let spinning = false;
+function startSpinner(){
+  if(spinning) return;
+  spinning = true;
+  // hide game
+  document.getElementById('game').classList.remove('show');
+  document.getElementById('game').style.display = 'none';
+  // show spinner
+  const ss = document.getElementById('spinScreen');
+  ss.classList.add('show');
+
+  const wheel = document.getElementById('wheel');
+  const resultVal = document.getElementById('spinResultValue');
+  const status = document.getElementById('spinStatus');
+  const cta = document.getElementById('spinCta');
+
+  // FAIR pick: cryptographic randomness, equal probability for each slice
+  const n = OUTFITS.length;
+  let pick;
+  if(window.crypto && crypto.getRandomValues){
+    const buf = new Uint32Array(1);
+    // rejection sampling for true uniform distribution
+    const limit = Math.floor(0xFFFFFFFF / n) * n;
+    do { crypto.getRandomValues(buf); } while(buf[0] >= limit);
+    pick = buf[0] % n;
+  } else {
+    pick = Math.floor(Math.random()*n);
+  }
+
+  const sliceAngle = 360/n;
+  // pointer is at top (12 o'clock). slice i occupies angles [i*sliceAngle, (i+1)*sliceAngle]
+  // we want the MIDDLE of slice `pick` to be at the top after rotation.
+  // wheel rotation R means slice i center is at (i*sliceAngle + sliceAngle/2 + R) mod 360.
+  // We need that == 0 (mod 360) → R = -(pick*sliceAngle + sliceAngle/2) (mod 360)
+  const targetCenter = pick * sliceAngle + sliceAngle/2;
+  const baseRot = (360 - (targetCenter % 360)) % 360;
+  const extraSpins = 8; // 8 full rotations for drama
+  const finalRot = extraSpins*360 + baseRot;
+
+  const duration = 10000; // 10 seconds
+  const start = performance.now();
+
+  // tick sound while spinning (slows down)
+  let lastTick = 0;
+  function maybeTick(t, eased){
+    // tick rate slows as spinning slows
+    const speed = 1 - eased;
+    const interval = 60 + (1-speed)*300; // ms
+    if(t - lastTick > interval){
+      beep(900 + Math.random()*200, .03, 'square', .04);
+      lastTick = t;
+    }
+  }
+
+  // ease-out cubic
+  function easeOutCubic(p){ return 1 - Math.pow(1-p, 3); }
+
+  const messages = [
+    'Memutar takdir... 🌀',
+    'Hmm... mode apa ya... 🤔',
+    'Suspense banget nih 😱',
+    'Bentar lagi keluar... ⏳',
+    'Deg-degan ga? 💗',
+    'Tinggal dikit lagi... 🥁',
+    'Hampirrrr 🎉',
+  ];
+  let lastMsg = -1;
+
+  function frame(now){
+    const elapsed = now - start;
+    const p = Math.min(1, elapsed/duration);
+    const eased = easeOutCubic(p);
+    const rot = finalRot * eased;
+    wheel.style.transform = `rotate(${rot}deg)`;
+    maybeTick(now, eased);
+    // status text every ~1.4s
+    const idx = Math.min(messages.length-1, Math.floor(p * messages.length));
+    if(idx !== lastMsg){
+      status.textContent = messages[idx];
+      lastMsg = idx;
+    }
+    if(p < 1){
+      requestAnimationFrame(frame);
+    } else {
+      finishSpin(pick);
+    }
+  }
+  requestAnimationFrame(frame);
+
+  function finishSpin(idx){
+    spinning = false;
+    soundYes();
+    const outfit = OUTFITS[idx];
+    resultVal.textContent = outfit.emoji + ' ' + outfit.name + ' ' + outfit.emoji;
+    resultVal.classList.add('show');
+    status.textContent = 'TAKDIR TELAH BERBICARA 🔥💕';
+    cta.classList.add('show');
+    // confetti burst
+    for(let i=0;i<60;i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100+'vw';
+      c.style.background = `hsl(${Math.random()*360},90%,65%)`;
+      c.style.animationDuration = (2 + Math.random()*2)+'s';
+      ss.appendChild(c);
+      setTimeout(()=>c.remove(), 5000);
+    }
+  }
+}
+
+document.getElementById('spinCta').addEventListener('click', ()=>{
+  soundClick();
+  document.getElementById('spinScreen').classList.remove('show');
   showResult();
 });
 
@@ -550,6 +850,15 @@ document.getElementById('restartBtn').addEventListener('click',()=>{
   // remove confetti & rain
   result.querySelectorAll('.confetti, .emoji-rain').forEach(n=>n.remove());
   result.classList.remove('show');
+  // reset spinner state
+  document.getElementById('spinResultValue').classList.remove('show');
+  document.getElementById('spinResultValue').textContent = '???';
+  document.getElementById('spinStatus').textContent = 'Memutar takdir... 🌀';
+  document.getElementById('spinCta').classList.remove('show');
+  document.getElementById('wheel').style.transform = 'rotate(0deg)';
+  // show game again
+  document.getElementById('game').style.display = '';
+  document.getElementById('game').classList.add('show');
 });
 
 /* ======================================================
