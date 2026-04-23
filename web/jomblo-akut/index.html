@@ -651,47 +651,36 @@ async function detectFaces(canvas){
     return -1;
   }
   // Upscale small selfies for better detection
-  const work = upscaleCanvas(canvas, 640);
+  const work = upscaleCanvas(canvas, 480);
   console.log('[face-detect] input size', canvas.width+'x'+canvas.height, '-> work', work.width+'x'+work.height);
 
-  const allBoxes = [];
-  const debug = { ssd: 'skipped', tiny: {} };
+  const t0 = performance.now();
+  let dets = [];
+  let used = '';
 
-  if (faceapi.nets.ssdMobilenetv1.params){
-    try {
-      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.15 });
-      const dets = await faceapi.detectAllFaces(work, opts);
-      debug.ssd = dets.length;
-      for (const d of dets){
-        const b = d.box;
-        allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score, src:'ssd' });
-      }
-    } catch(e){ console.warn('ssd detect failed', e); debug.ssd = 'error'; }
-  }
-
+  // ONE pass only — Tiny detector is fast (~200ms on mobile) and accurate enough
   if (faceapi.nets.tinyFaceDetector.params){
-    for (const size of [320, 416, 512, 608]){
-      try {
-        const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold: 0.2 });
-        const dets = await faceapi.detectAllFaces(work, opts);
-        debug.tiny[size] = dets.length;
-        for (const d of dets){
-          const b = d.box;
-          allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score, src:'tiny'+size });
-        }
-      } catch(e){ console.warn('tiny detect failed', e); debug.tiny[size] = 'error'; }
-    }
+    try {
+      const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.5 });
+      dets = await faceapi.detectAllFaces(work, opts);
+      used = 'tiny416';
+    } catch(e){ console.warn('tiny detect failed', e); }
+  }
+  // SSD only as backup if tiny found nothing AND ssd is loaded
+  if (dets.length === 0 && faceapi.nets.ssdMobilenetv1.params){
+    try {
+      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 });
+      dets = await faceapi.detectAllFaces(work, opts);
+      used = 'ssd';
+    } catch(e){ console.warn('ssd detect failed', e); }
   }
 
-  console.log('[face-detect] raw boxes:', allBoxes.length, 'detail:', JSON.stringify(debug));
+  const ms = Math.round(performance.now() - t0);
+  const boxes = dets.map(d => ({ x:d.box.x, y:d.box.y, w:d.box.width, h:d.box.height, score:d.score }));
+  console.log('[face-detect]', used, ms+'ms ->', boxes.length, 'faces:', boxes.map(b=>({x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.w),s:b.score.toFixed(2)})));
 
-  // If no detector ran at all, return -1 (truly unknown)
-  if (debug.ssd === 'skipped' && Object.keys(debug.tiny).length === 0) return -1;
-
-  if (allBoxes.length === 0) return 0;
-  const merged = dedupeFaces(allBoxes);
-  console.log('[face-detect] after dedupe:', merged.length, merged.map(b=>({x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.w),h:Math.round(b.h),s:b.score.toFixed(2),src:b.src})));
-  return merged.length;
+  if (!used) return -1; // no detector ran
+  return boxes.length;
 }
 
 /* ===== Result variants ===== */
