@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>Sayang... Mas Mau Nanya 🥺</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;font-family:'Fredoka',sans-serif;color:#1d3557;user-select:none}
+  body{
+    background:
+      radial-gradient(1100px 700px at 80% 10%, #cdeafd 0%, transparent 60%),
+      radial-gradient(900px 700px at 10% 90%, #b9e3fb 0%, transparent 55%),
+      linear-gradient(180deg,#dff1ff 0%, #b6dffb 100%);
+    position:relative;
+  }
+
+  /* Floating bubble emojis */
+  .bubbles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .bubble{position:absolute;bottom:-60px;font-size:32px;opacity:.55;animation:rise linear infinite;will-change:transform}
+  @keyframes rise{
+    0%{transform:translate3d(0,0,0) rotate(0deg);opacity:0}
+    10%{opacity:.6}
+    90%{opacity:.6}
+    100%{transform:translate3d(var(--dx,30px),-110vh,0) rotate(360deg);opacity:0}
+  }
+
+  /* Cursor trail */
+  .trail{position:fixed;pointer-events:none;font-size:22px;z-index:9999;animation:trailFade .9s ease-out forwards;will-change:transform,opacity}
+  @keyframes trailFade{
+    0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-150%) scale(.4)}
+  }
+
+  /* ===== Intro screen ===== */
+  .screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:24px;z-index:2}
+  #intro .bubble-talk{
+    background:#fff;
+    padding:28px 30px;
+    border-radius:28px;
+    max-width:520px;
+    box-shadow:0 18px 50px -10px rgba(70,130,180,.35), 0 0 0 6px rgba(255,255,255,.5);
+    text-align:center;
+    position:relative;
+    animation:pop .5s cubic-bezier(.3,1.5,.5,1);
+  }
+  @keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+  .bubble-talk:after{
+    content:'';position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);
+    border:12px solid transparent;border-top-color:#fff;
+  }
+  .typed{font-size:22px;line-height:1.55;font-weight:500;min-height:160px}
+  .typed .cursor{display:inline-block;width:2px;height:1em;background:#1d3557;vertical-align:middle;animation:blink 1s step-end infinite}
+  @keyframes blink{50%{opacity:0}}
+  .skip-hint{margin-top:18px;font-size:13px;color:#5a7a99;opacity:.8}
+  .start-btn{
+    margin-top:20px;display:none;
+    padding:14px 36px;border:none;border-radius:999px;cursor:pointer;
+    background:linear-gradient(135deg,#ff7eb6 0%,#ffb86c 100%);
+    color:#fff;font-family:inherit;font-weight:600;font-size:18px;
+    box-shadow:0 10px 24px -8px rgba(255,126,182,.7);
+    animation:wiggle 1.5s ease-in-out infinite;
+  }
+  .start-btn.show{display:inline-block}
+  @keyframes wiggle{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  /* ===== Main game screen ===== */
+  #game{display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:30px}
+  #game.show{display:flex}
+  .question{
+    font-family:'Caveat',cursive;
+    font-size:clamp(34px,7vw,58px);
+    line-height:1.15;
+    text-align:center;
+    color:#1d3557;
+    text-shadow:2px 2px 0 #fff, 4px 4px 0 rgba(255,126,182,.3);
+    padding:0 20px;
+    max-width:720px;
+    animation:slideDown .6s ease;
+  }
+  @keyframes slideDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:none}}
+  .sub-question{
+    margin-top:12px;font-size:18px;color:#456787;font-weight:500;
+    text-align:center;padding:0 20px;
+  }
+
+  /* Progress bar */
+  .ganteng-bar{
+    margin:24px auto 8px;width:min(420px,85vw);
+    background:rgba(255,255,255,.7);border-radius:999px;padding:6px;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.08);
+  }
+  .ganteng-fill{
+    height:18px;border-radius:999px;
+    background:linear-gradient(90deg,#ff7eb6 0%,#ffb86c 50%,#ffd166 100%);
+    width:99%;
+    box-shadow:0 2px 8px rgba(255,126,182,.5);
+    position:relative;overflow:hidden;
+  }
+  .ganteng-fill:after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.5) 50%,transparent 100%);
+    animation:shine 2s linear infinite;
+  }
+  @keyframes shine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .ganteng-label{text-align:center;font-size:14px;color:#1d3557;font-weight:600;margin-bottom:4px}
+
+  /* Counter */
+  .counter-text{
+    margin-top:8px;text-align:center;font-size:16px;color:#d6336c;font-weight:600;
+    min-height:24px;
+    transition:transform .3s;
+  }
+  .counter-text.bump{animation:bump .4s ease}
+  @keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+  /* Buttons area */
+  .play-area{
+    position:relative;flex:1;width:100%;margin-top:18px;
+    min-height:380px;
+  }
+  .btn{
+    position:absolute;
+    border:none;cursor:pointer;
+    font-family:inherit;font-weight:700;
+    border-radius:999px;
+    transition:transform .25s cubic-bezier(.3,1.4,.5,1), width .25s, height .25s, font-size .25s, box-shadow .3s, background .3s;
+    user-select:none;
+  }
+  .btn-yes{
+    left:50%;top:30%;
+    transform:translate(-50%,-50%);
+    background:linear-gradient(135deg,#ff4d8d 0%,#ff7eb6 100%);
+    color:#fff;
+    padding:0;
+    width:160px;height:160px;
+    font-size:32px;
+    box-shadow:0 14px 30px -6px rgba(255,77,141,.6), 0 0 0 0 rgba(255,77,141,.5);
+    animation:glow 1.6s ease-in-out infinite;
+    z-index:5;
+  }
+  @keyframes glow{
+    0%,100%{box-shadow:0 14px 30px -6px rgba(255,77,141,.6), 0 0 0 0 rgba(255,77,141,.6)}
+    50%{box-shadow:0 18px 40px -4px rgba(255,77,141,.8), 0 0 0 18px rgba(255,77,141,0)}
+  }
+  .btn-yes:hover{filter:brightness(1.08)}
+  .btn-no{
+    left:50%;top:65%;
+    transform:translate(-50%,-50%);
+    background:#fff;
+    color:#456787;
+    padding:14px 28px;
+    font-size:20px;
+    box-shadow:0 8px 20px -6px rgba(0,0,0,.2);
+    z-index:4;
+  }
+
+  /* Result screen */
+  #result{
+    display:none;position:absolute;inset:0;flex-direction:column;
+    align-items:center;justify-content:center;z-index:20;padding:24px;
+    background:linear-gradient(180deg,#dff1ff 0%, #b6dffb 100%);
+  }
+  #result.show{display:flex;animation:fadeIn .5s}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .yay{
+    font-family:'Caveat',cursive;
+    font-size:clamp(56px,12vw,120px);
+    line-height:1;
+    background:linear-gradient(135deg,#ff4d8d 0%,#ffb86c 50%,#ff4d8d 100%);
+    background-size:200% 100%;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-align:center;
+    animation:rainbow 3s linear infinite, bounceIn 1s cubic-bezier(.3,1.6,.5,1);
+    text-shadow:0 0 0 transparent;
+  }
+  @keyframes rainbow{to{background-position:200% 0}}
+  @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.2)}80%{transform:scale(.95)}100%{transform:scale(1)}}
+  .yay-sub{
+    margin-top:16px;font-size:22px;text-align:center;color:#1d3557;font-weight:500;
+    max-width:90vw;
+  }
+  .emoji-rain{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:21}
+  .raindrop{position:absolute;font-size:42px;animation:rain linear forwards;will-change:transform}
+  @keyframes rain{
+    from{transform:translateY(-10vh) rotate(0)}
+    to{transform:translateY(110vh) rotate(720deg)}
+  }
+  .confetti{position:absolute;width:10px;height:18px;top:-20px;animation:fall linear forwards;will-change:transform}
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0)}
+    100%{transform:translateY(110vh) rotate(720deg)}
+  }
+  .restart{
+    margin-top:34px;
+    padding:14px 32px;border:none;border-radius:999px;cursor:pointer;
+    background:#fff;color:#1d3557;font-family:inherit;font-weight:600;font-size:16px;
+    box-shadow:0 8px 20px -6px rgba(0,0,0,.2);
+  }
+
+  /* Toast */
+  .toast{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:rgba(29,53,87,.95);color:#fff;
+    padding:12px 24px;border-radius:999px;
+    font-size:15px;font-weight:500;
+    opacity:0;transition:all .3s;z-index:1000;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* Mobile tweaks */
+  @media (max-width:480px){
+    .typed{font-size:18px;min-height:140px}
+    .bubble-talk{padding:22px 20px}
+    .btn-yes{width:130px;height:130px;font-size:26px}
+    .btn-no{font-size:18px;padding:12px 22px}
+    .play-area{min-height:340px}
+  }
+</style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+
+<!-- INTRO -->
+<div class="screen" id="intro">
+  <div class="bubble-talk">
+    <div class="typed" id="typed"><span class="cursor"></span></div>
+    <button class="start-btn" id="startBtn">Iya, apa sayang? 💕</button>
+    <div class="skip-hint">tap layar buat skip</div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="game">
+  <div class="question" id="qText">Sayang... Mas mau jatah dong hari ini 🥺👉👈</div>
+  <div class="sub-question">Boleh ya? please pleaseeee 🙏✨</div>
+
+  <div class="ganteng-label">Tingkat Kegantengan Mas Hari Ini</div>
+  <div class="ganteng-bar"><div class="ganteng-fill" id="gantengFill"></div></div>
+
+  <div class="counter-text" id="counter"></div>
+
+  <div class="play-area" id="playArea">
+    <button class="btn btn-yes" id="btnYes">YA 🔥</button>
+    <button class="btn btn-no" id="btnNo">Tidak</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result">
+  <div class="yay">YEAYYY 🥳</div>
+  <div class="yay-sub" id="yaySub">MAKASIH SAYANGGG ❤️🔥<br>Aku tau kamu pasti bilang iya 😏💦</div>
+  <button class="restart" id="restartBtn">Ulang lagi 😜</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Audio (synthesized inline, no external files) -->
+<script>
+/* ======================================================
+ * BUBBLE BACKGROUND
+ * ====================================================== */
+const bubbleEmojis = ['💕','🌸','✨','💖','🥰','💗','🌷','💘','🍑','🔥','💦','😘','💋','🌟'];
+function spawnBubbles(){
+  const wrap = document.getElementById('bubbles');
+  const total = 22;
+  for(let i=0;i<total;i++){
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.textContent = bubbleEmojis[Math.floor(Math.random()*bubbleEmojis.length)];
+    const left = Math.random()*100;
+    const dur = 12 + Math.random()*16;
+    const delay = -Math.random()*dur;
+    const size = 22 + Math.random()*28;
+    const dx = (Math.random()-.5)*120;
+    b.style.left = left+'vw';
+    b.style.fontSize = size+'px';
+    b.style.animationDuration = dur+'s';
+    b.style.animationDelay = delay+'s';
+    b.style.setProperty('--dx', dx+'px');
+    wrap.appendChild(b);
+  }
+}
+spawnBubbles();
+
+/* ======================================================
+ * CURSOR / TOUCH TRAIL
+ * ====================================================== */
+const trailEmojis = ['❤️','🌸','💕','✨','💖'];
+let lastTrail = 0;
+function makeTrail(x,y){
+  const now = performance.now();
+  if(now - lastTrail < 50) return;
+  lastTrail = now;
+  const t = document.createElement('div');
+  t.className = 'trail';
+  t.textContent = trailEmojis[Math.floor(Math.random()*trailEmojis.length)];
+  t.style.left = x+'px';
+  t.style.top = y+'px';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),900);
+}
+document.addEventListener('mousemove',e=>makeTrail(e.clientX,e.clientY));
+document.addEventListener('touchmove',e=>{
+  const t=e.touches[0]; if(t) makeTrail(t.clientX,t.clientY);
+},{passive:true});
+
+/* ======================================================
+ * SOUND (Web Audio synth — no external files)
+ * ====================================================== */
+let audioCtx = null;
+function ac(){
+  if(!audioCtx){
+    try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  }
+  return audioCtx;
+}
+function beep(freq, dur, type='sine', vol=.15){
+  const c = ac(); if(!c) return;
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.value = vol;
+  o.connect(g); g.connect(c.destination);
+  o.start();
+  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+dur);
+  o.stop(c.currentTime+dur);
+}
+function soundNo(){
+  // descending sad "yahhh"
+  beep(440,.12,'sawtooth',.1);
+  setTimeout(()=>beep(330,.18,'sawtooth',.1),100);
+  setTimeout(()=>beep(220,.25,'sawtooth',.1),250);
+}
+function soundYes(){
+  // happy fanfare
+  const notes = [523, 659, 784, 1047];
+  notes.forEach((f,i)=>setTimeout(()=>beep(f,.18,'triangle',.16), i*100));
+  setTimeout(()=>{ beep(1047,.4,'triangle',.18); beep(1318,.4,'sine',.12); }, 450);
+}
+function soundClick(){ beep(800,.05,'square',.06); }
+
+/* ======================================================
+ * INTRO TYPING
+ * ====================================================== */
+const introText = "Sayanggg... 🥺👉👈\n\nMas mau nanya serius nih...\nSerius beneran...\nJanji jangan marah ya 😅";
+const typedEl = document.getElementById('typed');
+const startBtn = document.getElementById('startBtn');
+let typingDone = false;
+
+function typeIntro(){
+  let i = 0;
+  const cur = '<span class="cursor"></span>';
+  const tick = ()=>{
+    if(i > introText.length){
+      typedEl.innerHTML = introText.replace(/\n/g,'<br>');
+      typingDone = true;
+      startBtn.classList.add('show');
+      return;
+    }
+    const partial = introText.slice(0,i).replace(/\n/g,'<br>');
+    typedEl.innerHTML = partial + cur;
+    i++;
+    setTimeout(tick, 55 + Math.random()*40);
+  };
+  tick();
+}
+typeIntro();
+
+// tap to skip
+document.getElementById('intro').addEventListener('click', (e)=>{
+  if(e.target === startBtn) return;
+  if(!typingDone){
+    typedEl.innerHTML = introText.replace(/\n/g,'<br>');
+    typingDone = true;
+    startBtn.classList.add('show');
+  }
+});
+
+startBtn.addEventListener('click',()=>{
+  ac(); // unlock audio on user gesture
+  soundClick();
+  document.getElementById('intro').style.display='none';
+  document.getElementById('game').classList.add('show');
+});
+
+/* ======================================================
+ * MAIN GAME LOGIC
+ * ====================================================== */
+const btnYes  = document.getElementById('btnYes');
+const btnNo   = document.getElementById('btnNo');
+const counter = document.getElementById('counter');
+const playArea= document.getElementById('playArea');
+const qText   = document.getElementById('qText');
+
+let noClicks = 0;
+let yesScale = 1;
+let noScale  = 1;
+
+const noLabels = [
+  'Tidak', 'Yakin?', 'Bohong ah 😏', 'Masa sih 🥺', 'Beneran nolak?',
+  'Mas sedih nih 😭', 'Coba lagi deh 👉👈', 'Yakin BANGET?', 'Nanti nyesel loh 🥲',
+  'Hmmmm... 🤔', 'Aku tau kok 😏', 'Ngga bisa kabur 😈', 'Nyerah aja deh 💀',
+  'Ya udah pilih ya aja 😤', 'Capek juga ya? 😅'
+];
+const noTaunts = [
+  'Kamu udah nolak ke-{n} kali loh 🥺',
+  'Mas hitung loh, ke-{n} kali ditolak 😭',
+  'Ke-{n} kali nih... yakin?',
+  'Tombolnya capek dikejar terus, {n}x udah 😩',
+  'Wah dedikasi banget, {n}x nolak 👏',
+  'Ke-{n} kali... mas mulai sedih nih 🥲',
+  'Lari aja terus tombolnya, {n}x 💨',
+  'Yakin nih? Udah {n}x loh 🤨',
+  'Mas aja masih sabar, {n}x ditolak 😇',
+];
+const yesLabels = ['YA 🔥','YA SAYANG! 💖','IYA DONG! 😘','MAU BANGET! 🥰','YAAA! 💕','YES! 🎉'];
+
+function moveNoButton(){
+  const area = playArea.getBoundingClientRect();
+  const btn  = btnNo.getBoundingClientRect();
+  const padding = 10;
+  const maxX = area.width  - btn.width  - padding;
+  const maxY = area.height - btn.height - padding;
+  if(maxX <= 0 || maxY <= 0) return;
+  // pick a random position inside play area, but bias away from current
+  let nx, ny, tries=0;
+  do{
+    nx = padding + Math.random()*maxX;
+    ny = padding + Math.random()*maxY;
+    tries++;
+  }while(tries<5 && Math.abs(nx-(btn.left-area.left))<60 && Math.abs(ny-(btn.top-area.top))<60);
+  btnNo.style.transform = 'none';
+  btnNo.style.left = nx+'px';
+  btnNo.style.top  = ny+'px';
+}
+
+function makeNoMoveOnHover(){
+  noClicks++;
+  // shrink "No"
+  noScale = Math.max(.35, noScale * .88);
+  btnNo.style.transform = 'scale('+noScale+')';
+  // grow "Yes"
+  yesScale = Math.min(1.6, yesScale * 1.06);
+  // text changes
+  btnNo.textContent = noLabels[Math.min(noClicks, noLabels.length-1)];
+  if(noClicks < yesLabels.length){
+    btnYes.textContent = yesLabels[noClicks];
+  } else {
+    btnYes.textContent = yesLabels[yesLabels.length-1];
+  }
+  // resize yes
+  const baseW = window.innerWidth < 480 ? 130 : 160;
+  const newSize = Math.min(280, baseW * yesScale);
+  btnYes.style.width = newSize+'px';
+  btnYes.style.height= newSize+'px';
+  btnYes.style.fontSize = (24 + noClicks*1.5) + 'px';
+  // counter
+  const taunt = noTaunts[Math.min(noClicks-1, noTaunts.length-1)].replace('{n}', noClicks);
+  counter.textContent = taunt;
+  counter.classList.remove('bump'); void counter.offsetWidth; counter.classList.add('bump');
+  // sound
+  soundNo();
+  // move
+  setTimeout(moveNoButton, 0);
+  // sub-question evolves
+  if(noClicks === 3) document.querySelector('.sub-question').textContent = 'Yaa kann sayanggg... mas baik2 kok 🥺';
+  if(noClicks === 6) document.querySelector('.sub-question').textContent = 'Tombol Tidak nya kabur terus tuh, nyerah aja 😏';
+  if(noClicks === 10) document.querySelector('.sub-question').textContent = 'Udah jelas jawabannya YAA tuh 🔥';
+}
+
+// dodge on hover (desktop) and on touchstart (mobile)
+['mouseenter','touchstart','mousedown'].forEach(ev=>{
+  btnNo.addEventListener(ev, (e)=>{
+    if(ev==='touchstart'){ /* don't preventDefault → still allow click? we want NEVER click */ }
+    e.preventDefault();
+    e.stopPropagation();
+    makeNoMoveOnHover();
+  }, {passive:false});
+});
+// in case it's actually clicked on a fast tap
+btnNo.addEventListener('click',(e)=>{
+  e.preventDefault();
+  makeNoMoveOnHover();
+});
+
+btnYes.addEventListener('click',()=>{
+  soundYes();
+  showResult();
+});
+
+/* ======================================================
+ * RESULT SCREEN
+ * ====================================================== */
+const result = document.getElementById('result');
+const yaySub = document.getElementById('yaySub');
+function showResult(){
+  result.classList.add('show');
+  // confetti
+  for(let i=0;i<80;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100+'vw';
+    c.style.background = `hsl(${Math.random()*360},90%,65%)`;
+    c.style.animationDuration = (2 + Math.random()*2)+'s';
+    c.style.animationDelay = (Math.random()*1.5)+'s';
+    result.appendChild(c);
+  }
+  // emoji rain
+  const rain = document.createElement('div');
+  rain.className = 'emoji-rain';
+  result.appendChild(rain);
+  const rainEmojis = ['❤️','🔥','💕','😘','💋','🥰','💖','💦','🍑','💗'];
+  for(let i=0;i<40;i++){
+    const d = document.createElement('div');
+    d.className = 'raindrop';
+    d.textContent = rainEmojis[Math.floor(Math.random()*rainEmojis.length)];
+    d.style.left = Math.random()*100+'vw';
+    d.style.animationDuration = (3 + Math.random()*3)+'s';
+    d.style.animationDelay = (Math.random()*2)+'s';
+    rain.appendChild(d);
+  }
+  // dynamic subtext based on noClicks
+  if(noClicks === 0){
+    yaySub.innerHTML = 'WAH LANGSUNG MAU?? ❤️🔥<br>Mas terharu sayanggg 🥺💕';
+  } else if(noClicks < 5){
+    yaySub.innerHTML = 'Akhirnya sayanggg ❤️🔥<br>Tau kok kamu pasti bilang iya 😏💦';
+  } else if(noClicks < 12){
+    yaySub.innerHTML = `Setelah nolak ${noClicks}x... akhirnya juga 😤❤️<br>Makasih sayanggg, mas siap 🔥💦`;
+  } else {
+    yaySub.innerHTML = `${noClicks}x nolak?? 😱<br>Tapi tetep ujung-ujungnya YA 😏🔥<br>Mas kan emang ganteng 💕`;
+  }
+}
+
+document.getElementById('restartBtn').addEventListener('click',()=>{
+  // reset
+  noClicks = 0; yesScale = 1; noScale = 1;
+  btnNo.style.transform = 'translate(-50%,-50%)';
+  btnNo.style.left = '50%'; btnNo.style.top = '65%';
+  btnNo.textContent = 'Tidak';
+  btnYes.style.width = ''; btnYes.style.height = ''; btnYes.style.fontSize = '';
+  btnYes.textContent = 'YA 🔥';
+  counter.textContent = '';
+  document.querySelector('.sub-question').textContent = 'Boleh ya? please pleaseeee 🙏✨';
+  // remove confetti & rain
+  result.querySelectorAll('.confetti, .emoji-rain').forEach(n=>n.remove());
+  result.classList.remove('show');
+});
+
+/* ======================================================
+ * "MAU KABUR YA?" — fires on tab leave / close
+ * ====================================================== */
+let triedToLeave = sessionStorage.getItem('jatah_kabur') === '1';
+function showToast(msg, ms=3500){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), ms);
+}
+window.addEventListener('beforeunload', (e)=>{
+  if(!result.classList.contains('show')){
+    sessionStorage.setItem('jatah_kabur','1');
+    e.preventDefault();
+    e.returnValue = 'Eh mau kabur ya? Mas belum dapet jawaban loh 🥺';
+    return e.returnValue;
+  }
+});
+window.addEventListener('load', ()=>{
+  if(triedToLeave){
+    setTimeout(()=>{
+      showToast('Eh ketauan mau kabur tadi ya? 😏 Ga bisa lariii 💕', 5000);
+      sessionStorage.removeItem('jatah_kabur');
+    }, 1200);
+  }
+});
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible' && !result.classList.contains('show') && noClicks > 0){
+    showToast('Balik lagi? 😏 Kan ga bisa kemana-mana 💖');
+  }
+});
+</script>
+</body>
+</html>
