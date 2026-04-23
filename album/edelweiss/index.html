@@ -889,9 +889,14 @@
       '<div class="wish"><div class="name">' + escHtml(w.name) + '</div><div class="msg">' + escHtml(w.msg) + '</div><div class="when">' + timeAgo(w.t) + '</div></div>'
     ).join('');
   }
+  // WISHES_API_BASE is rewritten by githubPublish.js when the album is
+  // pushed to GitHub Pages — it gets pointed at the Replit backend so wishes
+  // still read & post live. On Replit it stays empty and uses relative paths.
+  const WISHES_API_BASE = "https://ee8222b0-a590-4d89-8db4-f2962c4b40bb-00-19xaa3zdwxaem.sisko.replit.dev/album/nikah-jumalia-makruf-2";
+  const wUrl = (p) => (WISHES_API_BASE && !WISHES_API_BASE.startsWith('%%') ? WISHES_API_BASE.replace(/\/$/, '') + '/' : '') + p;
   async function loadWishes(){
     try {
-      const r = await fetch('wishes.json?t=' + Date.now());
+      const r = await fetch(wUrl('wishes.json') + '?t=' + Date.now());
       const arr = await r.json();
       renderWishes(arr);
     } catch (e) {}
@@ -904,7 +909,7 @@
     if (!msg) return false;
     btn.disabled = true; btn.textContent = 'Mengirim...';
     try {
-      const r = await fetch('wishes', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, msg}) });
+      const r = await fetch(wUrl('wishes'), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, msg}) });
       if (!r.ok) throw new Error('fail');
       document.getElementById('wMsg').value = '';
       await loadWishes();
