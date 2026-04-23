@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Jajan Jomblo & HTS-an 💀🤡</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; overflow:hidden; font-family:'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body {
+    background: linear-gradient(135deg, #ffd6e7 0%, #ffe7f1 40%, #fff0f6 100%);
+    color:#5a2a4a; user-select:none;
+    position:relative;
+  }
+  .petals { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:1; }
+  .petal { position:absolute; font-size:22px; animation: fall linear infinite; opacity:.85; }
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(720deg); }
+  }
+  .screen { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; z-index:5; }
+  .screen.active { display:flex; }
+
+  /* ============ WELCOME ============ */
+  #welcome .card {
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-radius: 28px; padding: 36px 28px; max-width: 420px; width:100%;
+    box-shadow: 0 20px 60px rgba(255,105,180,.25);
+    text-align:center; animation: pop .6s ease;
+  }
+  @keyframes pop { from { transform:scale(.7); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .greet-emoji { font-size:64px; animation: wiggle 1.5s ease-in-out infinite; }
+  @keyframes wiggle { 0%,100%{transform:rotate(-10deg);} 50%{transform:rotate(10deg);} }
+  #welcome h1 { font-size:26px; margin:14px 0 6px; color:#d6336c; }
+  #welcome p { font-size:16px; color:#7a4866; margin-bottom:22px; line-height:1.5; }
+  .btn-primary {
+    background: linear-gradient(135deg, #ff6fa3, #ff4081);
+    color:white; border:none; padding:14px 36px; border-radius:50px;
+    font-size:17px; font-weight:600; cursor:pointer;
+    box-shadow: 0 8px 20px rgba(255,64,129,.4);
+    transition: transform .15s;
+  }
+  .btn-primary:active { transform:scale(.95); }
+
+  /* ============ VERIFIKASI WAJAH ============ */
+  #verify { background: radial-gradient(circle, #1a0f2e 0%, #0a0518 100%); color:#fff; }
+  #verify .scanner-wrap {
+    position:relative; width: 280px; height: 280px;
+    border-radius: 50%; overflow:hidden;
+    border: 4px solid #ff4081;
+    box-shadow: 0 0 60px rgba(255,64,129,.6), inset 0 0 30px rgba(255,64,129,.3);
+  }
+  #cameraView { width:100%; height:100%; object-fit:cover; transform: scaleX(-1); background:#000; }
+  .scan-line {
+    position:absolute; left:0; right:0; height:3px;
+    background: linear-gradient(90deg, transparent, #ff4081, transparent);
+    box-shadow: 0 0 12px #ff4081;
+    animation: scan 1.5s linear infinite;
+  }
+  @keyframes scan { 0%{top:0;} 100%{top:100%;} }
+  .corner { position:absolute; width:40px; height:40px; border:3px solid #ff4081; }
+  .corner.tl { top:10px; left:10px; border-right:none; border-bottom:none; }
+  .corner.tr { top:10px; right:10px; border-left:none; border-bottom:none; }
+  .corner.bl { bottom:10px; left:10px; border-right:none; border-top:none; }
+  .corner.br { bottom:10px; right:10px; border-left:none; border-top:none; }
+  #verify h2 { margin-top:30px; font-size:20px; color:#ff8fb1; letter-spacing:1px; }
+  #verifyStatus { margin-top:14px; font-size:14px; color:#ffb3cc; min-height:20px; font-family: monospace; }
+  .progress-ring { margin-top: 16px; font-size:32px; font-weight:bold; color:#ff4081; font-family:monospace; }
+  .flash { position:fixed; inset:0; background:#fff; opacity:0; z-index:99; pointer-events:none; }
+  .flash.snap { animation: flashAnim .5s ease; }
+  @keyframes flashAnim { 0%{opacity:0;} 30%{opacity:1;} 100%{opacity:0;} }
+  #verifyResult { display:none; text-align:center; }
+  #verifyResult img.snap-img {
+    width: 240px; height:240px; object-fit:cover; border-radius:20px;
+    border: 4px solid #ff4081; transform: scaleX(-1);
+    box-shadow: 0 10px 40px rgba(255,64,129,.5);
+    animation: pop .6s ease;
+  }
+  #verifyResult h2 { color:#ffb3cc; margin-top:24px; font-size:22px; padding:0 16px; }
+  #verifyResult .heart-burst { font-size: 40px; margin-top:14px; animation: heartbeat 1s ease infinite; }
+  @keyframes heartbeat { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+
+  /* ============ MAIN ============ */
+  #main { overflow-y:auto; align-items:flex-start; padding-top:24px; padding-bottom:60px; display:none; }
+  #main.active { display:flex; }
+  #main .container { width:100%; max-width:480px; }
+  .header-card {
+    background:rgba(255,255,255,.92); border-radius:24px; padding:18px 20px;
+    box-shadow:0 8px 24px rgba(255,105,180,.2); margin-bottom:20px; text-align:center;
+  }
+  .header-card h2 { color:#d6336c; font-size:20px; margin-bottom:4px; }
+  .header-card p { color:#7a4866; font-size:13px; }
+
+  /* Spinner */
+  .spinner-card { background:rgba(255,255,255,.92); border-radius:24px; padding:24px 18px; margin-bottom:20px; box-shadow:0 8px 24px rgba(255,105,180,.2); }
+  .spinner-wrap { position:relative; width:280px; height:280px; margin: 0 auto 18px; }
+  .spinner-pointer {
+    position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent;
+    border-top:24px solid #d6336c; z-index:3; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  }
+  #spinnerCanvas { width:100%; height:100%; transition: transform 5s cubic-bezier(.17,.67,.21,.99); }
+  .spinner-center {
+    position:absolute; top:50%; left:50%; width:50px; height:50px;
+    transform:translate(-50%,-50%); background:#fff; border-radius:50%;
+    border:4px solid #d6336c; z-index:2; display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+  }
+  .spinner-result {
+    text-align:center; min-height:30px; font-size:16px; color:#d6336c; font-weight:600; margin-top:8px;
+  }
+
+  /* Request box */
+  .request-card { background:rgba(255,255,255,.92); border-radius:24px; padding:20px; margin-bottom:20px; box-shadow:0 8px 24px rgba(255,105,180,.2); }
+  .request-card h3 { color:#d6336c; font-size:16px; margin-bottom:12px; text-align:center; }
+  .input-row { display:flex; gap:8px; }
+  #foodInput {
+    flex:1; padding:14px 16px; border:2px solid #ffc1d8; border-radius:14px;
+    font-size:15px; outline:none; background:#fff5f9;
+  }
+  #foodInput:focus { border-color:#ff4081; }
+  #sendBtn {
+    background: linear-gradient(135deg, #ff6fa3, #ff4081);
+    border:none; color:#fff; padding: 0 18px; border-radius:14px; font-size:18px; cursor:pointer;
+  }
+  .response-box {
+    margin-top:14px; padding:14px 16px; background:#fff5f9; border-radius:14px;
+    border-left: 4px solid #ff4081; min-height:0; max-height:0; overflow:hidden;
+    transition: all .4s ease; opacity:0;
+  }
+  .response-box.show { max-height:300px; min-height:50px; opacity:1; padding:14px 16px; margin-top:14px; }
+  .response-box .resp-emoji { font-size:38px; display:block; text-align:center; margin-bottom:8px; }
+  .response-box .resp-text { color:#5a2a4a; font-size:15px; line-height:1.5; text-align:center; }
+
+  /* Buttons row */
+  .btn-row { display:flex; flex-direction:column; gap:14px; align-items:center; padding:0 12px; position:relative; min-height:200px; }
+  .btn-pick {
+    background: linear-gradient(135deg, #ff6fa3, #ff4081);
+    color:#fff; border:none; padding:16px 28px; border-radius:50px;
+    font-size:16px; font-weight:600; cursor:pointer; width:100%; max-width:280px;
+    box-shadow: 0 8px 20px rgba(255,64,129,.4);
+    transition: transform .15s;
+  }
+  .btn-pick:active { transform:scale(.96); }
+
+  .btn-terserah {
+    background: linear-gradient(135deg, #ffb74d, #ff6f3c);
+    color:#fff; border:none; padding:19px 34px; border-radius:50px;
+    font-size:19px; font-weight:700; cursor:pointer;
+    box-shadow: 0 10px 26px rgba(255,111,60,.45);
+    position:relative; transition: width .3s, height .3s, font-size .3s, opacity .3s;
+    width: 336px; max-width: 90vw;
+  }
+  .btn-terserah.flying {
+    position:fixed; z-index:50; transition: left .35s ease, top .35s ease, width .35s, height .35s, font-size .35s, opacity .35s;
+  }
+
+  .terserah-counter { font-size:12px; color:#7a4866; margin-top:10px; text-align:center; opacity:.7; }
+
+  .speech-bubble {
+    position:fixed; background:#fff; padding:10px 16px; border-radius:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,.2); color:#d6336c; font-size:14px; font-weight:600;
+    z-index:100; pointer-events:none; opacity:0; transition: opacity .3s, transform .5s;
+    max-width:240px; text-align:center;
+  }
+  .speech-bubble.show { opacity:1; transform: translateY(-20px); }
+
+  /* Achievement */
+  #achievement {
+    position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center;
+    z-index:200; padding:20px;
+  }
+  #achievement.show { display:flex; }
+  .achievement-card {
+    background: linear-gradient(135deg, #fff8e1, #ffd54f);
+    padding:30px; border-radius:24px; text-align:center; max-width:360px; width:100%;
+    box-shadow: 0 0 80px rgba(255,213,79,.6); animation: pop .7s ease;
+  }
+  .trophy { font-size:80px; animation: heartbeat 1.2s infinite; }
+  .achievement-card h2 { color:#bf360c; margin-top:14px; font-size:22px; }
+  .achievement-card p { color:#5d4037; margin-top:10px; font-size:15px; line-height:1.5; }
+  .achievement-card button { margin-top:20px; }
+
+  /* Phone input */
+  .phone-row { display:flex; align-items:center; gap:8px; margin-top:14px; }
+  .phone-label { font-size:13px; color:#7a4866; font-weight:600; white-space:nowrap; }
+  #husbandPhone {
+    flex:1; padding:10px 14px; border:2px solid #ffc1d8; border-radius:12px;
+    font-size:14px; outline:none; background:#fff5f9; color:#5a2a4a;
+  }
+  #husbandPhone:focus { border-color:#ff4081; }
+  .phone-hint { font-size:11px; color:#d6336c; margin-top:8px; opacity:.85; }
+  .phone-hint.ok { color:#2e7d32; }
+
+  /* WA button */
+  .wa-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, #25d366, #128c7e); color:#fff !important;
+    text-decoration: none; padding: 12px 20px; border-radius: 50px;
+    font-weight: 700; font-size: 14px; margin-top: 14px;
+    box-shadow: 0 6px 18px rgba(37,211,102,.45);
+    animation: pulseWA 1.6s ease-in-out infinite;
+  }
+  .wa-btn.big { padding: 15px 28px; font-size: 16px; margin-top: 22px; }
+  @keyframes pulseWA { 0%,100%{ transform:scale(1);} 50%{transform:scale(1.05);} }
+
+  /* Winner Modal */
+  .winner-modal {
+    position:fixed; inset:0; background:rgba(20,5,30,.85); backdrop-filter: blur(8px);
+    display:none; align-items:center; justify-content:center; z-index:180; padding:20px;
+  }
+  .winner-modal.show { display:flex; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  .winner-card {
+    background: linear-gradient(135deg, #fff0f6, #ffe0ec);
+    border-radius: 32px; padding: 30px 24px; max-width: 380px; width:100%; text-align:center;
+    box-shadow: 0 0 100px rgba(255,64,129,.7), 0 20px 60px rgba(0,0,0,.4);
+    border: 3px solid #ff4081; animation: pop .6s ease;
+  }
+  .winner-sparkles { font-size:32px; animation: heartbeat 1s infinite; }
+  .winner-emoji-wrap { position:relative; width:180px; height:180px; margin: 16px auto; }
+  .winner-glow {
+    position:absolute; inset:0; border-radius:50%;
+    background: radial-gradient(circle, rgba(255,213,79,.7), transparent 70%);
+    animation: glowPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes glowPulse { 0%,100%{transform:scale(1); opacity:.7;} 50%{transform:scale(1.3); opacity:1;} }
+  .winner-emoji {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size: 130px; animation: bounceIn 1s ease;
+  }
+  @keyframes bounceIn {
+    0%{transform:scale(0) rotate(-180deg);} 60%{transform:scale(1.2) rotate(20deg);} 100%{transform:scale(1) rotate(0);}
+  }
+  .winner-title {
+    color:#d6336c; font-size:22px; font-weight:700; letter-spacing:1px;
+    text-shadow: 0 2px 4px rgba(255,64,129,.3);
+  }
+  .winner-name {
+    color:#ad1457; font-size: 36px; font-weight:900; margin-top:6px;
+    background: linear-gradient(135deg, #ff4081, #ad1457);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .winner-sub { color:#7a4866; font-size:14px; margin-top:8px; }
+  .btn-secondary {
+    background: transparent; color:#d6336c; border: 2px solid #d6336c;
+    padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 14px; display:block; margin-left:auto; margin-right:auto;
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position:absolute; top:-20px; width:10px; height:14px; opacity:.9;
+    animation: confettiFall linear forwards;
+    border-radius: 2px;
+  }
+  @keyframes confettiFall {
+    0%{ transform: translateY(-20px) rotate(0deg); opacity:1;}
+    100%{ transform: translateY(105vh) rotate(720deg); opacity:.4;}
+  }
+
+  /* Cute photo frame for snapshot */
+  .photo-frame-wrap {
+    position:relative; display:inline-block; padding: 18px;
+    background: linear-gradient(135deg, #fff, #ffe0ec);
+    border-radius: 28px;
+    box-shadow: 0 15px 50px rgba(255,64,129,.5);
+  }
+  .photo-frame-deco {
+    position:absolute; font-size: 28px;
+  }
+  .photo-frame-deco.tl { top:-12px; left:-12px; transform: rotate(-20deg); }
+  .photo-frame-deco.tr { top:-12px; right:-12px; transform: rotate(20deg); }
+  .photo-frame-deco.bl { bottom:-8px; left:-12px; transform: rotate(-160deg); }
+  .photo-frame-deco.br { bottom:-8px; right:-12px; transform: rotate(160deg); }
+  .photo-caption {
+    margin-top: 12px; font-size: 13px; color:#d6336c; font-weight: 700;
+    background: rgba(255,255,255,.9); padding: 6px 14px; border-radius: 20px;
+    display: inline-block;
+  }
+
+  /* Scanner upgrades */
+  .radar-ring {
+    position:absolute; border:2px solid rgba(255,64,129,.5); border-radius:50%;
+    animation: radar 2s ease-out infinite;
+  }
+  @keyframes radar {
+    0%{ width:60px; height:60px; opacity:1; top:50%; left:50%; transform:translate(-50%,-50%);}
+    100%{ width:340px; height:340px; opacity:0; top:50%; left:50%; transform:translate(-50%,-50%);}
+  }
+  .scan-particle {
+    position:absolute; width:6px; height:6px; background:#ff4081; border-radius:50%;
+    box-shadow: 0 0 8px #ff4081; animation: particleOrbit 3s linear infinite;
+  }
+  @keyframes particleOrbit {
+    from { transform: rotate(0deg) translateX(150px); }
+    to   { transform: rotate(360deg) translateX(150px); }
+  }
+
+  @media (max-width: 380px) {
+    .spinner-wrap { width:240px; height:240px; }
+    .btn-terserah { width:280px; font-size:17px; padding:17px 28px; }
+  }
+</style>
+</head>
+<body>
+  <div class="petals" id="petals"></div>
+  <div class="flash" id="flash"></div>
+
+  <!-- ===== WELCOME ===== -->
+  <div class="screen active" id="welcome">
+    <div class="card">
+      <div class="greet-emoji">🤡</div>
+      <h1>Halo jomblo akut~ 💀</h1>
+      <p>Bingung mau jajan apa? Yaiyalah, doi aja ga punya 😭<br>Mau nanya gebetan? Hadeh chat-nya aja ga dibales 📵<br>HTS-an? Status aja ga ada, apalagi pesenan~ 🤡<br><br>Yaudah spin aja sendiri, jajan sendiri, makan sendiri 🛵💨</p>
+
+      <button class="btn-primary" id="btnLanjut">Yaudah Lanjut 😮‍💨</button>
+      <div style="font-size:11px; color:#7a4866; margin-top:14px; opacity:.8;">
+        *nomor WA-nya nanti aja diisi pas mau pesen, soalnya yakin deh kontak doi belum kamu punya 💀
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VERIFIKASI WAJAH ===== -->
+  <div class="screen" id="verify">
+    <div id="verifyScanning">
+      <h2>🔍 SCAN AURA JOMBLO 🔍</h2>
+      <div style="height:24px"></div>
+      <div style="position:relative; width:280px; height:280px; display:flex; align-items:center; justify-content:center;">
+        <div class="radar-ring"></div>
+        <div class="radar-ring" style="animation-delay:.6s;"></div>
+        <div class="radar-ring" style="animation-delay:1.2s;"></div>
+        <div class="scan-particle" style="animation-delay:0s;"></div>
+        <div class="scan-particle" style="animation-delay:1s;"></div>
+        <div class="scan-particle" style="animation-delay:2s;"></div>
+        <div class="scanner-wrap">
+          <video id="cameraView" autoplay muted playsinline></video>
+          <div class="scan-line"></div>
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+        </div>
+      </div>
+      <div class="progress-ring" id="countdown">7</div>
+      <div id="verifyStatus">Memindai level kejombloan...</div>
+    </div>
+    <div id="verifyResult">
+      <div class="photo-frame-wrap">
+        <span class="photo-frame-deco tl">💀</span>
+        <span class="photo-frame-deco tr">🤡</span>
+        <span class="photo-frame-deco bl">📵</span>
+        <span class="photo-frame-deco br">🚩</span>
+        <img class="snap-img" id="snapImg" alt="snap" />
+        <div class="photo-caption">💀 TERDETEKSI: JOMBLO AKUT / HTS GAJELAS 💀</div>
+      </div>
+      <h2 style="line-height:1.4; padding:0 12px;">
+        🚨 Wah parah, sistem deteksi kamu masih JOMBLO 🚨
+      </h2>
+      <div style="font-size:11px; color:#ffb3cc; line-height:1.6; margin-top:10px; padding:0 16px; max-width:340px;">
+        Status: <b>Jomblo akut sejak lahir</b> 💀<br>
+        Level HTS: <b>HTS gajelas, chat doang ga jadian-jadian</b> 🤡<br>
+        Hubungan kok virtual mulu, real life mana? 📵<br>
+        Last seen punya pacar: <b>tidak ditemukan</b> 🔍<br>
+        Aura red flag terdeteksi, makanya ditolak mulu 🚩<br>
+        <span style="display:block; margin-top:6px;">
+          Bot kasian liat kamu makan sendiri terus 🥲<br>
+          Yaudah, daripada nungguin doi yang ga akan dateng,<br>
+          mending spin aja terus pesen sendiri wkwk 🛵💨
+        </span>
+      </div>
+      <div class="heart-burst">💀🤡💔🥲💀</div>
+      <button class="btn-primary" id="btnMasuk" style="margin-top:24px;">Yaudah Masuk Aja 😮‍💨</button>
+    </div>
+  </div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="screen" id="main">
+    <div class="container">
+      <div class="header-card">
+        <h2>🍽️ Jajan Sendiri Time!</h2>
+        <p>Pilih sendiri ya, doi mah ga akan ngerti selera kamu kok 💀<br>(Lah, doinya aja ga punya wkwk)</p>
+        <div id="phoneStatus" style="margin-top:10px; font-size:12px; color:#7a4866; font-weight:600;"></div>
+        <div style="display:flex; gap:8px; justify-content:center; margin-top:6px; flex-wrap:wrap;">
+          <button id="changePhoneBtn" type="button" style="background:none; border:none; color:#d6336c; font-size:11px; text-decoration:underline; cursor:pointer; display:none;">Ganti nomor</button>
+        </div>
+      </div>
+
+      <div class="spinner-card">
+        <div class="spinner-wrap">
+          <div class="spinner-pointer"></div>
+          <canvas id="spinnerCanvas" width="500" height="500"></canvas>
+          <div class="spinner-center">🎯</div>
+        </div>
+        <div class="spinner-result" id="spinResult">Klik spin, biar takdir aja yang mutusin (kek doi yg ga mau mutusin status~) 💀</div>
+        <div style="display:flex; justify-content:center; margin-top:12px;">
+          <button id="editMenuBtn" type="button" style="background:#ff4081; border:none; color:#fff; font-size:12px; font-weight:700; padding:8px 16px; border-radius:14px; cursor:pointer; box-shadow:0 4px 12px rgba(255,64,129,.3);">⚙️ Atur List Menu</button>
+        </div>
+      </div>
+
+      <div class="request-card">
+        <h3>💬 Request manual (kalo masih ngarep ada yang anter)</h3>
+        <div class="input-row">
+          <input type="text" id="foodInput" placeholder="Misal: bakso, es teh, mie ayam..." />
+          <button id="sendBtn">➤</button>
+        </div>
+        <div class="response-box" id="responseBox">
+          <span class="resp-emoji" id="respEmoji">🍽️</span>
+          <div class="resp-text" id="respText"></div>
+          <a id="waReqBtn" class="wa-btn" href="#" target="_blank" rel="noopener" style="display:none;">
+            <span style="font-size:20px">📲</span> Paksa Kirim ke Doi (yg blm tentu bales)
+          </a>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-pick" id="btnSpin">🎰 PILIH ACAK 🎰</button>
+        <button class="btn-terserah" id="btnTerserah">TERSERAH!! 🙄</button>
+        <div class="terserah-counter" id="terserahCounter"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Speech bubble for terserah protests -->
+  <div class="speech-bubble" id="speechBubble"></div>
+
+  <!-- Confetti -->
+  <div id="confetti" style="position:fixed; inset:0; pointer-events:none; z-index:150; overflow:hidden;"></div>
+
+  <!-- Winner Modal -->
+  <!-- ===== MENU EDITOR MODAL ===== -->
+  <div id="menuModal" class="winner-modal">
+    <div class="winner-card" style="max-width:420px; padding:20px; max-height:85vh; overflow-y:auto;">
+      <h2 style="color:#d6336c; margin-bottom:6px;">⚙️ Atur Menu Spinner</h2>
+      <p style="font-size:12px; color:#7a4866; margin-bottom:14px;">
+        Tambahin/hapus menu sesuka hati. Bot otomatis tambahin <b>4 ZONK</b> + semua slot punya peluang sama rata 🎯
+      </p>
+
+      <div id="menuList" style="text-align:left; margin-bottom:14px; max-height:280px; overflow-y:auto;"></div>
+
+      <div style="background:#fff5f9; border:2px dashed #ffc1d8; padding:10px; border-radius:12px; margin-bottom:12px;">
+        <input id="newName" type="text" maxlength="25" placeholder="Tulis nama menu aja (contoh: Pizza)" style="width:100%; padding:10px; border:2px solid #ffc1d8; border-radius:10px; font-size:14px; box-sizing:border-box;" />
+        <div style="font-size:11px; color:#7a4866; margin-top:6px; text-align:center;">✨ Emoji otomatis dipilih bot sesuai nama menu</div>
+        <button id="addMenuBtn" type="button" style="margin-top:8px; width:100%; background:#4caf50; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:700; cursor:pointer;">+ Tambah Menu</button>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button id="resetMenuBtn" type="button" style="flex:1; background:#fff; color:#d6336c; border:2px solid #d6336c; padding:10px; border-radius:12px; font-weight:700; cursor:pointer;">🔄 Reset Default</button>
+        <button id="closeMenuBtn" type="button" style="flex:1; background:#ff4081; color:#fff; border:none; padding:10px; border-radius:12px; font-weight:700; cursor:pointer;">✅ Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="winnerModal" class="winner-modal">
+    <div class="winner-card">
+      <div class="winner-sparkles">✨🎊✨</div>
+      <div class="winner-emoji-wrap">
+        <div class="winner-glow"></div>
+        <div class="winner-emoji" id="winnerEmoji">🍜</div>
+      </div>
+      <div class="winner-title" id="winnerTitle">HOREYY KAMU DAPET</div>
+      <div class="winner-name" id="winnerName">Bakso</div>
+      <div class="winner-sub" id="winnerSub">Yeyy selera lo emang juara bestie 💕</div>
+      <a id="winnerWa" class="wa-btn big" href="#" target="_blank" rel="noopener">
+        <span style="font-size:22px">📲</span> Pesan ke Doi/Temen Sekarang
+      </a>
+      <button class="btn-secondary" id="btnCloseWinner">Spin Lagi 🔄</button>
+    </div>
+  </div>
+
+  <!-- Achievement -->
+  <div id="achievement">
+    <div class="achievement-card">
+      <div class="trophy">🤡</div>
+      <h2>ACHIEVEMENT UNLOCKED!</h2>
+      <p><b>"Raja/Ratu Bilang Terserah"</b><br><br>Selamat, lo udah klik Terserah 20x. Pantes lah jomblo, pacar mana tahan sm yg jawabnya "terserah" mulu 💀<br><br>🎁 <b>Hadiah:</b> Status jomblo akut diperpanjang 1 tahun lagi! Aamiin 🤲</p>
+      <button class="btn-primary" id="btnCloseAch">Yaudah Pasrah 😮‍💨</button>
+    </div>
+  </div>
+
+<script>
+/* ============ PETALS BACKGROUND ============ */
+(function(){
+  const petals = ['🌸','💕','🌷','💖','🌟','💘','🍓','✨'];
+  const wrap = document.getElementById('petals');
+  for (let i=0;i<25;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random()*petals.length)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.animationDuration = (8 + Math.random()*10) + 's';
+    p.style.animationDelay = (-Math.random()*15) + 's';
+    p.style.fontSize = (16 + Math.random()*16) + 'px';
+    wrap.appendChild(p);
+  }
+})();
+
+/* ============ AUDIO (Web Audio API) ============ */
+let audioCtx = null;
+function ac(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function beep(freq, dur, type='sine', vol=.15){
+  try {
+    const ctx = ac();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + dur);
+  } catch(e){}
+}
+function sfxSpin(){
+  let f = 800;
+  const interval = setInterval(()=>{ beep(f, .05, 'square', .08); f = Math.max(200, f-20); }, 80);
+  setTimeout(()=> clearInterval(interval), 4800);
+}
+function sfxDing(){ beep(880,.15,'sine',.2); setTimeout(()=>beep(1320,.25,'sine',.2),120); }
+function sfxPop(){ beep(440,.08,'triangle',.15); setTimeout(()=>beep(220,.08,'triangle',.15),60); }
+function sfxKiss(){ beep(660,.1,'sine',.15); setTimeout(()=>beep(990,.15,'sine',.18),100); }
+function sfxBuzz(){ beep(180,.4,'sawtooth',.25); setTimeout(()=>beep(120,.5,'sawtooth',.25),200); }
+
+/* ============ TTS ============ */
+function speak(){ /* TTS dinonaktifkan — pakai SFX/getar aja */ }
+
+/* ============ VIBRATE ============ */
+function vibrate(pattern){ try { navigator.vibrate && navigator.vibrate(pattern); } catch(e){} }
+
+/* ============ SCREEN NAV ============ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=> s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  if (id === 'main') el.style.display = 'flex';
+}
+
+/* ============ WELCOME → VERIFY ============ */
+document.getElementById('btnLanjut').addEventListener('click', async ()=>{
+  sfxPop();
+  ac(); // unlock audio
+  showScreen('verify');
+  startVerification();
+});
+
+/* ============ VERIFIKASI WAJAH (7 detik) ============ */
+let mediaStream = null;
+async function startVerification(){
+  const video = document.getElementById('cameraView');
+  const status = document.getElementById('verifyStatus');
+  const cd = document.getElementById('countdown');
+  const messages = [
+    'Memindai level kejombloan kamu...',
+    'Cek status: jomblo akut / HTS gajelas? 💀',
+    'Menghitung berapa kali ditolak doi...',
+    'Verifikasi: hubungan kok cuma di chat? 📵',
+    'Mengukur aura red flag (banyak bgt nih) 🚩',
+    'Skor jodoh: -10/10 (sabar yaa~)',
+    'Hampir selesai, jangan ngarep doi~ 🥲'
+  ];
+
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+    video.srcObject = mediaStream;
+  } catch(e) {
+    status.textContent = '⚠️ Kamera ga bisa diakses, lanjut aja yaa~';
+  }
+
+  let t = 7;
+  cd.textContent = t;
+  let msgIdx = 0;
+  status.textContent = messages[0];
+
+  const tick = setInterval(()=>{
+    t--;
+    cd.textContent = t;
+    msgIdx = (msgIdx+1) % messages.length;
+    status.textContent = messages[msgIdx];
+    beep(600 + (7-t)*40, .08, 'sine', .1);
+    if (t <= 0){
+      clearInterval(tick);
+      doSnapshot(video);
+    }
+  }, 1000);
+}
+
+function doSnapshot(video){
+  // Flash effect
+  const flash = document.getElementById('flash');
+  flash.classList.add('snap');
+  beep(1200, .05, 'square', .2);
+  setTimeout(()=> flash.classList.remove('snap'), 500);
+
+  // Capture frame
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth || 320;
+  canvas.height = video.videoHeight || 240;
+  try {
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    document.getElementById('snapImg').src = canvas.toDataURL('image/jpeg', .85);
+  } catch(e) {
+    document.getElementById('snapImg').src = '';
+    document.getElementById('snapImg').style.display = 'none';
+  }
+
+  // Stop camera
+  if (mediaStream) mediaStream.getTracks().forEach(t=> t.stop());
+
+  // Show result
+  setTimeout(()=>{
+    document.getElementById('verifyScanning').style.display = 'none';
+    document.getElementById('verifyResult').style.display = 'block';
+    sfxKiss();
+    setTimeout(()=> speak('Terdeteksi: jomblo akut. Yaudah jajan aja sendiri yaa~'), 300);
+  }, 600);
+}
+
+document.getElementById('btnMasuk').addEventListener('click', ()=>{
+  sfxPop();
+  showScreen('main');
+  drawSpinner();
+  updatePhoneStatus();
+});
+
+/* ============ SPINNER ============ */
+const DEFAULT_MENUS = [
+  { name: 'Bakso',          emoji: '🍜' },
+  { name: 'Seblak',         emoji: '🌶️' },
+  { name: 'Mie Gacoan',     emoji: '🍝' },
+  { name: 'Nasi Goreng',    emoji: '🍛' },
+  { name: 'Mie Omah',       emoji: '🍲' },
+  { name: 'Burger',         emoji: '🍔' },
+  { name: 'Kebab',          emoji: '🌯' },
+  { name: 'Mie Ayam',       emoji: '🍜' },
+  { name: 'Es Bebas',       emoji: '🧋' },
+  { name: 'Roti Bakar',     emoji: '🍞' },
+  { name: 'Martabak',       emoji: '🥞' },
+  { name: 'Sate',           emoji: '🍢' },
+];
+const MENU_COLORS = ['#ff8a80','#ff6e40','#ff5252','#ffab40','#ffd180','#a1887f','#bcaaa4','#ffca28','#80d8ff','#ffb74d','#f48fb1','#8d6e63','#f06292','#ffcc80','#b39ddb','#ce93d8','#81c784','#4fc3f7','#ba68c8','#ffd54f'];
+
+function loadCustomMenus(){
+  try {
+    const raw = localStorage.getItem('customMenus');
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return DEFAULT_MENUS.slice();
+}
+function saveCustomMenus(arr){
+  localStorage.setItem('customMenus', JSON.stringify(arr));
+}
+
+let MENU = [];
+function buildMenu(){
+  const customs = loadCustomMenus();
+  // Sebar 4 ZONK merata diantara real menus biar visual nya ga numpuk
+  const result = [];
+  const totalSlots = customs.length + 4;
+  // tempat zonk: dibagi rata
+  const zonkPositions = new Set();
+  for (let i=0; i<4; i++){
+    zonkPositions.add(Math.floor(i * totalSlots / 4) + Math.floor(totalSlots/8));
+  }
+  let menuIdx = 0;
+  for (let i=0; i<totalSlots; i++){
+    if (zonkPositions.has(i) && [...zonkPositions].filter(p=>p<=i).length <= 4){
+      result.push({ name: 'ZONK GA JADI', emoji: '💀', color: i%2 ? '#37474f' : '#263238', zonk: true });
+    } else if (menuIdx < customs.length){
+      const m = customs[menuIdx];
+      result.push({ name: m.name, emoji: m.emoji, color: MENU_COLORS[menuIdx % MENU_COLORS.length] });
+      menuIdx++;
+    }
+  }
+  // Pastikan tepat 4 zonk + semua menus masuk (fallback simple interleave kalau ada yg miss)
+  if (result.filter(x=>x.zonk).length !== 4 || menuIdx < customs.length){
+    result.length = 0;
+    const interval = Math.max(1, Math.floor((customs.length+4)/4));
+    let zCount = 0, mIdx = 0;
+    const total = customs.length + 4;
+    for (let i=0; i<total; i++){
+      if (zCount < 4 && (i % interval === interval-1) && mIdx >= customs.length * (zCount+1)/5){
+        result.push({ name: 'ZONK GA JADI', emoji: '💀', color: i%2 ? '#37474f' : '#263238', zonk: true });
+        zCount++;
+      } else if (mIdx < customs.length){
+        const m = customs[mIdx];
+        result.push({ name: m.name, emoji: m.emoji, color: MENU_COLORS[mIdx % MENU_COLORS.length] });
+        mIdx++;
+      } else {
+        result.push({ name: 'ZONK GA JADI', emoji: '💀', color: i%2 ? '#37474f' : '#263238', zonk: true });
+        zCount++;
+      }
+    }
+  }
+  MENU = result;
+}
+buildMenu();
+
+/* ===== Menu editor modal ===== */
+function renderMenuList(){
+  const list = document.getElementById('menuList');
+  const customs = loadCustomMenus();
+  if (customs.length === 0){
+    list.innerHTML = '<div style="text-align:center; color:#999; font-size:13px; padding:14px;">Belum ada menu, tambahin di bawah ⬇️</div>';
+    return;
+  }
+  list.innerHTML = customs.map((m,i)=>`
+    <div style="display:flex; align-items:center; gap:8px; padding:8px; background:#fff5f9; border-radius:10px; margin-bottom:6px;">
+      <span style="font-size:20px;">${m.emoji}</span>
+      <span style="flex:1; font-size:14px; color:#5a2a4a; font-weight:600;">${m.name}</span>
+      <button data-idx="${i}" class="del-menu" style="background:#ef5350; color:#fff; border:none; width:28px; height:28px; border-radius:8px; cursor:pointer; font-weight:700;">✕</button>
+    </div>
+  `).join('');
+  list.querySelectorAll('.del-menu').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = +btn.dataset.idx;
+      const arr = loadCustomMenus();
+      arr.splice(idx, 1);
+      saveCustomMenus(arr);
+      renderMenuList();
+      buildMenu(); drawSpinner();
+    });
+  });
+}
+
+document.getElementById('editMenuBtn').addEventListener('click', ()=>{
+  renderMenuList();
+  document.getElementById('menuModal').classList.add('show');
+});
+document.getElementById('closeMenuBtn').addEventListener('click', ()=>{
+  document.getElementById('menuModal').classList.remove('show');
+  buildMenu(); drawSpinner();
+});
+function autoEmoji(name){
+  const n = (name||'').toLowerCase();
+  const map = [
+    [['bakso','meatball'],'🍜'], [['seblak','pedas','cabe','cabai','sambal'],'🌶️'],
+    [['mie','noodle','indomie','ramen'],'🍜'], [['nasi goreng','fried rice','nasgor'],'🍛'],
+    [['nasi','rice','padang','rendang','ayam geprek','geprek'],'🍚'], [['burger','hamburger'],'🍔'],
+    [['kebab','shawarma','burrito'],'🌯'], [['pizza'],'🍕'], [['sate','satay'],'🍢'],
+    [['soto','sup','soup','bakwan'],'🥣'], [['ayam','chicken','kfc','crispy'],'🍗'],
+    [['ikan','fish','seafood','udang','shrimp'],'🐟'], [['sushi'],'🍣'], [['onigiri','rice ball'],'🍙'],
+    [['taco'],'🌮'], [['pasta','spaghetti','spagetti','carbonara','lasagna'],'🍝'],
+    [['steak','daging','beef','sapi'],'🥩'], [['telur','egg','omelet','telor'],'🍳'],
+    [['salad','sayur','vegetable'],'🥗'], [['roti','bread','toast','sandwich'],'🍞'],
+    [['martabak','pancake','serabi'],'🥞'], [['donat','donut'],'🍩'],
+    [['cake','kue','tart','tiramisu','brownies'],'🍰'], [['cupcake'],'🧁'],
+    [['cookie','biskuit','biscuit'],'🍪'], [['coklat','chocolate','choco'],'🍫'],
+    [['permen','candy','gula'],'🍬'], [['lollipop','permen lolipop'],'🍭'],
+    [['es krim','ice cream','gelato'],'🍦'], [['es ','ice','dingin'],'🧊'],
+    [['kopi','coffee','cappuccino','latte','espresso'],'☕'], [['teh','tea','milk tea','boba','bubble','thai tea','chizu'],'🧋'],
+    [['susu','milk','milkshake'],'🥛'], [['jus','juice','smoothie'],'🧃'],
+    [['soda','cola','coca','sprite','fanta','pepsi'],'🥤'], [['air','water','aqua'],'💧'],
+    [['bir','beer','wine','anggur'],'🍺'], [['cocktail'],'🍹'],
+    [['buah','fruit'],'🍎'], [['apel','apple'],'🍎'], [['pisang','banana'],'🍌'],
+    [['anggur','grape'],'🍇'], [['jeruk','orange'],'🍊'], [['mangga','mango'],'🥭'],
+    [['semangka','watermelon'],'🍉'], [['nanas','pineapple'],'🍍'], [['stroberi','strawberry'],'🍓'],
+    [['kelapa','coconut'],'🥥'], [['alpukat','avocado'],'🥑'],
+    [['bakwan','gorengan','tempe','tahu','cireng','cilok','cimol'],'🍢'],
+    [['cakwe','cwe','dimsum','siomay','batagor'],'🥟'], [['bakpao','pao'],'🥟'],
+    [['sushi','sashimi'],'🍣'], [['kebab'],'🌯'],
+    [['pancake'],'🥞'], [['waffle'],'🧇'], [['pretzel'],'🥨'],
+    [['hotdog','hot dog','sosis','sausage'],'🌭'], [['popcorn'],'🍿'],
+    [['cheese','keju'],'🧀'], [['butter','mentega'],'🧈'], [['honey','madu'],'🍯'],
+    [['mochi','dorayaki'],'🍡'], [['curry','kari','gulai'],'🍛'],
+    [['pho','laksa'],'🍜'], [['oden'],'🍢'], [['takoyaki','okonomiyaki'],'🍥'],
+    [['ramen'],'🍜'], [['salmon'],'🐟'], [['gurita','octopus'],'🐙'],
+    [['kerang','shellfish'],'🦪'], [['lobster'],'🦞'], [['kepiting','crab'],'🦀'],
+    [['belanja','shopping','sendiri'],'🛍️'], [['terserah','bingung'],'🤷'],
+    [['delivery','gofood','grabfood','shopee','antar'],'🛵'],
+  ];
+  for (const [keys, emoji] of map){
+    for (const k of keys){
+      if (n.includes(k)) return emoji;
+    }
+  }
+  return '🍴';
+}
+
+document.getElementById('addMenuBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('newName').value.trim();
+  if (!name){ alert('Nama menu wajib diisi yaa~'); return; }
+  const emoji = autoEmoji(name);
+  const arr = loadCustomMenus();
+  arr.push({ emoji, name });
+  saveCustomMenus(arr);
+  document.getElementById('newName').value = '';
+  renderMenuList();
+  buildMenu(); drawSpinner();
+});
+document.getElementById('resetMenuBtn').addEventListener('click', ()=>{
+  if (confirm('Yakin reset ke daftar menu default?')){
+    saveCustomMenus(DEFAULT_MENUS.slice());
+    renderMenuList();
+    buildMenu(); drawSpinner();
+  }
+});
+
+const canvas = document.getElementById('spinnerCanvas');
+const ctx = canvas.getContext('2d');
+let spinAngle = 0;
+let spinning = false;
+
+function drawSpinner(){
+  const W = canvas.width, H = canvas.height, R = W/2;
+  const slice = (Math.PI*2) / MENU.length;
+  ctx.clearRect(0,0,W,H);
+  MENU.forEach((m, i)=>{
+    const start = i*slice;
+    ctx.beginPath();
+    ctx.moveTo(R, R);
+    ctx.arc(R, R, R-4, start, start+slice);
+    ctx.closePath();
+    ctx.fillStyle = m.color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(R, R);
+    ctx.rotate(start + slice/2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 22px system-ui';
+    ctx.shadowColor = 'rgba(0,0,0,.3)'; ctx.shadowBlur = 4;
+    ctx.fillText(m.emoji + ' ' + m.name, R - 24, 8);
+    ctx.restore();
+  });
+}
+
+document.getElementById('btnSpin').addEventListener('click', ()=>{
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('spinResult').textContent = 'Mutusin nasib makan kamu... (lebih cepet drpd doi mutusin status) 🌀';
+  sfxSpin();
+  const rounds = 6 + Math.floor(Math.random()*3);
+  // Rate adil: semua slot (menu + zonk) punya peluang sama rata
+  const winner = Math.floor(Math.random() * MENU.length);
+  const slice = 360 / MENU.length;
+  // Pointer ada di TOP (270° in canvas coordinates). Slice i digambar mulai i*slice dari 3 o'clock.
+  // Setelah rotasi R, center slice i berada di (i*slice + slice/2 + R) mod 360. Harus = 270.
+  const desired = (270 - (winner*slice + slice/2) + 360) % 360;
+  const currentMod = ((spinAngle % 360) + 360) % 360;
+  const delta = ((desired - currentMod + 360) % 360) + 360*rounds;
+  spinAngle += delta;
+  canvas.style.transform = `rotate(${spinAngle}deg)`;
+  setTimeout(()=>{
+    const m = MENU[winner];
+    document.getElementById('spinResult').innerHTML = `🎉 ${m.emoji} <b>${m.name}</b> 🎉`;
+    if (m.zonk){ sfxBuzz(); } else { sfxDing(); }
+    showWinnerModal(m);
+    spinning = false;
+  }, 5100);
+});
+
+/* ============ PHONE NUMBER ============ */
+function normalizePhone(raw){
+  const digits = (raw||'').replace(/\D/g,'');
+  if (!digits) return '';
+  if (digits.startsWith('0'))   return '62' + digits.slice(1);   // 085xxx -> 6285xxx
+  if (digits.startsWith('62'))  return digits;                    // 6285xxx
+  if (digits.startsWith('8'))   return '62' + digits;             // 85xxx  -> 6285xxx
+  return digits;
+}
+function getHusbandNumber(){
+  const raw = (document.getElementById('husbandPhone')?.value || localStorage.getItem('husbandPhone') || '').trim();
+  return normalizePhone(raw);
+}
+
+/* ============ WINNER MODAL ============ */
+function waLink(menu){
+  const num = getHusbandNumber();
+  const text = encodeURIComponent(`Hai, aku jomblo akut nih lagi laper. Spinner nyuruh aku makan ${menu}. Anter dong, kasian aku makan sendirian terus 🥲🛵`);
+  return num ? `https://wa.me/${num}?text=${text}` : '#';
+}
+function waLinkRequest(food){
+  const num = getHusbandNumber();
+  const text = encodeURIComponent(`Halo, aku request makanan nih, mau ${food} 🥺 Tau kan aku jomblo + ga ada yg anterin, jadi please beliin yaa, jangan di-read doang 😭🙏`);
+  return num ? `https://wa.me/${num}?text=${text}` : '#';
+}
+function ensurePhoneOrAlert(){
+  const num = getHusbandNumber();
+  if (!num || num.length < 10){
+    const newNum = prompt('Eh, isi dulu nomor WA-nya 📱\nMau dikirim ke siapa? Doi (yg blm tentu bales)? Gebetan? Temen sebatang kara? 💀\n(contoh: 085824162280)', '');
+    if (newNum){
+      const n = normalizePhone(newNum);
+      if (n.length >= 10 && n.startsWith('62')){
+        localStorage.setItem('husbandPhone', newNum);
+        updatePhoneStatus();
+        return true;
+      } else {
+        alert('Nomornya ga valid, kayak status hubungan kamu wkwk 💀');
+      }
+    }
+    return false;
+  }
+  return true;
+}
+
+function updatePhoneStatus(){
+  const num = getHusbandNumber();
+  const status = document.getElementById('phoneStatus');
+  const changeBtn = document.getElementById('changePhoneBtn');
+  if (status){
+    status.textContent = num ? `📱 Target paksaan: +${num}` : '';
+  }
+  if (changeBtn){
+    changeBtn.style.display = num ? '' : 'none';
+  }
+}
+document.addEventListener('DOMContentLoaded', updatePhoneStatus);
+document.getElementById('changePhoneBtn')?.addEventListener('click', ()=>{
+  const cur = localStorage.getItem('husbandPhone') || '';
+  const newNum = prompt('Ganti nomor target paksaan (contoh: 085824162280):', cur);
+  if (newNum !== null){
+    const n = normalizePhone(newNum);
+    if (n.length >= 10 && n.startsWith('62')){
+      localStorage.setItem('husbandPhone', newNum);
+      updatePhoneStatus();
+    } else if (newNum.trim() !== ''){
+      alert('Nomor kurang valid, kek status hubungan kamu 💀');
+    }
+  }
+});
+function showWinnerModal(m){
+  const modal = document.getElementById('winnerModal');
+  const waBtn = document.getElementById('winnerWa');
+  document.getElementById('winnerEmoji').textContent = m.emoji;
+  document.getElementById('winnerName').textContent = m.name;
+  if (m.zonk){
+    document.getElementById('winnerTitle').textContent = '💀 ZONK! GA JADI JAJAN!';
+    const zonkSubs = [
+      'Pantes lah, jomblo emang ga pantes makan enak 🤡',
+      'Zonk = sama kayak nasib HTS-an kamu, ga jadi-jadi 💀',
+      'Tuhan aja ga ridho kamu jajan, intropeksi dong~ 🙏',
+      'Ditolak doi, ditolak spinner juga. Sabar yaa 🥲',
+      'Hubungan zonk, makan zonk. Combo! 💀',
+    ];
+    document.getElementById('winnerSub').textContent = zonkSubs[Math.floor(Math.random()*zonkSubs.length)];
+    waBtn.style.display = 'none';
+  } else {
+    document.getElementById('winnerTitle').textContent = 'YAH DAPET INI~';
+    const subs = [
+      'Selamat, makan sendiri lagi ya 🥲 Doi mah ga akan nemenin~',
+      'Pesan sendiri, makan sendiri, bayar sendiri. Mantap jomblo! 💀',
+      'Doi sebelah ga akan tau kamu makan apa, nikmatin aja sendiri 😮‍💨',
+      'HTS-an ga jadi pacar, yaudah jadi jajan aja 🤡',
+      'Iyaa makan ini aja, daripada nungguin chat doi yg ga dibales~ 📵',
+    ];
+    document.getElementById('winnerSub').textContent = subs[Math.floor(Math.random()*subs.length)];
+    waBtn.style.display = '';
+    waBtn.href = waLink(m.name);
+    spawnConfetti();
+  }
+  modal.classList.add('show');
+  vibrate([100, 50, 100, 50, 200]);
+}
+document.getElementById('btnCloseWinner').addEventListener('click', ()=>{
+  document.getElementById('winnerModal').classList.remove('show');
+  sfxPop();
+});
+// Validate phone before opening WA links
+['winnerWa','waReqBtn'].forEach(id=>{
+  document.addEventListener('click', (ev)=>{
+    const el = ev.target.closest && ev.target.closest('#'+id);
+    if (!el) return;
+    if (!ensurePhoneOrAlert()){ ev.preventDefault(); return; }
+    // refresh href just before opening, in case nomor diketik di tengah jalan
+    if (id === 'winnerWa') el.href = waLink(document.getElementById('winnerName').textContent);
+  });
+});
+
+/* ============ CONFETTI ============ */
+function spawnConfetti(){
+  const wrap = document.getElementById('confetti');
+  wrap.innerHTML = '';
+  const colors = ['#ff4081','#ffd54f','#80d8ff','#b388ff','#ff8a80','#a5d6a7'];
+  for (let i=0;i<60;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDelay = (Math.random()*0.5) + 's';
+    c.style.animationDuration = (2 + Math.random()*2) + 's';
+    wrap.appendChild(c);
+  }
+  setTimeout(()=> wrap.innerHTML='', 4500);
+}
+
+/* ============ FOOD REQUEST RESPONSES ============ */
+const RESPONSES = {
+  bakso:   { e:'🍜', t:'BAKSO?? Yaelah bakso sendirian, mangkok satu sumpit dua, yg satu lagi buat sapa? Doi imajinasi? 💀' },
+  baso:    { e:'🍜', t:'Bakso lagi-bakso lagi. Sendirian lagi. Konsisten sih, kek status jombloan kamu 🤡' },
+  'mie ayam': { e:'🍲', t:'Mie ayam tuh enak diajak makan bareng, lah kamu? Sendiri. Nih pesen aja tetep 🥲' },
+  mie:     { e:'🍜', t:'Mie? Murah meriah cocok buat dompet jomblo yg ga pernah ditraktir 💀' },
+  geprek:  { e:'🍗', t:'Geprek pedes biar nangis kamu jelas, mau alesan nangis krn HTS-nya juga? 🌶️🥲' },
+  ayam:    { e:'🍗', t:'Ayam ga pernah ngecewain, beda sama gebetan kamu yg slow respon mulu 📵' },
+  nasi:    { e:'🍚', t:'Nasi doang? Kek perasaan kamu ke doi: polos, ga dibales, anyep 🍚💀' },
+  padang:  { e:'🍛', t:'Nasi padang sendirian itu sad bgt loh, biasanya buat berdua. Tapi yaudah kamu mah jomblo~ 🤡' },
+  sate:    { e:'🍢', t:'Sate 10 tusuk. Buat siapa? Oh, buat kamu sendiri. Yaudah lanjut~ 💀' },
+  pizza:   { e:'🍕', t:'Pizza family size sendirian? Niat bgt sad-eating-nya wkwk 🍕😭' },
+  burger:  { e:'🍔', t:'Burger sendiri, ga ada yg ngambilin kentangnya. Kasian ya~ 🥲' },
+  sushi:   { e:'🍣', t:'Sushi mahal buat self-reward jomblo? Self-love sehat sih, tapi tetep aja sendirian 💎🤡' },
+  ramen:   { e:'🍜', t:'Ramen panas kek emosi kamu liat doi story bareng org laen 🔥💀' },
+  seblak:  { e:'🌶️', t:'Seblak pedes ngalahin pedesnya hati kamu pas di-ghosting? Belum tentu sih wkwk 🌶️🥲' },
+  martabak: { e:'🥞', t:'Martabak biasanya buat berdua, kamu? Habisin sendirian. Kalori jomblo no debat 🥞💀' },
+  bubur:   { e:'🥣', t:'Bubur diaduk ga diaduk, tetep ga ada yg merhatiin. Mirip status HTS-mu~ 🤡' },
+  soto:    { e:'🥣', t:'Soto anget, hatinya tetep dingin krn ga ada yg nemenin. Sabar yaa 🥲' },
+  rendang: { e:'🍛', t:'Rendang juara dunia, kamu? Juara dunia jomblo terlama. Seimbang 🏆💀' },
+  gudeg:   { e:'🍱', t:'Gudeg manis legit, sayang HTS-mu ga semanis ini. Ya nikmatin aja 💛🤡' },
+  pecel:   { e:'🥗', t:'Pecel sehat, sehatin bdn dulu drpd sehatin perasaan ke org yg ga peduli 🥗💀' },
+  warteg:  { e:'🍱', t:'Warteg pilihan jomblo sejati, hemat buat nabung ngarepin doi yg gajadi-jadi 🤡' },
+
+  // Drinks
+  'es teh': { e:'🧋', t:'Es teh manis. Lebih manis dari kata-kata doi yg cuma "iya" "ok" "hmm" 💀' },
+  teh:     { e:'🍵', t:'Teh anget biar kalem, kamu butuh ini sblm liat story HTS-mu sama org lain~ 🍵🥲' },
+  kopi:    { e:'☕', t:'Ngopi sendiri lagi? Aesthetic sih, tapi tetep sendiri 😎💀' },
+  boba:    { e:'🥤', t:'Boba manis, beda sama feedback dari gebetan kamu yg pahit pait 🥤🤡' },
+  jus:     { e:'🥤', t:'Jus sehat, sayang ga bisa nge-jus perasaan kamu ke doi yg ga peka 🥲' },
+  es:      { e:'🧊', t:'Es apaaa? Sedingin sikap doi pas kamu chat duluan? Pilih yg jelas dong~ 🧊💀' },
+  air:     { e:'💧', t:'Air putih doang? Hidup udh tawar, jgn ditambah tawar lagi sis~ 💧🤡' },
+
+  // Snacks
+  martabak2: { e:'🥞', t:'Martabak full topping buat self-reward jomblo? Boleh, kamu pantes (kecuali pacar~) 🥞💀' },
+  donat:   { e:'🍩', t:'Donat bolong tengahnya, kek hati kamu pas di-read doang sama doi 🍩🥲' },
+  donut:   { e:'🍩', t:'Donut sprinkle warna-warni, beda sama hidup kamu yg abu-abu krn HTS gajelas 🤡' },
+  roti:    { e:'🍞', t:'Roti tawar = vibe hubungan kamu. Anyep, ga ada rasa, ga ada status 💀' },
+  cake:    { e:'🎂', t:'Cake? Ulang taun sendirian lagi nih? Sabar yaa, jodoh kapan ya 🎂🥲' },
+  kue:     { e:'🧁', t:'Kue manis bikin mood naik, sayang doi ga bantu naikin mood kamu sm sekali 🧁💀' },
+  ice:     { e:'🍦', t:'Ice cream meleleh, kek harapan kamu sama gebetan yg ga jadi-jadi 🍦🤡' },
+  'es krim': { e:'🍦', t:'Es krim sendirian. Romantis kalo berdua, sedih kalo solo. Welcome to your life 🥲' },
+  cokelat: { e:'🍫', t:'Coklat valentine? Beli sendiri buat sendiri ya~ Self-love eraa 💀' },
+  coklat:  { e:'🍫', t:'Coklat pahit kek nasib percintaan kamu. Match made in heaven 🍫🤡' },
+  pisang:  { e:'🍌', t:'Pisang goreng murah meriah, cocok buat dompet anak HTS yg ga di-traktir doi 🥲' },
+  buah:    { e:'🍓', t:'Buah seger, semoga gebetan kamu juga seger ngebales chat. Aamiin~ 🤲💀' },
+};
+
+function getResponse(input){
+  const q = input.toLowerCase().trim();
+  if (!q) return { e:'🤔', t:'Eh kosong bestie, ketik dulu mau apa~' };
+  // Exact match first
+  if (RESPONSES[q]) return RESPONSES[q];
+  // Contains match
+  for (const k in RESPONSES) if (q.includes(k) || k.includes(q)) return RESPONSES[k];
+  // Generic positive responses
+  const generics = [
+    { e:'🤡', t:`"${input}"?! Yaudah pesen, toh ga ada doi yg complain selera kamu aneh 💀` },
+    { e:'😮‍💨', t:`"${input}" — sendiri lagi makannya? Konsisten sih, jomblo sejati 🥲` },
+    { e:'💀', t:`Ohh "${input}" yaa. Pesen sendiri, makan sendiri, bayar sendiri. The trinity of jomblo 🤡` },
+    { e:'🥲', t:`"${input}"! Daripada nungguin doi nawarin, mending order sendiri kan ya~ 📵` },
+    { e:'😭', t:`"${input}" — request dicatet. Tapi inget, kurirnya bakal sampe duluan drpd doi 💀` },
+  ];
+  return generics[Math.floor(Math.random()*generics.length)];
+}
+
+function showResponse(input){
+  const food = (input || '').trim();
+  if (!food) {
+    document.getElementById('respEmoji').textContent = '🤔';
+    document.getElementById('respText').textContent = 'Eh kosong bestie, ketik dulu mau apa~';
+    document.getElementById('waReqBtn').style.display = 'none';
+    document.getElementById('responseBox').classList.add('show');
+    return;
+  }
+  const r = getResponse(food);
+  document.getElementById('respEmoji').textContent = r.e;
+  document.getElementById('respText').textContent = r.t;
+  const waBtn = document.getElementById('waReqBtn');
+  waBtn.href = waLinkRequest(food);
+  waBtn.style.display = 'inline-flex';
+  document.getElementById('responseBox').classList.add('show');
+  sfxKiss();
+  setTimeout(()=> speak(r.t.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,'')), 200);
+}
+
+document.getElementById('sendBtn').addEventListener('click', ()=>{
+  showResponse(document.getElementById('foodInput').value);
+});
+document.getElementById('foodInput').addEventListener('keydown', e=>{
+  if (e.key === 'Enter') showResponse(e.target.value);
+});
+
+/* ============ TOMBOL TERSERAH ============ */
+const btnT = document.getElementById('btnTerserah');
+const counterEl = document.getElementById('terserahCounter');
+const bubble = document.getElementById('speechBubble');
+
+let terserahClicks = 0;
+const MAX_CLICKS = 20;
+
+const PROTESTS = [
+  'Heh jangan klik aku!',
+  'Gabisa pilih ya?',
+  'Kabuurrr 🏃‍♀️',
+  'Cape gua dipencetin mulu!',
+  'Coba pilih yang bener dong bestie',
+  'Aduhhh jangan kejar aku 🥺',
+  'Kerja gua lari mulu nih',
+  'Aku ngambek kalo lo klik aku terus',
+  'Bayar dong tiap klik 1000!',
+  'Stop! Dilarang klik!',
+  'Yaelahh pilih beneran napaa',
+  'Lari aja sampai kamu nyerah',
+  'Aku nungguin lo nih',
+  'Tombol satunya tuh klik!',
+  'Hadeuhhh~',
+  'Gak akan ketangkep 😎',
+  'Gas terus larinya',
+  'Bentar lagi gua ilang!',
+  'Sebentar lagi kamu nyerah deh',
+  'Klik terakhir nihh, hilang gua',
+];
+
+function updateCounter(){
+  const left = MAX_CLICKS - terserahClicks;
+  counterEl.textContent = `Bilang "terserah" mulu? Pantes doi kabur 💀 ${left} klik lagi sebelum tombolnya pergi (kek doi)`;
+}
+updateCounter();
+
+function showBubble(text, x, y){
+  bubble.textContent = text;
+  bubble.style.left = Math.min(window.innerWidth - 250, Math.max(10, x - 100)) + 'px';
+  bubble.style.top = Math.max(10, y - 60) + 'px';
+  bubble.classList.add('show');
+  clearTimeout(bubble._t);
+  bubble._t = setTimeout(()=> bubble.classList.remove('show'), 1400);
+}
+
+function moveTerserah(){
+  // pick random spot avoiding edges
+  const w = btnT.offsetWidth, h = btnT.offsetHeight;
+  const maxX = window.innerWidth - w - 20;
+  const maxY = window.innerHeight - h - 20;
+  const x = Math.random() * Math.max(20, maxX);
+  const y = Math.random() * Math.max(80, maxY);
+  if (!btnT.classList.contains('flying')){
+    btnT.classList.add('flying');
+  }
+  btnT.style.left = x + 'px';
+  btnT.style.top = y + 'px';
+}
+
+function shrinkTerserah(){
+  // shrink ~3.5% per click, font shrink as well
+  const scale = Math.max(0.25, 1 - terserahClicks * 0.035);
+  const baseW = 336;
+  btnT.style.width = (baseW * scale) + 'px';
+  btnT.style.fontSize = Math.max(11, 19 * scale) + 'px';
+  btnT.style.padding = Math.max(8, 19 * scale) + 'px ' + Math.max(14, 34 * scale) + 'px';
+  btnT.style.opacity = Math.max(0.4, 1 - terserahClicks * 0.025);
+}
+
+function sfxAnnoying(){
+  // Buzzer error keras
+  beep(180, .12, 'sawtooth', .25);
+  setTimeout(()=> beep(140, .12, 'sawtooth', .25), 110);
+  setTimeout(()=> beep(110, .15, 'square', .22), 230);
+}
+function handleTerserahClick(e){
+  e && e.preventDefault();
+  terserahClicks++;
+  vibrate([120, 60, 120, 60, 200]);
+  sfxAnnoying();
+
+  const protest = PROTESTS[(terserahClicks-1) % PROTESTS.length];
+  const rect = btnT.getBoundingClientRect();
+  showBubble(protest, rect.left + rect.width/2, rect.top);
+
+  if (terserahClicks >= MAX_CLICKS){
+    // Hide forever
+    btnT.style.transition = 'opacity .6s, transform .6s';
+    btnT.style.opacity = '0';
+    btnT.style.transform = 'scale(0)';
+    setTimeout(()=>{
+      btnT.style.display = 'none';
+      counterEl.textContent = '✨ Tombol Terserah hilang selamanyaa! ✨';
+      showAchievement();
+    }, 600);
+    return;
+  }
+
+  shrinkTerserah();
+  moveTerserah();
+  updateCounter();
+}
+
+// Make button run away on hover too (mobile-friendly: also on click)
+btnT.addEventListener('click', handleTerserahClick);
+btnT.addEventListener('mouseenter', (e)=>{
+  // Only flee on hover if already clicked once (so first click is easy to bait)
+  if (terserahClicks > 0 && terserahClicks < MAX_CLICKS){
+    handleTerserahClick(e);
+  }
+});
+
+/* ============ ACHIEVEMENT ============ */
+function showAchievement(){
+  document.getElementById('achievement').classList.add('show');
+  sfxDing();
+  vibrate([200, 100, 200, 100, 400]);
+  setTimeout(()=> speak('Achievement unlocked! Master of terserah! Selamat besieee!', {pitch:1.3}), 300);
+}
+document.getElementById('btnCloseAch').addEventListener('click', ()=>{
+  document.getElementById('achievement').classList.remove('show');
+  sfxKiss();
+});
+</script>
+</body>
+</html>
