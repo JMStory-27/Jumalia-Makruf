@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<base href="./">
+<base href="/album/nikah-jumalia-makruf-2/">
 <title>Jumalia &amp; Makruf • Album Abadi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,6 +110,8 @@
   .audio-fab{position:fixed;right:18px;bottom:18px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--pink-deep),var(--blue-deep));color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;box-shadow:0 10px 30px rgba(232,149,166,.55);z-index:55;transition:transform .25s}
   .audio-fab:hover{transform:scale(1.1)}
   .audio-fab.playing{animation:spin 6s linear infinite}
+  .audio-fab.attention{animation:audioPulse 1.2s ease-in-out infinite;box-shadow:0 0 0 0 rgba(232,149,166,.7),0 10px 30px rgba(232,149,166,.55)}
+  @keyframes audioPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,149,166,.7),0 10px 30px rgba(232,149,166,.55)}50%{transform:scale(1.12);box-shadow:0 0 0 16px rgba(232,149,166,0),0 10px 30px rgba(232,149,166,.55)}}
   .audio-hint{position:fixed;right:86px;bottom:32px;background:#fff;padding:8px 14px;border-radius:999px;font-size:12px;color:var(--ink);box-shadow:0 6px 18px rgba(232,149,166,.4);z-index:55;opacity:0;transition:opacity .4s;pointer-events:none}
   .audio-hint.show{opacity:1}
   /* === WISHES WALL === */
@@ -313,7 +315,7 @@
     </div>
 
     <div class="actions">
-      <a class="btn primary" href="album.zip">⬇ Unduh Semua (.zip)</a>
+      <a class="btn primary" href="/album/nikah-jumalia-makruf-2/download">⬇ Unduh Semua (.zip)</a>
       <button class="btn" onclick="copyLink()">🔗 Salin Tautan</button>
       <button class="btn" onclick="document.getElementById('wishes').scrollIntoView({behavior:'smooth'})">💌 Tulis Ucapan</button>
     </div>
@@ -773,6 +775,7 @@
     const loadTrack = (i) => {
       trackIdx = ((i % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
       audio.src = PLAYLIST[trackIdx];
+      try { audio.load(); } catch {}
     };
     loadTrack(0);
     // When a track ends, advance to the next one. Wrap back to 0 after the last.
@@ -780,14 +783,17 @@
       loadTrack(trackIdx + 1);
       audio.play().catch(() => {});
     });
-    // If the file fails to load, skip to the next so a single broken file
-    // doesn't stop the whole playlist.
+    // If a file fails (404 / decode error), skip to next so playlist keeps going.
+    let errSkips = 0;
     audio.addEventListener('error', () => {
-      if (PLAYLIST.length > 1) {
+      console.warn('[audio] load error track', trackIdx, audio.src);
+      if (PLAYLIST.length > 1 && errSkips < PLAYLIST.length) {
+        errSkips++;
         loadTrack(trackIdx + 1);
         audio.play().catch(() => {});
       }
     });
+    audio.addEventListener('playing', () => { errSkips = 0; });
     const fadeIn = () => {
       audio.volume = 0;
       let v = 0;
@@ -798,32 +804,40 @@
         audio.volume = v;
       }, 80);
     };
+    const showHint = (txt, ms) => {
+      if (!hint) return;
+      hint.textContent = txt;
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), ms || 4000);
+    };
+    const onPlayingSuccess = () => {
+      playing = true;
+      fadeIn();
+      fab.classList.add('playing');
+      fab.classList.remove('attention');
+      fab.textContent = '🎵';
+      showHint(PLAYLIST.length > 1 ? '🎵 Playlist ' + PLAYLIST.length + ' lagu (loop)' : '🎵 Musik diputar');
+    };
+    // Fallback: any user gesture anywhere on page will start audio if autoplay was blocked.
+    const gestureStart = async () => {
+      if (playing || !audio.paused) return;
+      try { await audio.play(); onPlayingSuccess(); } catch {}
+    };
+    ['click','touchstart','pointerdown','keydown'].forEach(ev =>
+      window.addEventListener(ev, gestureStart, { passive: true }));
     const startPlayback = async () => {
       try {
         await audio.play();
-        playing = true;
-        fadeIn();
-        fab.classList.add('playing');
-        fab.textContent = '🎵';
-        if (hint) {
-          hint.textContent = PLAYLIST.length > 1
-            ? '🎵 Playlist ' + PLAYLIST.length + ' lagu (loop)'
-            : '🎵 Musik diputar';
-          hint.classList.add('show');
-          setTimeout(() => hint.classList.remove('show'), 4000);
-        }
+        onPlayingSuccess();
       } catch (e) {
-        // Should never happen since we trigger from a user gesture, but
-        // fall back to first-interaction listener just in case.
-        const start = async () => {
-          try { await audio.play(); playing = true; fadeIn(); fab.classList.add('playing'); } catch {}
-        };
-        ['click','touchstart','pointerdown','keydown'].forEach(ev =>
-          window.addEventListener(ev, start, { once: true, passive: true }));
+        // Autoplay blocked — make the FAB pulse + show banner asking user to tap.
+        fab.classList.add('attention');
+        showHint('🔊 Tap tombol musik buat putar lagu', 8000);
       }
     };
     fab.addEventListener('click', (e) => {
       e.stopPropagation();
+      fab.classList.remove('attention');
       if (audio.paused) {
         audio.play().then(() => { playing = true; fab.classList.add('playing'); fab.textContent = '🎵'; }).catch(() => {});
       } else {
