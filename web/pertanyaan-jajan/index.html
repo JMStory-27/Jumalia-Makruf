@@ -313,6 +313,18 @@
       <div class="greet-emoji">🥰</div>
       <h1>Hai istriku tercintaaa~</h1>
       <p>Hari ini Mas mau jajanin kamu, lho 🥺💕<br>Yuk pilih mau makan/minum apa, biar aku langsung beliin~</p>
+
+      <div style="background:#fff5f9; border:2px solid #ffc1d8; border-radius:16px; padding:14px; margin:18px 0 8px; text-align:left;">
+        <label style="display:block; font-size:13px; font-weight:700; color:#d6336c; margin-bottom:8px;">
+          📱 Isi nomor WhatsApp suamimu dulu yaa~
+        </label>
+        <input type="tel" id="husbandPhone" placeholder="contoh: 0858xxxxxxx" inputmode="numeric"
+          style="width:100%; padding:12px 14px; border:2px solid #ffc1d8; border-radius:12px; font-size:15px; outline:none; background:#fff; color:#5a2a4a;" />
+        <div class="phone-hint" id="phoneHint" style="margin-top:8px; font-size:11px; color:#d6336c;">
+          Wajib diisi biar bisa kirim pesan ke suamimu 💕
+        </div>
+      </div>
+
       <button class="btn-primary" id="btnLanjut">Lanjut ✨</button>
     </div>
   </div>
@@ -373,11 +385,8 @@
       <div class="header-card">
         <h2>🍽️ Jajan Time, Sayang!</h2>
         <p>Pilih sendiri atau biar takdir yang nentuin 💫</p>
-        <div class="phone-row">
-          <span class="phone-label">📱 Nomor Suamimu:</span>
-          <input type="tel" id="husbandPhone" placeholder="contoh: 0858xxxx atau 6285xxxx" inputmode="numeric" />
-        </div>
-        <div class="phone-hint" id="phoneHint">Isi nomor suami dulu yaa biar bisa kirim pesan 💕</div>
+        <div id="phoneStatus" style="margin-top:10px; font-size:12px; color:#2e7d32; font-weight:600;"></div>
+        <button id="changePhoneBtn" type="button" style="margin-top:6px; background:none; border:none; color:#d6336c; font-size:11px; text-decoration:underline; cursor:pointer;">Ganti nomor</button>
       </div>
 
       <div class="spinner-card">
@@ -502,10 +511,47 @@ function showScreen(id){
 
 /* ============ WELCOME → VERIFY ============ */
 document.getElementById('btnLanjut').addEventListener('click', async ()=>{
+  const phoneEl = document.getElementById('husbandPhone');
+  const num = normalizePhone(phoneEl.value);
+  if (!num || num.length < 10 || !num.startsWith('62')){
+    const hint = document.getElementById('phoneHint');
+    hint.textContent = '⚠️ Nomor belum valid sayang, contoh: 085824162280';
+    hint.style.color = '#d32f2f';
+    phoneEl.focus();
+    phoneEl.style.borderColor = '#d32f2f';
+    sfxPop();
+    return;
+  }
+  localStorage.setItem('husbandPhone', phoneEl.value);
   sfxPop();
   ac(); // unlock audio
   showScreen('verify');
   startVerification();
+});
+
+// Pre-fill from localStorage
+(function(){
+  const saved = localStorage.getItem('husbandPhone');
+  if (saved) {
+    const el = document.getElementById('husbandPhone');
+    if (el) el.value = saved;
+  }
+})();
+// Live hint update on welcome input
+document.getElementById('husbandPhone')?.addEventListener('input', (e)=>{
+  const n = normalizePhone(e.target.value);
+  const hint = document.getElementById('phoneHint');
+  e.target.style.borderColor = '#ffc1d8';
+  if (n.length >= 10 && n.startsWith('62')){
+    hint.textContent = `✅ Siap! Nomor terdeteksi: +${n}`;
+    hint.style.color = '#2e7d32';
+  } else if (n.length > 0){
+    hint.textContent = `Lanjut ngetik yaa... (${n.length}/min 10 digit)`;
+    hint.style.color = '#d6336c';
+  } else {
+    hint.textContent = 'Wajib diisi biar bisa kirim pesan ke suamimu 💕';
+    hint.style.color = '#d6336c';
+  }
 });
 
 /* ============ VERIFIKASI WAJAH (7 detik) ============ */
@@ -585,6 +631,7 @@ document.getElementById('btnMasuk').addEventListener('click', ()=>{
   sfxPop();
   showScreen('main');
   drawSpinner();
+  updatePhoneStatus();
 });
 
 /* ============ SPINNER ============ */
@@ -686,26 +733,6 @@ function getHusbandNumber(){
   const raw = (document.getElementById('husbandPhone')?.value || localStorage.getItem('husbandPhone') || '').trim();
   return normalizePhone(raw);
 }
-const phoneInput = () => document.getElementById('husbandPhone');
-const phoneHint  = () => document.getElementById('phoneHint');
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  const saved = localStorage.getItem('husbandPhone');
-  if (saved && phoneInput()) phoneInput().value = saved;
-  if (phoneInput()) {
-    phoneInput().addEventListener('input', ()=>{
-      const n = normalizePhone(phoneInput().value);
-      localStorage.setItem('husbandPhone', phoneInput().value);
-      if (n.length >= 10 && n.startsWith('62')){
-        phoneHint().textContent = `✅ Nomor siap: +${n}`;
-        phoneHint().classList.add('ok');
-      } else {
-        phoneHint().textContent = 'Isi nomor suami dulu yaa biar bisa kirim pesan 💕';
-        phoneHint().classList.remove('ok');
-      }
-    });
-  }
-});
 
 /* ============ WINNER MODAL ============ */
 function waLink(menu){
@@ -721,12 +748,47 @@ function waLinkRequest(food){
 function ensurePhoneOrAlert(){
   const num = getHusbandNumber();
   if (!num || num.length < 10){
-    alert('Eh sayang, isi nomor suamimu dulu di atas yaa~ 📱💕');
-    phoneInput()?.focus();
+    const newNum = prompt('Eh sayang, isi nomor WhatsApp suamimu dulu yaa~ 📱💕\n(contoh: 085824162280)', '');
+    if (newNum){
+      const n = normalizePhone(newNum);
+      if (n.length >= 10 && n.startsWith('62')){
+        localStorage.setItem('husbandPhone', newNum);
+        const el = document.getElementById('husbandPhone');
+        if (el) el.value = newNum;
+        updatePhoneStatus();
+        return true;
+      } else {
+        alert('Nomornya kurang valid, coba lagi yaa~');
+      }
+    }
     return false;
   }
   return true;
 }
+
+function updatePhoneStatus(){
+  const num = getHusbandNumber();
+  const status = document.getElementById('phoneStatus');
+  if (status){
+    status.textContent = num ? `📱 Nomor suamimu: +${num}` : '';
+  }
+}
+document.addEventListener('DOMContentLoaded', updatePhoneStatus);
+document.getElementById('changePhoneBtn')?.addEventListener('click', ()=>{
+  const cur = localStorage.getItem('husbandPhone') || '';
+  const newNum = prompt('Ganti nomor suami (contoh: 085824162280):', cur);
+  if (newNum !== null){
+    const n = normalizePhone(newNum);
+    if (n.length >= 10 && n.startsWith('62')){
+      localStorage.setItem('husbandPhone', newNum);
+      const el = document.getElementById('husbandPhone');
+      if (el) el.value = newNum;
+      updatePhoneStatus();
+    } else if (newNum.trim() !== ''){
+      alert('Nomor kurang valid yaa~');
+    }
+  }
+});
 function showWinnerModal(m){
   const modal = document.getElementById('winnerModal');
   document.getElementById('winnerEmoji').textContent = m.emoji;
