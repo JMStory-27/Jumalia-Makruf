@@ -629,42 +629,68 @@ function dedupeFaces(boxes){
   return kept;
 }
 
+// Upscale a small canvas to at least targetW pixels wide — face detectors
+// (especially SSD) work much better on larger inputs.
+function upscaleCanvas(srcCanvas, targetW=640){
+  if (srcCanvas.width >= targetW) return srcCanvas;
+  const scale = targetW / srcCanvas.width;
+  const c = document.createElement('canvas');
+  c.width = Math.round(srcCanvas.width * scale);
+  c.height = Math.round(srcCanvas.height * scale);
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(srcCanvas, 0, 0, c.width, c.height);
+  return c;
+}
+
 async function detectFaces(canvas){
   const ok = await ensureFaceModel();
-  if (!ok || typeof faceapi === 'undefined') return -1;
-  // Run multiple detectors and combine results, dedupe overlapping boxes
+  if (!ok || typeof faceapi === 'undefined') {
+    console.warn('[face-detect] face-api not ready, returning -1');
+    return -1;
+  }
+  // Upscale small selfies for better detection
+  const work = upscaleCanvas(canvas, 640);
+  console.log('[face-detect] input size', canvas.width+'x'+canvas.height, '-> work', work.width+'x'+work.height);
+
   const allBoxes = [];
-  const debug = { ssd: 0, tiny: {} };
-  // Try SSD MobileNet (more accurate for multiple faces)
+  const debug = { ssd: 'skipped', tiny: {} };
+
   if (faceapi.nets.ssdMobilenetv1.params){
     try {
-      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 });
-      const dets = await faceapi.detectAllFaces(canvas, opts);
+      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.15 });
+      const dets = await faceapi.detectAllFaces(work, opts);
       debug.ssd = dets.length;
       for (const d of dets){
         const b = d.box;
-        allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score });
+        allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score, src:'ssd' });
       }
-    } catch(e){ console.warn('ssd detect failed', e); }
+    } catch(e){ console.warn('ssd detect failed', e); debug.ssd = 'error'; }
   }
-  // Also run Tiny at multiple input sizes for robustness
+
   if (faceapi.nets.tinyFaceDetector.params){
     for (const size of [320, 416, 512, 608]){
       try {
         const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold: 0.2 });
-        const dets = await faceapi.detectAllFaces(canvas, opts);
+        const dets = await faceapi.detectAllFaces(work, opts);
         debug.tiny[size] = dets.length;
         for (const d of dets){
           const b = d.box;
-          allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score });
+          allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score, src:'tiny'+size });
         }
-      } catch(e){ console.warn('tiny detect failed', e); }
+      } catch(e){ console.warn('tiny detect failed', e); debug.tiny[size] = 'error'; }
     }
   }
-  console.log('[face-detect] raw boxes:', allBoxes.length, 'detail:', debug);
+
+  console.log('[face-detect] raw boxes:', allBoxes.length, 'detail:', JSON.stringify(debug));
+
+  // If no detector ran at all, return -1 (truly unknown)
+  if (debug.ssd === 'skipped' && Object.keys(debug.tiny).length === 0) return -1;
+
   if (allBoxes.length === 0) return 0;
   const merged = dedupeFaces(allBoxes);
-  console.log('[face-detect] after dedupe:', merged.length, merged.map(b=>({x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.w),h:Math.round(b.h),s:b.score.toFixed(2)})));
+  console.log('[face-detect] after dedupe:', merged.length, merged.map(b=>({x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.w),h:Math.round(b.h),s:b.score.toFixed(2),src:b.src})));
   return merged.length;
 }
 
@@ -764,13 +790,18 @@ async function doSnapshot(video){
 
   // Update status while detecting
   const status = document.getElementById('verifyStatus');
-  if (status) status.textContent = 'Menghitung jumlah wajah... 🔍';
+  if (status) status.textContent = 'Loading model AI deteksi wajah... 🤖';
+
+  // Wait for face model to be fully ready (this might take a few seconds on first scan)
+  const modelOk = await ensureFaceModel();
+  if (status) status.textContent = modelOk ? 'Menghitung jumlah wajah... 🔍' : 'AI gagal load, pake hasil random 🤡';
 
   // Detect faces in captured frame
   let count = -1;
-  if (cap.width > 0 && cap.height > 0){
+  if (cap.width > 0 && cap.height > 0 && modelOk){
     count = await detectFaces(cap);
   }
+  console.log('[snapshot] final face count =', count);
 
   // Pick variant
   let key;
@@ -778,13 +809,20 @@ async function doSnapshot(video){
   else if (count === 1) key = 'oneFace';
   else if (count === 2) key = 'twoFaces';
   else if (count >= 3) key = 'manyFaces';
-  else key = 'oneFace'; // detection failed -> default to jomblo
+  else {
+    // Detection genuinely failed — randomize so user doesn't always see "jomblo"
+    const fallbacks = ['noFace','oneFace','twoFaces','manyFaces'];
+    key = fallbacks[Math.floor(Math.random()*fallbacks.length)];
+    console.warn('[snapshot] detection failed, random fallback =', key);
+  }
   const v = RESULT_VARIANTS[key];
 
   // Apply variant
   document.getElementById('resultCaption').innerHTML = v.caption;
   document.getElementById('resultHeadline').innerHTML = v.headline;
-  const countNote = count >= 0 ? `<div style="text-align:center; margin-bottom:8px; font-size:12px; color:#ff8fb1;"><b>👁️ AI deteksi: ${count} wajah</b></div>` : '';
+  const countNote = count >= 0
+    ? `<div style="text-align:center; margin-bottom:8px; font-size:12px; color:#ff8fb1;"><b>👁️ AI deteksi: ${count} wajah</b></div>`
+    : `<div style="text-align:center; margin-bottom:8px; font-size:12px; color:#ff8fb1;"><b>👁️ AI ga jalan, hasil random aja 🤖</b></div>`;
   document.getElementById('resultDetails').innerHTML = countNote + v.details;
   document.getElementById('resultBurst').textContent = v.burst;
   document.getElementById('frameTl').textContent = v.deco[0];
