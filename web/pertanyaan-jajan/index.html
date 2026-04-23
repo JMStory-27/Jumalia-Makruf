@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Jajan Yuk Sayang 🥰</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; overflow:hidden; font-family:'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body {
+    background: linear-gradient(135deg, #ffd6e7 0%, #ffe7f1 40%, #fff0f6 100%);
+    color:#5a2a4a; user-select:none;
+    position:relative;
+  }
+  .petals { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:1; }
+  .petal { position:absolute; font-size:22px; animation: fall linear infinite; opacity:.85; }
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(720deg); }
+  }
+  .screen { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; z-index:5; }
+  .screen.active { display:flex; }
+
+  /* ============ WELCOME ============ */
+  #welcome .card {
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-radius: 28px; padding: 36px 28px; max-width: 420px; width:100%;
+    box-shadow: 0 20px 60px rgba(255,105,180,.25);
+    text-align:center; animation: pop .6s ease;
+  }
+  @keyframes pop { from { transform:scale(.7); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .greet-emoji { font-size:64px; animation: wiggle 1.5s ease-in-out infinite; }
+  @keyframes wiggle { 0%,100%{transform:rotate(-10deg);} 50%{transform:rotate(10deg);} }
+  #welcome h1 { font-size:26px; margin:14px 0 6px; color:#d6336c; }
+  #welcome p { font-size:16px; color:#7a4866; margin-bottom:22px; line-height:1.5; }
+  .btn-primary {
+    background: linear-gradient(135deg, #ff6fa3, #ff4081);
+    color:white; border:none; padding:14px 36px; border-radius:50px;
+    font-size:17px; font-weight:600; cursor:pointer;
+    box-shadow: 0 8px 20px rgba(255,64,129,.4);
+    transition: transform .15s;
+  }
+  .btn-primary:active { transform:scale(.95); }
+
+  /* ============ VERIFIKASI WAJAH ============ */
+  #verify { background: radial-gradient(circle, #1a0f2e 0%, #0a0518 100%); color:#fff; }
+  #verify .scanner-wrap {
+    position:relative; width: 280px; height: 280px;
+    border-radius: 50%; overflow:hidden;
+    border: 4px solid #ff4081;
+    box-shadow: 0 0 60px rgba(255,64,129,.6), inset 0 0 30px rgba(255,64,129,.3);
+  }
+  #cameraView { width:100%; height:100%; object-fit:cover; transform: scaleX(-1); background:#000; }
+  .scan-line {
+    position:absolute; left:0; right:0; height:3px;
+    background: linear-gradient(90deg, transparent, #ff4081, transparent);
+    box-shadow: 0 0 12px #ff4081;
+    animation: scan 1.5s linear infinite;
+  }
+  @keyframes scan { 0%{top:0;} 100%{top:100%;} }
+  .corner { position:absolute; width:40px; height:40px; border:3px solid #ff4081; }
+  .corner.tl { top:10px; left:10px; border-right:none; border-bottom:none; }
+  .corner.tr { top:10px; right:10px; border-left:none; border-bottom:none; }
+  .corner.bl { bottom:10px; left:10px; border-right:none; border-top:none; }
+  .corner.br { bottom:10px; right:10px; border-left:none; border-top:none; }
+  #verify h2 { margin-top:30px; font-size:20px; color:#ff8fb1; letter-spacing:1px; }
+  #verifyStatus { margin-top:14px; font-size:14px; color:#ffb3cc; min-height:20px; font-family: monospace; }
+  .progress-ring { margin-top: 16px; font-size:32px; font-weight:bold; color:#ff4081; font-family:monospace; }
+  .flash { position:fixed; inset:0; background:#fff; opacity:0; z-index:99; pointer-events:none; }
+  .flash.snap { animation: flashAnim .5s ease; }
+  @keyframes flashAnim { 0%{opacity:0;} 30%{opacity:1;} 100%{opacity:0;} }
+  #verifyResult { display:none; text-align:center; }
+  #verifyResult img.snap-img {
+    width: 240px; height:240px; object-fit:cover; border-radius:20px;
+    border: 4px solid #ff4081; transform: scaleX(-1);
+    box-shadow: 0 10px 40px rgba(255,64,129,.5);
+    animation: pop .6s ease;
+  }
+  #verifyResult h2 { color:#ffb3cc; margin-top:24px; font-size:22px; padding:0 16px; }
+  #verifyResult .heart-burst { font-size: 40px; margin-top:14px; animation: heartbeat 1s ease infinite; }
+  @keyframes heartbeat { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+
+  /* ============ MAIN ============ */
+  #main { overflow-y:auto; align-items:flex-start; padding-top:24px; padding-bottom:60px; display:none; }
+  #main.active { display:flex; }
+  #main .container { width:100%; max-width:480px; }
+  .header-card {
+    background:rgba(255,255,255,.92); border-radius:24px; padding:18px 20px;
+    box-shadow:0 8px 24px rgba(255,105,180,.2); margin-bottom:20px; text-align:center;
+  }
+  .header-card h2 { color:#d6336c; font-size:20px; margin-bottom:4px; }
+  .header-card p { color:#7a4866; font-size:13px; }
+
+  /* Spinner */
+  .spinner-card { background:rgba(255,255,255,.92); border-radius:24px; padding:24px 18px; margin-bottom:20px; box-shadow:0 8px 24px rgba(255,105,180,.2); }
+  .spinner-wrap { position:relative; width:280px; height:280px; margin: 0 auto 18px; }
+  .spinner-pointer {
+    position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent;
+    border-top:24px solid #d6336c; z-index:3; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  }
+  #spinnerCanvas { width:100%; height:100%; transition: transform 5s cubic-bezier(.17,.67,.21,.99); }
+  .spinner-center {
+    position:absolute; top:50%; left:50%; width:50px; height:50px;
+    transform:translate(-50%,-50%); background:#fff; border-radius:50%;
+    border:4px solid #d6336c; z-index:2; display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+  }
+  .spinner-result {
+    text-align:center; min-height:30px; font-size:16px; color:#d6336c; font-weight:600; margin-top:8px;
+  }
+
+  /* Request box */
+  .request-card { background:rgba(255,255,255,.92); border-radius:24px; padding:20px; margin-bottom:20px; box-shadow:0 8px 24px rgba(255,105,180,.2); }
+  .request-card h3 { color:#d6336c; font-size:16px; margin-bottom:12px; text-align:center; }
+  .input-row { display:flex; gap:8px; }
+  #foodInput {
+    flex:1; padding:14px 16px; border:2px solid #ffc1d8; border-radius:14px;
+    font-size:15px; outline:none; background:#fff5f9;
+  }
+  #foodInput:focus { border-color:#ff4081; }
+  #sendBtn {
+    background: linear-gradient(135deg, #ff6fa3, #ff4081);
+    border:none; color:#fff; padding: 0 18px; border-radius:14px; font-size:18px; cursor:pointer;
+  }
+  .response-box {
+    margin-top:14px; padding:14px 16px; background:#fff5f9; border-radius:14px;
+    border-left: 4px solid #ff4081; min-height:0; max-height:0; overflow:hidden;
+    transition: all .4s ease; opacity:0;
+  }
+  .response-box.show { max-height:300px; min-height:50px; opacity:1; padding:14px 16px; margin-top:14px; }
+  .response-box .resp-emoji { font-size:38px; display:block; text-align:center; margin-bottom:8px; }
+  .response-box .resp-text { color:#5a2a4a; font-size:15px; line-height:1.5; text-align:center; }
+
+  /* Buttons row */
+  .btn-row { display:flex; flex-direction:column; gap:14px; align-items:center; padding:0 12px; position:relative; min-height:200px; }
+  .btn-pick {
+    background: linear-gradient(135deg, #ff6fa3, #ff4081);
+    color:#fff; border:none; padding:16px 28px; border-radius:50px;
+    font-size:16px; font-weight:600; cursor:pointer; width:100%; max-width:280px;
+    box-shadow: 0 8px 20px rgba(255,64,129,.4);
+    transition: transform .15s;
+  }
+  .btn-pick:active { transform:scale(.96); }
+
+  .btn-terserah {
+    background: linear-gradient(135deg, #ffb74d, #ff6f3c);
+    color:#fff; border:none; padding:19px 34px; border-radius:50px;
+    font-size:19px; font-weight:700; cursor:pointer;
+    box-shadow: 0 10px 26px rgba(255,111,60,.45);
+    position:relative; transition: width .3s, height .3s, font-size .3s, opacity .3s;
+    width: 336px; max-width: 90vw;
+  }
+  .btn-terserah.flying {
+    position:fixed; z-index:50; transition: left .35s ease, top .35s ease, width .35s, height .35s, font-size .35s, opacity .35s;
+  }
+
+  .terserah-counter { font-size:12px; color:#7a4866; margin-top:10px; text-align:center; opacity:.7; }
+
+  .speech-bubble {
+    position:fixed; background:#fff; padding:10px 16px; border-radius:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,.2); color:#d6336c; font-size:14px; font-weight:600;
+    z-index:100; pointer-events:none; opacity:0; transition: opacity .3s, transform .5s;
+    max-width:240px; text-align:center;
+  }
+  .speech-bubble.show { opacity:1; transform: translateY(-20px); }
+
+  /* Achievement */
+  #achievement {
+    position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center;
+    z-index:200; padding:20px;
+  }
+  #achievement.show { display:flex; }
+  .achievement-card {
+    background: linear-gradient(135deg, #fff8e1, #ffd54f);
+    padding:30px; border-radius:24px; text-align:center; max-width:360px; width:100%;
+    box-shadow: 0 0 80px rgba(255,213,79,.6); animation: pop .7s ease;
+  }
+  .trophy { font-size:80px; animation: heartbeat 1.2s infinite; }
+  .achievement-card h2 { color:#bf360c; margin-top:14px; font-size:22px; }
+  .achievement-card p { color:#5d4037; margin-top:10px; font-size:15px; line-height:1.5; }
+  .achievement-card button { margin-top:20px; }
+
+  @media (max-width: 380px) {
+    .spinner-wrap { width:240px; height:240px; }
+    .btn-terserah { width:280px; font-size:17px; padding:17px 28px; }
+  }
+</style>
+</head>
+<body>
+  <div class="petals" id="petals"></div>
+  <div class="flash" id="flash"></div>
+
+  <!-- ===== WELCOME ===== -->
+  <div class="screen active" id="welcome">
+    <div class="card">
+      <div class="greet-emoji">🥰</div>
+      <h1>Hai istriku tercintaaa~</h1>
+      <p>Hari ini Mas mau jajanin kamu, lho 🥺💕<br>Yuk pilih mau makan/minum apa, biar aku langsung beliin~</p>
+      <button class="btn-primary" id="btnLanjut">Lanjut ✨</button>
+    </div>
+  </div>
+
+  <!-- ===== VERIFIKASI WAJAH ===== -->
+  <div class="screen" id="verify">
+    <div id="verifyScanning">
+      <h2>🔍 VERIFIKASI WAJAH ISTRI 🔍</h2>
+      <div style="height:24px"></div>
+      <div class="scanner-wrap">
+        <video id="cameraView" autoplay muted playsinline></video>
+        <div class="scan-line"></div>
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+      </div>
+      <div class="progress-ring" id="countdown">7</div>
+      <div id="verifyStatus">Memindai wajah istri tercantik...</div>
+    </div>
+    <div id="verifyResult">
+      <img class="snap-img" id="snapImg" alt="snap" />
+      <h2>✨ Ini dia istriku yang<br>paling cantik di dunia ✨</h2>
+      <div class="heart-burst">💖💕💖</div>
+      <button class="btn-primary" id="btnMasuk" style="margin-top:24px;">Masuk Yuk 🔥</button>
+    </div>
+  </div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="screen" id="main">
+    <div class="container">
+      <div class="header-card">
+        <h2>🍽️ Jajan Time, Sayang!</h2>
+        <p>Pilih sendiri atau biar takdir yang nentuin 💫</p>
+      </div>
+
+      <div class="spinner-card">
+        <div class="spinner-wrap">
+          <div class="spinner-pointer"></div>
+          <canvas id="spinnerCanvas" width="500" height="500"></canvas>
+          <div class="spinner-center">🎯</div>
+        </div>
+        <div class="spinner-result" id="spinResult">Klik tombol di bawah buat spin~</div>
+      </div>
+
+      <div class="request-card">
+        <h3>💬 Atau langsung request aja sayang~</h3>
+        <div class="input-row">
+          <input type="text" id="foodInput" placeholder="Misal: bakso, es teh, mie ayam..." />
+          <button id="sendBtn">➤</button>
+        </div>
+        <div class="response-box" id="responseBox">
+          <span class="resp-emoji" id="respEmoji">🍽️</span>
+          <div class="resp-text" id="respText"></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-pick" id="btnSpin">🎰 PILIH ACAK 🎰</button>
+        <button class="btn-terserah" id="btnTerserah">TERSERAH!! 🙄</button>
+        <div class="terserah-counter" id="terserahCounter"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Speech bubble for terserah protests -->
+  <div class="speech-bubble" id="speechBubble"></div>
+
+  <!-- Achievement -->
+  <div id="achievement">
+    <div class="achievement-card">
+      <div class="trophy">🏆</div>
+      <h2>ACHIEVEMENT UNLOCKED!</h2>
+      <p><b>"Master of Terserah"</b><br><br>Selamat sayang, kamu udah klik Terserah 20x dan tombolnya hilang selamanya 😎<br><br>🎁 <b>Hadiah:</b> Mas akan beliin makanan apapun 1x gratis tanpa nawar!</p>
+      <button class="btn-primary" id="btnCloseAch">Asik! ❤️</button>
+    </div>
+  </div>
+
+<script>
+/* ============ PETALS BACKGROUND ============ */
+(function(){
+  const petals = ['🌸','💕','🌷','💖','🌟','💘','🍓','✨'];
+  const wrap = document.getElementById('petals');
+  for (let i=0;i<25;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random()*petals.length)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.animationDuration = (8 + Math.random()*10) + 's';
+    p.style.animationDelay = (-Math.random()*15) + 's';
+    p.style.fontSize = (16 + Math.random()*16) + 'px';
+    wrap.appendChild(p);
+  }
+})();
+
+/* ============ AUDIO (Web Audio API) ============ */
+let audioCtx = null;
+function ac(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function beep(freq, dur, type='sine', vol=.15){
+  try {
+    const ctx = ac();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + dur);
+  } catch(e){}
+}
+function sfxSpin(){
+  let f = 800;
+  const interval = setInterval(()=>{ beep(f, .05, 'square', .08); f = Math.max(200, f-20); }, 80);
+  setTimeout(()=> clearInterval(interval), 4800);
+}
+function sfxDing(){ beep(880,.15,'sine',.2); setTimeout(()=>beep(1320,.25,'sine',.2),120); }
+function sfxPop(){ beep(440,.08,'triangle',.15); setTimeout(()=>beep(220,.08,'triangle',.15),60); }
+function sfxKiss(){ beep(660,.1,'sine',.15); setTimeout(()=>beep(990,.15,'sine',.18),100); }
+
+/* ============ TTS ============ */
+function speak(text, opts={}){
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'id-ID';
+    u.rate = opts.rate || 1.0;
+    u.pitch = opts.pitch || 1.1;
+    u.volume = opts.volume || 1;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  } catch(e){}
+}
+
+/* ============ VIBRATE ============ */
+function vibrate(pattern){ try { navigator.vibrate && navigator.vibrate(pattern); } catch(e){} }
+
+/* ============ SCREEN NAV ============ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=> s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  if (id === 'main') el.style.display = 'flex';
+}
+
+/* ============ WELCOME → VERIFY ============ */
+document.getElementById('btnLanjut').addEventListener('click', async ()=>{
+  sfxPop();
+  ac(); // unlock audio
+  showScreen('verify');
+  startVerification();
+});
+
+/* ============ VERIFIKASI WAJAH (7 detik) ============ */
+let mediaStream = null;
+async function startVerification(){
+  const video = document.getElementById('cameraView');
+  const status = document.getElementById('verifyStatus');
+  const cd = document.getElementById('countdown');
+  const messages = [
+    'Memindai wajah istri tercantik...',
+    'Mendeteksi tingkat kecantikan...',
+    'Menghitung level cute...',
+    'Verifikasi senyum manis...',
+    'Konfirmasi: ini istri Mas...',
+    'Mengukur aura cantiknya...',
+    'Hampir selesai sayanggg...'
+  ];
+
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+    video.srcObject = mediaStream;
+  } catch(e) {
+    status.textContent = '⚠️ Kamera ga bisa diakses, lanjut aja yaa~';
+  }
+
+  let t = 7;
+  cd.textContent = t;
+  let msgIdx = 0;
+  status.textContent = messages[0];
+
+  const tick = setInterval(()=>{
+    t--;
+    cd.textContent = t;
+    msgIdx = (msgIdx+1) % messages.length;
+    status.textContent = messages[msgIdx];
+    beep(600 + (7-t)*40, .08, 'sine', .1);
+    if (t <= 0){
+      clearInterval(tick);
+      doSnapshot(video);
+    }
+  }, 1000);
+}
+
+function doSnapshot(video){
+  // Flash effect
+  const flash = document.getElementById('flash');
+  flash.classList.add('snap');
+  beep(1200, .05, 'square', .2);
+  setTimeout(()=> flash.classList.remove('snap'), 500);
+
+  // Capture frame
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth || 320;
+  canvas.height = video.videoHeight || 240;
+  try {
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    document.getElementById('snapImg').src = canvas.toDataURL('image/jpeg', .85);
+  } catch(e) {
+    document.getElementById('snapImg').src = '';
+    document.getElementById('snapImg').style.display = 'none';
+  }
+
+  // Stop camera
+  if (mediaStream) mediaStream.getTracks().forEach(t=> t.stop());
+
+  // Show result
+  setTimeout(()=>{
+    document.getElementById('verifyScanning').style.display = 'none';
+    document.getElementById('verifyResult').style.display = 'block';
+    sfxKiss();
+    setTimeout(()=> speak('Ini dia istriku yang paling cantik di dunia'), 300);
+  }, 600);
+}
+
+document.getElementById('btnMasuk').addEventListener('click', ()=>{
+  sfxPop();
+  showScreen('main');
+  drawSpinner();
+});
+
+/* ============ SPINNER ============ */
+const MENU = [
+  { name: 'Bakso',          emoji: '🍜', color: '#ff8a80' },
+  { name: 'Seblak',         emoji: '🌶️', color: '#ff6e40' },
+  { name: 'ZONK GA JADI',   emoji: '💀', color: '#37474f', zonk: true },
+  { name: 'Mie Gacoan',     emoji: '🍝', color: '#ff5252' },
+  { name: 'Nasi Goreng',    emoji: '🍛', color: '#ffab40' },
+  { name: 'ZONK GA JADI',   emoji: '💀', color: '#263238', zonk: true },
+  { name: 'Mie Omah',       emoji: '🍲', color: '#ffd180' },
+  { name: 'Burger',         emoji: '🍔', color: '#a1887f' },
+  { name: 'ZONK GA JADI',   emoji: '💀', color: '#37474f', zonk: true },
+  { name: 'Kebab',          emoji: '🌯', color: '#bcaaa4' },
+  { name: 'Mie Ayam',       emoji: '🍜', color: '#ffca28' },
+  { name: 'ZONK GA JADI',   emoji: '💀', color: '#263238', zonk: true },
+  { name: 'Es Bebas',       emoji: '🧋', color: '#80d8ff' },
+  { name: 'Roti Bakar',     emoji: '🍞', color: '#ffb74d' },
+  { name: 'ZONK GA JADI',   emoji: '💀', color: '#37474f', zonk: true },
+  { name: 'Martabak',       emoji: '🥞', color: '#f48fb1' },
+  { name: 'Sate',           emoji: '🍢', color: '#8d6e63' },
+  { name: 'ZONK GA JADI',   emoji: '💀', color: '#263238', zonk: true },
+  { name: 'Donat',          emoji: '🍩', color: '#f06292' },
+  { name: 'Kue Cakwe',      emoji: '🥐', color: '#ffcc80' },
+  { name: 'Es Krim',        emoji: '🍦', color: '#b39ddb' },
+  { name: 'Belanja Sendiri',emoji: '🛍️', color: '#ce93d8' },
+];
+
+const canvas = document.getElementById('spinnerCanvas');
+const ctx = canvas.getContext('2d');
+let spinAngle = 0;
+let spinning = false;
+
+function drawSpinner(){
+  const W = canvas.width, H = canvas.height, R = W/2;
+  const slice = (Math.PI*2) / MENU.length;
+  ctx.clearRect(0,0,W,H);
+  MENU.forEach((m, i)=>{
+    const start = i*slice;
+    ctx.beginPath();
+    ctx.moveTo(R, R);
+    ctx.arc(R, R, R-4, start, start+slice);
+    ctx.closePath();
+    ctx.fillStyle = m.color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(R, R);
+    ctx.rotate(start + slice/2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 22px system-ui';
+    ctx.shadowColor = 'rgba(0,0,0,.3)'; ctx.shadowBlur = 4;
+    ctx.fillText(m.emoji + ' ' + m.name, R - 24, 8);
+    ctx.restore();
+  });
+}
+
+document.getElementById('btnSpin').addEventListener('click', ()=>{
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('spinResult').textContent = 'Memutar takdir... 🌀';
+  sfxSpin();
+  const rounds = 5 + Math.random()*3;
+  // Pick winner ONLY from non-zonk items (zonk cuma buat nakutin, ga pernah kepilih)
+  const safeIndices = MENU.map((m,i)=> m.zonk ? -1 : i).filter(i=> i>=0);
+  const winner = safeIndices[Math.floor(Math.random() * safeIndices.length)];
+  const slice = 360 / MENU.length;
+  const target = 360*rounds + (360 - (winner*slice + slice/2));
+  spinAngle += target;
+  canvas.style.transform = `rotate(${spinAngle}deg)`;
+  setTimeout(()=>{
+    const m = MENU[winner];
+    document.getElementById('spinResult').innerHTML = `🎉 ${m.emoji} <b>${m.name}</b> 🎉`;
+    sfxDing();
+    setTimeout(()=> speak(`Dan pemenangnya adalaaaah... ${m.name}!`, {pitch:1.3, rate:1.05}), 200);
+    spinning = false;
+  }, 5100);
+});
+
+/* ============ FOOD REQUEST RESPONSES ============ */
+const RESPONSES = {
+  bakso:   { e:'🍜', t:'Wuihhh BAKSO! Pilihan sultan banget sayang 🤩 Kuah panas + sambel pedes = surga dunia!' },
+  baso:    { e:'🍜', t:'Bakso lagiii? Ya ampun selera kita sama bgt 🥺 Mas pesenin yang urat ya!' },
+  'mie ayam': { e:'🍲', t:'MIE AYAM! Klasik tapi nggak pernah salah ✨ Pakai pangsit + bakso ya sayang 🤤' },
+  mie:     { e:'🍜', t:'Mie pilihan bijak! Kenyang awet, enak, murah meriah 💯' },
+  geprek:  { e:'🍗', t:'GEPREK 🔥🔥 Level berapa nih? Mas saranin level 5 biar nangis bareng wkwk' },
+  ayam:    { e:'🍗', t:'Ayam emang nggak pernah ngecewain 😋 Mau goreng, bakar, atau geprek?' },
+  nasi:    { e:'🍚', t:'Nasi anak Indonesia bgt 🇮🇩 Lauknya apa nih sayang? Mas tambahin telor ceplok ya!' },
+  padang:  { e:'🍛', t:'NASI PADANG?! 🤩 Rendang + ayam pop + sayur singkong = combo terjuara!' },
+  sate:    { e:'🍢', t:'Sateee! Bumbu kacangnya itu loh, juara dunia 🏆 Sate ayam apa kambing?' },
+  pizza:   { e:'🍕', t:'PIZZA?! Mewah amat sayang 😍 Mas pesenin yang large + extra cheese ya!' },
+  burger:  { e:'🍔', t:'Burgerrr 🍔 Pilihan western chic! Mau yang beef double patty kah?' },
+  sushi:   { e:'🍣', t:'SUSHI?! Tajir banget 💎 Salmon, tuna, atau yang pakai uni? Mas siapin dompet dulu wkwk' },
+  ramen:   { e:'🍜', t:'RAMEN! Kuah miso atau shoyu nih? Anginnya ngebul kayak Jepang asli 🥢' },
+  seblak:  { e:'🌶️', t:'SEBLAK! Pedesnya nikmat banget 🥵 Pakai ceker + makaroni + sosis ya sayang!' },
+  martabak: { e:'🥞', t:'Martabak manis atau telor? 2 2 nya enak 🤤 Mas borong aja deh!' },
+  bubur:   { e:'🥣', t:'Bubur ayam pagi-pagi emang juara 🌅 Diaduk apa ngga nih sayang? Tim mana?' },
+  soto:    { e:'🥣', t:'Sotooo! Kuah bening hangat 🤩 Soto ayam, betawi, atau lamongan?' },
+  rendang: { e:'🍛', t:'RENDANG! World\'s best food kata CNN 🏆 Selera kamu emang internasional!' },
+  gudeg:   { e:'🍱', t:'Gudegg manis legit! Yogyakarta vibes banget 💛' },
+  pecel:   { e:'🥗', t:'Pecel lele atau pecel sayur? Bumbu kacangnya nampol! 🥜' },
+  warteg:  { e:'🍱', t:'Warteg emang the best 💯 Murah, kenyang, banyak pilihan!' },
+
+  // Drinks
+  'es teh': { e:'🧋', t:'Es teh manis! Minuman paling demokratis di Indonesia 🇮🇩 Seger pol!' },
+  teh:     { e:'🍵', t:'Teh hangat atau dingin? 2-2nya bikin tenang 😌' },
+  kopi:    { e:'☕', t:'Ngopi dulu sayang ☕ Mau yang espresso atau kopi susu kekinian?' },
+  boba:    { e:'🥤', t:'BOBAAA 🥤 Brown sugar, taro, atau matcha nih? Topping cheese foam ya 🤤' },
+  jus:     { e:'🥤', t:'Jus seger sehat 💪 Alpukat, jeruk, atau mangga sayang?' },
+  es:      { e:'🧊', t:'Es apaaa? Es teh, es jeruk, es campur? Sebut yang lengkap dong sayang 🥺' },
+  air:     { e:'💧', t:'Hidup sehat banget kamu 💧 Tapi cuma air doang? Beneran nih?' },
+
+  // Snacks
+  martabak2: { e:'🥞', t:'Martabaakk 🤤 Topping coklat keju kacang full?' },
+  donat:   { e:'🍩', t:'Donat manis! Glazed atau yang ada toppingnya? 🍩' },
+  donut:   { e:'🍩', t:'Donut! Pilih yang chocolate sprinkle atau strawberry ya?' },
+  roti:    { e:'🍞', t:'Roti! Klasik dan mengenyangkan 🥐 Mau yang manis atau gurih?' },
+  cake:    { e:'🎂', t:'CAKE?! Hari spesial nih sayang? Coklat, red velvet, atau tiramisu? 💕' },
+  kue:     { e:'🧁', t:'Kue manis! Bikin mood naik 1000% 🥰' },
+  ice:     { e:'🍦', t:'ICE CREAM! Vanilla, coklat, atau yang aneh-aneh kayak salted caramel?' },
+  'es krim': { e:'🍦', t:'Es krim! Cone atau cup sayang? Topping kacang + meses ya!' },
+  cokelat: { e:'🍫', t:'Cokelat bikin happy hormone naik 🍫 Dark, milk, atau white chocolate?' },
+  coklat:  { e:'🍫', t:'Cokelaattt 😍 Mood booster paling ampuh sedunia!' },
+  pisang:  { e:'🍌', t:'Pisang sehat banget 💪 Pisang goreng atau pisang epe?' },
+  buah:    { e:'🍓', t:'Buah! Sehat dan seger 🍓 Tim semangka apa mangga?' },
+};
+
+function getResponse(input){
+  const q = input.toLowerCase().trim();
+  if (!q) return { e:'🤔', t:'Eh kosong sayang, ketik dulu mau apa~' };
+  // Exact match first
+  if (RESPONSES[q]) return RESPONSES[q];
+  // Contains match
+  for (const k in RESPONSES) if (q.includes(k) || k.includes(q)) return RESPONSES[k];
+  // Generic positive responses
+  const generics = [
+    { e:'🤩', t:`"${input}"?! Wahh pilihan unik sayang, Mas baru denger tapi pasti enak! 💖` },
+    { e:'😋', t:`"${input}" tuh kayaknya enak ya! Selera kamu emang anti mainstream 🔥` },
+    { e:'🥰', t:`Ohh mau "${input}" yaa? Sip Mas catet, langsung order sekarang! 🚀` },
+    { e:'😍', t:`"${input}"! Mas suka deh kalau kamu udah jelas mintanya, nggak terserah-terserah lagi 💕` },
+    { e:'✨', t:`"${input}" — request diterima sayang ✨ Tinggal tunggu Mas sampai rumah ya!` },
+  ];
+  return generics[Math.floor(Math.random()*generics.length)];
+}
+
+function showResponse(input){
+  const r = getResponse(input);
+  document.getElementById('respEmoji').textContent = r.e;
+  document.getElementById('respText').textContent = r.t;
+  document.getElementById('responseBox').classList.add('show');
+  sfxKiss();
+  setTimeout(()=> speak(r.t.replace(/[🍜🍲🍗🧋🍣🍕🥤🌶️🍢🍦🥣🍛🍔🥞🥗🍱🍵☕🧊💧🍩🍞🎂🧁🍫🍌🍓🤤🤩😋🥰😍✨🔥💕💖🚀🥺🏆💯💎😌💪🌅🇮🇩🥢🥜]/g,'')), 200);
+}
+
+document.getElementById('sendBtn').addEventListener('click', ()=>{
+  showResponse(document.getElementById('foodInput').value);
+});
+document.getElementById('foodInput').addEventListener('keydown', e=>{
+  if (e.key === 'Enter') showResponse(e.target.value);
+});
+
+/* ============ TOMBOL TERSERAH ============ */
+const btnT = document.getElementById('btnTerserah');
+const counterEl = document.getElementById('terserahCounter');
+const bubble = document.getElementById('speechBubble');
+
+let terserahClicks = 0;
+const MAX_CLICKS = 20;
+
+const PROTESTS = [
+  'Heh jangan klik aku!',
+  'Gabisa pilih ya?',
+  'Kabuurrr 🏃‍♀️',
+  'Cape gua dipencetin mulu!',
+  'Coba pilih yang bener dong sayang',
+  'Aduhhh jangan kejar aku 🥺',
+  'Kerja gua lari mulu nih',
+  'Mas ngambek nih kalo kamu klik aku terus',
+  'Bayar dong tiap klik 1000!',
+  'Stop! Dilarang klik!',
+  'Yaelahh pilih beneran napaa',
+  'Lari aja sampai kamu nyerah',
+  'Mas nungguin kamu nih',
+  'Tombol satunya tuh klik!',
+  'Hadeuhhh~',
+  'Gak akan ketangkep 😎',
+  'Gas terus larinya',
+  'Bentar lagi gua ilang!',
+  'Sebentar lagi kamu nyerah deh',
+  'Klik terakhir nihh, hilang gua',
+];
+
+function updateCounter(){
+  const left = MAX_CLICKS - terserahClicks;
+  counterEl.textContent = `Tombol Terserah: ${left} klik lagi sebelum hilang selamanya 🔥`;
+}
+updateCounter();
+
+function showBubble(text, x, y){
+  bubble.textContent = text;
+  bubble.style.left = Math.min(window.innerWidth - 250, Math.max(10, x - 100)) + 'px';
+  bubble.style.top = Math.max(10, y - 60) + 'px';
+  bubble.classList.add('show');
+  clearTimeout(bubble._t);
+  bubble._t = setTimeout(()=> bubble.classList.remove('show'), 1400);
+}
+
+function moveTerserah(){
+  // pick random spot avoiding edges
+  const w = btnT.offsetWidth, h = btnT.offsetHeight;
+  const maxX = window.innerWidth - w - 20;
+  const maxY = window.innerHeight - h - 20;
+  const x = Math.random() * Math.max(20, maxX);
+  const y = Math.random() * Math.max(80, maxY);
+  if (!btnT.classList.contains('flying')){
+    btnT.classList.add('flying');
+  }
+  btnT.style.left = x + 'px';
+  btnT.style.top = y + 'px';
+}
+
+function shrinkTerserah(){
+  // shrink ~3.5% per click, font shrink as well
+  const scale = Math.max(0.25, 1 - terserahClicks * 0.035);
+  const baseW = 336;
+  btnT.style.width = (baseW * scale) + 'px';
+  btnT.style.fontSize = Math.max(11, 19 * scale) + 'px';
+  btnT.style.padding = Math.max(8, 19 * scale) + 'px ' + Math.max(14, 34 * scale) + 'px';
+  btnT.style.opacity = Math.max(0.4, 1 - terserahClicks * 0.025);
+}
+
+function handleTerserahClick(e){
+  e && e.preventDefault();
+  terserahClicks++;
+  vibrate([80, 40, 80]);
+  sfxPop();
+
+  const protest = PROTESTS[(terserahClicks-1) % PROTESTS.length];
+  const rect = btnT.getBoundingClientRect();
+  showBubble(protest, rect.left + rect.width/2, rect.top);
+  speak(protest, { pitch:1.4, rate:1.15 });
+
+  if (terserahClicks >= MAX_CLICKS){
+    // Hide forever
+    btnT.style.transition = 'opacity .6s, transform .6s';
+    btnT.style.opacity = '0';
+    btnT.style.transform = 'scale(0)';
+    setTimeout(()=>{
+      btnT.style.display = 'none';
+      counterEl.textContent = '✨ Tombol Terserah hilang selamanyaa! ✨';
+      showAchievement();
+    }, 600);
+    return;
+  }
+
+  shrinkTerserah();
+  moveTerserah();
+  updateCounter();
+}
+
+// Make button run away on hover too (mobile-friendly: also on click)
+btnT.addEventListener('click', handleTerserahClick);
+btnT.addEventListener('mouseenter', (e)=>{
+  // Only flee on hover if already clicked once (so first click is easy to bait)
+  if (terserahClicks > 0 && terserahClicks < MAX_CLICKS){
+    handleTerserahClick(e);
+  }
+});
+
+/* ============ ACHIEVEMENT ============ */
+function showAchievement(){
+  document.getElementById('achievement').classList.add('show');
+  sfxDing();
+  vibrate([200, 100, 200, 100, 400]);
+  setTimeout(()=> speak('Achievement unlocked! Master of terserah! Selamat sayanggg!', {pitch:1.3}), 300);
+}
+document.getElementById('btnCloseAch').addEventListener('click', ()=>{
+  document.getElementById('achievement').classList.remove('show');
+  sfxKiss();
+});
+</script>
+</body>
+</html>
