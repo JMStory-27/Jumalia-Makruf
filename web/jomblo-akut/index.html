@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 <title>Jajan Jomblo & HTS-an 💀🤡</title>
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { height:100%; overflow:hidden; font-family:'Segoe UI', system-ui, -apple-system, sans-serif; }
@@ -345,29 +346,18 @@
     </div>
     <div id="verifyResult">
       <div class="photo-frame-wrap">
-        <span class="photo-frame-deco tl">💀</span>
-        <span class="photo-frame-deco tr">🤡</span>
-        <span class="photo-frame-deco bl">📵</span>
-        <span class="photo-frame-deco br">🚩</span>
+        <span class="photo-frame-deco tl" id="frameTl">💀</span>
+        <span class="photo-frame-deco tr" id="frameTr">🤡</span>
+        <span class="photo-frame-deco bl" id="frameBl">📵</span>
+        <span class="photo-frame-deco br" id="frameBr">🚩</span>
         <img class="snap-img" id="snapImg" alt="snap" />
-        <div class="photo-caption">💀 TERDETEKSI: JOMBLO AKUT / HTS GAJELAS 💀</div>
+        <div class="photo-caption" id="resultCaption">💀 TERDETEKSI: JOMBLO AKUT 💀</div>
       </div>
-      <h2 style="line-height:1.4; padding:0 12px;">
+      <h2 id="resultHeadline" style="line-height:1.4; padding:0 12px;">
         🚨 Wah parah, sistem deteksi kamu masih JOMBLO 🚨
       </h2>
-      <div style="font-size:11px; color:#ffb3cc; line-height:1.6; margin-top:10px; padding:0 16px; max-width:340px;">
-        Status: <b>Jomblo akut sejak lahir</b> 💀<br>
-        Level HTS: <b>HTS gajelas, chat doang ga jadian-jadian</b> 🤡<br>
-        Hubungan kok virtual mulu, real life mana? 📵<br>
-        Last seen punya pacar: <b>tidak ditemukan</b> 🔍<br>
-        Aura red flag terdeteksi, makanya ditolak mulu 🚩<br>
-        <span style="display:block; margin-top:6px;">
-          Bot kasian liat kamu makan sendiri terus 🥲<br>
-          Yaudah, daripada nungguin doi yang ga akan dateng,<br>
-          mending spin aja terus pesen sendiri wkwk 🛵💨
-        </span>
-      </div>
-      <div class="heart-burst">💀🤡💔🥲💀</div>
+      <div id="resultDetails" style="font-size:11px; color:#ffb3cc; line-height:1.6; margin-top:10px; padding:0 16px; max-width:340px;"></div>
+      <div class="heart-burst" id="resultBurst">💀🤡💔🥲💀</div>
       <button class="btn-primary" id="btnMasuk" style="margin-top:24px;">Yaudah Masuk Aja 😮‍💨</button>
     </div>
   </div>
@@ -580,7 +570,160 @@ async function startVerification(){
   }, 1000);
 }
 
-function doSnapshot(video){
+/* ===== Face detection (face-api.js — SSD MobileNet for accuracy + Tiny as fallback) ===== */
+let faceModelReady = false;
+let faceModelLoading = null;
+async function waitForFaceApi(timeoutMs=8000){
+  const start = Date.now();
+  while (typeof faceapi === 'undefined'){
+    if (Date.now() - start > timeoutMs) return false;
+    await new Promise(r=> setTimeout(r, 100));
+  }
+  return true;
+}
+async function ensureFaceModel(){
+  if (faceModelReady) return true;
+  if (faceModelLoading) return faceModelLoading;
+  faceModelLoading = (async ()=>{
+    const ok = await waitForFaceApi();
+    if (!ok) return false;
+    const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
+    try {
+      // Load both models — SSD is more accurate at finding multiple faces, Tiny is fallback
+      await Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL).catch(e=> console.warn('ssd load fail', e)),
+        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL).catch(e=> console.warn('tiny load fail', e)),
+      ]);
+      faceModelReady = true;
+      return true;
+    } catch(e){ console.warn('face model load failed', e); return false; }
+  })();
+  return faceModelLoading;
+}
+// Pre-warm on load (start loading immediately)
+ensureFaceModel();
+
+function dedupeFaces(boxes){
+  // boxes: [{x,y,w,h,score}]
+  // Merge boxes that overlap a lot (IoU > 0.4) — pick best score
+  const kept = [];
+  for (const b of boxes.sort((a,b)=> b.score - a.score)){
+    let dup = false;
+    for (const k of kept){
+      const x1 = Math.max(b.x, k.x), y1 = Math.max(b.y, k.y);
+      const x2 = Math.min(b.x+b.w, k.x+k.w), y2 = Math.min(b.y+b.h, k.y+k.h);
+      const inter = Math.max(0, x2-x1) * Math.max(0, y2-y1);
+      const uni = b.w*b.h + k.w*k.h - inter;
+      if (uni > 0 && inter/uni > 0.4){ dup = true; break; }
+    }
+    if (!dup) kept.push(b);
+  }
+  return kept;
+}
+
+async function detectFaces(canvas){
+  const ok = await ensureFaceModel();
+  if (!ok || typeof faceapi === 'undefined') return -1;
+  // Run multiple detectors and combine results, dedupe overlapping boxes
+  const allBoxes = [];
+  // Try SSD MobileNet (more accurate for multiple faces)
+  if (faceapi.nets.ssdMobilenetv1.params){
+    try {
+      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.35 });
+      const dets = await faceapi.detectAllFaces(canvas, opts);
+      for (const d of dets){
+        const b = d.box;
+        allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score });
+      }
+    } catch(e){ console.warn('ssd detect failed', e); }
+  }
+  // Also run Tiny at multiple input sizes for robustness
+  if (faceapi.nets.tinyFaceDetector.params){
+    for (const size of [416, 608]){
+      try {
+        const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold: 0.3 });
+        const dets = await faceapi.detectAllFaces(canvas, opts);
+        for (const d of dets){
+          const b = d.box;
+          allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score });
+        }
+      } catch(e){ console.warn('tiny detect failed', e); }
+    }
+  }
+  if (allBoxes.length === 0) return 0;
+  return dedupeFaces(allBoxes).length;
+}
+
+/* ===== Result variants ===== */
+const RESULT_VARIANTS = {
+  noFace: {
+    caption: '🫥 MUKA DISEMBUNYIIN — JELAS JOMBLO MALU 🫥',
+    headline: '😶‍🌫️ Wah ngumpet ya? Tetep aja JOMBLO kok 😶‍🌫️',
+    deco: ['🫥','💀','🙈','📵'],
+    burst: '🫥💀🙈📵💀',
+    details: `
+      Status: <b>Sembunyi-sembunyi, malu kali yaa</b> 🙈<br>
+      Detektor: <b>Muka ga ke-deteksi = jelas jomblo</b> 💀<br>
+      Logikanya: punya doi pun ga akan kamu tunjukin, krn ga ada 📵<br>
+      Diagnosis: <b>Jomblo malu-malu kucing</b> 🐈<br>
+      <span style="display:block; margin-top:6px;">
+        Tunjukin muka pun hasilnya tetep jomblo,<br>
+        ngumpet pun tetep jomblo. Yaudah pasrah aja 🤡<br>
+        Spin sendiri, jajan sendiri, ya gini terus~ 🛵💨
+      </span>`
+  },
+  oneFace: {
+    caption: '💀 TERDETEKSI: JOMBLO AKUT / HTS GAJELAS 💀',
+    headline: '🚨 1 wajah doang — fix JOMBLO sejati! 🚨',
+    deco: ['💀','🤡','📵','🚩'],
+    burst: '💀🤡💔🥲💀',
+    details: `
+      Wajah terdeteksi: <b>1 (sendirian, ya gitu deh)</b> 💀<br>
+      Status: <b>Jomblo akut sejak lahir</b> 🤡<br>
+      Level HTS: <b>Chat-an doang, ga jadi-jadi</b> 📵<br>
+      Last seen punya pacar: <b>tidak ditemukan</b> 🔍<br>
+      Aura red flag: <b>Nyala terang banget</b> 🚩<br>
+      <span style="display:block; margin-top:6px;">
+        Sendirian terus tuh capek loh,<br>
+        tapi yaudah, jodoh kapan tuh ya~ 🥲<br>
+        Spin aja sendiri, pesen aja sendiri 🛵💨
+      </span>`
+  },
+  twoFaces: {
+    caption: '💕 TERDETEKSI: BERDUAAN — CURANG NIH! 💕',
+    headline: '😤 Ehh ada 2 muka! Curang, lagi sama doi yaa? 😤',
+    deco: ['💕','😤','💑','💢'],
+    burst: '💕💑😤💢💕',
+    details: `
+      Wajah terdeteksi: <b>2 orang (ihhh modus berdua)</b> 💑<br>
+      Status: <b>Bukan jomblo, tapi pamer ke web jomblo. SADIS</b> 😤<br>
+      Verdict: <b>Pasangan halal/HTS-jadi/temen mesra?</b> 🤔<br>
+      Hukuman: <b>Wajib traktir yang sebelah kamu sekarang</b> 💸<br>
+      <span style="display:block; margin-top:6px;">
+        Web ini buat jomblo loh, kok malah pamer 😭<br>
+        Yaudah, spin yang banyak terus traktir doi yaa,<br>
+        biar adil sama yang sendirian disini 🥲💕
+      </span>`
+  },
+  manyFaces: {
+    caption: '🎉 TERDETEKSI: RAME-RAME — PESTA JOMBLO? 🎉',
+    headline: '👯 Wah rame banget! Reunian jomblo squad ya? 👯',
+    deco: ['🎉','👯','🍿','💀'],
+    burst: '🎉👯🍿💀🎉',
+    details: `
+      Wajah terdeteksi: <b>Banyak (rame bgt!)</b> 👯<br>
+      Diagnosis: <b>Squad jomblo ngumpul, atau ada 1 yg punya pacar?</b> 🤔<br>
+      Probabilitas: <b>99% di antara kalian masih jomblo semua</b> 💀<br>
+      Saran: <b>Patungan beli makan, hemat bareng</b> 💸<br>
+      <span style="display:block; margin-top:6px;">
+        Mending rame-rame jomblo drpd sendirian sih,<br>
+        minimal ga sad-eating sendirian 🍿<br>
+        Spin aja, terus voting menu rame-rame~ 🎰
+      </span>`
+  }
+};
+
+async function doSnapshot(video){
   // Flash effect
   const flash = document.getElementById('flash');
   flash.classList.add('snap');
@@ -588,13 +731,15 @@ function doSnapshot(video){
   setTimeout(()=> flash.classList.remove('snap'), 500);
 
   // Capture frame
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth || 320;
-  canvas.height = video.videoHeight || 240;
+  const cap = document.createElement('canvas');
+  cap.width = video.videoWidth || 320;
+  cap.height = video.videoHeight || 240;
+  let dataUrl = '';
   try {
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    document.getElementById('snapImg').src = canvas.toDataURL('image/jpeg', .85);
+    const ctx = cap.getContext('2d');
+    ctx.drawImage(video, 0, 0, cap.width, cap.height);
+    dataUrl = cap.toDataURL('image/jpeg', .85);
+    document.getElementById('snapImg').src = dataUrl;
   } catch(e) {
     document.getElementById('snapImg').src = '';
     document.getElementById('snapImg').style.display = 'none';
@@ -603,13 +748,42 @@ function doSnapshot(video){
   // Stop camera
   if (mediaStream) mediaStream.getTracks().forEach(t=> t.stop());
 
+  // Update status while detecting
+  const status = document.getElementById('verifyStatus');
+  if (status) status.textContent = 'Menghitung jumlah wajah... 🔍';
+
+  // Detect faces in captured frame
+  let count = -1;
+  if (cap.width > 0 && cap.height > 0){
+    count = await detectFaces(cap);
+  }
+
+  // Pick variant
+  let key;
+  if (count === 0) key = 'noFace';
+  else if (count === 1) key = 'oneFace';
+  else if (count === 2) key = 'twoFaces';
+  else if (count >= 3) key = 'manyFaces';
+  else key = 'oneFace'; // detection failed -> default to jomblo
+  const v = RESULT_VARIANTS[key];
+
+  // Apply variant
+  document.getElementById('resultCaption').innerHTML = v.caption;
+  document.getElementById('resultHeadline').innerHTML = v.headline;
+  const countNote = count >= 0 ? `<div style="text-align:center; margin-bottom:8px; font-size:12px; color:#ff8fb1;"><b>👁️ AI deteksi: ${count} wajah</b></div>` : '';
+  document.getElementById('resultDetails').innerHTML = countNote + v.details;
+  document.getElementById('resultBurst').textContent = v.burst;
+  document.getElementById('frameTl').textContent = v.deco[0];
+  document.getElementById('frameTr').textContent = v.deco[1];
+  document.getElementById('frameBl').textContent = v.deco[2];
+  document.getElementById('frameBr').textContent = v.deco[3];
+
   // Show result
   setTimeout(()=>{
     document.getElementById('verifyScanning').style.display = 'none';
     document.getElementById('verifyResult').style.display = 'block';
     sfxKiss();
-    setTimeout(()=> speak('Terdeteksi: jomblo akut. Yaudah jajan aja sendiri yaa~'), 300);
-  }, 600);
+  }, 400);
 }
 
 document.getElementById('btnMasuk').addEventListener('click', ()=>{
