@@ -442,10 +442,8 @@
       <div id="menuList" style="text-align:left; margin-bottom:14px; max-height:280px; overflow-y:auto;"></div>
 
       <div style="background:#fff5f9; border:2px dashed #ffc1d8; padding:10px; border-radius:12px; margin-bottom:12px;">
-        <div style="display:flex; gap:6px;">
-          <input id="newEmoji" type="text" maxlength="3" placeholder="🍕" style="width:50px; padding:8px; border:2px solid #ffc1d8; border-radius:10px; text-align:center; font-size:18px;" />
-          <input id="newName" type="text" maxlength="20" placeholder="Nama menu (contoh: Pizza)" style="flex:1; padding:8px; border:2px solid #ffc1d8; border-radius:10px; font-size:14px;" />
-        </div>
+        <input id="newName" type="text" maxlength="25" placeholder="Tulis nama menu aja (contoh: Pizza)" style="width:100%; padding:10px; border:2px solid #ffc1d8; border-radius:10px; font-size:14px; box-sizing:border-box;" />
+        <div style="font-size:11px; color:#7a4866; margin-top:6px; text-align:center;">✨ Emoji otomatis dipilih bot sesuai nama menu</div>
         <button id="addMenuBtn" type="button" style="margin-top:8px; width:100%; background:#4caf50; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:700; cursor:pointer;">+ Tambah Menu</button>
       </div>
 
@@ -771,14 +769,59 @@ document.getElementById('closeMenuBtn').addEventListener('click', ()=>{
   document.getElementById('menuModal').classList.remove('show');
   buildMenu(); drawSpinner();
 });
+function autoEmoji(name){
+  const n = (name||'').toLowerCase();
+  const map = [
+    [['bakso','meatball'],'🍜'], [['seblak','pedas','cabe','cabai','sambal'],'🌶️'],
+    [['mie','noodle','indomie','ramen'],'🍜'], [['nasi goreng','fried rice','nasgor'],'🍛'],
+    [['nasi','rice','padang','rendang','ayam geprek','geprek'],'🍚'], [['burger','hamburger'],'🍔'],
+    [['kebab','shawarma','burrito'],'🌯'], [['pizza'],'🍕'], [['sate','satay'],'🍢'],
+    [['soto','sup','soup','bakwan'],'🥣'], [['ayam','chicken','kfc','crispy'],'🍗'],
+    [['ikan','fish','seafood','udang','shrimp'],'🐟'], [['sushi'],'🍣'], [['onigiri','rice ball'],'🍙'],
+    [['taco'],'🌮'], [['pasta','spaghetti','spagetti','carbonara','lasagna'],'🍝'],
+    [['steak','daging','beef','sapi'],'🥩'], [['telur','egg','omelet','telor'],'🍳'],
+    [['salad','sayur','vegetable'],'🥗'], [['roti','bread','toast','sandwich'],'🍞'],
+    [['martabak','pancake','serabi'],'🥞'], [['donat','donut'],'🍩'],
+    [['cake','kue','tart','tiramisu','brownies'],'🍰'], [['cupcake'],'🧁'],
+    [['cookie','biskuit','biscuit'],'🍪'], [['coklat','chocolate','choco'],'🍫'],
+    [['permen','candy','gula'],'🍬'], [['lollipop','permen lolipop'],'🍭'],
+    [['es krim','ice cream','gelato'],'🍦'], [['es ','ice','dingin'],'🧊'],
+    [['kopi','coffee','cappuccino','latte','espresso'],'☕'], [['teh','tea','milk tea','boba','bubble','thai tea','chizu'],'🧋'],
+    [['susu','milk','milkshake'],'🥛'], [['jus','juice','smoothie'],'🧃'],
+    [['soda','cola','coca','sprite','fanta','pepsi'],'🥤'], [['air','water','aqua'],'💧'],
+    [['bir','beer','wine','anggur'],'🍺'], [['cocktail'],'🍹'],
+    [['buah','fruit'],'🍎'], [['apel','apple'],'🍎'], [['pisang','banana'],'🍌'],
+    [['anggur','grape'],'🍇'], [['jeruk','orange'],'🍊'], [['mangga','mango'],'🥭'],
+    [['semangka','watermelon'],'🍉'], [['nanas','pineapple'],'🍍'], [['stroberi','strawberry'],'🍓'],
+    [['kelapa','coconut'],'🥥'], [['alpukat','avocado'],'🥑'],
+    [['bakwan','gorengan','tempe','tahu','cireng','cilok','cimol'],'🍢'],
+    [['cakwe','cwe','dimsum','siomay','batagor'],'🥟'], [['bakpao','pao'],'🥟'],
+    [['sushi','sashimi'],'🍣'], [['kebab'],'🌯'],
+    [['pancake'],'🥞'], [['waffle'],'🧇'], [['pretzel'],'🥨'],
+    [['hotdog','hot dog','sosis','sausage'],'🌭'], [['popcorn'],'🍿'],
+    [['cheese','keju'],'🧀'], [['butter','mentega'],'🧈'], [['honey','madu'],'🍯'],
+    [['mochi','dorayaki'],'🍡'], [['curry','kari','gulai'],'🍛'],
+    [['pho','laksa'],'🍜'], [['oden'],'🍢'], [['takoyaki','okonomiyaki'],'🍥'],
+    [['ramen'],'🍜'], [['salmon'],'🐟'], [['gurita','octopus'],'🐙'],
+    [['kerang','shellfish'],'🦪'], [['lobster'],'🦞'], [['kepiting','crab'],'🦀'],
+    [['belanja','shopping','sendiri'],'🛍️'], [['terserah','bingung'],'🤷'],
+    [['delivery','gofood','grabfood','shopee','antar'],'🛵'],
+  ];
+  for (const [keys, emoji] of map){
+    for (const k of keys){
+      if (n.includes(k)) return emoji;
+    }
+  }
+  return '🍴';
+}
+
 document.getElementById('addMenuBtn').addEventListener('click', ()=>{
-  const emoji = document.getElementById('newEmoji').value.trim() || '🍴';
   const name = document.getElementById('newName').value.trim();
   if (!name){ alert('Nama menu wajib diisi yaa~'); return; }
+  const emoji = autoEmoji(name);
   const arr = loadCustomMenus();
   arr.push({ emoji, name });
   saveCustomMenus(arr);
-  document.getElementById('newEmoji').value = '';
   document.getElementById('newName').value = '';
   renderMenuList();
   buildMenu(); drawSpinner();
