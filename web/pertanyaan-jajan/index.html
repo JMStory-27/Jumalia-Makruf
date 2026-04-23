@@ -337,18 +337,20 @@
         <img class="snap-img" id="snapImg" alt="snap" />
         <div class="photo-caption">💕 ISTRIKU PALING CANTIK SEDUNIA 💕</div>
       </div>
-      <h2 style="line-height:1.5; padding:0 12px;">
-        ✨ Ini dia istriku yang paling cantik di dunia... ✨<br>
-        <span style="font-size:16px; color:#ffb3cc; display:block; margin-top:10px;">
-          Senyumnya bikin hari Mas jadi cerah ☀️<br>
-          Matanya bikin Mas jatuh cinta tiap hari 👀💘<br>
-          Pipinya yang chubby bikin pengen Mas cubit terus 🥰<br>
-          Suaranya merdu kayak lagu kesukaan Mas 🎵<br>
-          Hati kamu lebih lembut dari kapas 🌸<br><br>
+      <h2 style="line-height:1.4; padding:0 12px;">
+        ✨ Ini dia istriku yang paling cantik di dunia... ✨
+      </h2>
+      <div style="font-size:11px; color:#ffb3cc; line-height:1.6; margin-top:10px; padding:0 16px; max-width:340px;">
+        Senyumnya bikin hari Mas jadi cerah ☀️<br>
+        Matanya bikin Mas jatuh cinta tiap hari 👀💘<br>
+        Pipinya yang chubby bikin pengen Mas cubit terus 🥰<br>
+        Suaranya merdu kayak lagu kesukaan Mas 🎵<br>
+        Hati kamu lebih lembut dari kapas 🌸<br>
+        <span style="display:block; margin-top:6px;">
           Mas bersyukur banget punya istri sebaik & secantik kamu 💕<br>
           Sehat selalu yaa sayang, semoga kita awet sampai surga 🤲❤️
         </span>
-      </h2>
+      </div>
       <div class="heart-burst">💖💕💖💞💗</div>
       <button class="btn-primary" id="btnMasuk" style="margin-top:24px;">Masuk Yuk 🔥</button>
     </div>
@@ -469,17 +471,7 @@ function sfxPop(){ beep(440,.08,'triangle',.15); setTimeout(()=>beep(220,.08,'tr
 function sfxKiss(){ beep(660,.1,'sine',.15); setTimeout(()=>beep(990,.15,'sine',.18),100); }
 
 /* ============ TTS ============ */
-function speak(text, opts={}){
-  try {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'id-ID';
-    u.rate = opts.rate || 1.0;
-    u.pitch = opts.pitch || 1.1;
-    u.volume = opts.volume || 1;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(u);
-  } catch(e){}
-}
+function speak(){ /* TTS dinonaktifkan — pakai SFX/getar aja */ }
 
 /* ============ VIBRATE ============ */
 function vibrate(pattern){ try { navigator.vibrate && navigator.vibrate(pattern); } catch(e){} }
