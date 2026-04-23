@@ -181,6 +181,17 @@
   .achievement-card p { color:#5d4037; margin-top:10px; font-size:15px; line-height:1.5; }
   .achievement-card button { margin-top:20px; }
 
+  /* Phone input */
+  .phone-row { display:flex; align-items:center; gap:8px; margin-top:14px; }
+  .phone-label { font-size:13px; color:#7a4866; font-weight:600; white-space:nowrap; }
+  #husbandPhone {
+    flex:1; padding:10px 14px; border:2px solid #ffc1d8; border-radius:12px;
+    font-size:14px; outline:none; background:#fff5f9; color:#5a2a4a;
+  }
+  #husbandPhone:focus { border-color:#ff4081; }
+  .phone-hint { font-size:11px; color:#d6336c; margin-top:8px; opacity:.85; }
+  .phone-hint.ok { color:#2e7d32; }
+
   /* WA button */
   .wa-btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -362,6 +373,11 @@
       <div class="header-card">
         <h2>🍽️ Jajan Time, Sayang!</h2>
         <p>Pilih sendiri atau biar takdir yang nentuin 💫</p>
+        <div class="phone-row">
+          <span class="phone-label">📱 Nomor Suamimu:</span>
+          <input type="tel" id="husbandPhone" placeholder="contoh: 0858xxxx atau 6285xxxx" inputmode="numeric" />
+        </div>
+        <div class="phone-hint" id="phoneHint">Isi nomor suami dulu yaa biar bisa kirim pesan 💕</div>
       </div>
 
       <div class="spinner-card">
@@ -383,7 +399,7 @@
           <span class="resp-emoji" id="respEmoji">🍽️</span>
           <div class="resp-text" id="respText"></div>
           <a id="waReqBtn" class="wa-btn" href="#" target="_blank" rel="noopener" style="display:none;">
-            <span style="font-size:20px">📲</span> Pesan Langsung ke Mas via WA
+            <span style="font-size:20px">📲</span> Pesan ke Suamimu Sekarang
           </a>
         </div>
       </div>
@@ -414,7 +430,7 @@
       <div class="winner-name" id="winnerName">Bakso</div>
       <div class="winner-sub">Yeyy selera kamu emang juara sayang 💕</div>
       <a id="winnerWa" class="wa-btn big" href="#" target="_blank" rel="noopener">
-        <span style="font-size:22px">📲</span> Pesan ke Mas Sekarang
+        <span style="font-size:22px">📲</span> Pesan ke Suamimu Sekarang
       </a>
       <button class="btn-secondary" id="btnCloseWinner">Spin Lagi 🔄</button>
     </div>
@@ -657,15 +673,59 @@ document.getElementById('btnSpin').addEventListener('click', ()=>{
   }, 5100);
 });
 
+/* ============ PHONE NUMBER ============ */
+function normalizePhone(raw){
+  const digits = (raw||'').replace(/\D/g,'');
+  if (!digits) return '';
+  if (digits.startsWith('0'))   return '62' + digits.slice(1);   // 085xxx -> 6285xxx
+  if (digits.startsWith('62'))  return digits;                    // 6285xxx
+  if (digits.startsWith('8'))   return '62' + digits;             // 85xxx  -> 6285xxx
+  return digits;
+}
+function getHusbandNumber(){
+  const raw = (document.getElementById('husbandPhone')?.value || localStorage.getItem('husbandPhone') || '').trim();
+  return normalizePhone(raw);
+}
+const phoneInput = () => document.getElementById('husbandPhone');
+const phoneHint  = () => document.getElementById('phoneHint');
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const saved = localStorage.getItem('husbandPhone');
+  if (saved && phoneInput()) phoneInput().value = saved;
+  if (phoneInput()) {
+    phoneInput().addEventListener('input', ()=>{
+      const n = normalizePhone(phoneInput().value);
+      localStorage.setItem('husbandPhone', phoneInput().value);
+      if (n.length >= 10 && n.startsWith('62')){
+        phoneHint().textContent = `✅ Nomor siap: +${n}`;
+        phoneHint().classList.add('ok');
+      } else {
+        phoneHint().textContent = 'Isi nomor suami dulu yaa biar bisa kirim pesan 💕';
+        phoneHint().classList.remove('ok');
+      }
+    });
+  }
+});
+
 /* ============ WINNER MODAL ============ */
-const WA_NUMBER = '6285824162280';
 function waLink(menu){
-  const text = encodeURIComponent(`Mas, aku udah pilih nih dari spinner~ Aku mau ${menu} yaaa 🥺💕`);
-  return `https://wa.me/${WA_NUMBER}?text=${text}`;
+  const num = getHusbandNumber();
+  const text = encodeURIComponent(`Suamiku sayang, aku udah pilih nih dari spinner~ Aku mau ${menu} yaaa 🥺💕`);
+  return num ? `https://wa.me/${num}?text=${text}` : '#';
 }
 function waLinkRequest(food){
-  const text = encodeURIComponent(`Mas, aku request makanan ya~ Aku mau ${food} 🥺💕 Cepet pulang yaaa!`);
-  return `https://wa.me/${WA_NUMBER}?text=${text}`;
+  const num = getHusbandNumber();
+  const text = encodeURIComponent(`Suamiku sayang, aku request makanan ya~ Aku mau ${food} 🥺💕 Cepet pulang yaaa!`);
+  return num ? `https://wa.me/${num}?text=${text}` : '#';
+}
+function ensurePhoneOrAlert(){
+  const num = getHusbandNumber();
+  if (!num || num.length < 10){
+    alert('Eh sayang, isi nomor suamimu dulu di atas yaa~ 📱💕');
+    phoneInput()?.focus();
+    return false;
+  }
+  return true;
 }
 function showWinnerModal(m){
   const modal = document.getElementById('winnerModal');
@@ -679,6 +739,16 @@ function showWinnerModal(m){
 document.getElementById('btnCloseWinner').addEventListener('click', ()=>{
   document.getElementById('winnerModal').classList.remove('show');
   sfxPop();
+});
+// Validate phone before opening WA links
+['winnerWa','waReqBtn'].forEach(id=>{
+  document.addEventListener('click', (ev)=>{
+    const el = ev.target.closest && ev.target.closest('#'+id);
+    if (!el) return;
+    if (!ensurePhoneOrAlert()){ ev.preventDefault(); return; }
+    // refresh href just before opening, in case nomor diketik di tengah jalan
+    if (id === 'winnerWa') el.href = waLink(document.getElementById('winnerName').textContent);
+  });
 });
 
 /* ============ CONFETTI ============ */
