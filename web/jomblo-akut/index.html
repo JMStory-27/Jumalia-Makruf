@@ -605,7 +605,12 @@ ensureFaceModel();
 
 function dedupeFaces(boxes){
   // boxes: [{x,y,w,h,score}]
-  // Merge boxes that overlap a lot (IoU > 0.4) — pick best score
+  // Two boxes count as the SAME face only if either:
+  //  - IoU very high (>0.55), OR
+  //  - center of one is inside the other AND box sizes are similar
+  // Otherwise (e.g. two friends close together), keep both.
+  function center(b){ return { cx: b.x + b.w/2, cy: b.y + b.h/2 }; }
+  function inside(p, b){ return p.cx >= b.x && p.cx <= b.x+b.w && p.cy >= b.y && p.cy <= b.y+b.h; }
   const kept = [];
   for (const b of boxes.sort((a,b)=> b.score - a.score)){
     let dup = false;
@@ -614,7 +619,10 @@ function dedupeFaces(boxes){
       const x2 = Math.min(b.x+b.w, k.x+k.w), y2 = Math.min(b.y+b.h, k.y+k.h);
       const inter = Math.max(0, x2-x1) * Math.max(0, y2-y1);
       const uni = b.w*b.h + k.w*k.h - inter;
-      if (uni > 0 && inter/uni > 0.4){ dup = true; break; }
+      const iou = uni > 0 ? inter/uni : 0;
+      const sizeRatio = Math.min(b.w*b.h, k.w*k.h) / Math.max(b.w*b.h, k.w*k.h);
+      const centerDup = inside(center(b), k) && inside(center(k), b) && sizeRatio > 0.5;
+      if (iou > 0.55 || centerDup){ dup = true; break; }
     }
     if (!dup) kept.push(b);
   }
@@ -626,11 +634,13 @@ async function detectFaces(canvas){
   if (!ok || typeof faceapi === 'undefined') return -1;
   // Run multiple detectors and combine results, dedupe overlapping boxes
   const allBoxes = [];
+  const debug = { ssd: 0, tiny: {} };
   // Try SSD MobileNet (more accurate for multiple faces)
   if (faceapi.nets.ssdMobilenetv1.params){
     try {
-      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.35 });
+      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 });
       const dets = await faceapi.detectAllFaces(canvas, opts);
+      debug.ssd = dets.length;
       for (const d of dets){
         const b = d.box;
         allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score });
@@ -639,10 +649,11 @@ async function detectFaces(canvas){
   }
   // Also run Tiny at multiple input sizes for robustness
   if (faceapi.nets.tinyFaceDetector.params){
-    for (const size of [416, 608]){
+    for (const size of [320, 416, 512, 608]){
       try {
-        const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold: 0.3 });
+        const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold: 0.2 });
         const dets = await faceapi.detectAllFaces(canvas, opts);
+        debug.tiny[size] = dets.length;
         for (const d of dets){
           const b = d.box;
           allBoxes.push({ x:b.x, y:b.y, w:b.width, h:b.height, score:d.score });
@@ -650,8 +661,11 @@ async function detectFaces(canvas){
       } catch(e){ console.warn('tiny detect failed', e); }
     }
   }
+  console.log('[face-detect] raw boxes:', allBoxes.length, 'detail:', debug);
   if (allBoxes.length === 0) return 0;
-  return dedupeFaces(allBoxes).length;
+  const merged = dedupeFaces(allBoxes);
+  console.log('[face-detect] after dedupe:', merged.length, merged.map(b=>({x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.w),h:Math.round(b.h),s:b.score.toFixed(2)})));
+  return merged.length;
 }
 
 /* ===== Result variants ===== */
