@@ -202,6 +202,26 @@
     75%{transform: translate(-2px,-3px) rotate(-6deg) scale(1.05)}
     100%{transform: translate(0,0) rotate(0)}
   }
+  /* Slow-motion finale — dadu ngerem dramatis sebelum buka angka */
+  .dice.slow-mo { animation: diceSlowMo .6s cubic-bezier(.45,.05,.55,.95) infinite; filter: drop-shadow(0 0 8px rgba(255,216,110,.7)); }
+  @keyframes diceSlowMo {
+    0%   { transform: rotate(-7deg) scale(1.08); }
+    50%  { transform: rotate( 7deg) scale(.96); }
+    100% { transform: rotate(-7deg) scale(1.08); }
+  }
+  .dice-center.slow-mo { animation: diceCenterSlowMo .9s cubic-bezier(.45,.05,.55,.95) infinite !important;
+    filter: drop-shadow(0 0 24px rgba(255,216,110,.85)) drop-shadow(0 0 8px rgba(255,255,255,.4));
+  }
+  @keyframes diceCenterSlowMo {
+    0%   { transform: translate(-50%, -50%) scale(1.35) rotate(-8deg); }
+    50%  { transform: translate(-50%, -52%) scale(1.45) rotate( 8deg); }
+    100% { transform: translate(-50%, -50%) scale(1.35) rotate(-8deg); }
+  }
+  /* Suspense vignette flash pas slow-mo */
+  .dice-suspense-vignette { position: fixed; inset: 0; pointer-events: none; z-index: 4;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.55) 100%);
+    opacity: 0; transition: opacity .35s ease; }
+  .dice-suspense-vignette.show { opacity: 1; }
   .dice-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 2px; width:100%; height:100%; }
   .dice-grid .dot { background: transparent; border-radius: 50%; }
   .dice-grid .dot.on { background: radial-gradient(circle at 30% 30%, #444, #000); box-shadow: inset 0 1px 1px rgba(0,0,0,.5); }
@@ -3199,28 +3219,51 @@ $('btnRoll').onclick = async () => {
 async function rollDiceAnimation(finalValue, totalMs){
   const dice = $('diceFace');
   const center = $('diceCenter');
+  // Pastiin total cukup buat suspense + slow-mo
+  totalMs = Math.max(totalMs || 0, 2400);
+  const slowMoMs = 850;     // durasi slow-mo
+  const fastMs = Math.max(500, totalMs - slowMoMs - 250);
+
   dice.classList.add('rolling');
 
   // 🔊 Dice rattle while it spins
   try { sfx.diceRattle(); } catch(_){}
 
   // Show "?" during the spin so the user only ever sees the FINAL value
-  // (avoids confusion where mid-spin random faces look like the result)
   const qHtml = '<div class="dice-q">?</div>';
-  center.classList.remove('settle');
+  center.classList.remove('settle', 'slow-mo');
   center.classList.add('show', 'throwing');
   dice.innerHTML = qHtml;
   center.innerHTML = qHtml;
 
-  // Wait for the suspense build-up (totalMs - 250ms reveal hold)
-  await sleep(Math.max(600, totalMs - 250));
+  // ⚡ FASE 1: spin cepat
+  await sleep(fastMs);
 
-  // REVEAL the actual rolled value
+  // 🐢 FASE 2: SLOW-MOTION — dadu ngerem, vignette gelap, suspense
   dice.classList.remove('rolling');
+  dice.classList.add('slow-mo');
+  center.classList.remove('throwing');
+  center.classList.add('slow-mo');
+  // Vignette gelap di sekeliling
+  let vignette = document.getElementById('diceSuspenseVignette');
+  if (!vignette){
+    vignette = document.createElement('div');
+    vignette.id = 'diceSuspenseVignette';
+    vignette.className = 'dice-suspense-vignette';
+    document.body.appendChild(vignette);
+  }
+  vignette.classList.add('show');
+  // Drum-roll sound (fallback ke rattle yg lebih lambat — pake Web Audio kalo ada)
+  try { sfx.diceSlow ? sfx.diceSlow() : sfx.diceRattle && sfx.diceRattle(); } catch(_){}
+  await sleep(slowMoMs);
+
+  // 💥 REVEAL the actual rolled value
+  dice.classList.remove('slow-mo');
+  center.classList.remove('slow-mo');
+  vignette.classList.remove('show');
   const finalHtml = diceFaceHTML(finalValue);
   dice.innerHTML = finalHtml;
   center.innerHTML = finalHtml;
-  center.classList.remove('throwing');
   // 🔊 Land thud
   try { sfx.diceLand(finalValue); } catch(_){}
   // Hold on the result briefly so player sees it on the board
@@ -3905,6 +3948,141 @@ document.addEventListener('keydown', (e) => {
     if ($('emojiPanel')?.classList.contains('show')) closeEmojiPanel();
   }
 });
+
+/* ============== STATS TRACKING (untuk admin dashboard) ============== */
+// Catat user di Firebase tiap kali aktif. Admin bisa liat siapa aja yg pernah main.
+async function trackUser(extra){
+  if (!db || !CLIENT_ID) return;
+  try {
+    const ref = db.ref('stats/users/'+CLIENT_ID);
+    const cur = await ref.get();
+    const now = Date.now();
+    const isNew = !cur.exists();
+    const data = {
+      clientId: CLIENT_ID,
+      name: myName || (cur.val()?.name) || 'Tamu',
+      lastSeen: now,
+      lastRoom: roomCode || null,
+      ua: (navigator.userAgent || '').slice(0, 120),
+      ...(extra || {})
+    };
+    if (isNew){ data.firstSeen = now; data.totalGames = 0; }
+    await ref.update(data);
+    if (isNew){
+      db.ref('stats/totals/users').transaction(v => (v||0)+1).catch(()=>{});
+    }
+  } catch(_){}
+}
+async function trackRoomCreated(){
+  if (!db) return;
+  try { await db.ref('stats/totals/rooms').transaction(v => (v||0)+1); } catch(_){}
+}
+async function trackGameStarted(){
+  if (!db) return;
+  try {
+    await db.ref('stats/totals/games').transaction(v => (v||0)+1);
+    if (CLIENT_ID) await db.ref('stats/users/'+CLIENT_ID+'/totalGames').transaction(v => (v||0)+1);
+  } catch(_){}
+}
+
+// Hook ke onRoomUpdate buat detect transisi lobby → playing (game start) per client.
+let _lastSeenStatus = null;
+const _origOnRoomUpdate = onRoomUpdate;
+onRoomUpdate = function(data){
+  try {
+    const status = data?.status;
+    if (status && status !== _lastSeenStatus){
+      if (_lastSeenStatus === 'lobby' && (status === 'playing' || status === 'challenge')){
+        // Cuma host (slot 0) yg trigger increment biar gak double-count
+        if (myPlayerIdx === 0) trackGameStarted();
+      }
+      _lastSeenStatus = status;
+    }
+  } catch(_){}
+  return _origOnRoomUpdate.apply(this, arguments);
+};
+
+// Hook ke createRoom & joinRoom buat track user
+const _origCreateRoom = createRoom;
+createRoom = async function(...args){
+  const r = await _origCreateRoom.apply(this, args);
+  trackUser({ action: 'create' });
+  trackRoomCreated();
+  return r;
+};
+const _origJoinRoom = joinRoom;
+joinRoom = async function(...args){
+  const r = await _origJoinRoom.apply(this, args);
+  trackUser({ action: 'join' });
+  return r;
+};
+
+// Heartbeat user juga (selain heartbeat lobby) — biar admin liat "online sekarang"
+setInterval(() => {
+  if (roomCode && myPlayerIdx >= 0) trackUser();
+}, 30000);
+
+/* ============== URL PARAMS: ?join=XXX & ?admin=1 ============== */
+// Buat link dari admin panel atau invite link.
+let __isAdminMode = false;
+(function handleURLParams(){
+  try {
+    const p = new URLSearchParams(location.search);
+    const code = (p.get('join') || p.get('room') || '').toUpperCase().replace(/[^0-9]/g, '');
+    const isAdmin = p.get('admin') === '1';
+    if (isAdmin){
+      __isAdminMode = true;
+      myName = '🛡️ ADMIN';
+      try { if ($('inputName')) $('inputName').value = myName; } catch(_){}
+    }
+    if (code && code.length >= 4 && code.length <= 6){
+      // Auto-fill kode di field gabung room
+      setTimeout(() => {
+        const f = $('joinRoomCode');
+        if (f) f.value = code;
+        // Kalo admin, auto-join setelah halaman ready (skip kalo lagi reconnect ke session lain)
+        if (isAdmin){
+          setTimeout(async () => {
+            if (loadSession()){
+              const s = loadSession();
+              if (s && s.roomCode === code) return; // udah di room itu
+              clearSession(); // tinggalin session lama, masuk room admin
+            }
+            try { await joinRoom(code); } catch(e){ alertModal('Gagal masuk', e.message || 'Error', '⚠️'); }
+          }, 1200);
+        }
+      }, 400);
+    }
+  } catch(e){ console.warn('URL param parse failed', e); }
+})();
+
+// Override join lobby check buat admin
+const _origJoinRoom2 = joinRoom;
+joinRoom = async function(code){
+  if (__isAdminMode){
+    // Admin bypass: izinin join walau status 'playing'
+    setupMedia().catch(()=>{});
+    const snap = await db.ref('rooms/'+code).get();
+    if (!snap.exists()) return alertModal('Room ga ketemu', 'Cek lagi kodenya', '🔍');
+    const data = snap.val();
+    let slot = -1;
+    for (let i=0; i<MAX_PLAYERS; i++){ if (!data.players || !data.players[i]){ slot = i; break; } }
+    if (slot < 0) return alertModal('Penuh', 'Room udah 4 orang. Admin gabisa masuk room penuh.', '🚪');
+    roomCode = code; myPlayerIdx = slot; isHost = (slot === 0);
+    roomRef = db.ref('rooms/'+code);
+    await roomRef.child('players/'+slot).set({
+      name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0,
+      joinedAt: Date.now(), clientId: CLIENT_ID, online: true, lastSeen: Date.now(), isAdmin: true
+    });
+    roomRef.child('players/'+slot+'/online').onDisconnect().set(false);
+    roomRef.child('players/'+slot+'/lastSeen').onDisconnect().set(Date.now());
+    saveSession();
+    enterLobby();
+    trackUser({ action: 'admin-join' });
+    return;
+  }
+  return _origJoinRoom2.apply(this, arguments);
+};
 </script>
 </body>
 </html>
