@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#2a1b4d" />
+<title>🎲 Ular Tangga Online — Mabar bareng temen</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>" />
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin:0; padding:0; height:100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #2a1b4d 0%, #1a0f33 50%, #0d0820 100%);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .screen { display:none; min-height:100vh; padding: 16px; max-width: 720px; margin: 0 auto; }
+  .screen.active { display:block; }
+  h1, h2, h3 { margin: 0 0 12px; font-weight: 800; }
+  h1 { font-size: 28px; text-align:center; background: linear-gradient(90deg, #ffd86e, #ff8e6e, #ff6ec4); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  h2 { font-size: 22px; }
+  p { line-height: 1.5; opacity: .9; }
+  button {
+    font: inherit; cursor: pointer; border: none; border-radius: 14px;
+    padding: 14px 22px; font-weight: 700; transition: transform .1s, box-shadow .15s;
+    color: #fff;
+  }
+  button:active { transform: scale(.97); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-primary { background: linear-gradient(135deg, #ff6ec4 0%, #7c3aed 100%); box-shadow: 0 6px 20px rgba(124, 58, 237, .4); width:100%; font-size:17px; }
+  .btn-primary:hover { box-shadow: 0 8px 25px rgba(124, 58, 237, .55); }
+  .btn-secondary { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); }
+  .btn-danger { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+  .btn-success { background: linear-gradient(135deg, #10b981, #047857); }
+
+  .card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 20px; margin-bottom: 14px; backdrop-filter: blur(10px); }
+  .input {
+    width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid rgba(255,255,255,.15);
+    background: rgba(0,0,0,.25); color: #fff; font-size: 16px; font-family: inherit;
+    text-transform: uppercase; letter-spacing: 2px; text-align: center;
+  }
+  .input:focus { outline: none; border-color: #ff6ec4; }
+
+  /* ===== WELCOME ===== */
+  .welcome-hero { text-align:center; padding: 30px 0 20px; }
+  .welcome-hero .dice-emoji { font-size: 72px; display:block; margin-bottom: 8px; animation: roll 3s ease-in-out infinite; }
+  @keyframes roll { 0%,100%{ transform: rotate(0); } 50% { transform: rotate(360deg); } }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display:block; margin-bottom:8px; font-weight:600; font-size:14px; opacity:.8; }
+  .name-input { text-transform: none; letter-spacing: 0; text-align: left; }
+  .color-picker { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .color-dot { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: transform .1s, border-color .1s; }
+  .color-dot.selected { border-color: #fff; transform: scale(1.15); }
+  .divider-or { text-align:center; margin: 16px 0; opacity:.5; font-size:13px; }
+  .divider-or::before, .divider-or::after { content:''; display:inline-block; width:60px; height:1px; background:rgba(255,255,255,.2); vertical-align:middle; margin:0 10px; }
+
+  /* ===== LOBBY ===== */
+  .room-code { font-size: 36px; font-weight: 900; text-align:center; letter-spacing: 6px; padding: 12px; background: rgba(255,255,255,.08); border-radius: 14px; margin-bottom: 12px; }
+  .room-actions { display:flex; gap:8px; }
+  .room-actions button { flex:1; }
+  .player-list { display:grid; gap:10px; margin-top: 10px; }
+  .player-row { display:flex; align-items:center; gap:12px; padding:10px 14px; background: rgba(255,255,255,.04); border-radius:12px; }
+  .player-row.empty { opacity: .35; border: 1px dashed rgba(255,255,255,.15); }
+  .player-row .pawn { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,.3) inset; }
+  .player-row .name { font-weight: 600; flex: 1; }
+  .player-row .badge { font-size: 11px; padding: 2px 8px; border-radius: 8px; background: rgba(255,255,255,.1); }
+  .badge.host { background: linear-gradient(135deg, #ffd86e, #ff8e6e); color: #1a0f33; font-weight:700; }
+  .badge.you { background: linear-gradient(135deg, #4ade80, #16a34a); }
+
+  /* ===== GAME ===== */
+  .game-top { display:flex; align-items:center; justify-content:space-between; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
+  .game-top .room-info { font-size: 13px; opacity:.7; }
+  .turn-indicator { display:flex; align-items:center; gap:8px; padding:8px 14px; border-radius: 100px; background: rgba(255,255,255,.08); }
+  .turn-indicator .pawn { width:18px; height:18px; border-radius:50%; }
+
+  /* Video tiles row */
+  .video-row { display:flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; }
+  .video-tile { position: relative; flex: 0 0 80px; height: 80px; border-radius: 50%; overflow: hidden; background: #000; border: 3px solid rgba(255,255,255,.2); }
+  .video-tile.turn { border-color: #ffd86e; box-shadow: 0 0 20px rgba(255,216,110,.6); }
+  .video-tile video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+  .video-tile .vt-name { position:absolute; bottom:0; left:0; right:0; font-size:10px; text-align:center; background: rgba(0,0,0,.6); padding: 2px 0; }
+  .video-tile .vt-status { position:absolute; top: 4px; right: 4px; font-size: 12px; }
+  .video-tile.no-video { display:flex; align-items:center; justify-content:center; }
+  .video-tile.no-video .vt-fallback { font-size: 28px; }
+
+  /* Board */
+  .board-wrap { position: relative; aspect-ratio: 1/1; max-width: 480px; margin: 0 auto 14px; }
+  .board { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); width: 100%; height: 100%; border: 3px solid rgba(255,216,110,.4); border-radius: 12px; overflow: hidden; background: #1a0f33; position: relative; }
+  .cell { position: relative; display:flex; align-items:flex-start; justify-content:flex-start; font-size: 9px; font-weight: 600; padding: 2px; line-height: 1; }
+  .cell.even { background: rgba(255,255,255,.04); }
+  .cell.odd  { background: rgba(255,255,255,.02); }
+  .cell.ladder-bot { background: rgba(74, 222, 128, .25) !important; }
+  .cell.ladder-top { background: rgba(74, 222, 128, .12) !important; }
+  .cell.snake-head { background: rgba(239, 68, 68, .3) !important; }
+  .cell.snake-tail { background: rgba(239, 68, 68, .12) !important; }
+  .cell.start { background: linear-gradient(135deg, #4ade80, #16a34a) !important; }
+  .cell.finish { background: linear-gradient(135deg, #fbbf24, #d97706) !important; color:#1a0f33; }
+  .cell .num { font-size: 9px; opacity:.7; }
+  .cell .icon { position:absolute; bottom:1px; right:2px; font-size:11px; }
+  .cell .pawns { position:absolute; top:50%; left:50%; transform: translate(-50%, -50%); display:flex; flex-wrap: wrap; gap: 1px; justify-content:center; align-items:center; max-width: 90%; }
+  .cell .pawn { width: 10px; height: 10px; border-radius:50%; box-shadow: 0 0 0 1.5px rgba(0,0,0,.4) inset, 0 1px 2px rgba(0,0,0,.5); }
+
+  /* Dice + controls */
+  .dice-area { display:flex; align-items:center; gap:14px; margin-bottom: 12px; padding: 14px; background: rgba(255,255,255,.05); border-radius: 16px; }
+  .dice {
+    width: 64px; height: 64px; border-radius: 14px;
+    background: linear-gradient(135deg, #fff 0%, #e5e7eb 100%);
+    color: #1a0f33; display:flex; align-items:center; justify-content:center;
+    font-size: 36px; font-weight: 900; font-family: 'Courier New', monospace;
+    box-shadow: 0 6px 16px rgba(0,0,0,.3), inset 0 -3px 0 rgba(0,0,0,.15);
+    flex-shrink: 0;
+  }
+  .dice.rolling { animation: shake .12s linear infinite; }
+  @keyframes shake {
+    0%{transform: translate(0,0) rotate(0)} 25%{transform: translate(-2px,1px) rotate(-8deg)}
+    50%{transform: translate(2px,-1px) rotate(8deg)} 75%{transform: translate(-1px,-2px) rotate(-4deg)} 100%{transform: translate(0,0) rotate(0)}
+  }
+  .dice-msg { flex: 1; font-size: 14px; line-height: 1.4; }
+  .dice-msg strong { color: #ffd86e; }
+
+  .av-controls { display:flex; gap: 8px; margin-bottom: 12px; }
+  .av-controls button { flex: 1; padding: 10px; font-size: 14px; }
+
+  .toast { position:fixed; bottom: 20px; left:50%; transform: translateX(-50%) translateY(20px); background: rgba(0,0,0,.9); color:#fff; padding: 12px 22px; border-radius: 100px; font-weight:600; font-size:14px; z-index: 999; opacity:0; pointer-events:none; transition: all .3s; }
+  .toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+
+  /* Modals */
+  .modal-bg { position: fixed; inset:0; background: rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index: 100; padding: 20px; }
+  .modal-bg.show { display:flex; }
+  .modal { background: linear-gradient(135deg, #2a1b4d 0%, #1a0f33 100%); border: 2px solid rgba(255,216,110,.4); border-radius: 20px; padding: 28px 22px; max-width: 380px; width:100%; text-align:center; }
+  .modal .winner-emoji { font-size: 80px; display:block; margin-bottom: 8px; }
+  .modal h2 { font-size: 26px; }
+
+  .footer-note { text-align:center; font-size: 11px; opacity:.4; margin-top: 20px; }
+
+  /* SVG overlay for snakes/ladders */
+  .board-overlay { position: absolute; inset: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<!-- ===== WELCOME ===== -->
+<div class="screen active" id="screenWelcome">
+  <div class="welcome-hero">
+    <span class="dice-emoji">🎲</span>
+    <h1>Ular Tangga Online</h1>
+    <p style="margin-top:4px;">Mabar bareng temen<br>Voice + video, real-time 🎤📹</p>
+  </div>
+
+  <div class="card">
+    <div class="form-group">
+      <label>Nama kamu</label>
+      <input type="text" class="input name-input" id="inputName" placeholder="Misal: Andi" maxlength="14" />
+    </div>
+    <div class="form-group">
+      <label>Pilih warna pion</label>
+      <div class="color-picker" id="colorPicker"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <button class="btn-primary" id="btnCreateRoom">🎮 Bikin Room Baru</button>
+    <div class="divider-or">atau</div>
+    <div class="form-group">
+      <label>Kode room dari temen</label>
+      <input type="text" class="input" id="inputRoomCode" placeholder="ABCD" maxlength="4" />
+    </div>
+    <button class="btn-primary" id="btnJoinRoom" style="background: linear-gradient(135deg, #4ade80, #16a34a); box-shadow: 0 6px 20px rgba(74,222,128,.3);">🚪 Join Room</button>
+  </div>
+
+  <p class="footer-note">Web bakal minta izin akses kamera & mic biar bisa voice + video. Aman, langsung HP-ke-HP, ga lewat server.</p>
+</div>
+
+<!-- ===== LOBBY ===== -->
+<div class="screen" id="screenLobby">
+  <h2 style="text-align:center;">📋 Lobby Room</h2>
+  <p style="text-align:center; opacity:.7; margin-top:0;">Share kode/link ke temen biar mereka join</p>
+
+  <div class="card">
+    <div style="font-size:12px; opacity:.7; text-align:center; margin-bottom:6px;">KODE ROOM</div>
+    <div class="room-code" id="lobbyRoomCode">----</div>
+    <div class="room-actions">
+      <button class="btn-secondary" id="btnCopyCode">📋 Copy Kode</button>
+      <button class="btn-secondary" id="btnCopyLink">🔗 Copy Link</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:10px;">👥 Pemain (<span id="playerCount">0</span>/4)</h3>
+    <div class="player-list" id="playerList"></div>
+  </div>
+
+  <button class="btn-primary" id="btnStartGame" disabled>🎲 Mulai Mabar</button>
+  <button class="btn-secondary" id="btnLeaveLobby" style="width:100%; margin-top:8px;">🚪 Keluar</button>
+
+  <p class="footer-note" id="lobbyHint">Tunggu host mulai game...</p>
+</div>
+
+<!-- ===== GAME ===== -->
+<div class="screen" id="screenGame">
+  <div class="game-top">
+    <div class="room-info">Room <strong id="gameRoomCode">----</strong></div>
+    <div class="turn-indicator" id="turnIndicator">
+      <span class="pawn" id="turnPawn"></span>
+      <span id="turnText">Giliran ...</span>
+    </div>
+  </div>
+
+  <div class="video-row" id="videoRow"></div>
+
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+    <svg class="board-overlay" id="boardOverlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+  </div>
+
+  <div class="dice-area">
+    <div class="dice" id="diceFace">?</div>
+    <div class="dice-msg" id="diceMsg">Loading...</div>
+    <button class="btn-primary" id="btnRoll" style="width: auto; padding: 12px 18px;">🎲 Lempar</button>
+  </div>
+
+  <div class="av-controls">
+    <button class="btn-secondary" id="btnMic">🎤 Mute</button>
+    <button class="btn-secondary" id="btnCam">📹 Off Cam</button>
+    <button class="btn-secondary" id="btnLeaveGame">🚪 Keluar</button>
+  </div>
+</div>
+
+<!-- Win modal -->
+<div class="modal-bg" id="winModal">
+  <div class="modal">
+    <span class="winner-emoji" id="winEmoji">🏆</span>
+    <h2 id="winText">Pemenang!</h2>
+    <p id="winSub" style="margin: 8px 0 20px;">Selamat 🎉</p>
+    <button class="btn-success" id="btnPlayAgain" style="width:100%; margin-bottom:8px;">🔄 Main Lagi</button>
+    <button class="btn-secondary" id="btnExitWin" style="width:100%;">🚪 Keluar Room</button>
+  </div>
+</div>
+
+<!-- Generic modal for alerts -->
+<div class="modal-bg" id="alertModal">
+  <div class="modal">
+    <span class="winner-emoji" id="alertIcon">ℹ️</span>
+    <h2 id="alertTitle">Info</h2>
+    <p id="alertMsg" style="margin: 8px 0 20px;"></p>
+    <button class="btn-primary" id="btnAlertOk" style="width:100%;">OK</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============== CONFIG ============== */
+const FIREBASE_CONFIG = {     "apiKey": "AIzaSyAAJniLnjwHVd5DEDg4zHpWqF0fnJMoB0Y",     "authDomain": "ular-tangga-jm.firebaseapp.com",     "databaseURL": "https://ular-tangga-jm-default-rtdb.asia-southeast1.firebasedatabase.app",     "projectId": "ular-tangga-jm",     "storageBucket": "ular-tangga-jm.firebasestorage.app",     "messagingSenderId": "16689505417",     "appId": "1:16689505417:web:6f479f831063e2978d1258",     "measurementId": "G-R3CKKXGLL5"   };
+const COLORS = [
+  { id: 'red',    hex: '#ef4444' },
+  { id: 'blue',   hex: '#3b82f6' },
+  { id: 'yellow', hex: '#fbbf24' },
+  { id: 'green',  hex: '#10b981' },
+];
+const LADDERS = { 4: 14, 9: 31, 20: 38, 28: 84, 40: 59, 51: 67, 63: 81, 71: 91 };
+const SNAKES  = { 17: 7, 54: 34, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 98: 79 };
+const MAX_PLAYERS = 4;
+
+/* ============== INIT ============== */
+firebase.initializeApp(FIREBASE_CONFIG);
+const db = firebase.database();
+let peer = null;        // PeerJS instance
+let localStream = null; // local mic+camera stream
+const peerCalls = {};   // peerId -> MediaConnection
+const remoteStreams = {}; // playerIdx -> MediaStream
+
+let roomCode = null;
+let myPlayerIdx = -1;
+let myName = '';
+let myColor = 'red';
+let myPeerId = null;
+let isHost = false;
+let roomData = null;
+let roomRef = null;
+
+const $ = (id) => document.getElementById(id);
+
+/* ============== UTILS ============== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+function toast(msg, ms=2200){
+  const t = $('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._tm); t._tm = setTimeout(()=> t.classList.remove('show'), ms);
+}
+function alertModal(title, msg, icon='ℹ️'){
+  $('alertIcon').textContent = icon; $('alertTitle').textContent = title; $('alertMsg').textContent = msg;
+  $('alertModal').classList.add('show');
+}
+$('btnAlertOk').onclick = () => $('alertModal').classList.remove('show');
+
+function genCode(){
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // no I/O for clarity
+  let s = '';
+  for (let i=0;i<4;i++) s += letters[Math.floor(Math.random()*letters.length)];
+  return s;
+}
+function colorHex(id){ return (COLORS.find(c=>c.id===id)||COLORS[0]).hex; }
+async function copyToClipboard(text){
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); document.body.removeChild(ta); return true; }
+    catch(_){ document.body.removeChild(ta); return false; }
+  }
+}
+
+/* ============== WELCOME ============== */
+function buildColorPicker(){
+  const wrap = $('colorPicker');
+  wrap.innerHTML = '';
+  COLORS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'color-dot'; d.style.background = c.hex; d.dataset.id = c.id;
+    if (c.id === myColor) d.classList.add('selected');
+    d.onclick = () => {
+      myColor = c.id;
+      wrap.querySelectorAll('.color-dot').forEach(x => x.classList.remove('selected'));
+      d.classList.add('selected');
+    };
+    wrap.appendChild(d);
+  });
+}
+buildColorPicker();
+
+// Restore saved name
+try { myName = localStorage.getItem('ut_name') || ''; $('inputName').value = myName; } catch(_){}
+
+// Auto-fill room code from URL ?r=XXXX
+const urlParams = new URLSearchParams(location.search);
+const urlRoom = (urlParams.get('r')||'').toUpperCase().slice(0,4);
+if (urlRoom) $('inputRoomCode').value = urlRoom;
+
+$('btnCreateRoom').onclick = async () => {
+  const name = $('inputName').value.trim();
+  if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
+  myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
+  await createRoom();
+};
+$('btnJoinRoom').onclick = async () => {
+  const name = $('inputName').value.trim();
+  const code = $('inputRoomCode').value.trim().toUpperCase();
+  if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
+  if (code.length !== 4) return alertModal('Eh', 'Kode room harus 4 huruf', '🔢');
+  myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
+  await joinRoom(code);
+};
+
+/* ============== MEDIA (mic + camera) ============== */
+async function setupMedia(){
+  if (localStream) return localStream;
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true },
+      video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } }
+    });
+    return localStream;
+  } catch(e){
+    console.warn('media access failed', e);
+    toast('⚠️ Mic/kamera ga bisa diakses, lanjut tanpa voice/video');
+    return null;
+  }
+}
+
+/* ============== PEERJS (voice + video signaling) ============== */
+function setupPeer(){
+  return new Promise((resolve, reject) => {
+    peer = new Peer(undefined, { debug: 1 });
+    peer.on('open', (id) => { myPeerId = id; resolve(id); });
+    peer.on('error', (err) => { console.warn('peer error', err); /* don't reject — game still works without media */ });
+    peer.on('call', (call) => {
+      // Incoming call from another player — answer with our stream
+      if (localStream) call.answer(localStream); else call.answer();
+      const remotePeerId = call.peer;
+      peerCalls[remotePeerId] = call;
+      call.on('stream', (stream) => attachRemoteStream(remotePeerId, stream));
+      call.on('close', () => detachRemoteStream(remotePeerId));
+    });
+    setTimeout(() => { if (!myPeerId) resolve(null); }, 8000); // don't block forever
+  });
+}
+
+function callPeer(remotePeerId){
+  if (!peer || !localStream || !remotePeerId || remotePeerId === myPeerId) return;
+  if (peerCalls[remotePeerId]) return;
+  try {
+    const call = peer.call(remotePeerId, localStream);
+    if (!call) return;
+    peerCalls[remotePeerId] = call;
+    call.on('stream', (stream) => attachRemoteStream(remotePeerId, stream));
+    call.on('close', () => detachRemoteStream(remotePeerId));
+  } catch(e){ console.warn('callPeer error', e); }
+}
+
+function attachRemoteStream(remotePeerId, stream){
+  // Find which player idx has this peerId
+  if (!roomData || !roomData.players) return;
+  for (const [idx, p] of Object.entries(roomData.players)){
+    if (p && p.peerId === remotePeerId){
+      remoteStreams[idx] = stream;
+      const tile = document.querySelector('.video-tile[data-idx="'+idx+'"]');
+      if (tile){
+        const vid = tile.querySelector('video');
+        if (vid && vid.srcObject !== stream){ vid.srcObject = stream; vid.play().catch(()=>{}); }
+        tile.classList.remove('no-video');
+      }
+      return;
+    }
+  }
+}
+function detachRemoteStream(remotePeerId){
+  for (const [idx, p] of Object.entries(roomData?.players||{})){
+    if (p && p.peerId === remotePeerId){ delete remoteStreams[idx]; break; }
+  }
+}
+
+function callAllOtherPeers(){
+  if (!roomData || !roomData.players) return;
+  for (const [idx, p] of Object.entries(roomData.players)){
+    if (p && p.peerId && p.peerId !== myPeerId) callPeer(p.peerId);
+  }
+}
+
+/* ============== ROOM (Firebase) ============== */
+async function createRoom(){
+  // Setup media + peer first (so we have peerId before writing to room)
+  await setupMedia();
+  await setupPeer();
+  // Generate unique code
+  let code, attempts = 0;
+  while (true){
+    code = genCode();
+    const snap = await db.ref('rooms/'+code).get();
+    if (!snap.exists()) break;
+    attempts++; if (attempts > 10) return alertModal('Error', 'Gagal bikin room, coba lagi', '😵');
+  }
+  roomCode = code;
+  myPlayerIdx = 0;
+  isHost = true;
+  roomRef = db.ref('rooms/'+code);
+  await roomRef.set({
+    host: myPeerId || 'host',
+    status: 'lobby',
+    createdAt: Date.now(),
+    currentTurn: 0,
+    diceRoll: null,
+    winner: null,
+    players: {
+      0: { name: myName, color: myColor, peerId: myPeerId, position: 0, joinedAt: Date.now() }
+    }
+  });
+  // Auto-cleanup if host disconnects
+  roomRef.onDisconnect().remove();
+  enterLobby();
+}
+
+async function joinRoom(code){
+  await setupMedia();
+  await setupPeer();
+  const snap = await db.ref('rooms/'+code).get();
+  if (!snap.exists()) return alertModal('Room ga ketemu', 'Cek lagi kodenya, atau room-nya udah bubar', '🔍');
+  const data = snap.val();
+  if (data.status !== 'lobby') return alertModal('Telat', 'Game-nya udah dimulai, ga bisa join lagi', '⏰');
+  // Find first empty slot
+  let slot = -1;
+  for (let i=0; i<MAX_PLAYERS; i++){
+    if (!data.players || !data.players[i]){ slot = i; break; }
+  }
+  if (slot < 0) return alertModal('Penuh', 'Room-nya udah 4 orang, ga ada slot kosong', '🚪');
+  roomCode = code;
+  myPlayerIdx = slot;
+  isHost = false;
+  roomRef = db.ref('rooms/'+code);
+  await roomRef.child('players/'+slot).set({
+    name: myName, color: myColor, peerId: myPeerId, position: 0, joinedAt: Date.now()
+  });
+  // Auto-remove this player on disconnect
+  roomRef.child('players/'+slot).onDisconnect().remove();
+  enterLobby();
+}
+
+function enterLobby(){
+  $('lobbyRoomCode').textContent = roomCode;
+  $('btnStartGame').style.display = isHost ? 'block' : 'none';
+  $('lobbyHint').textContent = isHost ? 'Tunggu temen join, terus klik "Mulai Mabar"' : 'Tunggu host mulai game...';
+  showScreen('screenLobby');
+  subscribeRoom();
+}
+
+function subscribeRoom(){
+  if (!roomRef) return;
+  roomRef.off();
+  roomRef.on('value', (snap) => {
+    const data = snap.val();
+    if (!data){
+      // Room was deleted (host left)
+      alertModal('Room bubar', 'Host udah keluar, room-nya ditutup', '👋');
+      cleanupAndGoHome();
+      return;
+    }
+    const wasNull = !roomData;
+    roomData = data;
+    onRoomUpdate(data, wasNull);
+  });
+}
+
+function onRoomUpdate(data, isFirst){
+  // Lobby render
+  if (data.status === 'lobby'){
+    renderLobby(data);
+  }
+  // Game started — switch screen
+  if (data.status === 'playing'){
+    if (!$('screenGame').classList.contains('active')){
+      showScreen('screenGame');
+      $('gameRoomCode').textContent = roomCode;
+      buildBoard();
+    }
+    renderGame(data);
+  }
+  if (data.status === 'done'){
+    if (!$('screenGame').classList.contains('active')){
+      showScreen('screenGame'); buildBoard();
+    }
+    renderGame(data);
+    showWinModal(data);
+  }
+  // Try to call any newly-joined peers
+  if (peer && localStream) callAllOtherPeers();
+}
+
+function renderLobby(data){
+  const list = $('playerList');
+  list.innerHTML = '';
+  let count = 0;
+  for (let i=0; i<MAX_PLAYERS; i++){
+    const p = data.players && data.players[i];
+    const row = document.createElement('div');
+    if (!p){
+      row.className = 'player-row empty';
+      row.innerHTML = '<div class="pawn" style="background:#444"></div><div class="name">Menunggu pemain...</div>';
+    } else {
+      count++;
+      row.className = 'player-row';
+      let badges = '';
+      if (i === 0) badges += '<span class="badge host">HOST</span>';
+      if (i === myPlayerIdx) badges += '<span class="badge you">KAMU</span>';
+      row.innerHTML = '<div class="pawn" style="background:'+colorHex(p.color)+'"></div>'
+        + '<div class="name">'+escapeHtml(p.name)+'</div>'
+        + badges;
+    }
+    list.appendChild(row);
+  }
+  $('playerCount').textContent = count;
+  $('btnStartGame').disabled = !(isHost && count >= 2);
+  if (isHost && count < 2) $('btnStartGame').textContent = '🎲 Tunggu min 2 pemain';
+  else if (isHost) $('btnStartGame').textContent = '🎲 Mulai Mabar ('+count+' pemain)';
+}
+
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+$('btnCopyCode').onclick = async () => {
+  if (await copyToClipboard(roomCode)) toast('✓ Kode di-copy: '+roomCode);
+  else toast('⚠️ Gagal copy, salin manual: '+roomCode, 4000);
+};
+$('btnCopyLink').onclick = async () => {
+  const link = location.origin + location.pathname + '?r=' + roomCode;
+  if (await copyToClipboard(link)) toast('✓ Link di-copy');
+  else toast('⚠️ Gagal copy: '+link, 4000);
+};
+$('btnStartGame').onclick = async () => {
+  if (!isHost) return;
+  await roomRef.update({ status: 'playing', currentTurn: 0, diceRoll: null, winner: null });
+};
+$('btnLeaveLobby').onclick = () => leaveRoom();
+
+/* ============== BOARD ============== */
+function cellNumberToRowCol(n){
+  // Bottom-left = 1; rows zigzag (boustrophedon)
+  // Row 0 (bottom): 1..10 left->right
+  // Row 1: 20..11 right->left
+  // ...
+  const row = Math.floor((n-1)/10);
+  const indexInRow = (n-1) % 10;
+  const col = (row % 2 === 0) ? indexInRow : (9 - indexInRow);
+  // CSS grid is top-down; bottom row should be at grid-row 10
+  const gridRow = 10 - row;
+  const gridCol = col + 1;
+  return { gridRow, gridCol, row, col };
+}
+
+function buildBoard(){
+  const board = $('board');
+  board.innerHTML = '';
+  for (let n = 100; n >= 1; n--){
+    // We'll iterate logically; CSS grid placement done via gridRow/gridCol
+  }
+  // Build cells 1..100 and place them
+  for (let n = 1; n <= 100; n++){
+    const { gridRow, gridCol } = cellNumberToRowCol(n);
+    const cell = document.createElement('div');
+    cell.className = 'cell ' + ((gridRow + gridCol) % 2 === 0 ? 'even' : 'odd');
+    cell.style.gridRow = gridRow; cell.style.gridColumn = gridCol;
+    cell.dataset.cell = n;
+    let icon = '';
+    if (n === 1) { cell.classList.add('start'); icon = '🏁'; }
+    if (n === 100) { cell.classList.add('finish'); icon = '🏆'; }
+    if (LADDERS[n]) { cell.classList.add('ladder-bot'); icon = '🪜'; }
+    if (Object.values(LADDERS).includes(n)) cell.classList.add('ladder-top');
+    if (SNAKES[n]) { cell.classList.add('snake-head'); icon = '🐍'; }
+    if (Object.values(SNAKES).includes(n)) cell.classList.add('snake-tail');
+    cell.innerHTML = '<span class="num">'+n+'</span>'
+      + (icon ? '<span class="icon">'+icon+'</span>' : '')
+      + '<span class="pawns" data-pawns="'+n+'"></span>';
+    board.appendChild(cell);
+  }
+  drawSnakeLadderOverlay();
+}
+
+function drawSnakeLadderOverlay(){
+  const svg = $('boardOverlay');
+  svg.innerHTML = '';
+  // Each cell is 10x10 in viewBox 100x100
+  const centerOf = (n) => {
+    const { gridRow, gridCol } = cellNumberToRowCol(n);
+    return { x: (gridCol - 0.5) * 10, y: (gridRow - 0.5) * 10 };
+  };
+  // Ladders — green lines
+  for (const [bot, top] of Object.entries(LADDERS)){
+    const a = centerOf(+bot), b = centerOf(+top);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+    line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+    line.setAttribute('stroke', 'rgba(74,222,128,.6)');
+    line.setAttribute('stroke-width', '0.8');
+    line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+  }
+  // Snakes — red curved lines
+  for (const [head, tail] of Object.entries(SNAKES)){
+    const a = centerOf(+head), b = centerOf(+tail);
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    const mx = (a.x + b.x) / 2 + (Math.random()*8 - 4);
+    const my = (a.y + b.y) / 2 + (Math.random()*8 - 4);
+    path.setAttribute('d', `M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`);
+    path.setAttribute('stroke', 'rgba(239,68,68,.7)');
+    path.setAttribute('stroke-width', '0.9');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+  }
+}
+
+function renderPawns(data){
+  // Clear all
+  document.querySelectorAll('.pawns').forEach(p => p.innerHTML = '');
+  if (!data.players) return;
+  // Group by position
+  const byPos = {};
+  for (const [idx, p] of Object.entries(data.players)){
+    if (!p) continue;
+    const pos = Math.max(1, p.position || (p.position === 0 ? 1 : 1)); // start at 1 visually
+    const actualPos = (p.position || 0) === 0 ? 1 : p.position;
+    if (!byPos[actualPos]) byPos[actualPos] = [];
+    byPos[actualPos].push({ idx: +idx, color: p.color });
+  }
+  for (const [pos, players] of Object.entries(byPos)){
+    const target = document.querySelector('.pawns[data-pawns="'+pos+'"]');
+    if (!target) continue;
+    for (const p of players){
+      const el = document.createElement('div');
+      el.className = 'pawn';
+      el.style.background = colorHex(p.color);
+      target.appendChild(el);
+    }
+  }
+}
+
+/* ============== VIDEO TILES ============== */
+function renderVideoTiles(data){
+  const row = $('videoRow');
+  // Build/update tiles
+  const desired = [];
+  for (let i=0; i<MAX_PLAYERS; i++){
+    const p = data.players && data.players[i];
+    if (p) desired.push({ idx: i, p });
+  }
+  // Clear and rebuild (simpler than diffing)
+  row.innerHTML = '';
+  for (const { idx, p } of desired){
+    const tile = document.createElement('div');
+    tile.className = 'video-tile' + (idx === data.currentTurn ? ' turn' : '');
+    tile.dataset.idx = idx;
+    tile.style.borderColor = (idx === data.currentTurn) ? '#ffd86e' : colorHex(p.color);
+    tile.innerHTML = '<video autoplay playsinline'+(idx===myPlayerIdx?' muted':'')+'></video>'
+      + '<span class="vt-name">'+escapeHtml(p.name)+'</span>';
+    row.appendChild(tile);
+    const vid = tile.querySelector('video');
+    if (idx === myPlayerIdx && localStream){
+      vid.srcObject = localStream; vid.play().catch(()=>{});
+    } else if (remoteStreams[idx]){
+      vid.srcObject = remoteStreams[idx]; vid.play().catch(()=>{});
+    } else if (idx !== myPlayerIdx) {
+      // No stream yet — show fallback
+      tile.classList.add('no-video');
+      vid.style.display='none';
+      const fb = document.createElement('div'); fb.className='vt-fallback'; fb.textContent='👤';
+      tile.appendChild(fb);
+    }
+  }
+}
+
+/* ============== GAME RENDER ============== */
+function renderGame(data){
+  // Turn indicator
+  const turnIdx = data.currentTurn || 0;
+  const turnPlayer = data.players && data.players[turnIdx];
+  if (turnPlayer){
+    $('turnPawn').style.background = colorHex(turnPlayer.color);
+    $('turnText').textContent = (turnIdx === myPlayerIdx) ? '🎯 GILIRAN KAMU!' : 'Giliran '+turnPlayer.name;
+  }
+  // Dice
+  if (data.diceRoll){
+    $('diceFace').textContent = data.diceRoll.value;
+    const by = data.players && data.players[data.diceRoll.by];
+    $('diceMsg').innerHTML = (by ? '<strong>'+escapeHtml(by.name)+'</strong> dapet ' : 'Dapet ') + '<strong>'+data.diceRoll.value+'</strong>'
+      + (data.diceRoll.note ? '<br>'+escapeHtml(data.diceRoll.note) : '');
+  } else {
+    $('diceFace').textContent = '?';
+    $('diceMsg').innerHTML = (turnIdx === myPlayerIdx) ? 'Lempar dadunya yuk! 🎲' : 'Tunggu giliranmu...';
+  }
+  // Roll button enabled only on my turn + no winner
+  $('btnRoll').disabled = !(turnIdx === myPlayerIdx && !data.winner);
+  // Pawns + tiles
+  renderPawns(data);
+  renderVideoTiles(data);
+  // Try to connect to all peers
+  if (peer && localStream) setTimeout(callAllOtherPeers, 500);
+}
+
+/* ============== ROLL DICE ============== */
+async function rollDice(){
+  if (!roomData || roomData.currentTurn !== myPlayerIdx || roomData.winner) return;
+  const me = roomData.players[myPlayerIdx];
+  const dice = 1 + Math.floor(Math.random() * 6);
+  const oldPos = me.position || 0;
+  let newPos = oldPos + dice;
+  let note = '';
+
+  // Visual rolling animation locally before commit
+  $('diceFace').classList.add('rolling');
+  $('btnRoll').disabled = true;
+  for (let i=0; i<8; i++){
+    $('diceFace').textContent = 1 + Math.floor(Math.random()*6);
+    await new Promise(r => setTimeout(r, 80));
+  }
+  $('diceFace').classList.remove('rolling');
+  $('diceFace').textContent = dice;
+
+  if (newPos > 100){
+    note = 'Lebih dari 100, ga jadi maju 😅';
+    newPos = oldPos;
+  } else if (newPos === 100){
+    note = '🎉 SAMPAI 100 — MENANG!';
+  } else if (LADDERS[newPos]){
+    note = '🪜 Naik tangga ke '+LADDERS[newPos]+'!';
+    newPos = LADDERS[newPos];
+  } else if (SNAKES[newPos]){
+    note = '🐍 Ketelan ular, turun ke '+SNAKES[newPos];
+    newPos = SNAKES[newPos];
+  }
+
+  const updates = {};
+  updates['players/'+myPlayerIdx+'/position'] = newPos;
+  updates['diceRoll'] = { value: dice, by: myPlayerIdx, note: note, ts: Date.now() };
+
+  if (newPos === 100){
+    updates['winner'] = myPlayerIdx;
+    updates['status'] = 'done';
+  } else {
+    // Next turn — find next existing player
+    const playerIndices = Object.keys(roomData.players).map(Number).sort((a,b)=>a-b);
+    const myArrIdx = playerIndices.indexOf(myPlayerIdx);
+    const nextIdx = playerIndices[(myArrIdx + 1) % playerIndices.length];
+    updates['currentTurn'] = nextIdx;
+  }
+  await roomRef.update(updates);
+}
+$('btnRoll').onclick = rollDice;
+
+/* ============== WIN MODAL ============== */
+function showWinModal(data){
+  if (!data.winner && data.winner !== 0) return;
+  const w = data.players[data.winner];
+  if (!w) return;
+  if ($('winModal').classList.contains('show')) return;
+  if (data.winner === myPlayerIdx){
+    $('winEmoji').textContent = '🏆';
+    $('winText').textContent = 'KAMU MENANG!';
+    $('winSub').textContent = 'Selamat, dapet trofi imajiner 🎉';
+  } else {
+    $('winEmoji').textContent = '🥲';
+    $('winText').textContent = w.name + ' menang!';
+    $('winSub').textContent = 'Coba lagi, giliranmu lain kali 💪';
+  }
+  $('winModal').classList.add('show');
+}
+
+$('btnPlayAgain').onclick = async () => {
+  $('winModal').classList.remove('show');
+  if (!isHost) { toast('Tunggu host buat restart yaa'); return; }
+  // Reset positions
+  const updates = {
+    status: 'playing', currentTurn: 0, diceRoll: null, winner: null
+  };
+  for (const idx of Object.keys(roomData.players)){
+    updates['players/'+idx+'/position'] = 0;
+  }
+  await roomRef.update(updates);
+};
+$('btnExitWin').onclick = () => { $('winModal').classList.remove('show'); leaveRoom(); };
+$('btnLeaveGame').onclick = () => leaveRoom();
+
+/* ============== AV CONTROLS ============== */
+$('btnMic').onclick = () => {
+  if (!localStream) return toast('Mic ga aktif');
+  const t = localStream.getAudioTracks()[0]; if (!t) return;
+  t.enabled = !t.enabled;
+  $('btnMic').textContent = t.enabled ? '🎤 Mute' : '🔇 Unmute';
+};
+$('btnCam').onclick = () => {
+  if (!localStream) return toast('Kamera ga aktif');
+  const t = localStream.getVideoTracks()[0]; if (!t) return;
+  t.enabled = !t.enabled;
+  $('btnCam').textContent = t.enabled ? '📹 Off Cam' : '📷 On Cam';
+};
+
+/* ============== LEAVE / CLEANUP ============== */
+async function leaveRoom(){
+  try {
+    if (roomRef && myPlayerIdx >= 0){
+      if (isHost){
+        await roomRef.remove();
+      } else {
+        await roomRef.child('players/'+myPlayerIdx).remove();
+      }
+    }
+  } catch(_){}
+  cleanupAndGoHome();
+}
+function cleanupAndGoHome(){
+  try { for (const c of Object.values(peerCalls)) c.close(); } catch(_){}
+  try { peer && peer.destroy(); } catch(_){}
+  try { localStream && localStream.getTracks().forEach(t=>t.stop()); } catch(_){}
+  for (const k of Object.keys(remoteStreams)) delete remoteStreams[k];
+  for (const k of Object.keys(peerCalls)) delete peerCalls[k];
+  peer = null; localStream = null; roomRef && roomRef.off(); roomRef = null;
+  roomData = null; roomCode = null; myPlayerIdx = -1; isHost = false; myPeerId = null;
+  showScreen('screenWelcome');
+}
+
+window.addEventListener('beforeunload', () => {
+  if (roomRef && myPlayerIdx >= 0){
+    if (isHost) roomRef.remove(); else roomRef.child('players/'+myPlayerIdx).remove();
+  }
+});
+</script>
+</body>
+</html>
