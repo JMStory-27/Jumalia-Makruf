@@ -135,7 +135,12 @@
   .video-tile:active { transform: scale(.97); }
   .video-tile.has-stream::before { content: '⤢'; position: absolute; top: 4px; left: 4px; z-index: 5; font-size: 11px; background: rgba(0,0,0,.5); color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
   .video-tile.turn { border-color: #ffd86e !important; box-shadow: 0 0 16px rgba(255,216,110,.6); }
-  .video-tile video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+  .video-tile video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);
+    /* Aesthetic iPhone-like grading: cerah, kontras lembut, warna vivid */
+    filter: brightness(1.08) contrast(1.06) saturate(1.18) hue-rotate(-2deg);
+    -webkit-filter: brightness(1.08) contrast(1.06) saturate(1.18) hue-rotate(-2deg);
+    image-rendering: -webkit-optimize-contrast;
+  }
   .video-tile .vt-name { position:absolute; bottom:0; left:0; right:0; font-size:10px; text-align:center; background: rgba(0,0,0,.6); padding: 2px 0; }
   .video-tile .vt-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:30px; background:#1a0f33; }
   .video-tile.has-stream .vt-fallback { display:none; }
@@ -276,7 +281,10 @@
   .vf-overlay { position: fixed; inset: 0; background: #000; z-index: 500; display: none;
     align-items: center; justify-content: center; flex-direction: column; }
   .vf-overlay.show { display: flex; }
-  .vf-overlay video { width: 100vw; height: 100vh; object-fit: cover; transform: scaleX(-1); background: #000; }
+  .vf-overlay video { width: 100vw; height: 100vh; object-fit: cover; transform: scaleX(-1); background: #000;
+    filter: brightness(1.08) contrast(1.06) saturate(1.18) hue-rotate(-2deg);
+    -webkit-filter: brightness(1.08) contrast(1.06) saturate(1.18) hue-rotate(-2deg);
+  }
   .vf-overlay video.no-mirror { transform: none; }
   .vf-close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%;
     background: rgba(0,0,0,.55); border: 2px solid rgba(255,255,255,.3); color: #fff; font-size: 24px;
@@ -1382,24 +1390,59 @@ async function setupMedia(){
   mediaSetupInFlight = (async () => {
     mediaSetupAttempted = true;
     try {
-      // First try with both audio+video
+      // Cascade HD → SD — peer connection auto-downscale per receiver kalo bandwidth kurang.
+      const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+      const hdConstraints = {
+        facingMode: 'user',
+        width:  { ideal: 1280, min: 640 },
+        height: { ideal: 720,  min: 480 },
+        frameRate: { ideal: 30, min: 15, max: 30 },
+        aspectRatio: { ideal: 16/9 },
+        // Hint ke browser: pengen video sebagus mungkin (Chrome/Edge)
+        resizeMode: 'none'
+      };
+      const sdConstraints = {
+        facingMode: 'user',
+        width:  { ideal: 640 },
+        height: { ideal: 480 },
+        frameRate: { ideal: 24, max: 30 }
+      };
       try {
+        // First try HD
         localStream = await navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-          video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 20, max: 24 } }
+          audio: audioConstraints, video: hdConstraints
         });
-      } catch(eFull){
-        console.warn('full media failed, trying audio-only', eFull);
-        // Fallback: audio only (still useful for voice chat)
+        console.log('[Media] HD camera locked');
+      } catch(eHd){
+        console.warn('[Media] HD gagal, fallback SD', eHd);
         try {
           localStream = await navigator.mediaDevices.getUserMedia({
-            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+            audio: audioConstraints, video: sdConstraints
           });
-          toast('🎤 Cuma mic yang aktif (kamera ga bisa diakses)', 3000);
-        } catch(eAudio){
-          console.warn('audio-only failed too', eAudio);
-          throw eAudio;
+          console.log('[Media] SD camera locked');
+        } catch(eSd){
+          console.warn('[Media] SD gagal, fallback audio-only', eSd);
+          // Last resort: audio only
+          try {
+            localStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
+            toast('🎤 Cuma mic yang aktif (kamera ga bisa diakses)', 3000);
+          } catch(eAudio){
+            console.warn('[Media] audio-only gagal juga', eAudio);
+            throw eAudio;
+          }
         }
+      }
+      // Apply advanced constraints (auto-focus, exposure, white-balance) — bikin gambar lebih hidup
+      const vt = localStream.getVideoTracks()[0];
+      if (vt && vt.applyConstraints){
+        try {
+          const caps = vt.getCapabilities ? vt.getCapabilities() : {};
+          const adv = {};
+          if (caps.focusMode && caps.focusMode.includes('continuous')) adv.focusMode = 'continuous';
+          if (caps.exposureMode && caps.exposureMode.includes('continuous')) adv.exposureMode = 'continuous';
+          if (caps.whiteBalanceMode && caps.whiteBalanceMode.includes('continuous')) adv.whiteBalanceMode = 'continuous';
+          if (Object.keys(adv).length) await vt.applyConstraints({ advanced: [adv] });
+        } catch(_){}
       }
       console.log('[Media] localStream ready:', localStream.getTracks().map(t=>t.kind+':'+t.enabled));
       // Renegotiate all existing peer connections so they actually send our tracks
@@ -1415,6 +1458,27 @@ async function setupMedia(){
     }
   })();
   return mediaSetupInFlight;
+}
+
+async function boostSenderBitrate(pc){
+  if (!pc || pc.signalingState === 'closed') return;
+  try {
+    const senders = pc.getSenders ? pc.getSenders() : [];
+    for (const s of senders){
+      if (!s.track) continue;
+      const params = s.getParameters();
+      if (!params.encodings || !params.encodings.length) params.encodings = [{}];
+      if (s.track.kind === 'video'){
+        params.encodings[0].maxBitrate = 2_500_000;   // ~2.5 Mbps untuk HD
+        params.encodings[0].maxFramerate = 30;
+        if ('contentHint' in s.track) s.track.contentHint = 'motion';
+        params.degradationPreference = 'maintain-resolution';
+      } else if (s.track.kind === 'audio'){
+        params.encodings[0].maxBitrate = 64_000;     // audio jernih
+      }
+      try { await s.setParameters(params); } catch(e){ /* browser may reject */ }
+    }
+  } catch(e){ console.warn('boostSenderBitrate', e); }
 }
 
 function renegotiateAllPeers(){
@@ -1494,6 +1558,8 @@ async function ensureConnection(otherIdx){
     for (const track of localStream.getTracks()) {
       try { pc.addTrack(track, localStream); } catch(e){ console.warn('addTrack', e); }
     }
+    // Naikin bitrate sender biar HD bener-bener nyampe peer (default WebRTC ~300kbps, kekecilan).
+    setTimeout(() => boostSenderBitrate(pc), 800);
   } else {
     try { pc.addTransceiver('audio', { direction: 'recvonly' }); } catch(_){}
     try { pc.addTransceiver('video', { direction: 'recvonly' }); } catch(_){}
