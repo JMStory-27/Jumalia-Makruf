@@ -110,6 +110,15 @@
   .player-row .pawn-mini { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,.3) inset; }
   .player-row .name { font-weight: 600; flex: 1; }
   .player-row .badge { font-size: 11px; padding: 2px 8px; border-radius: 8px; background: rgba(255,255,255,.1); }
+  .player-row .voice-btn {
+    width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    background: rgba(74,222,128,.18); color: #4ade80; transition: transform .1s, background .15s, color .15s;
+    flex-shrink: 0; padding: 0;
+  }
+  .player-row .voice-btn:hover { transform: scale(1.08); }
+  .player-row .voice-btn.off { background: rgba(239,68,68,.18); color: #f87171; }
+  .player-row .voice-btn.speaking { box-shadow: 0 0 0 2px #4ade80, 0 0 12px rgba(74,222,128,.6); }
   .badge.host { background: linear-gradient(135deg, #ffd86e, #ff8e6e); color: #1a0f33; font-weight:700; }
   .badge.you { background: linear-gradient(135deg, #4ade80, #16a34a); }
 
@@ -1576,6 +1585,8 @@ function attachRemoteAudio(otherIdx){
     pool.appendChild(audio);
   }
   if (audio.srcObject !== stream) audio.srcObject = stream;
+  // Respect user's local mute preference for this peer (kalo udah pernah di-mute)
+  audio.muted = !!peerListenMuted[otherIdx];
   audio.play().catch(() => {
     audioUnlockNeeded = true;
     showAudioUnlock();
@@ -2201,18 +2212,45 @@ function renderLobby(data){
     } else {
       count++;
       row.className = 'player-row';
+      const colors = getPlayerColors(p);
       let badges = '';
       if (i === 0) badges += '<span class="badge host">HOST</span>';
       if (i === myPlayerIdx) badges += '<span class="badge you">KAMU</span>';
-      row.innerHTML = '<div class="pawn-mini" style="background:linear-gradient(180deg,'+getPlayerColors(p).c1+','+getPlayerColors(p).c2+')"></div>'
-        + '<div class="name">'+escapeHtml(p.name)+'</div>' + badges;
+
+      // Voice button: own row = mic toggle; other rows = listen toggle
+      let voiceBtnHtml = '';
+      if (i === myPlayerIdx){
+        const off = !myMicOn;
+        voiceBtnHtml = '<button class="voice-btn'+(off?' off':'')+'" data-self="1" title="'
+          + (off ? 'Mic OFF — klik buat unmute' : 'Mic ON — klik buat mute diri')
+          + '">' + (off ? '🔇' : '🎤') + '</button>';
+      } else {
+        const muted = !!peerListenMuted[i];
+        voiceBtnHtml = '<button class="voice-btn'+(muted?' off':'')+'" data-idx="'+i+'" title="'
+          + (muted ? 'Suara dia di-mute — klik buat dengerin' : 'Lagi denger dia — klik buat mute')
+          + '">' + (muted ? '🔇' : '🔊') + '</button>';
+      }
+
+      row.innerHTML = '<div class="pawn-mini" style="background:linear-gradient(180deg,'+colors.c1+','+colors.c2+')"></div>'
+        + '<div class="name">'+escapeHtml(p.name)+'</div>' + badges + voiceBtnHtml;
     }
     list.appendChild(row);
   }
+  // Wire up voice buttons (delegated bind here to avoid inline handlers)
+  list.querySelectorAll('.voice-btn').forEach(btn => {
+    if (btn.dataset.self === '1'){
+      btn.onclick = () => toggleMyMic();
+    } else {
+      const idx = +btn.dataset.idx;
+      btn.onclick = () => togglePeerListen(idx);
+    }
+  });
   $('playerCount').textContent = count;
   $('btnStartGame').disabled = !(isHost && count >= 2);
   if (isHost && count < 2) $('btnStartGame').textContent = '🎲 Tunggu min 2 pemain';
   else if (isHost) $('btnStartGame').textContent = '🎲 Mulai Mabar ('+count+' pemain)';
+  // Kalau audio masih ke-block browser (autoplay policy), tampilin tombol unlock
+  if (audioUnlockNeeded) showAudioUnlock();
 }
 
 $('btnCopyCode').onclick = async () => {
@@ -3400,12 +3438,51 @@ $('btnExitWin').onclick = () => { $('winModal').classList.remove('show'); leaveR
 $('btnLeaveGame').onclick = () => leaveRoom();
 
 /* ============== AV CONTROLS ============== */
-$('btnMic').onclick = () => {
-  if (!localStream) return toast('Mic ga aktif');
-  const t = localStream.getAudioTracks()[0]; if (!t) return;
+// Track peers I've muted on MY side (I won't hear them). Persists across screens.
+const peerListenMuted = {};
+let myMicOn = true; // synced flag for all UI surfaces
+
+function syncMicUI(){
+  const btn = $('btnMic');
+  if (btn) btn.textContent = myMicOn ? '🎤 Mute' : '🔇 Unmute';
+  // Update lobby row button if rendered
+  const lobbyBtn = document.querySelector('#playerList .voice-btn[data-self="1"]');
+  if (lobbyBtn){
+    lobbyBtn.classList.toggle('off', !myMicOn);
+    lobbyBtn.textContent = myMicOn ? '🎤' : '🔇';
+    lobbyBtn.title = myMicOn ? 'Mic ON — klik buat mute diri' : 'Mic OFF — klik buat unmute';
+  }
+}
+
+function toggleMyMic(){
+  if (!localStream){
+    toast('Mic blm aktif, izinin dulu');
+    setupMedia().then(()=> syncMicUI()).catch(()=>{});
+    return;
+  }
+  const t = localStream.getAudioTracks()[0];
+  if (!t){ toast('Mic ga ke-detect'); return; }
   t.enabled = !t.enabled;
-  $('btnMic').textContent = t.enabled ? '🎤 Mute' : '🔇 Unmute';
-};
+  myMicOn = t.enabled;
+  syncMicUI();
+  toast(myMicOn ? '🎤 Mic ON' : '🔇 Mic OFF');
+}
+
+function togglePeerListen(idx){
+  peerListenMuted[idx] = !peerListenMuted[idx];
+  const audio = document.querySelector('#remoteAudioPool audio[data-idx="'+idx+'"]');
+  if (audio) audio.muted = !!peerListenMuted[idx];
+  // Update lobby row button
+  const btn = document.querySelector('#playerList .voice-btn[data-idx="'+idx+'"]');
+  if (btn){
+    btn.classList.toggle('off', !!peerListenMuted[idx]);
+    btn.textContent = peerListenMuted[idx] ? '🔇' : '🔊';
+    btn.title = peerListenMuted[idx] ? 'Suara dia di-mute — klik buat dengerin' : 'Lagi denger dia — klik buat mute';
+  }
+  toast(peerListenMuted[idx] ? '🔇 Suara di-mute' : '🔊 Suara aktif');
+}
+
+$('btnMic').onclick = toggleMyMic;
 $('btnCam').onclick = () => {
   if (!localStream) return toast('Kamera ga aktif');
   const t = localStream.getVideoTracks()[0]; if (!t) return;
