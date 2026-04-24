@@ -104,17 +104,17 @@
   .room-code { font-size: 36px; font-weight: 900; text-align:center; letter-spacing: 6px; padding: 12px; background: rgba(255,255,255,.08); border-radius: 14px; margin-bottom: 12px; }
   .room-actions { display:flex; gap:8px; }
   .room-actions button { flex:1; }
-  .player-list { display:grid; gap:10px; margin-top: 10px; }
-  .player-row { display:flex; align-items:center; gap:12px; padding:10px 14px; background: rgba(255,255,255,.04); border-radius:12px; }
+  .player-list { display:grid; gap:6px; margin-top: 8px; }
+  .player-row { display:flex; align-items:center; gap:8px; padding:6px 10px; background: rgba(255,255,255,.04); border-radius:10px; min-height: 40px; }
   .player-row.empty { opacity: .35; border: 1px dashed rgba(255,255,255,.15); }
-  .player-row .pawn-mini { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,.3) inset; }
-  .player-row .name { font-weight: 600; flex: 1; }
-  .player-row .badge { font-size: 11px; padding: 2px 8px; border-radius: 8px; background: rgba(255,255,255,.1); }
+  .player-row .pawn-mini { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,.3) inset; }
+  .player-row .name { font-weight: 600; flex: 1; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .player-row .badge { font-size: 9px; padding: 2px 6px; border-radius: 6px; background: rgba(255,255,255,.1); letter-spacing: .3px; }
   .player-row .voice-btn {
-    width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
     background: rgba(74,222,128,.18); color: #4ade80; transition: transform .1s, background .15s, color .15s;
-    flex-shrink: 0; padding: 0;
+    flex-shrink: 0; padding: 0; line-height: 1;
   }
   .player-row .voice-btn:hover { transform: scale(1.08); }
   .player-row .voice-btn.off { background: rgba(239,68,68,.18); color: #f87171; }
@@ -129,8 +129,11 @@
   .turn-indicator .pawn-mini { width:18px; height:18px; border-radius:50%; }
 
   /* Video tiles */
-  .video-row { display:flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; }
-  .video-tile { position: relative; flex: 0 0 80px; height: 80px; border-radius: 50%; overflow: hidden; background: #000; border: 3px solid rgba(255,255,255,.2); }
+  .video-row { display:flex; gap: 10px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; }
+  .video-tile { position: relative; flex: 0 0 110px; height: 110px; border-radius: 50%; overflow: hidden; background: #000; border: 3px solid rgba(255,255,255,.2); cursor: pointer; transition: transform .12s; }
+  .video-tile:hover { transform: scale(1.05); }
+  .video-tile:active { transform: scale(.97); }
+  .video-tile.has-stream::before { content: '⤢'; position: absolute; top: 4px; left: 4px; z-index: 5; font-size: 11px; background: rgba(0,0,0,.5); color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
   .video-tile.turn { border-color: #ffd86e !important; box-shadow: 0 0 16px rgba(255,216,110,.6); }
   .video-tile video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
   .video-tile .vt-name { position:absolute; bottom:0; left:0; right:0; font-size:10px; text-align:center; background: rgba(0,0,0,.6); padding: 2px 0; }
@@ -244,12 +247,46 @@
   .av-controls { display:flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
   .av-controls button { flex: 1 1 calc(50% - 4px); padding: 10px; font-size: 14px; min-width: 0; }
   /* Reaction panel */
-  .reactions-bar { display:flex; gap:6px; margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,.05); border-radius: 14px; overflow-x:auto; }
+  .reactions-bar { display:flex; gap:6px; margin-bottom: 12px; padding: 6px 10px; background: rgba(255,255,255,.05); border-radius: 14px; align-items:center; }
+  .reactions-bar .react-label { font-size:11px; color: rgba(255,255,255,.6); white-space: nowrap; }
   .reactions-bar .react-btn { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; border: none; background: rgba(255,255,255,.08); font-size: 22px; cursor: pointer; transition: transform .15s, background .15s; padding: 0; display:flex; align-items:center; justify-content:center; }
   .reactions-bar .react-btn:hover { background: rgba(255,255,255,.18); transform: scale(1.15); }
   .reactions-bar .react-btn:active { transform: scale(.92); }
   .reactions-bar .react-btn.targeting { background: linear-gradient(135deg,#ff6ec4,#7c3aed); transform: scale(1.1); }
-  .reactions-bar .react-label { font-size:11px; color: rgba(255,255,255,.6); margin-right: 4px; align-self:center; white-space: nowrap; }
+  /* Single emoji toggle button in bar */
+  .emoji-toggle { width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+    background: linear-gradient(135deg,#ff6ec4,#7c3aed); color:#fff; font-size: 22px;
+    display:flex; align-items:center; justify-content:center; transition: transform .12s; padding:0; }
+  .emoji-toggle:hover { transform: scale(1.08); }
+  .emoji-toggle:active { transform: scale(.94); }
+  /* Emoji popup panel (anchored above the bar) */
+  .emoji-panel { position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%) scale(.8); transform-origin: bottom center;
+    background: rgba(26,15,51,.96); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px; padding: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.6); z-index: 250;
+    display: none; opacity: 0; transition: opacity .15s, transform .15s;
+    max-width: 90vw; }
+  .emoji-panel.show { display: block; opacity: 1; transform: translateX(-50%) scale(1); }
+  .emoji-panel-grid { display: grid; grid-template-columns: repeat(5, 48px); gap: 8px; }
+  .emoji-panel .react-btn { width: 48px; height: 48px; padding: 4px; }
+  .emoji-panel .react-btn svg { width: 100%; height: 100%; display:block; }
+  .emoji-panel-title { font-size: 11px; font-weight: 700; opacity: .7; text-align: center; margin-bottom: 8px; letter-spacing: 1px; }
+  .emoji-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 240; display: none; }
+  .emoji-backdrop.show { display: block; }
+  /* Fullscreen video overlay (WA-style) */
+  .vf-overlay { position: fixed; inset: 0; background: #000; z-index: 500; display: none;
+    align-items: center; justify-content: center; flex-direction: column; }
+  .vf-overlay.show { display: flex; }
+  .vf-overlay video { width: 100vw; height: 100vh; object-fit: cover; transform: scaleX(-1); background: #000; }
+  .vf-overlay video.no-mirror { transform: none; }
+  .vf-close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(0,0,0,.55); border: 2px solid rgba(255,255,255,.3); color: #fff; font-size: 24px;
+    cursor: pointer; z-index: 10; display:flex; align-items:center; justify-content:center; padding:0; line-height:1; }
+  .vf-close:hover { background: rgba(239,68,68,.7); }
+  .vf-name { position: absolute; top: 20px; left: 20px; padding: 8px 14px; background: rgba(0,0,0,.55);
+    border-radius: 100px; font-weight: 700; font-size: 14px; color: #fff; z-index: 10; max-width: 60vw;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vf-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 120px; background: #1a0f33; color: #fff; }
   /* Floating emoji over a tile */
   .video-tile .react-fly { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 36px; pointer-events:none; z-index: 10; animation: reactFly 2.2s cubic-bezier(.2,.8,.4,1) forwards; }
   @keyframes reactFly {
@@ -277,10 +314,9 @@
 
   .footer-note { text-align:center; font-size: 11px; opacity:.4; margin-top: 20px; }
 
-  /* ===== Custom emoji reaction buttons ===== */
-  .reactions-bar .react-btn { width: 46px; height: 46px; padding: 4px; }
-  .reactions-bar .react-btn svg { width: 100%; height: 100%; display:block; }
-  .reactions-bar .react-btn.cooldown { opacity: .35; cursor: wait; }
+  /* ===== Custom emoji reaction buttons (svg sizing applies in panel too) ===== */
+  .react-btn svg { width: 100%; height: 100%; display:block; }
+  .react-btn.cooldown { opacity: .35; cursor: wait; }
 
   /* ===== Center broadcast reaction overlay ===== */
   .center-react-layer { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
@@ -694,8 +730,15 @@
   </div>
 
   <div class="reactions-bar" id="reactionsBar">
-    <span class="react-label">Spam:</span>
-    <!-- buttons injected by JS with custom SVG emojis -->
+    <span class="react-label">Spam emoji ke temen:</span>
+    <button id="btnEmojiToggle" class="emoji-toggle" title="Buka emoji">😀</button>
+  </div>
+  <div id="emojiBackdrop" class="emoji-backdrop"></div>
+  <div id="emojiPanel" class="emoji-panel">
+    <div class="emoji-panel-title">PILIH EMOJI</div>
+    <div class="emoji-panel-grid" id="emojiPanelGrid">
+      <!-- buttons injected by JS with custom SVG emojis -->
+    </div>
   </div>
 
   <div class="av-controls">
@@ -1884,17 +1927,17 @@ const CUSTOM_EMOJIS = {
   }
 };
 
-// Inject buttons into reactions bar
+// Inject buttons into emoji popup grid (single-icon-toggle UI)
 (function buildReactionBar(){
-  const bar = $('reactionsBar');
-  if (!bar) return;
+  const grid = $('emojiPanelGrid');
+  if (!grid) return;
   for (const [key, em] of Object.entries(CUSTOM_EMOJIS)){
     const b = document.createElement('button');
     b.className = 'react-btn';
     b.dataset.emoji = key;
     b.title = em.label;
     b.innerHTML = em.svg;
-    bar.appendChild(b);
+    grid.appendChild(b);
   }
 })();
 
@@ -1965,14 +2008,16 @@ function sendReaction(emojiKey){
   }).catch(e => console.warn('reaction write failed', e));
 }
 
-// Wire up reaction buttons (1-click broadcast, no target picking)
-document.querySelectorAll('.reactions-bar .react-btn').forEach(btn => {
+// Wire up reaction buttons in the emoji popup grid (1-click broadcast)
+document.querySelectorAll('#emojiPanelGrid .react-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     const emoji = btn.dataset.emoji;
     btn.classList.add('cooldown');
     setTimeout(() => btn.classList.remove('cooldown'), 800);
     sendReaction(emoji);
+    // Auto-close popup after pick (sebar 1x lalu nutup, biar gak ke-cover)
+    setTimeout(() => closeEmojiPanel(), 150);
   });
 });
 
@@ -3536,6 +3581,91 @@ function cleanupAndGoHome(){
 window.addEventListener('beforeunload', () => {
   if (roomRef && myPlayerIdx >= 0){
     if (isHost) roomRef.remove(); else roomRef.child('players/'+myPlayerIdx).remove();
+  }
+});
+
+/* ============== EMOJI POPUP TOGGLE ============== */
+function openEmojiPanel(){
+  $('emojiPanel').classList.add('show');
+  $('emojiBackdrop').classList.add('show');
+}
+function closeEmojiPanel(){
+  $('emojiPanel').classList.remove('show');
+  $('emojiBackdrop').classList.remove('show');
+}
+$('btnEmojiToggle').onclick = (e) => {
+  e.stopPropagation();
+  if ($('emojiPanel').classList.contains('show')) closeEmojiPanel();
+  else openEmojiPanel();
+};
+$('emojiBackdrop').onclick = closeEmojiPanel;
+
+/* ============== FULLSCREEN VIDEO (WA-style) ============== */
+let vfCurrentIdx = -1;
+function openVideoFullscreen(idx){
+  const overlay = $('videoFullscreen');
+  if (!overlay) return;
+  vfCurrentIdx = idx;
+  const vid = overlay.querySelector('.vf-video');
+  const fb = overlay.querySelector('.vf-fallback');
+  const nameEl = overlay.querySelector('.vf-name');
+  const p = roomData?.players?.[idx];
+  nameEl.textContent = p ? (p.name + (idx === myPlayerIdx ? ' (kamu)' : '')) : 'Pemain';
+  let stream = null;
+  if (idx === myPlayerIdx) stream = localStream;
+  else stream = remoteStreams[idx];
+  if (stream && stream.getVideoTracks && stream.getVideoTracks().length > 0){
+    vid.srcObject = stream;
+    // Mirror only own preview; remote videos shown as-is
+    vid.classList.toggle('no-mirror', idx !== myPlayerIdx);
+    // Mute the fullscreen video element to avoid double-audio (audio plays from #remoteAudioPool)
+    vid.muted = true;
+    vid.play().catch(()=>{});
+    vid.style.display = '';
+    fb.style.display = 'none';
+  } else {
+    vid.style.display = 'none';
+    fb.style.display = 'flex';
+    fb.textContent = '👤';
+  }
+  overlay.classList.add('show');
+}
+function closeVideoFullscreen(){
+  const overlay = $('videoFullscreen');
+  if (!overlay) return;
+  const vid = overlay.querySelector('.vf-video');
+  try { vid.srcObject = null; } catch(_){}
+  overlay.classList.remove('show');
+  vfCurrentIdx = -1;
+}
+// Bind fullscreen overlay close (created lazily below)
+(function ensureVideoFullscreen(){
+  if (document.getElementById('videoFullscreen')) return;
+  const o = document.createElement('div');
+  o.id = 'videoFullscreen';
+  o.className = 'vf-overlay';
+  o.innerHTML = '<div class="vf-name"></div>'
+    + '<button class="vf-close" title="Tutup">×</button>'
+    + '<div class="vf-fallback">👤</div>'
+    + '<video class="vf-video" autoplay playsinline></video>';
+  document.body.appendChild(o);
+  o.querySelector('.vf-close').onclick = closeVideoFullscreen;
+})();
+
+// Click any video tile → open fullscreen
+document.addEventListener('click', (e) => {
+  const tile = e.target.closest('.video-tile');
+  if (!tile) return;
+  const idx = +tile.dataset.idx;
+  if (isNaN(idx)) return;
+  openVideoFullscreen(idx);
+});
+
+// ESC key closes fullscreen + emoji panel
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){
+    if ($('videoFullscreen')?.classList.contains('show')) closeVideoFullscreen();
+    if ($('emojiPanel')?.classList.contains('show')) closeEmojiPanel();
   }
 });
 </script>
