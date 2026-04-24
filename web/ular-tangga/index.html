@@ -70,6 +70,33 @@
   .color-picker { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .color-dot { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: transform .1s, border-color .1s; }
   .color-dot.selected { border-color: #fff; transform: scale(1.15); }
+
+  /* ===== Gradient picker (welcome) ===== */
+  .gradient-picker { display:flex; align-items:center; gap:14px; justify-content:center; padding: 10px 4px 4px; }
+  .color-input-group { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .color-input-group input[type="color"] { -webkit-appearance:none; appearance:none; width: 52px; height: 52px; border:none; border-radius: 14px; cursor:pointer; background:transparent; padding:0; box-shadow: 0 4px 12px rgba(0,0,0,.4), 0 0 0 3px rgba(255,255,255,.15) inset; }
+  .color-input-group input[type="color"]::-webkit-color-swatch-wrapper { padding:0; border-radius: 12px; }
+  .color-input-group input[type="color"]::-webkit-color-swatch { border:none; border-radius: 12px; }
+  .color-input-group .color-label { font-size:10px; opacity:.7; letter-spacing:1px; text-transform:uppercase; font-weight:700; }
+  .gradient-preview { width: 56px; height: 70px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0,0,0,.4), inset 0 0 0 2px rgba(255,255,255,.2); }
+  .preset-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top: 12px; }
+  .preset-swatch { width: 28px; height: 28px; border-radius: 50%; cursor:pointer; border: 2px solid transparent; box-shadow: 0 2px 6px rgba(0,0,0,.4); transition: transform .1s; }
+  .preset-swatch:hover { transform: scale(1.15); }
+  .preset-swatch.selected { border-color:#ffd86e; transform: scale(1.18); }
+
+  /* ===== Shape picker (welcome) ===== */
+  .shape-picker { display:grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 8px 4px 4px; }
+  .shape-tile { aspect-ratio: 4/5; background: rgba(255,255,255,.05); border: 2px solid rgba(255,255,255,.12); border-radius: 12px; cursor:pointer; padding: 4px; display:flex; align-items:center; justify-content:center; transition: transform .1s, border-color .1s, background .1s; position: relative; }
+  .shape-tile svg { width: 100%; height: 100%; display:block; }
+  .shape-tile:hover { background: rgba(255,255,255,.1); }
+  .shape-tile.selected { border-color: #ffd86e; background: rgba(255,216,110,.12); transform: scale(1.04); box-shadow: 0 0 0 2px rgba(255,216,110,.25); }
+  .shape-tile .shape-name { position:absolute; bottom:-2px; left:0; right:0; font-size:8px; text-align:center; color: rgba(255,255,255,.7); font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+
+  /* ===== Pawn preview big ===== */
+  .pawn-preview-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; padding: 14px 0 4px; }
+  .pawn-preview { width: 110px; height: 138px; display:flex; align-items:center; justify-content:center; filter: drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+  .pawn-preview svg { width: 100%; height: 100%; }
+  .pawn-preview-label { font-size: 11px; opacity:.6; letter-spacing:2px; text-transform:uppercase; font-weight:700; }
   .divider-or { text-align:center; margin: 16px 0; opacity:.5; font-size:13px; }
   .divider-or::before, .divider-or::after { content:''; display:inline-block; width:60px; height:1px; background:rgba(255,255,255,.2); vertical-align:middle; margin:0 10px; }
 
@@ -466,8 +493,27 @@
       <input type="text" class="input name-input" id="inputName" placeholder="Misal: Andi" maxlength="14" />
     </div>
     <div class="form-group">
-      <label>Pilih warna pion</label>
-      <div class="color-picker" id="colorPicker"></div>
+      <label>Warna pion (gradasi bebas)</label>
+      <div class="gradient-picker">
+        <div class="color-input-group">
+          <input type="color" id="colorStart" value="#ff6ec4" />
+          <span class="color-label">Atas</span>
+        </div>
+        <div class="gradient-preview" id="gradientPreview"></div>
+        <div class="color-input-group">
+          <input type="color" id="colorEnd" value="#7c3aed" />
+          <span class="color-label">Bawah</span>
+        </div>
+      </div>
+      <div class="preset-row" id="presetRow"></div>
+    </div>
+    <div class="form-group">
+      <label>Bentuk pion (10 macam — pilih satu)</label>
+      <div class="shape-picker" id="shapePicker"></div>
+    </div>
+    <div class="pawn-preview-wrap">
+      <div class="pawn-preview" id="pawnPreview"></div>
+      <div class="pawn-preview-label">✨ Preview Pion Kamu</div>
     </div>
   </div>
 
@@ -720,7 +766,9 @@ const db = firebase.database();
 let roomCode = null;
 let myPlayerIdx = -1;
 let myName = '';
-let myColor = 'red';
+let myColor1 = '#ff6ec4';   // gradient top color
+let myColor2 = '#7c3aed';   // gradient bottom color
+let myShape  = 'classic';   // chosen pawn shape (one of SHAPES.id)
 let isHost = false;
 let roomData = null;
 let roomRef = null;
@@ -738,7 +786,7 @@ let isBotMode = false;
 let botLevel = 0;             // 1=mudah, 2=sedang, 3=susah
 let botFavor = 0;             // -1..+1; >0 = bot lebih beruntung; <0 = player lebih beruntung
 let botName = 'Bot';
-let botColor = 'blue';
+let botColor1 = '#3b82f6', botColor2 = '#1e3a8a', botShape = 'robot';
 const BOT_LOSE_RATES = { 1: 0.25, 2: 0.40, 3: 0.55 };
 
 const $ = (id) => document.getElementById(id);
@@ -928,8 +976,167 @@ function genCode(){
   // Numeric 6-digit room code (100000-999999) — gampang diketik & dibagi
   return String(Math.floor(100000 + Math.random() * 900000));
 }
-function colorHex(id){ return (COLORS.find(c=>c.id===id)||COLORS[0]).hex; }
-function colorDark(id){ return (COLORS.find(c=>c.id===id)||COLORS[0]).dark; }
+/* ============== COLOR / SHAPE HELPERS ==============
+   New player record can carry { color1, color2, shape }. Legacy records
+   only carry { color: 'red' } from the old palette. getPlayerColors()
+   normalizes both into one shape. */
+function darkenHex(hex, amount){
+  amount = (amount==null) ? 0.4 : amount;
+  let h = String(hex||'#000').replace('#','');
+  if (h.length === 3) h = h.split('').map(x=>x+x).join('');
+  const r = Math.max(0, Math.min(255, parseInt(h.slice(0,2),16) * (1-amount)));
+  const g = Math.max(0, Math.min(255, parseInt(h.slice(2,4),16) * (1-amount)));
+  const b = Math.max(0, Math.min(255, parseInt(h.slice(4,6),16) * (1-amount)));
+  return '#'+[r,g,b].map(n=>Math.round(n).toString(16).padStart(2,'0')).join('');
+}
+function getPlayerColors(p){
+  if (!p) return { c1:'#888', c2:'#444', dark:'#222', shape:'classic' };
+  if (typeof p === 'string'){
+    const old = COLORS.find(c=>c.id===p) || COLORS[0];
+    return { c1: old.hex, c2: old.dark, dark: old.dark, shape: 'classic' };
+  }
+  if (p.color1 && p.color2){
+    return { c1: p.color1, c2: p.color2, dark: darkenHex(p.color2, 0.45), shape: p.shape || 'classic' };
+  }
+  const id = p.color || 'red';
+  const old = COLORS.find(c=>c.id===id) || COLORS[0];
+  return { c1: old.hex, c2: old.dark, dark: old.dark, shape: 'classic' };
+}
+function colorHex(p){ return getPlayerColors(p).c1; }
+function colorDark(p){ return getPlayerColors(p).dark; }
+
+/* ============== PAWN SHAPES (10 variants) ==============
+   Each shape is rendered as an SVG using a vertical linear-gradient from c1
+   (top) -> c2 (bottom). dark = stroke/outline color. Each call creates a
+   unique gradient id so multiple pawns on the page don't collide. */
+const SHAPES = [
+  { id:'classic', name:'Klasik'  },
+  { id:'crown',   name:'Raja'    },
+  { id:'star',    name:'Bintang' },
+  { id:'heart',   name:'Cinta'   },
+  { id:'diamond', name:'Permata' },
+  { id:'cat',     name:'Kucing'  },
+  { id:'ghost',   name:'Hantu'   },
+  { id:'rocket',  name:'Roket'   },
+  { id:'flame',   name:'Api'     },
+  { id:'robot',   name:'Robot'   }
+];
+const PRESETS = [
+  ['#ff6ec4','#7c3aed'], ['#fbbf24','#ef4444'], ['#10b981','#065f46'],
+  ['#3b82f6','#1e3a8a'], ['#f97316','#7c2d12'], ['#22d3ee','#0e7490'],
+  ['#a78bfa','#5b21b6'], ['#f472b6','#9d174d'], ['#ffd86e','#92400e'],
+  ['#34d399','#0f766e']
+];
+let _gradSeq = 0;
+function shapeSVG(shape, c1, c2, dark){
+  const gid = 'pgrad_' + (++_gradSeq);
+  const grad = '<defs><linearGradient id="'+gid+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="'+c1+'"/><stop offset="100%" stop-color="'+c2+'"/></linearGradient></defs>';
+  const f = 'url(#'+gid+')';
+  const open = '<svg viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">';
+  const sd = '<ellipse cx="16" cy="37" rx="11" ry="2.4" fill="rgba(0,0,0,.4)"/>';
+  const base = '<ellipse cx="16" cy="34" rx="10" ry="3.5" fill="'+dark+'"/><ellipse cx="16" cy="33" rx="10" ry="3" fill="'+f+'"/>';
+  const body = '<path d="M9 32 Q8 22 12 18 L20 18 Q24 22 23 32 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8"/>';
+  switch(shape){
+    case 'crown':
+      return open + grad + sd + base + body
+        + '<circle cx="16" cy="14" r="7.5" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8"/>'
+        + '<path d="M9 7 L11 3 L13 7 L16 2 L19 7 L21 3 L23 7 L23 10 L9 10 Z" fill="#fbbf24" stroke="#7a4a00" stroke-width="0.7" stroke-linejoin="round"/>'
+        + '<circle cx="16" cy="6" r="1.2" fill="#ef4444"/>'
+        + '<circle cx="11" cy="14" r="1.4" fill="#1a1a2e"/><circle cx="21" cy="14" r="1.4" fill="#1a1a2e"/>'
+        + '<circle cx="11.5" cy="13.5" r="0.5" fill="#fff"/><circle cx="21.5" cy="13.5" r="0.5" fill="#fff"/>'
+        + '<path d="M13 17 Q16 19 19 17" fill="none" stroke="#1a1a2e" stroke-width="1.2" stroke-linecap="round"/>'
+        + '</svg>';
+    case 'star':
+      return open + grad + sd + base + body
+        + '<path d="M16 2 L19 11 L28 11 L21 16 L24 25 L16 19 L8 25 L11 16 L4 11 L13 11 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<circle cx="13" cy="14" r="1.2" fill="#1a1a2e"/><circle cx="19" cy="14" r="1.2" fill="#1a1a2e"/>'
+        + '<path d="M13.5 17 Q16 18.5 18.5 17" fill="none" stroke="#1a1a2e" stroke-width="1" stroke-linecap="round"/>'
+        + '</svg>';
+    case 'heart':
+      return open + grad + sd + base + body
+        + '<path d="M16 22 C 13 14, 4 14, 4 9 C 4 4, 10 2, 16 8 C 22 2, 28 4, 28 9 C 28 14, 19 14, 16 22 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<ellipse cx="9" cy="8" rx="2.5" ry="2" fill="rgba(255,255,255,.5)"/>'
+        + '<circle cx="12" cy="11" r="1.1" fill="#1a1a2e"/><circle cx="20" cy="11" r="1.1" fill="#1a1a2e"/>'
+        + '<path d="M13 14.5 Q16 16 19 14.5" fill="none" stroke="#1a1a2e" stroke-width="1" stroke-linecap="round"/>'
+        + '</svg>';
+    case 'diamond':
+      return open + grad + sd + base + body
+        + '<path d="M5 8 L11 3 L21 3 L27 8 L16 22 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="1" stroke-linejoin="round"/>'
+        + '<path d="M5 8 L11 3 L11 8 Z" fill="rgba(255,255,255,.4)"/>'
+        + '<path d="M11 8 L11 3 L21 3 L21 8 Z" fill="rgba(255,255,255,.25)"/>'
+        + '<path d="M21 8 L21 3 L27 8 Z" fill="rgba(0,0,0,.18)"/>'
+        + '<path d="M5 8 L27 8 L16 22 Z" fill="none" stroke="'+dark+'" stroke-width="0.6" opacity=".7"/>'
+        + '<circle cx="13" cy="11" r="0.9" fill="#1a1a2e"/><circle cx="19" cy="11" r="0.9" fill="#1a1a2e"/>'
+        + '<path d="M13.5 14 Q16 15 18.5 14" fill="none" stroke="#1a1a2e" stroke-width=".9" stroke-linecap="round"/>'
+        + '</svg>';
+    case 'cat':
+      return open + grad + sd + base + body
+        + '<path d="M8 14 L7 5 L13 11 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<path d="M24 14 L25 5 L19 11 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<path d="M9.5 11.5 L8.5 7 L11.5 10.5 Z" fill="rgba(255,180,200,.7)"/>'
+        + '<path d="M22.5 11.5 L23.5 7 L20.5 10.5 Z" fill="rgba(255,180,200,.7)"/>'
+        + '<circle cx="16" cy="14" r="7.5" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8"/>'
+        + '<ellipse cx="13" cy="11" rx="2" ry="2.5" fill="rgba(255,255,255,.4)"/>'
+        + '<ellipse cx="12" cy="14" rx="1.4" ry="1.8" fill="#1a1a2e"/><ellipse cx="20" cy="14" rx="1.4" ry="1.8" fill="#1a1a2e"/>'
+        + '<circle cx="12.3" cy="13.5" r="0.4" fill="#fff"/><circle cx="20.3" cy="13.5" r="0.4" fill="#fff"/>'
+        + '<path d="M16 17 L15 18 L17 18 Z" fill="#ff6b96"/>'
+        + '<path d="M14 19 Q16 21 18 19" fill="none" stroke="#1a1a2e" stroke-width="1" stroke-linecap="round"/>'
+        + '<path d="M5 16 L11 17 M 5 18 L11 17.6" stroke="#1a1a2e" stroke-width="0.5" stroke-linecap="round" opacity=".7"/>'
+        + '<path d="M27 16 L21 17 M 27 18 L21 17.6" stroke="#1a1a2e" stroke-width="0.5" stroke-linecap="round" opacity=".7"/>'
+        + '</svg>';
+    case 'ghost':
+      return open + grad + sd
+        + '<ellipse cx="16" cy="34" rx="10" ry="3.5" fill="'+dark+'"/><ellipse cx="16" cy="33" rx="10" ry="3" fill="'+f+'"/>'
+        + '<path d="M5 30 L5 14 Q5 4 16 4 Q27 4 27 14 L27 30 L24 27 L21 30 L18 27 L16 30 L14 27 L11 30 L8 27 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<ellipse cx="11" cy="13" rx="2.5" ry="3.5" fill="#fff"/><ellipse cx="21" cy="13" rx="2.5" ry="3.5" fill="#fff"/>'
+        + '<ellipse cx="11.5" cy="14" rx="1.2" ry="1.8" fill="#1a1a2e"/><ellipse cx="21.5" cy="14" rx="1.2" ry="1.8" fill="#1a1a2e"/>'
+        + '<ellipse cx="16" cy="20" rx="2.5" ry="2" fill="#1a1a2e"/>'
+        + '<ellipse cx="9" cy="9" rx="2" ry="3" fill="rgba(255,255,255,.35)"/>'
+        + '</svg>';
+    case 'rocket':
+      return open + grad + sd + base
+        + '<path d="M13 30 Q14 33 16 36 Q18 33 19 30 Z" fill="#fbbf24"/>'
+        + '<path d="M14 30 Q15 32 16 34 Q17 32 18 30 Z" fill="#ef4444"/>'
+        + '<path d="M10 28 L10 14 Q10 4 16 2 Q22 4 22 14 L22 28 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<path d="M10 22 L6 28 L10 28 Z" fill="'+dark+'"/>'
+        + '<path d="M22 22 L26 28 L22 28 Z" fill="'+dark+'"/>'
+        + '<circle cx="16" cy="14" r="4" fill="#1a1a2e" stroke="'+dark+'" stroke-width="0.8"/>'
+        + '<circle cx="16" cy="14" r="2.8" fill="#5dade2"/>'
+        + '<circle cx="14.5" cy="12.5" r="1" fill="rgba(255,255,255,.7)"/>'
+        + '</svg>';
+    case 'flame':
+      return open + grad + sd + base
+        + '<path d="M16 2 C 12 8, 6 14, 6 22 C 6 28, 11 32, 16 32 C 21 32, 26 28, 26 22 C 26 16, 22 14, 22 10 C 20 14, 18 12, 16 2 Z" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8" stroke-linejoin="round"/>'
+        + '<path d="M16 12 C 14 16, 12 20, 14 26 C 17 24, 18 22, 16 12 Z" fill="rgba(255,255,255,.45)"/>'
+        + '<circle cx="13" cy="20" r="1.2" fill="#1a1a2e"/><circle cx="19" cy="20" r="1.2" fill="#1a1a2e"/>'
+        + '<path d="M13.5 24 Q16 26 18.5 24" fill="none" stroke="#1a1a2e" stroke-width="1" stroke-linecap="round"/>'
+        + '</svg>';
+    case 'robot':
+      return open + grad + sd + base + body
+        + '<line x1="16" y1="6" x2="16" y2="2" stroke="'+dark+'" stroke-width="1" stroke-linecap="round"/>'
+        + '<circle cx="16" cy="2" r="1.5" fill="#fbbf24" stroke="'+dark+'" stroke-width="0.5"/>'
+        + '<rect x="7" y="6" width="18" height="14" rx="2" fill="'+f+'" stroke="'+dark+'" stroke-width="0.9"/>'
+        + '<rect x="9" y="9" width="14" height="8" rx="1" fill="#1a1a2e"/>'
+        + '<circle cx="12" cy="13" r="1.5" fill="#10b981"/>'
+        + '<circle cx="20" cy="13" r="1.5" fill="#10b981"/>'
+        + '<rect x="11" y="15" width="10" height="0.8" fill="#10b981" opacity=".7"/>'
+        + '<circle cx="9" cy="8" r="0.7" fill="'+dark+'"/><circle cx="23" cy="8" r="0.7" fill="'+dark+'"/>'
+        + '<circle cx="9" cy="18" r="0.7" fill="'+dark+'"/><circle cx="23" cy="18" r="0.7" fill="'+dark+'"/>'
+        + '</svg>';
+    case 'classic':
+    default:
+      return open + grad + sd + base + body
+        + '<path d="M9.5 27 Q16 29 22.5 27" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-linecap="round"/>'
+        + '<circle cx="16" cy="13" r="8" fill="'+f+'" stroke="'+dark+'" stroke-width="0.8"/>'
+        + '<ellipse cx="13" cy="10" rx="2.2" ry="2.8" fill="rgba(255,255,255,.45)"/>'
+        + '<circle cx="13" cy="13" r="1.5" fill="#1a1a2e"/><circle cx="19" cy="13" r="1.5" fill="#1a1a2e"/>'
+        + '<circle cx="13.5" cy="12.5" r="0.5" fill="#fff"/><circle cx="19.5" cy="12.5" r="0.5" fill="#fff"/>'
+        + '<path d="M13 16.5 Q16 18.5 19 16.5" fill="none" stroke="#1a1a2e" stroke-width="1.2" stroke-linecap="round"/>'
+        + '<circle cx="11" cy="15.5" r="1.1" fill="rgba(255,107,150,.55)"/>'
+        + '<circle cx="21" cy="15.5" r="1.1" fill="rgba(255,107,150,.55)"/>'
+        + '</svg>';
+  }
+}
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 async function copyToClipboard(text){
   try { await navigator.clipboard.writeText(text); return true; }
@@ -941,22 +1148,79 @@ async function copyToClipboard(text){
 }
 function svgEl(name){ return document.createElementNS('http://www.w3.org/2000/svg', name); }
 
-/* ============== WELCOME ============== */
-function buildColorPicker(){
-  const wrap = $('colorPicker'); wrap.innerHTML = '';
-  COLORS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'color-dot'; d.style.background = c.hex; d.dataset.id = c.id;
-    if (c.id === myColor) d.classList.add('selected');
-    d.onclick = () => {
-      myColor = c.id;
-      wrap.querySelectorAll('.color-dot').forEach(x => x.classList.remove('selected'));
-      d.classList.add('selected');
-    };
-    wrap.appendChild(d);
+/* ============== WELCOME (gradient + shape picker) ============== */
+function updateGradientPreview(){
+  const el = $('gradientPreview');
+  if (el) el.style.background = 'linear-gradient(180deg, '+myColor1+' 0%, '+myColor2+' 100%)';
+}
+function updatePawnPreview(){
+  const el = $('pawnPreview');
+  if (el) el.innerHTML = shapeSVG(myShape, myColor1, myColor2, darkenHex(myColor2, 0.45));
+}
+function refreshPresetSelection(){
+  document.querySelectorAll('#presetRow .preset-swatch').forEach((sw, i) => {
+    const pair = PRESETS[i];
+    if (pair && pair[0]===myColor1 && pair[1]===myColor2) sw.classList.add('selected');
+    else sw.classList.remove('selected');
   });
 }
-buildColorPicker();
+function buildPresetRow(){
+  const row = $('presetRow'); if (!row) return; row.innerHTML='';
+  PRESETS.forEach(pair => {
+    const sw = document.createElement('div');
+    sw.className = 'preset-swatch';
+    sw.style.background = 'linear-gradient(180deg, '+pair[0]+', '+pair[1]+')';
+    if (pair[0]===myColor1 && pair[1]===myColor2) sw.classList.add('selected');
+    sw.onclick = () => {
+      myColor1 = pair[0]; myColor2 = pair[1];
+      $('colorStart').value = myColor1; $('colorEnd').value = myColor2;
+      try { localStorage.setItem('ut_c1', myColor1); localStorage.setItem('ut_c2', myColor2); } catch(_){}
+      updateGradientPreview(); updatePawnPreview(); rebuildShapePicker(); refreshPresetSelection();
+    };
+    row.appendChild(sw);
+  });
+}
+function rebuildShapePicker(){
+  const wrap = $('shapePicker'); if (!wrap) return; wrap.innerHTML='';
+  const dark = darkenHex(myColor2, 0.45);
+  SHAPES.forEach(s => {
+    const tile = document.createElement('div');
+    tile.className = 'shape-tile' + (s.id===myShape ? ' selected' : '');
+    tile.innerHTML = shapeSVG(s.id, myColor1, myColor2, dark) + '<div class="shape-name">'+s.name+'</div>';
+    tile.onclick = () => {
+      myShape = s.id;
+      try { localStorage.setItem('ut_shape', myShape); } catch(_){}
+      wrap.querySelectorAll('.shape-tile').forEach(x=>x.classList.remove('selected'));
+      tile.classList.add('selected');
+      updatePawnPreview();
+    };
+    wrap.appendChild(tile);
+  });
+}
+function initPawnPicker(){
+  try {
+    const c1 = localStorage.getItem('ut_c1'); if (c1) myColor1 = c1;
+    const c2 = localStorage.getItem('ut_c2'); if (c2) myColor2 = c2;
+    const sh = localStorage.getItem('ut_shape'); if (sh) myShape = sh;
+  } catch(_){}
+  $('colorStart').value = myColor1;
+  $('colorEnd').value = myColor2;
+  $('colorStart').addEventListener('input', e => {
+    myColor1 = e.target.value;
+    try { localStorage.setItem('ut_c1', myColor1); } catch(_){}
+    updateGradientPreview(); updatePawnPreview(); rebuildShapePicker(); refreshPresetSelection();
+  });
+  $('colorEnd').addEventListener('input', e => {
+    myColor2 = e.target.value;
+    try { localStorage.setItem('ut_c2', myColor2); } catch(_){}
+    updateGradientPreview(); updatePawnPreview(); rebuildShapePicker(); refreshPresetSelection();
+  });
+  buildPresetRow();
+  rebuildShapePicker();
+  updateGradientPreview();
+  updatePawnPreview();
+}
+initPawnPicker();
 try { myName = localStorage.getItem('ut_name') || ''; $('inputName').value = myName; } catch(_){}
 const urlParams = new URLSearchParams(location.search);
 const urlRoom = (urlParams.get('r')||'').replace(/[^0-9]/g,'').slice(0,6);
@@ -1357,7 +1621,7 @@ async function createRoom(){
     status: 'lobby', createdAt: Date.now(),
     currentTurn: 0, diceRoll: null, winner: null,
     players: {
-      0: { name: myName, color: myColor, position: 0, joinedAt: Date.now() }
+      0: { name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0, joinedAt: Date.now() }
     }
   });
   roomRef.onDisconnect().remove();
@@ -1379,7 +1643,7 @@ async function joinRoom(code){
   roomCode = code; myPlayerIdx = slot; isHost = false;
   roomRef = db.ref('rooms/'+code);
   await roomRef.child('players/'+slot).set({
-    name: myName, color: myColor, position: 0, joinedAt: Date.now()
+    name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0, joinedAt: Date.now()
   });
   roomRef.child('players/'+slot).onDisconnect().remove();
   enterLobby();
@@ -1689,7 +1953,7 @@ function appendChatMessage(m, opts){
   const isMe = m.from === myPlayerIdx;
   const div = document.createElement('div');
   div.className = 'chat-msg ' + (isMe ? 'me' : 'them');
-  const colorHexStr = colorHex(m.color || 'red');
+  const colorHexStr = colorHex(m);
   let inner = '';
   if (!isMe){
     inner += '<div class="who"><span class="dot" style="background:'+colorHexStr+'"></span><span>'+escapeHtml(m.name||'Pemain')+'</span></div>';
@@ -1757,7 +2021,9 @@ function sendChatText(){
   const me = roomData && roomData.players && roomData.players[myPlayerIdx];
   const msg = {
     from: myPlayerIdx, name: (me && me.name) || myName || 'Pemain',
-    color: (me && me.color) || myColor || 'red',
+    color1: (me && me.color1) || myColor1,
+    color2: (me && me.color2) || myColor2,
+    shape:  (me && me.shape)  || myShape,
     text: txt.slice(0, 200), kind: 'text', ts: Date.now()
   };
   input.value = '';
@@ -1831,7 +2097,9 @@ function sendVoiceNote(dataUrl, dur){
   const me = roomData && roomData.players && roomData.players[myPlayerIdx];
   const msg = {
     from: myPlayerIdx, name: (me && me.name) || myName || 'Pemain',
-    color: (me && me.color) || myColor || 'red',
+    color1: (me && me.color1) || myColor1,
+    color2: (me && me.color2) || myColor2,
+    shape:  (me && me.shape)  || myShape,
     kind: 'voice', audio: dataUrl, dur: Math.round(dur*10)/10, ts: Date.now()
   };
   if (isBotMode){ appendChatMessage(msg, {silent:true}); return; }
@@ -1889,7 +2157,7 @@ function renderLobby(data){
       let badges = '';
       if (i === 0) badges += '<span class="badge host">HOST</span>';
       if (i === myPlayerIdx) badges += '<span class="badge you">KAMU</span>';
-      row.innerHTML = '<div class="pawn-mini" style="background:'+colorHex(p.color)+'"></div>'
+      row.innerHTML = '<div class="pawn-mini" style="background:linear-gradient(180deg,'+getPlayerColors(p).c1+','+getPlayerColors(p).c2+')"></div>'
         + '<div class="name">'+escapeHtml(p.name)+'</div>' + badges;
     }
     list.appendChild(row);
@@ -2301,42 +2569,26 @@ function drawSnake(svg, head, tail){
 }
 
 /* ============== PAWNS (SVG, absolute positioned, animated) ============== */
-function pawnSVG(color, dark){
-  // Cute kawaii character pawn — round head with face, body, base
-  return '<svg viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">'
-    // shadow
-    + '<ellipse cx="16" cy="37" rx="11" ry="2.6" fill="rgba(0,0,0,.4)"/>'
-    // base/feet (oval pedestal)
-    + '<ellipse cx="16" cy="34" rx="10" ry="3.5" fill="'+dark+'"/>'
-    + '<ellipse cx="16" cy="33" rx="10" ry="3" fill="'+color+'"/>'
-    // body (rounded cone)
-    + '<path d="M9 32 Q8 22 12 18 L20 18 Q24 22 23 32 Z" fill="'+color+'" stroke="'+dark+'" stroke-width="0.8"/>'
-    // belt highlight
-    + '<path d="M9.5 27 Q16 29 22.5 27" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-linecap="round"/>'
-    // head (big round)
-    + '<circle cx="16" cy="13" r="8" fill="'+color+'" stroke="'+dark+'" stroke-width="0.8"/>'
-    // shine on head
-    + '<ellipse cx="13" cy="10" rx="2.2" ry="2.8" fill="rgba(255,255,255,.45)"/>'
-    // eyes
-    + '<circle cx="13" cy="13" r="1.5" fill="#1a1a2e"/>'
-    + '<circle cx="19" cy="13" r="1.5" fill="#1a1a2e"/>'
-    + '<circle cx="13.5" cy="12.5" r="0.5" fill="#fff"/>'
-    + '<circle cx="19.5" cy="12.5" r="0.5" fill="#fff"/>'
-    // smile
-    + '<path d="M13 16.5 Q16 18.5 19 16.5" fill="none" stroke="#1a1a2e" stroke-width="1.2" stroke-linecap="round"/>'
-    // blush cheeks
-    + '<circle cx="11" cy="15.5" r="1.1" fill="rgba(255,107,150,.55)"/>'
-    + '<circle cx="21" cy="15.5" r="1.1" fill="rgba(255,107,150,.55)"/>'
-    + '</svg>';
-}
-
-function ensurePawnElement(idx, color){
+function ensurePawnElement(idx, p){
   let el = document.getElementById('pawn-'+idx);
   if (!el){
     el = document.createElement('div');
     el.id = 'pawn-'+idx; el.className = 'pawn-piece';
-    el.innerHTML = pawnSVG(colorHex(color), colorDark(color));
+    const pc = getPlayerColors(p);
+    el.innerHTML = shapeSVG(pc.shape, pc.c1, pc.c2, pc.dark);
+    el.dataset.shape = pc.shape;
+    el.dataset.c1 = pc.c1;
+    el.dataset.c2 = pc.c2;
     $('pawnsLayer').appendChild(el);
+  } else {
+    // Re-render if player changed shape/colors mid-session (e.g. legacy -> new format)
+    const pc = getPlayerColors(p);
+    if (el.dataset.shape !== pc.shape || el.dataset.c1 !== pc.c1 || el.dataset.c2 !== pc.c2){
+      el.innerHTML = shapeSVG(pc.shape, pc.c1, pc.c2, pc.dark);
+      el.dataset.shape = pc.shape;
+      el.dataset.c1 = pc.c1;
+      el.dataset.c2 = pc.c2;
+    }
   }
   return el;
 }
@@ -2353,7 +2605,7 @@ function pawnPositionForCell(idx, cellNum){
 
 function setPawnPosition(idx, cellNum){
   const p = roomData?.players?.[idx]; if (!p) return;
-  const el = ensurePawnElement(idx, p.color);
+  const el = ensurePawnElement(idx, p);
   const pos = pawnPositionForCell(idx, cellNum);
   el.style.left = pos.x + '%';
   el.style.top = pos.y + '%';
@@ -2374,7 +2626,7 @@ function renderPawns(data){
 }
 
 async function animatePawnSteps(idx, fromCell, toCell){
-  const el = ensurePawnElement(idx, roomData.players[idx].color);
+  const el = ensurePawnElement(idx, roomData.players[idx]);
   el.classList.remove('snake-slide', 'ladder-climb');
   if (fromCell < 1) fromCell = 1;
   for (let n = fromCell + 1; n <= toCell; n++){
@@ -2388,7 +2640,7 @@ async function animatePawnSteps(idx, fromCell, toCell){
 }
 
 async function animatePawnSlide(idx, toCell, isLadder){
-  const el = ensurePawnElement(idx, roomData.players[idx].color);
+  const el = ensurePawnElement(idx, roomData.players[idx]);
   el.classList.remove('bouncing');
   el.classList.add(isLadder ? 'ladder-climb' : 'snake-slide');
   try { isLadder ? sfx.ladder() : sfx.snake(); } catch(_){}
@@ -2417,7 +2669,7 @@ function renderVideoTiles(data){
         + '<span class="vt-status" data-state="">·</span>';
       row.appendChild(tile);
     }
-    tile.style.borderColor = (i === data.currentTurn) ? '#ffd86e' : colorHex(p.color);
+    tile.style.borderColor = (i === data.currentTurn) ? '#ffd86e' : colorHex(p);
     tile.classList.toggle('turn', i === data.currentTurn);
     tile.querySelector('.vt-name').textContent = p.name + (i===myPlayerIdx?' (kamu)':'');
     // Update connection status indicator
@@ -2473,7 +2725,7 @@ function renderGame(data){
   const turnIdx = data.currentTurn || 0;
   const turnPlayer = data.players && data.players[turnIdx];
   if (turnPlayer){
-    $('turnPawn').style.background = colorHex(turnPlayer.color);
+    { const tpc = getPlayerColors(turnPlayer); $('turnPawn').style.background = 'linear-gradient(180deg,'+tpc.c1+','+tpc.c2+')'; }
     $('turnText').textContent = (turnIdx === myPlayerIdx) ? '🎯 GILIRAN KAMU!' : 'Giliran '+turnPlayer.name;
   }
   // Render dice face based on last roll
@@ -2642,10 +2894,13 @@ async function startBotGame(level){
   const baseStrength = 0.45 + level * 0.10; // 0.55 / 0.65 / 0.75
   botFavor = (botWillLose ? -1 : 1) * baseStrength;
 
-  // Pick a contrasting bot color
-  const taken = myColor;
-  const candidates = COLORS.filter(c => c.id !== taken);
-  botColor = candidates[Math.floor(Math.random()*candidates.length)].id;
+  // Pick a bot gradient/shape that's different from the player's
+  const usedPair = (myColor1 + '|' + myColor2).toLowerCase();
+  const botPresets = PRESETS.filter(p => (p[0]+'|'+p[1]).toLowerCase() !== usedPair);
+  const botPair = botPresets[Math.floor(Math.random()*botPresets.length)];
+  botColor1 = botPair[0]; botColor2 = botPair[1];
+  const otherShapes = SHAPES.filter(s => s.id !== myShape);
+  botShape = otherShapes[Math.floor(Math.random()*otherShapes.length)].id;
   botName = ['Bocil Bot','Bot Andi','Mas Bot','Bot Jaya','Bot Riko'][Math.floor(Math.random()*5)];
 
   // Self-view camera (so player can still see themselves on cam) — bg only,
@@ -2663,8 +2918,8 @@ async function startBotGame(level){
     diceRoll: null,
     winner: null,
     players: {
-      0: { name: myName, color: myColor, position: 0, joinedAt: Date.now() },
-      1: { name: botName, color: botColor, position: 0, joinedAt: Date.now()+1, isBot: true }
+      0: { name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0, joinedAt: Date.now() },
+      1: { name: botName, color1: botColor1, color2: botColor2, shape: botShape, position: 0, joinedAt: Date.now()+1, isBot: true }
     }
   };
   visualPositions = { 0: 0, 1: 0 };
