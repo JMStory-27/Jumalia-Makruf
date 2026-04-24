@@ -556,7 +556,7 @@
     <div class="divider-or">atau</div>
     <div class="form-group">
       <label>Kode room dari temen</label>
-      <input type="text" class="input" id="inputRoomCode" placeholder="123456" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+      <input type="text" class="input" id="inputRoomCode" placeholder="1234" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
     </div>
     <button class="btn-primary" id="btnJoinRoom" style="background: linear-gradient(135deg, #4ade80, #16a34a); box-shadow: 0 6px 20px rgba(74,222,128,.3);">🚪 Join Room</button>
     <div class="divider-or">atau</div>
@@ -1011,9 +1011,13 @@ function alertModal(title, msg, icon='ℹ️'){
 }
 $('btnAlertOk').onclick = () => $('alertModal').classList.remove('show');
 
-function genCode(){
-  // Numeric 6-digit room code (100000-999999) — gampang diketik & dibagi
-  return String(Math.floor(100000 + Math.random() * 900000));
+function genCode(digits){
+  // Numeric room code, default 4 digit (1000-9999) — auto-scale ke 5/6 digit
+  // pas user makin banyak (handled di createRoom retry).
+  digits = digits || 4;
+  const min = Math.pow(10, digits-1);
+  const max = Math.pow(10, digits) - min;
+  return String(Math.floor(min + Math.random() * max));
 }
 /* ============== COLOR / SHAPE HELPERS ==============
    New player record can carry { color1, color2, shape }. Legacy records
@@ -1288,7 +1292,7 @@ $('btnJoinRoom').onclick = async () => {
   const name = $('inputName').value.trim();
   const code = $('inputRoomCode').value.replace(/[^0-9]/g,'').slice(0,6);
   if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
-  if (code.length !== 6) return alertModal('Eh', 'Kode room harus 6 angka', '🔢');
+  if (code.length < 4 || code.length > 6) return alertModal('Eh', 'Kode room harus 4-6 angka', '🔢');
   myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
   const btn = $('btnJoinRoom'); const oldHtml = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '⏳ Join room...';
@@ -1645,15 +1649,19 @@ async function createRoom(){
   // langsung dibikin instan tanpa nungguin permission dialog cam/mic.
   setupMedia().catch(()=>{});
   if (!db) throw new Error('Firebase belum siap (cek FIREBASE_CONFIG)');
-  let code, attempts = 0;
-  while (true){
-    code = genCode();
-    let snap;
-    try { snap = await db.ref('rooms/'+code).get(); }
-    catch(e){ throw new Error('Server connect fail: ' + (e?.message || e)); }
-    if (!snap.exists()) break;
-    if (++attempts > 10) throw new Error('Server lagi penuh, coba lagi bentar');
+  // Auto-scale: mulai 4 digit, naik ke 5 lalu 6 kalo udah penuh.
+  // Tiap level coba 8x. 4 digit = 9rb kombinasi, 5 = 90rb, 6 = 900rb.
+  let code = null;
+  outer: for (let digits = 4; digits <= 6; digits++){
+    for (let attempts = 0; attempts < 8; attempts++){
+      const candidate = genCode(digits);
+      let snap;
+      try { snap = await db.ref('rooms/'+candidate).get(); }
+      catch(e){ throw new Error('Server connect fail: ' + (e?.message || e)); }
+      if (!snap.exists()){ code = candidate; break outer; }
+    }
   }
+  if (!code) throw new Error('Server lagi penuh banget, coba lagi bentar');
   roomCode = code; myPlayerIdx = 0; isHost = true;
   roomRef = db.ref('rooms/'+code);
   await roomRef.set({
