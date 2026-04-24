@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
 <meta name="theme-color" content="#2a1b4d" />
-<!-- WEB VERSION: V1 — naik ke V2, V3 dst tiap kali publish ulang ke GitHub Pages -->
-<title>🎲 ULAR TANGGA BY LAWRENZ V1 — Mabar bareng temen</title>
+<!-- WEB VERSION: V2 — naik ke V3, V4 dst tiap kali publish ulang ke GitHub Pages -->
+<title>🎲 ULAR TANGGA BY LAWRENZ V2 — Mabar bareng temen</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>" />
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
@@ -36,7 +36,7 @@
   .brand-watermark .b { color:#ff6ec4; }
   /* Faint diagonal corner stamp on board */
   .board-wrap::after {
-    content: 'BY LAWRENZ V1'; position:absolute; bottom: 6px; right: 10px;
+    content: 'BY LAWRENZ V2'; position:absolute; bottom: 6px; right: 10px;
     font-size: 9px; font-weight: 800; letter-spacing: 3px;
     color: rgba(43,27,77,.35); pointer-events:none;
   }
@@ -398,29 +398,65 @@
     100% { transform: scale(1); opacity:1; }
   }
 
-  /* Active challenge banner inside game */
+  /* Active challenge banner — sticky, prominent so players REMEMBER what's at stake */
   .challenge-banner {
-    display:none; padding: 8px 14px; margin-bottom: 10px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(255,110,196,.18), rgba(124,58,237,.18));
-    border: 1px solid rgba(255,216,110,.35);
-    font-size: 13px; font-weight: 700;
+    display:none; padding: 12px 16px; margin: 0 0 12px;
+    border-radius: 14px; text-align: center;
+    background: linear-gradient(135deg, rgba(255,110,196,.30), rgba(124,58,237,.30));
+    border: 2px solid rgba(255,216,110,.7);
+    font-size: 14px; font-weight: 800;
+    box-shadow: 0 4px 20px rgba(255,110,196,.35), inset 0 0 0 1px rgba(255,255,255,.08);
+    animation: bannerPulse 2.4s ease-in-out infinite;
+    letter-spacing: .3px;
+  }
+  @keyframes bannerPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,110,196,.35), inset 0 0 0 1px rgba(255,255,255,.08); transform: scale(1); }
+    50%      { box-shadow: 0 6px 30px rgba(255,216,110,.7), inset 0 0 0 1px rgba(255,255,255,.18); transform: scale(1.012); }
   }
   .challenge-banner.show { display:block; }
-  .challenge-banner .ico { font-size:16px; margin-right:6px; }
-  .challenge-banner .lbl { color:#ffd86e; }
-  .challenge-banner .txt { color:#fff; }
+  .challenge-banner .lbl { color:#ffd86e; font-size: 11px; letter-spacing: 2px; display:block; margin-bottom: 4px; }
+  .challenge-banner .txt { color:#fff; font-size: 17px; line-height: 1.25; display:block; }
+
+  /* ===== WIN/LOSE CEREMONY (full-screen takeover with enlarged cams) ===== */
+  .ceremony-overlay { position: fixed; inset:0; z-index: 250; display:none; flex-direction:column; align-items:center; justify-content:center; padding: 20px; backdrop-filter: blur(6px); }
+  .ceremony-overlay.show { display:flex; }
+  .ceremony-overlay[data-theme="win"]  { background: radial-gradient(circle at center, rgba(255,216,110,.40), rgba(0,0,0,.92) 70%); }
+  .ceremony-overlay[data-theme="lose"] { background: radial-gradient(circle at center, rgba(239,68,68,.40), rgba(0,0,0,.95) 70%); }
+  .ceremony-title { font-size: 32px; font-weight: 900; text-align:center; margin-bottom: 6px; text-shadow: 0 4px 24px rgba(0,0,0,.6); animation: ceremonyPop .55s cubic-bezier(.2,.9,.3,1.4); }
+  .ceremony-overlay[data-theme="win"]  .ceremony-title { background: linear-gradient(135deg, #ffd86e, #fb923c, #ff6ec4); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .ceremony-overlay[data-theme="lose"] .ceremony-title { background: linear-gradient(135deg, #fb7185, #ef4444, #b91c1c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .ceremony-subtitle { font-size: 18px; font-weight: 700; opacity:.95; text-align:center; margin-bottom: 22px; max-width: 92%; line-height:1.35; padding: 0 10px; }
+  .ceremony-overlay[data-theme="win"]  .ceremony-subtitle { color:#fff5d4; }
+  .ceremony-overlay[data-theme="lose"] .ceremony-subtitle { color:#fecaca; }
+  .ceremony-cams { display:flex; flex-wrap:wrap; gap: 18px; justify-content:center; align-items:center; max-width: 100%; }
+  .ceremony-cam { position: relative; width: 220px; height: 220px; border-radius: 50%; overflow: hidden; background:#000; border: 5px solid; animation: ceremonyPop .6s cubic-bezier(.2,.9,.3,1.4); }
+  .ceremony-cam[data-theme="win"]  { border-color: #ffd86e; box-shadow: 0 0 0 3px rgba(255,216,110,.4), 0 12px 40px rgba(255,216,110,.35); }
+  .ceremony-cam[data-theme="lose"] { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.4), 0 12px 40px rgba(239,68,68,.35); animation: ceremonyPop .6s cubic-bezier(.2,.9,.3,1.4), shake .55s ease 1.2s 2; }
+  .ceremony-cam video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+  .ceremony-cam .ceremony-cam-name { position:absolute; bottom: 6px; left: 8px; right: 8px; text-align:center; font-size: 13px; font-weight: 800; background: rgba(0,0,0,.75); border-radius: 8px; padding: 4px 6px; }
+  .ceremony-cam .ceremony-cam-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size: 90px; background:#1a0f33; }
+  .ceremony-cam.has-stream .ceremony-cam-fallback { display:none; }
+  @keyframes ceremonyPop { 0% { transform: scale(.3) rotate(-8deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  @keyframes shake { 0%,100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-8px) rotate(-2deg); } 75% { transform: translateX(8px) rotate(2deg); } }
+  .ceremony-medal { position: absolute; top: -8px; right: -8px; width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg,#ffd86e,#f59e0b); display:flex; align-items:center; justify-content:center; font-size: 28px; box-shadow: 0 4px 14px rgba(0,0,0,.5); z-index: 2; border: 3px solid #1a0f33; }
+  @media (max-width: 480px){
+    .ceremony-cam { width: 150px; height: 150px; border-width: 4px; }
+    .ceremony-title { font-size: 26px; }
+    .ceremony-subtitle { font-size: 16px; }
+    .ceremony-cam .ceremony-cam-fallback { font-size: 60px; }
+    .ceremony-medal { width: 42px; height: 42px; font-size: 22px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="brand-watermark">⚡ ULAR TANGGA <span class="b">BY LAWRENZ V1</span></div>
+<div class="brand-watermark">⚡ ULAR TANGGA <span class="b">BY LAWRENZ V2</span></div>
 
 <!-- ===== WELCOME ===== -->
 <div class="screen active" id="screenWelcome">
   <div class="welcome-hero">
     <span class="dice-emoji">🎲</span>
-    <h1>ULAR TANGGA<span class="by">BY LAWRENZ V1</span></h1>
+    <h1>ULAR TANGGA<span class="by">BY LAWRENZ V2</span></h1>
     <p style="margin-top:4px;">Mabar bareng temen<br>Voice + video + chat, real-time 🎤📹💬</p>
   </div>
 
@@ -440,7 +476,7 @@
     <div class="divider-or">atau</div>
     <div class="form-group">
       <label>Kode room dari temen</label>
-      <input type="text" class="input" id="inputRoomCode" placeholder="ABCD" maxlength="4" />
+      <input type="text" class="input" id="inputRoomCode" placeholder="123456" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
     </div>
     <button class="btn-primary" id="btnJoinRoom" style="background: linear-gradient(135deg, #4ade80, #16a34a); box-shadow: 0 6px 20px rgba(74,222,128,.3);">🚪 Join Room</button>
     <div class="divider-or">atau</div>
@@ -579,6 +615,13 @@
 
 <!-- ===== CENTER REACTION OVERLAY (broadcast to room) ===== -->
 <div class="center-react-layer" id="centerReactLayer"></div>
+
+<!-- ===== WIN/LOSE CEREMONY OVERLAY ===== -->
+<div class="ceremony-overlay" id="ceremonyOverlay" data-theme="win">
+  <div class="ceremony-title" id="ceremonyTitle">🏆 SELAMAT JUARA!</div>
+  <div class="ceremony-subtitle" id="ceremonySubtitle">POSE DULU GAES! 📸</div>
+  <div class="ceremony-cams" id="ceremonyCams"></div>
+</div>
 
 <!-- ===== CHAT PANEL ===== -->
 <div class="chat-panel" id="chatPanel">
@@ -882,9 +925,8 @@ function alertModal(title, msg, icon='ℹ️'){
 $('btnAlertOk').onclick = () => $('alertModal').classList.remove('show');
 
 function genCode(){
-  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  let s = ''; for (let i=0;i<4;i++) s += letters[Math.floor(Math.random()*letters.length)];
-  return s;
+  // Numeric 6-digit room code (100000-999999) — gampang diketik & dibagi
+  return String(Math.floor(100000 + Math.random() * 900000));
 }
 function colorHex(id){ return (COLORS.find(c=>c.id===id)||COLORS[0]).hex; }
 function colorDark(id){ return (COLORS.find(c=>c.id===id)||COLORS[0]).dark; }
@@ -917,22 +959,44 @@ function buildColorPicker(){
 buildColorPicker();
 try { myName = localStorage.getItem('ut_name') || ''; $('inputName').value = myName; } catch(_){}
 const urlParams = new URLSearchParams(location.search);
-const urlRoom = (urlParams.get('r')||'').toUpperCase().slice(0,4);
+const urlRoom = (urlParams.get('r')||'').replace(/[^0-9]/g,'').slice(0,6);
 if (urlRoom) $('inputRoomCode').value = urlRoom;
+// Strip non-digits as user types
+$('inputRoomCode').addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/[^0-9]/g,'').slice(0,6);
+});
 
 $('btnCreateRoom').onclick = async () => {
   const name = $('inputName').value.trim();
   if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
   myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
-  await createRoom();
+  const btn = $('btnCreateRoom'); const oldHtml = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '⏳ Bikin room...';
+  try {
+    await createRoom();
+  } catch(e){
+    console.error('[createRoom]', e);
+    alertModal('Gagal bikin room', 'Error: ' + (e?.message || e || 'unknown') + '\n\nCoba refresh & izinin mic/kamera.', '😵');
+  } finally {
+    btn.disabled = false; btn.innerHTML = oldHtml;
+  }
 };
 $('btnJoinRoom').onclick = async () => {
   const name = $('inputName').value.trim();
-  const code = $('inputRoomCode').value.trim().toUpperCase();
+  const code = $('inputRoomCode').value.replace(/[^0-9]/g,'').slice(0,6);
   if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
-  if (code.length !== 4) return alertModal('Eh', 'Kode room harus 4 huruf', '🔢');
+  if (code.length !== 6) return alertModal('Eh', 'Kode room harus 6 angka', '🔢');
   myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
-  await joinRoom(code);
+  const btn = $('btnJoinRoom'); const oldHtml = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '⏳ Join room...';
+  try {
+    await joinRoom(code);
+  } catch(e){
+    console.error('[joinRoom]', e);
+    alertModal('Gagal join room', 'Error: ' + (e?.message || e || 'unknown') + '\n\nCek koneksi & coba lagi.', '😵');
+  } finally {
+    btn.disabled = false; btn.innerHTML = oldHtml;
+  }
 };
 
 $('btnPlayBot').onclick = () => {
@@ -1275,12 +1339,15 @@ function cleanupAllPeers(){
 /* ============== ROOM ============== */
 async function createRoom(){
   await setupMedia();
+  if (!db) throw new Error('Firebase belum siap (cek FIREBASE_CONFIG)');
   let code, attempts = 0;
   while (true){
     code = genCode();
-    const snap = await db.ref('rooms/'+code).get();
+    let snap;
+    try { snap = await db.ref('rooms/'+code).get(); }
+    catch(e){ throw new Error('Server connect fail: ' + (e?.message || e)); }
     if (!snap.exists()) break;
-    if (++attempts > 10) return alertModal('Error', 'Gagal bikin room, coba lagi', '😵');
+    if (++attempts > 10) throw new Error('Server lagi penuh, coba lagi bentar');
   }
   roomCode = code; myPlayerIdx = 0; isHost = true;
   roomRef = db.ref('rooms/'+code);
@@ -1358,7 +1425,7 @@ function onRoomUpdate(data){
       renderPawns(data);
     }
     renderGame(data);
-    if (data.status === 'done') showWinModal(data);
+    if (data.status === 'done') startGameDoneSequence(data);
     handleNewRoll(data);
     handleReactions(data);
   }
@@ -1868,8 +1935,9 @@ $('btnModeNormal').onclick = async () => {
   await roomRef.update({
     status: 'playing', gameMode: 'normal',
     activeChallenge: null, challenge: null,
-    currentTurn: 0, diceRoll: null, winner: null
+    currentTurn: 0, diceRoll: null, winner: null, loser: null, finishOrder: null
   });
+  _ceremonyShownForGame = null;
 };
 $('btnModeChallenge').onclick = async () => {
   if (!isHost || !roomRef) return;
@@ -2027,8 +2095,9 @@ function renderChallenge(data){
           await roomRef.child('signals').remove().catch(()=>{});
           await roomRef.update({
             status: 'playing', activeChallenge: pickedText,
-            currentTurn: 0, diceRoll: null, winner: null
+            currentTurn: 0, diceRoll: null, winner: null, loser: null, finishOrder: null
           });
+          _ceremonyShownForGame = null;
         } catch(_){}
       }, 4500);
     }
@@ -2392,7 +2461,7 @@ function renderGame(data){
   if (banner){
     if (data.activeChallenge){
       banner.classList.add('show');
-      banner.innerHTML = '<span class="ico">⚡</span><span class="lbl">TANTANGAN KALAH:</span> <span class="txt">'+escapeHtml(data.activeChallenge)+'</span>';
+      banner.innerHTML = '<span class="lbl">⚡ HUKUMAN BUAT YANG KALAH ⚡</span><span class="txt">'+escapeHtml(data.activeChallenge)+'</span>';
     } else {
       banner.classList.remove('show');
       banner.innerHTML = '';
@@ -2451,10 +2520,16 @@ $('btnRoll').onclick = async () => {
   const dice = 1 + Math.floor(Math.random() * 6);
   const eff = applyBoardEffect(oldPos, dice);
 
-  // Determine next turn
+  // Determine next turn — skip players yang udah finish (sampe finish line / 100)
   const playerIndices = Object.keys(roomData.players).map(Number).sort((a,b)=>a-b);
+  const finishedSet = new Set(Array.isArray(roomData.finishOrder) ? roomData.finishOrder : []);
   const myArrIdx = playerIndices.indexOf(myPlayerIdx);
-  const nextIdx = playerIndices[(myArrIdx + 1) % playerIndices.length];
+  let nextIdx = playerIndices[(myArrIdx + 1) % playerIndices.length];
+  let _safety = 0;
+  while (finishedSet.has(nextIdx) && _safety++ < playerIndices.length){
+    const i = playerIndices.indexOf(nextIdx);
+    nextIdx = playerIndices[(i + 1) % playerIndices.length];
+  }
 
   // Build roll payload
   const rollData = {
@@ -2483,8 +2558,27 @@ $('btnRoll').onclick = async () => {
   const updates = {};
   updates['players/'+myPlayerIdx+'/position'] = eff.finalTo;
   if (eff.finalTo === 100){
-    updates['winner'] = myPlayerIdx;
-    updates['status'] = 'done';
+    // Aku finish! Track ke finishOrder (urut sampe finish line)
+    const finishOrderNew = Array.isArray(roomData.finishOrder) ? roomData.finishOrder.slice() : [];
+    if (!finishOrderNew.includes(myPlayerIdx)) finishOrderNew.push(myPlayerIdx);
+    updates['finishOrder'] = finishOrderNew;
+    updates['players/'+myPlayerIdx+'/finishedAt'] = Date.now();
+    if (roomData.winner === null || roomData.winner === undefined) updates['winner'] = myPlayerIdx;
+    if (finishOrderNew.length >= playerIndices.length - 1){
+      // Tinggal 1 yang belum finish = dia yang KALAH → game done
+      const loser = playerIndices.find(i => !finishOrderNew.includes(i));
+      updates['loser'] = (loser !== undefined) ? loser : null;
+      updates['status'] = 'done';
+    } else {
+      // Lanjut ke pemain berikutnya yang belum finish
+      let candidate = nextIdx, s2 = 0;
+      const finishedNow = new Set(finishOrderNew);
+      while (finishedNow.has(candidate) && s2++ < playerIndices.length){
+        const i = playerIndices.indexOf(candidate);
+        candidate = playerIndices[(i + 1) % playerIndices.length];
+      }
+      updates['currentTurn'] = candidate;
+    }
   } else {
     updates['currentTurn'] = nextIdx;
   }
@@ -2685,6 +2779,121 @@ async function playRollAnimation(r){
   }
 }
 
+/* ============== WIN/LOSE CEREMONY ============== */
+function _sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+let _ceremonyShownForGame = null;
+
+function startGameDoneSequence(data){
+  if (!data || data.status !== 'done') return;
+  // Dedupe: jangan jalanin 2x untuk game yang sama
+  const gameKey = String(data.winner) + '_' + String(data.loser) + '_' + String((data.finishOrder||[]).join(','));
+  if (_ceremonyShownForGame === gameKey) return;
+  _ceremonyShownForGame = gameKey;
+  // Bot mode → modal sederhana aja (cuma 2 entitas, gak butuh ceremony)
+  if (isBotMode){ showWinModal(data); return; }
+  // Multi-player: ceremony dulu (winner → loser) baru modal play-again
+  showCeremony(data).then(() => showWinModal(data)).catch(e => { console.warn('ceremony err', e); showWinModal(data); });
+}
+
+async function showCeremony(data){
+  const players = data.players || {};
+  const allIdx = Object.keys(players).map(Number);
+  let winners = Array.isArray(data.finishOrder) ? data.finishOrder.slice() : [];
+  let loserIdx = (data.loser !== undefined && data.loser !== null) ? data.loser : null;
+  // Fallback kalau finishOrder/loser belum diset (legacy data)
+  if (winners.length === 0 && (data.winner !== undefined && data.winner !== null)){
+    winners = [data.winner];
+  }
+  if (loserIdx === null && winners.length){
+    loserIdx = allIdx.find(i => !winners.includes(i));
+    if (loserIdx === undefined) loserIdx = null;
+  }
+  const challenge = data.activeChallenge || '';
+
+  // Phase 1: Apresiasi yang menang
+  if (winners.length){
+    showCeremonyOverlay({
+      theme: 'win',
+      title: '🏆 SELAMAT, JUARA!',
+      subtitle: 'POSE DULU GAES! 📸',
+      indices: winners,
+    });
+    try { sfx.win && sfx.win(); } catch(_){}
+    await _sleep(7000);
+  }
+
+  // Phase 2: Bully yang kalah dengan hukumannya
+  if (loserIdx !== null && loserIdx !== undefined && players[loserIdx]){
+    const loserName = players[loserIdx].name || 'pemain';
+    const subtitle = challenge
+      ? loserName + ' wajib HUKUMAN: ' + challenge + ' 🤣'
+      : loserName + ' kalah, ditertawain dulu ya 😜';
+    showCeremonyOverlay({
+      theme: 'lose',
+      title: '😈 INI DIA YANG KALAH!',
+      subtitle,
+      indices: [loserIdx],
+    });
+    try { sfx.lose && sfx.lose(); } catch(_){}
+    await _sleep(7000);
+  }
+
+  // Tutup overlay & lepas srcObject biar gak mubazir
+  $('ceremonyOverlay').classList.remove('show');
+  document.querySelectorAll('#ceremonyCams video').forEach(v => { try { v.srcObject = null; } catch(_){} });
+  $('ceremonyCams').innerHTML = '';
+}
+
+function showCeremonyOverlay({theme, title, subtitle, indices}){
+  const ov = $('ceremonyOverlay');
+  ov.dataset.theme = theme;
+  $('ceremonyTitle').textContent = title;
+  $('ceremonySubtitle').textContent = subtitle;
+  const camsWrap = $('ceremonyCams');
+  camsWrap.innerHTML = '';
+  for (const idx of indices){
+    const player = roomData?.players?.[idx];
+    if (!player) continue;
+    const tile = document.createElement('div');
+    tile.className = 'ceremony-cam';
+    tile.dataset.theme = theme;
+
+    const video = document.createElement('video');
+    video.autoplay = true; video.playsInline = true;
+    // SEMUA video di ceremony harus muted — audio tetap dari #remoteAudioPool, biar gak echo/feedback
+    video.muted = true;
+
+    const fallback = document.createElement('div');
+    fallback.className = 'ceremony-cam-fallback';
+    fallback.textContent = (theme === 'win') ? '🏆' : '😈';
+
+    const stream = (idx === myPlayerIdx) ? localStream : remoteStreams[idx];
+    if (stream){
+      try { video.srcObject = stream; } catch(_){}
+      tile.classList.add('has-stream');
+      video.play().catch(()=>{});
+    }
+
+    if (theme === 'win'){
+      const medal = document.createElement('div');
+      medal.className = 'ceremony-medal';
+      const place = (Array.isArray(roomData?.finishOrder) ? roomData.finishOrder.indexOf(idx) : 0);
+      medal.textContent = place === 0 ? '🥇' : (place === 1 ? '🥈' : '🥉');
+      tile.appendChild(medal);
+    }
+
+    const name = document.createElement('div');
+    name.className = 'ceremony-cam-name';
+    name.textContent = player.name + (theme === 'win' ? ' 🏆' : ' 😈');
+
+    tile.appendChild(video);
+    tile.appendChild(fallback);
+    tile.appendChild(name);
+    camsWrap.appendChild(tile);
+  }
+  ov.classList.add('show');
+}
+
 /* ============== WIN MODAL ============== */
 function showWinModal(data){
   if (!data.winner && data.winner !== 0) return;
@@ -2726,9 +2935,13 @@ $('btnPlayAgain').onclick = async () => {
     return;
   }
   if (!isHost) { toast('Tunggu host buat restart yaa'); return; }
-  const updates = { status: 'playing', currentTurn: 0, diceRoll: null, winner: null };
-  for (const idx of Object.keys(roomData.players)) updates['players/'+idx+'/position'] = 0;
+  const updates = { status: 'playing', currentTurn: 0, diceRoll: null, winner: null, loser: null, finishOrder: null };
+  for (const idx of Object.keys(roomData.players)){
+    updates['players/'+idx+'/position'] = 0;
+    updates['players/'+idx+'/finishedAt'] = null;
+  }
   for (const idx of Object.keys(roomData.players)) visualPositions[idx] = 0;
+  _ceremonyShownForGame = null;
   await roomRef.child('signals').remove().catch(()=>{});
   await roomRef.update(updates);
   // Reset visuals
