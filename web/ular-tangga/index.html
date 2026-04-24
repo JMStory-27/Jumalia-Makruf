@@ -1720,12 +1720,17 @@ async function createRoom(){
   roomRef = db.ref('rooms/'+code);
   await roomRef.set({
     status: 'lobby', createdAt: Date.now(),
-    currentTurn: 0, diceRoll: null, winner: null,
+    currentTurn: 0, diceRoll: null, winner: null, hostOnline: true,
     players: {
-      0: { name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0, joinedAt: Date.now() }
+      0: { name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0,
+           joinedAt: Date.now(), clientId: CLIENT_ID, online: true, lastSeen: Date.now() }
     }
   });
-  roomRef.onDisconnect().remove();
+  // Mark offline (bukan remove) saat disconnect — biar bisa reconnect.
+  roomRef.child('players/0/online').onDisconnect().set(false);
+  roomRef.child('players/0/lastSeen').onDisconnect().set(Date.now());
+  roomRef.child('hostOnline').onDisconnect().set(false);
+  saveSession();
   enterLobby();
 }
 
@@ -1744,9 +1749,13 @@ async function joinRoom(code){
   roomCode = code; myPlayerIdx = slot; isHost = false;
   roomRef = db.ref('rooms/'+code);
   await roomRef.child('players/'+slot).set({
-    name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0, joinedAt: Date.now()
+    name: myName, color1: myColor1, color2: myColor2, shape: myShape, position: 0,
+    joinedAt: Date.now(), clientId: CLIENT_ID, online: true, lastSeen: Date.now()
   });
-  roomRef.child('players/'+slot).onDisconnect().remove();
+  // Mark offline (bukan remove) saat disconnect — biar bisa reconnect.
+  roomRef.child('players/'+slot+'/online').onDisconnect().set(false);
+  roomRef.child('players/'+slot+'/lastSeen').onDisconnect().set(Date.now());
+  saveSession();
   enterLobby();
 }
 
@@ -1764,8 +1773,12 @@ function subscribeRoom(){
   roomRef.on('value', (snap) => {
     const data = snap.val();
     if (!data){
-      alertModal('Room bubar', 'Host udah keluar, room-nya ditutup', '👋');
-      cleanupAndGoHome(); return;
+      alertModal('Room bubar', 'Room-nya udah ditutup', '👋');
+      clearSession(); cleanupAndGoHome(); return;
+    }
+    // Auto-promote: host slot kosong → angkat pemain online pertama jadi host baru
+    if (!data.players || !data.players[0]){
+      promoteNewHost(data);
     }
     roomData = data;
     onRoomUpdate(data);
@@ -2258,9 +2271,11 @@ function renderLobby(data){
       count++;
       row.className = 'player-row';
       const colors = getPlayerColors(p);
+      const isOffline = p.online === false;
       let badges = '';
       if (i === 0) badges += '<span class="badge host">HOST</span>';
       if (i === myPlayerIdx) badges += '<span class="badge you">KAMU</span>';
+      if (isOffline) badges += '<span class="badge" style="background:rgba(239,68,68,.25);color:#f87171;">OFFLINE</span>';
 
       // Voice button: own row = mic toggle; other rows = listen toggle
       let voiceBtnHtml = '';
@@ -3549,10 +3564,17 @@ document.addEventListener('click', (e) => {
 
 /* ============== LEAVE / CLEANUP ============== */
 async function leaveRoom(){
+  // Klik "Keluar" eksplisit = beneran keluar, hapus session.
+  clearSession();
   try {
     if (roomRef && myPlayerIdx >= 0){
-      if (isHost) await roomRef.remove();
-      else await roomRef.child('players/'+myPlayerIdx).remove();
+      // Hapus slot pemain. Kalo room kosong total → hapus room.
+      await roomRef.child('players/'+myPlayerIdx).remove();
+      const snap = await roomRef.child('players').get();
+      const remaining = snap.val();
+      if (!remaining || Object.keys(remaining).length === 0){
+        await roomRef.remove();
+      }
     }
   } catch(_){}
   cleanupAndGoHome();
@@ -3578,11 +3600,160 @@ function cleanupAndGoHome(){
   showScreen('screenWelcome');
 }
 
+// Beforeunload: JANGAN remove player — biarkan mereka bisa reconnect.
+// onDisconnect handler udah otomatis nge-set online: false di Firebase.
 window.addEventListener('beforeunload', () => {
-  if (roomRef && myPlayerIdx >= 0){
-    if (isHost) roomRef.remove(); else roomRef.child('players/'+myPlayerIdx).remove();
-  }
+  saveSession(); // pastiin session terbaru tersimpan
 });
+
+/* ============== PERMANENT RECONNECT ============== */
+// Unique browser-level ID — buat verifikasi "ini gw beneran" pas reconnect.
+const CLIENT_ID = (() => {
+  try {
+    let id = localStorage.getItem('ut_client_id');
+    if (!id){
+      id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem('ut_client_id', id);
+    }
+    return id;
+  } catch(_){
+    return 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+  }
+})();
+
+const SESSION_KEY = 'ut_session';
+const SESSION_TTL_MS = 60 * 60 * 1000; // 1 jam — abis itu session expired
+
+function saveSession(){
+  if (!roomCode || myPlayerIdx < 0) return;
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      roomCode, myPlayerIdx, isHost, ts: Date.now(), clientId: CLIENT_ID,
+      myName, myColor1, myColor2, myShape
+    }));
+  } catch(_){}
+}
+function clearSession(){
+  try { localStorage.removeItem(SESSION_KEY); } catch(_){}
+}
+function loadSession(){
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); }
+  catch(_){ return null; }
+}
+
+// Auto-promote: kalo host slot (idx 0) kosong, angkat pemain online ber-idx terkecil jadi host.
+async function promoteNewHost(data){
+  if (!roomRef) return;
+  const players = data.players || {};
+  let newHostIdx = -1;
+  for (let i=1; i<MAX_PLAYERS; i++){
+    if (players[i] && players[i].online){ newHostIdx = i; break; }
+  }
+  if (newHostIdx < 0){
+    // Gak ada yg online → coba pemain pertama yg ada (offline pun gpp)
+    for (let i=1; i<MAX_PLAYERS; i++){ if (players[i]){ newHostIdx = i; break; } }
+  }
+  if (newHostIdx < 0) return;
+  // Pindahin slot pemain ke slot 0 (jadi host) — cuma yg paling kecil idx-nya yg coba.
+  // Buat hindarin race condition multi-client, pake transaction.
+  try {
+    const movingPlayer = players[newHostIdx];
+    const updates = {};
+    updates['players/0'] = { ...movingPlayer, slotChangedAt: Date.now() };
+    updates['players/'+newHostIdx] = null;
+    updates['hostOnline'] = !!movingPlayer.online;
+    await roomRef.update(updates);
+    // Kalo gw yg di-promote, update state lokal
+    if (movingPlayer.clientId === CLIENT_ID){
+      myPlayerIdx = 0;
+      isHost = true;
+      // Re-pasang onDisconnect handler untuk slot baru
+      roomRef.child('players/0/online').onDisconnect().set(false);
+      roomRef.child('players/0/lastSeen').onDisconnect().set(Date.now());
+      roomRef.child('hostOnline').onDisconnect().set(false);
+      saveSession();
+      $('btnStartGame').style.display = 'block';
+      toast('👑 Kamu jadi host baru');
+    }
+  } catch(e){ console.warn('promoteNewHost failed', e); }
+}
+
+async function tryAutoReconnect(){
+  const s = loadSession();
+  if (!s) return false;
+  if (!s.roomCode || s.myPlayerIdx == null || s.myPlayerIdx < 0){ clearSession(); return false; }
+  if (!s.ts || Date.now() - s.ts > SESSION_TTL_MS){ clearSession(); return false; }
+  if (!db){ console.warn('[reconnect] Firebase belum siap'); return false; }
+  try {
+    const snap = await db.ref('rooms/'+s.roomCode).get();
+    if (!snap.exists()){ clearSession(); return false; }
+    const data = snap.val();
+    const p = data.players?.[s.myPlayerIdx];
+    if (!p){ clearSession(); return false; }
+    // Verifikasi: clientId harus match. Kalo gak match, ada user lain yg pake slot itu — abort.
+    if (p.clientId && p.clientId !== CLIENT_ID){ clearSession(); return false; }
+    // Restore semua state lokal
+    roomCode = s.roomCode;
+    myPlayerIdx = s.myPlayerIdx;
+    isHost = s.myPlayerIdx === 0;
+    myName = p.name || s.myName || myName;
+    myColor1 = p.color1 || s.myColor1 || myColor1;
+    myColor2 = p.color2 || s.myColor2 || myColor2;
+    myShape  = p.shape  || s.myShape  || myShape;
+    roomRef = db.ref('rooms/'+roomCode);
+    // Mark online lagi + pasang onDisconnect handler ulang
+    await roomRef.child('players/'+myPlayerIdx).update({
+      online: true, lastSeen: Date.now(), clientId: CLIENT_ID
+    });
+    roomRef.child('players/'+myPlayerIdx+'/online').onDisconnect().set(false);
+    roomRef.child('players/'+myPlayerIdx+'/lastSeen').onDisconnect().set(Date.now());
+    if (isHost){
+      await roomRef.child('hostOnline').set(true);
+      roomRef.child('hostOnline').onDisconnect().set(false);
+    }
+    saveSession();
+    setupMedia().catch(()=>{});
+    enterLobby();
+    toast('✓ Auto-reconnect: balik ke room ' + roomCode);
+    return true;
+  } catch(e){
+    console.warn('[reconnect] failed', e);
+    return false;
+  }
+}
+
+// Heartbeat — tiap 20 detik update lastSeen biar ke-track aktif/nggak.
+setInterval(() => {
+  if (roomRef && myPlayerIdx >= 0){
+    try { roomRef.child('players/'+myPlayerIdx+'/lastSeen').set(Date.now()); } catch(_){}
+    saveSession(); // refresh ttl session
+  }
+}, 20000);
+
+// On reconnect (Firebase RTDB connectivity returned), pastikan online: true ke-set ulang.
+try {
+  db.ref('.info/connected').on('value', (snap) => {
+    if (snap.val() === true && roomRef && myPlayerIdx >= 0){
+      try {
+        roomRef.child('players/'+myPlayerIdx+'/online').set(true);
+        if (isHost) roomRef.child('hostOnline').set(true);
+        // Re-arm onDisconnect (kadang ke-clear setelah reconnect)
+        roomRef.child('players/'+myPlayerIdx+'/online').onDisconnect().set(false);
+        roomRef.child('players/'+myPlayerIdx+'/lastSeen').onDisconnect().set(Date.now());
+        if (isHost) roomRef.child('hostOnline').onDisconnect().set(false);
+      } catch(_){}
+    }
+  });
+} catch(_){}
+
+// Trigger auto-reconnect saat halaman ke-load (welcome screen)
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { tryAutoReconnect().catch(()=>{}); }, 600);
+});
+// Kalau DOMContentLoaded udah lewat (script ke-load setelah parse), langsung jalanin.
+if (document.readyState !== 'loading'){
+  setTimeout(() => { tryAutoReconnect().catch(()=>{}); }, 600);
+}
 
 /* ============== EMOJI POPUP TOGGLE ============== */
 function openEmojiPanel(){
