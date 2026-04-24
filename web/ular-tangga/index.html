@@ -146,6 +146,47 @@
   .dice-msg { flex: 1; font-size: 14px; line-height: 1.4; min-height: 40px; }
   .dice-msg strong { color: #ffd86e; }
 
+  /* Center-of-board big dice (thrown into the middle, spins, lands) */
+  .dice-center {
+    position: absolute; left: 50%; top: 50%;
+    width: 22%; aspect-ratio: 1/1;
+    border-radius: 14%;
+    background: linear-gradient(135deg, #fff 0%, #e5e7eb 100%);
+    box-shadow: 0 14px 30px rgba(0,0,0,.55), inset 0 -5px 0 rgba(0,0,0,.18), inset 0 3px 0 rgba(255,255,255,.7);
+    padding: 8%;
+    z-index: 5;
+    opacity: 0; pointer-events: none;
+    transform: translate(-50%, -50%) scale(.2);
+    transition: opacity .25s ease, transform .35s cubic-bezier(.25,1.4,.5,1);
+  }
+  .dice-center.show { opacity: 1; }
+  .dice-center.throwing { animation: diceThrow 3s cubic-bezier(.18,.7,.3,1) forwards; }
+  @keyframes diceThrow {
+    0%   { transform: translate(-50%, 220%) scale(.5) rotate(0deg);   opacity: 0; }
+    15%  { transform: translate(-50%, -110%) scale(1.4) rotate(420deg); opacity: 1; }
+    30%  { transform: translate(-50%, -50%)  scale(1.25) rotate(820deg); }
+    50%  { transform: translate(-50%, -50%)  scale(1.25) rotate(1480deg); }
+    75%  { transform: translate(-50%, -50%)  scale(1.25) rotate(1960deg); }
+    92%  { transform: translate(-50%, -50%)  scale(1.4)  rotate(2160deg); }
+    100% { transform: translate(-50%, -50%)  scale(1.25) rotate(2160deg); }
+  }
+  .dice-center.settle { animation: diceSettle .5s ease forwards; }
+  @keyframes diceSettle {
+    0%   { transform: translate(-50%, -50%) scale(1.25) rotate(2160deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(.4)   rotate(2160deg); opacity: 0; }
+  }
+  .dice-center .dice-grid .dot.on { background: radial-gradient(circle at 30% 30%, #444, #000); box-shadow: inset 0 1px 1px rgba(0,0,0,.5); }
+  .dice-center .dice-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 6%; width:100%; height:100%; }
+  .dice-center .dice-grid .dot { background: transparent; border-radius: 50%; }
+
+  /* Difficulty picker */
+  .diff-list { display:grid; gap:10px; margin: 14px 0; }
+  .diff-btn { width:100%; text-align:left; padding: 14px 16px; border-radius: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); display:flex; align-items:center; gap:12px; }
+  .diff-btn:hover { background: rgba(255,255,255,.12); }
+  .diff-btn .ico { font-size: 26px; }
+  .diff-btn .ttl { font-weight: 800; font-size: 16px; }
+  .diff-btn .sub { font-size: 12px; opacity: .7; }
+
   .av-controls { display:flex; gap: 8px; margin-bottom: 12px; }
   .av-controls button { flex: 1; padding: 10px; font-size: 14px; }
 
@@ -191,9 +232,26 @@
       <input type="text" class="input" id="inputRoomCode" placeholder="ABCD" maxlength="4" />
     </div>
     <button class="btn-primary" id="btnJoinRoom" style="background: linear-gradient(135deg, #4ade80, #16a34a); box-shadow: 0 6px 20px rgba(74,222,128,.3);">🚪 Join Room</button>
+    <div class="divider-or">atau</div>
+    <button class="btn-primary" id="btnPlayBot" style="background: linear-gradient(135deg, #f59e0b, #b45309); box-shadow: 0 6px 20px rgba(245,158,11,.3);">🤖 Lawan Bot (Solo)</button>
   </div>
 
   <p class="footer-note">Web bakal minta izin akses kamera & mic biar bisa voice + video. Aman, langsung HP-ke-HP, ga lewat server.</p>
+</div>
+
+<!-- ===== DIFFICULTY MODAL ===== -->
+<div class="modal-bg" id="diffModal">
+  <div class="modal" style="max-width:380px;">
+    <span class="winner-emoji" style="font-size:60px;">🤖</span>
+    <h2>Pilih Lawan Bot</h2>
+    <p style="margin: 4px 0 4px;">Mau lawan yang kayak gimana?</p>
+    <div class="diff-list">
+      <button class="diff-btn" data-level="1"><span class="ico">😊</span><div><div class="ttl">Mudah</div><div class="sub">Bot santai, cocok buat pemanasan</div></div></button>
+      <button class="diff-btn" data-level="2"><span class="ico">😎</span><div><div class="ttl">Sedang</div><div class="sub">Bot lumayan, mulai serius nih</div></div></button>
+      <button class="diff-btn" data-level="3"><span class="ico">😈</span><div><div class="ttl">Susah</div><div class="sub">Bot ganas, siap-siap kalah</div></div></button>
+    </div>
+    <button class="btn-secondary" id="btnDiffCancel" style="width:100%;">Batal</button>
+  </div>
 </div>
 
 <!-- ===== LOBBY ===== -->
@@ -250,6 +308,7 @@
       </svg>
       <div class="pawns-layer" id="pawnsLayer"></div>
     </div>
+    <div class="dice-center" id="diceCenter"></div>
   </div>
 
   <div class="dice-area">
@@ -329,6 +388,14 @@ let visualPositions = {};   // playerIdx -> last rendered cell (for animation st
 let isAnimating = false;
 let myPendingRoll = false;
 
+// ===== BOT MODE STATE =====
+let isBotMode = false;
+let botLevel = 0;             // 1=mudah, 2=sedang, 3=susah
+let botFavor = 0;             // -1..+1; >0 = bot lebih beruntung; <0 = player lebih beruntung
+let botName = 'Bot';
+let botColor = 'blue';
+const BOT_LOSE_RATES = { 1: 0.25, 2: 0.40, 3: 0.55 };
+
 const $ = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -401,6 +468,21 @@ $('btnJoinRoom').onclick = async () => {
   myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
   await joinRoom(code);
 };
+
+$('btnPlayBot').onclick = () => {
+  const name = $('inputName').value.trim();
+  if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
+  myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
+  $('diffModal').classList.add('show');
+};
+$('btnDiffCancel').onclick = () => $('diffModal').classList.remove('show');
+document.querySelectorAll('.diff-btn').forEach(btn => {
+  btn.onclick = async () => {
+    const lvl = +btn.dataset.level;
+    $('diffModal').classList.remove('show');
+    await startBotGame(lvl);
+  };
+});
 
 /* ============== MEDIA ============== */
 async function setupMedia(){
@@ -720,7 +802,41 @@ function centerOf(n){
 }
 
 function buildBoard(){
-  const board = $('board'); board.innerHTML = '';
+  const board = $('board');
+  // IMPORTANT: only remove old cells; keep the SVG overlay and pawns layer intact
+  Array.from(board.querySelectorAll('.cell')).forEach(c => c.remove());
+  // Ensure SVG overlay exists (recreate if wiped)
+  let svg = $('boardOverlay');
+  if (!svg){
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('id', 'boardOverlay');
+    svg.setAttribute('class', 'board-overlay');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.innerHTML = '<defs>'
+      + '<linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">'
+      +   '<stop offset="0%" stop-color="#86c060"/>'
+      +   '<stop offset="50%" stop-color="#a8d272"/>'
+      +   '<stop offset="100%" stop-color="#5e8a3a"/>'
+      + '</linearGradient>'
+      + '<linearGradient id="ladderGrad" x1="0%" y1="0%" x2="0%" y2="100%">'
+      +   '<stop offset="0%" stop-color="#7dd3fc"/>'
+      +   '<stop offset="100%" stop-color="#0284c7"/>'
+      + '</linearGradient>'
+      + '</defs>';
+    board.appendChild(svg);
+  }
+  // Ensure pawns layer exists (recreate if wiped)
+  let pl = $('pawnsLayer');
+  if (!pl){
+    pl = document.createElement('div');
+    pl.id = 'pawnsLayer';
+    pl.className = 'pawns-layer';
+    board.appendChild(pl);
+  } else {
+    pl.innerHTML = '';
+  }
+  // Now build the 100 cells
   for (let n = 1; n <= 100; n++){
     const { gridRow, gridCol } = cellNumberToRowCol(n);
     const cell = document.createElement('div');
@@ -732,7 +848,6 @@ function buildBoard(){
     board.appendChild(cell);
   }
   drawSnakeLadderOverlay();
-  $('pawnsLayer').innerHTML = '';
 }
 
 function drawSnakeLadderOverlay(){
@@ -1026,6 +1141,7 @@ $('btnRoll').onclick = async () => {
   if (isAnimating) return;
   if (!roomData || roomData.currentTurn !== myPlayerIdx || roomData.winner) return;
   if (myPendingRoll) return;
+  if (isBotMode) { return doBotModeRoll(myPlayerIdx); }
   myPendingRoll = true;
   isAnimating = true;
   $('btnRoll').disabled = true;
@@ -1092,22 +1208,154 @@ $('btnRoll').onclick = async () => {
 
 async function rollDiceAnimation(finalValue, totalMs){
   const dice = $('diceFace');
+  const center = $('diceCenter');
   dice.classList.add('rolling');
+
+  // Show big dice in center of board: throw in, spin, settle
+  center.classList.remove('settle');
+  center.classList.add('show', 'throwing');
+  center.innerHTML = diceFaceHTML(1 + Math.floor(Math.random()*6));
+
   const start = Date.now();
   let interval = 70;
-  while (Date.now() - start < totalMs - 250){
+  while (Date.now() - start < totalMs - 350){
     const v = 1 + Math.floor(Math.random()*6);
-    dice.innerHTML = diceFaceHTML(v);
+    const html = diceFaceHTML(v);
+    dice.innerHTML = html;
+    center.innerHTML = html;
     const t = (Date.now() - start) / totalMs;
     interval = 70 + t*t*220; // slow down towards end
     await sleep(interval);
   }
   dice.classList.remove('rolling');
-  dice.innerHTML = diceFaceHTML(finalValue);
-  // Bounce
+  const finalHtml = diceFaceHTML(finalValue);
+  dice.innerHTML = finalHtml;
+  center.innerHTML = finalHtml;
+  center.classList.remove('throwing');
+  // Hold on the result briefly so player sees it on the board
+  await sleep(700);
+  // Then fade/shrink the center dice away
+  center.classList.add('settle');
+  await sleep(450);
+  center.classList.remove('show', 'settle');
+  // Bounce small dice
   dice.style.transform = 'scale(1.2)';
   await sleep(150);
   dice.style.transform = '';
+}
+
+/* ============== BOT MODE (offline, single-player vs CPU) ============== */
+async function startBotGame(level){
+  isBotMode = true;
+  botLevel = level;
+  // Decide outcome bias for THIS game (without telling user)
+  const loseRate = BOT_LOSE_RATES[level] || 0.4;
+  // If random < loseRate -> bot will lose this game (favor player); else bot will win
+  const botWillLose = Math.random() < loseRate;
+  // Strength of bias scales gently with level so it doesn't feel scripted
+  const baseStrength = 0.45 + level * 0.10; // 0.55 / 0.65 / 0.75
+  botFavor = (botWillLose ? -1 : 1) * baseStrength;
+
+  // Pick a contrasting bot color
+  const taken = myColor;
+  const candidates = COLORS.filter(c => c.id !== taken);
+  botColor = candidates[Math.floor(Math.random()*candidates.length)].id;
+  botName = ['Bocil Bot','Bot Andi','Mas Bot','Bot Jaya','Bot Riko'][Math.floor(Math.random()*5)];
+
+  // Self-view camera (so player can still see themselves on cam)
+  await setupMedia();
+
+  // Build local roomData (no Firebase, no roomRef)
+  roomCode = 'BOT';
+  myPlayerIdx = 0;
+  isHost = true;
+  roomRef = null;
+  roomData = {
+    status: 'playing',
+    currentTurn: 0,
+    diceRoll: null,
+    winner: null,
+    players: {
+      0: { name: myName, color: myColor, position: 0, joinedAt: Date.now() },
+      1: { name: botName, color: botColor, position: 0, joinedAt: Date.now()+1, isBot: true }
+    }
+  };
+  visualPositions = { 0: 0, 1: 0 };
+  showScreen('screenGame');
+  $('gameRoomCode').textContent = '🤖 vs Bot';
+  buildBoard();
+  $('pawnsLayer').innerHTML = '';
+  renderPawns(roomData);
+  renderGame(roomData);
+}
+
+function biasedDiceRoll(favor){
+  // favor in [-1,1]; positive = bias high, negative = bias low
+  const a = 1 + Math.floor(Math.random()*6);
+  if (Math.random() >= Math.abs(favor)) return a;
+  const b = 1 + Math.floor(Math.random()*6);
+  return favor > 0 ? Math.max(a,b) : Math.min(a,b);
+}
+
+function applyBoardEffect(oldPos, dice){
+  let walkTo = oldPos + dice;
+  let finalTo = walkTo, note = '';
+  let viaLadder = false, viaSnake = false;
+  if (walkTo > 100){ note = 'Lebih dari 100, ga jadi maju 😅'; walkTo = oldPos; finalTo = oldPos; }
+  else if (LADDERS[walkTo]){ note = '🪜 Naik tangga ke '+LADDERS[walkTo]+'!'; finalTo = LADDERS[walkTo]; viaLadder = true; }
+  else if (SNAKES[walkTo]){ note = '🐍 Ketelan ular, turun ke '+SNAKES[walkTo]; finalTo = SNAKES[walkTo]; viaSnake = true; }
+  else if (walkTo === 100){ note = '🎉 SAMPAI 100 — MENANG!'; }
+  return { walkTo, finalTo, note, viaLadder, viaSnake };
+}
+
+async function doBotModeRoll(playerIdx){
+  if (isAnimating) return;
+  if (roomData.winner !== null && roomData.winner !== undefined) return;
+  if (roomData.currentTurn !== playerIdx) return;
+  isAnimating = true;
+  $('btnRoll').disabled = true;
+
+  const isBot = !!roomData.players[playerIdx]?.isBot;
+  const oldPos = roomData.players[playerIdx].position || 0;
+  // Player rolls fairly; bot rolls biased toward botFavor
+  // Player gets opposite favor (so if bot is destined to lose, player gets a small boost)
+  const dice = isBot
+    ? biasedDiceRoll(botFavor)
+    : biasedDiceRoll(-botFavor * 0.55);
+
+  $('diceMsg').innerHTML = isBot ? '🤖 ' + escapeHtml(botName) + ' lempar dadu...' : '🎲 Lempar dadu...';
+  await rollDiceAnimation(dice, isBot ? 2200 : 3000);
+
+  const eff = applyBoardEffect(oldPos, dice);
+  const r = { by: playerIdx, value: dice, from: oldPos, walkTo: eff.walkTo, finalTo: eff.finalTo, viaLadder: eff.viaLadder, viaSnake: eff.viaSnake, note: eff.note, ts: Date.now() };
+  roomData.diceRoll = r;
+  // Update dice msg
+  const by = roomData.players[playerIdx];
+  let msg = '<strong>'+escapeHtml(by.name)+'</strong> dapet <strong>'+dice+'</strong>';
+  if (r.note) msg += '<br>'+escapeHtml(r.note);
+  $('diceMsg').innerHTML = msg;
+
+  await playRollAnimation(r);
+
+  roomData.players[playerIdx].position = eff.finalTo;
+  if (eff.finalTo === 100){
+    roomData.winner = playerIdx;
+    roomData.status = 'done';
+    isAnimating = false;
+    renderGame(roomData);
+    showWinModal(roomData);
+    return;
+  }
+  // Next turn: alternate between 0 and 1
+  roomData.currentTurn = (playerIdx === 0) ? 1 : 0;
+  isAnimating = false;
+  renderGame(roomData);
+
+  // If now bot's turn, auto-roll after short delay
+  if (roomData.currentTurn === 1 && !roomData.winner){
+    await sleep(800);
+    doBotModeRoll(1);
+  }
 }
 
 /* ============== HANDLE ROLL FROM OTHERS (replay animation) ============== */
@@ -1167,6 +1415,25 @@ function showWinModal(data){
 
 $('btnPlayAgain').onclick = async () => {
   $('winModal').classList.remove('show');
+  if (isBotMode){
+    // Re-roll the outcome bias for the new game (still secret to user)
+    const loseRate = BOT_LOSE_RATES[botLevel] || 0.4;
+    const botWillLose = Math.random() < loseRate;
+    const baseStrength = 0.45 + botLevel * 0.10;
+    botFavor = (botWillLose ? -1 : 1) * baseStrength;
+    for (const idx of Object.keys(roomData.players)){
+      roomData.players[idx].position = 0;
+      visualPositions[idx] = 0;
+    }
+    roomData.status = 'playing';
+    roomData.currentTurn = 0;
+    roomData.diceRoll = null;
+    roomData.winner = null;
+    $('pawnsLayer').innerHTML = '';
+    renderPawns(roomData);
+    renderGame(roomData);
+    return;
+  }
   if (!isHost) { toast('Tunggu host buat restart yaa'); return; }
   const updates = { status: 'playing', currentTurn: 0, diceRoll: null, winner: null };
   for (const idx of Object.keys(roomData.players)) updates['players/'+idx+'/position'] = 0;
@@ -1212,6 +1479,7 @@ function cleanupAndGoHome(){
   localStream = null; roomRef && roomRef.off(); roomRef = null;
   roomData = null; roomCode = null; myPlayerIdx = -1; isHost = false;
   lastAnimatedRollTs = 0; isAnimating = false; myPendingRoll = false;
+  isBotMode = false; botLevel = 0; botFavor = 0;
   showScreen('screenWelcome');
 }
 
