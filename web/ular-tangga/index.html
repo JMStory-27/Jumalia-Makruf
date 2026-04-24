@@ -373,19 +373,53 @@
   #modeModal .modal { max-width: 400px; }
   #modeModal .btn-primary, #modeModal .btn-success { width:100%; line-height:1.25; padding: 14px 18px; }
 
-  /* ===== Challenge / Taruhan screen ===== */
-  .challenge-textarea {
-    width:100%; min-height: 180px; padding:12px 14px; border-radius:14px;
-    border: 2px solid rgba(255,255,255,.15); background: rgba(0,0,0,.3); color:#fff;
-    font:inherit; font-size:14px; resize: vertical; line-height:1.5;
-  }
-  .challenge-textarea:focus { outline:none; border-color:#ff6ec4; }
-  .challenge-textarea:disabled { opacity:.6; cursor:not-allowed; }
+  /* ===== Challenge / Taruhan screen — list-style picker ===== */
   .rate-badge {
     font-size:11px; font-weight:800; padding:4px 10px; border-radius:100px;
     background: linear-gradient(135deg,#ff6ec4,#7c3aed); color:#fff;
   }
   .rate-info { font-size:12px; opacity:.7; margin-top:8px; text-align:right; }
+
+  .challenge-list {
+    max-height: 320px; overflow-y: auto; padding: 4px 4px 6px; margin: 4px -4px 4px;
+    display:flex; flex-direction:column; gap: 7px;
+  }
+  .challenge-list::-webkit-scrollbar { width: 6px; }
+  .challenge-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 4px; }
+  .challenge-row {
+    display:flex; align-items:center; gap: 10px;
+    padding: 11px 12px; background: rgba(255,255,255,.06); border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.08);
+    animation: chRowIn .22s ease-out;
+  }
+  @keyframes chRowIn { from { opacity:0; transform: translateX(-6px); } to { opacity:1; transform: translateX(0); } }
+  .challenge-row .emo { font-size: 22px; flex-shrink: 0; width: 30px; text-align:center; line-height:1; }
+  .challenge-row .txt { flex: 1; font-size: 14px; line-height: 1.3; word-break: break-word; color:#fff; }
+  .challenge-row .del {
+    width: 32px; height: 32px; flex-shrink: 0; border: none;
+    background: linear-gradient(135deg, #ef4444, #b91c1c); color:#fff;
+    border-radius: 9px; cursor:pointer; font-size: 18px; font-weight: 900;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 2px 6px rgba(239,68,68,.4); transition: transform .1s, opacity .1s;
+  }
+  .challenge-row .del:hover { transform: scale(1.06); }
+  .challenge-row .del:active { transform: scale(.95); }
+  .challenge-row .del:disabled { opacity: .3; cursor: not-allowed; transform:none; }
+  .challenge-empty {
+    padding: 26px 14px; text-align:center; opacity: .55; font-size: 13px;
+    font-style: italic; border: 1px dashed rgba(255,255,255,.15); border-radius: 12px;
+  }
+  .add-challenge-box {
+    background: rgba(255,255,255,.04); border: 1px dashed rgba(255,255,255,.18);
+    border-radius: 14px; padding: 12px; margin-top: 12px;
+  }
+  .add-challenge-box .input { margin-bottom: 0; }
+  .add-emoji-hint {
+    font-size:11px; opacity:.7; margin: 8px 0 0; text-align:center;
+    color:#fbbf24; font-weight:600;
+  }
+  #btnAddChallenge { width:100%; margin-top:10px; padding: 12px 16px; font-size: 14px; }
+  #btnAddChallenge:disabled { opacity:.5; cursor:not-allowed; }
 
   .spinner-wrap {
     position:relative; width: min(280px, 80vw); height: min(280px, 80vw);
@@ -582,9 +616,14 @@
       <h3 style="margin:0;">📝 List Tantangan</h3>
       <span class="rate-badge" id="challengeRateBadge">10% per item</span>
     </div>
-    <p style="font-size:12px; opacity:.7; margin: 0 0 8px;">Tulis 1 tantangan per baris. Spinner pilih random rata.</p>
-    <textarea class="challenge-textarea" id="challengeListInput" rows="9" placeholder="Push up 5x&#10;Joget TikTok 30 detik&#10;Telpon mantan, ngobrol 1 menit"></textarea>
+    <p style="font-size:12px; opacity:.7; margin: 0 0 8px;">Semua bisa nambah/hapus tantangan. Spinner pilih random rata.</p>
+    <div class="challenge-list" id="challengeList"></div>
     <div class="rate-info" id="challengeCountInfo">10 tantangan aktif</div>
+    <div class="add-challenge-box">
+      <input type="text" class="input" id="newChallengeInput" placeholder="Tulis tantangan aja (contoh: Push up 5x)" maxlength="60" />
+      <p class="add-emoji-hint">✨ Emoji otomatis dipilih bot sesuai tantangan</p>
+      <button class="btn-success" id="btnAddChallenge">+ Tambah Tantangan</button>
+    </div>
     <div style="display:flex; gap:8px; margin-top:12px;">
       <button class="btn-secondary" id="btnChallengeReset" style="flex:1;">↺ Default</button>
       <button class="btn-primary" id="btnChallengeSpin" style="flex:2;">🎯 SPIN!</button>
@@ -2219,9 +2258,127 @@ $('btnModeChallenge').onclick = async () => {
   });
 };
 
-function parseChallengeList(){
-  return $('challengeListInput').value.split('\n').map(s => s.trim()).filter(s => s.length > 0).slice(0, 20);
+/* ===== Auto-emoji picker — bot-style: keyword → emoji ===== */
+function pickChallengeEmoji(text){
+  const t = String(text||'').toLowerCase();
+  const rules = [
+    [/push.?up|sit.?up|squat|jongkok|plank|gym|workout|olahraga/i, '💪'],
+    [/lari|jogging|running|sprint/i, '🏃'],
+    [/loncat|lompat|jump/i, '🤸'],
+    [/jalan(?!in)|walk/i, '🚶'],
+    [/joget|dance|tiktok|nari|tarian|menari/i, '💃'],
+    [/nyanyi|sing|lagu|karaoke|song/i, '🎤'],
+    [/musik|music/i, '🎵'],
+    [/telpon|telepon|phone|call|hubungi|videocall|vc/i, '📞'],
+    [/foto|selfie|pose/i, '📸'],
+    [/story|status|posting|post|upload|update sosmed/i, '📱'],
+    [/sosmed|instagram|\big\b|tiktok|twitter|fb|facebook/i, '📲'],
+    [/whatsapp|wa\b|chat|dm|kirim pesan|message/i, '💬'],
+    [/bayar|traktir|jajan|beli|belanja/i, '💸'],
+    [/uang|duit|money/i, '💰'],
+    [/mantan|ex\b|gebetan|crush/i, '💔'],
+    [/cinta|sayang|love|pacar/i, '❤️'],
+    [/cium|kiss|peluk|hug/i, '💋'],
+    [/teriak|scream|shout/i, '🗣️'],
+    [/hewan|kucing|cat\b|anjing|dog\b|sapi|kambing|ayam|bebek|babi/i, '🐶'],
+    [/makan|eat|sarapan|maksi/i, '🍔'],
+    [/minum|drink|kopi|coffee|teh|jus/i, '🥤'],
+    [/tidur|sleep|bobo|ngorok/i, '😴'],
+    [/nangis|menangis|cry|tear/i, '😭'],
+    [/ketawa|tawa|laugh|ngakak/i, '😂'],
+    [/joke|lawak|garing|jokes/i, '🤡'],
+    [/cerita|story|kisah|curhat/i, '📖'],
+    [/baca|read|buku/i, '📚'],
+    [/tulis|write|catat|notes/i, '✍️'],
+    [/gambar|draw|sketch|lukis/i, '🎨'],
+    [/game\b|main(?!an)|playing/i, '🎮'],
+    [/film|movie|nonton|tonton/i, '🎬'],
+    [/marah|angry|kesel|esmosi/i, '😠'],
+    [/sedih|sad|galau|down/i, '😢'],
+    [/bahagia|happy|senang|gembira|seneng/i, '😄'],
+    [/kaget|surprise|shock/i, '😱'],
+    [/pintar|smart|jenius|cerdas/i, '🤓'],
+    [/bohong|lie|fake|hoax/i, '🤥'],
+    [/jujur|honest|terus terang/i, '🙏'],
+    [/petualangan|adventure|travel|jalan-jalan/i, '🗺️'],
+    [/api|fire|bakar/i, '🔥'],
+    [/air|water|mandi|berenang|swim/i, '💧'],
+    [/bintang|star/i, '⭐'],
+    [/raja|king|queen|ratu|mahkota/i, '👑'],
+    [/pisang|banana/i, '🍌'],
+    [/apel|apple/i, '🍎'],
+    [/bunga|flower|mawar/i, '🌸'],
+    [/pohon|tree/i, '🌳'],
+    [/matahari|sun\b/i, '☀️'],
+    [/bulan|moon/i, '🌙'],
+    [/hujan|rain/i, '🌧️'],
+    [/salju|snow/i, '❄️'],
+    [/kado|gift|present|hadiah/i, '🎁'],
+    [/pesta|party/i, '🎉'],
+    [/kue|cake|ulang tahun|ultah/i, '🎂'],
+    [/sekolah|school|kelas|kuliah/i, '🏫'],
+    [/kerja|work|kantor|office/i, '💼'],
+    [/rumah|home|house/i, '🏠'],
+    [/mobil|car|kendaraan/i, '🚗'],
+    [/motor|bike|sepeda/i, '🛵'],
+    [/niru|imitate|tirukan|impersonate|impresi/i, '🎭'],
+    [/balon|baloon|tiup/i, '🎈'],
+    [/dadu|dice/i, '🎲'],
+    [/kartu|card/i, '🃏'],
+    [/sebut|nyebut|sebutkan/i, '🔤'],
+    [/cebok|toilet|wc|pup|kentut/i, '🚽'],
+    [/buka baju|telanjang|topless/i, '🩲'],
+    [/tantangan|challenge/i, '🎯'],
+  ];
+  for (const [re, em] of rules) if (re.test(t)) return em;
+  // Stable hash fallback so same text always gets same emoji
+  const fallbacks = ['🎯','✨','🎲','🎪','🎨','🎭','🎬','🎮','🃏','🎰','🪄','🎢'];
+  let h = 0;
+  for (let i = 0; i < t.length; i++) h = ((h * 31) + t.charCodeAt(i)) >>> 0;
+  return fallbacks[h % fallbacks.length];
 }
+
+/* ===== Local challenge list state (mirrors Firebase challenge/list) ===== */
+let challengeItems = [...DEFAULT_CHALLENGES];
+
+function parseChallengeList(){
+  return challengeItems.filter(s => s && String(s).trim().length > 0).slice(0, 20);
+}
+
+function syncChallengeListToRoom(){
+  if (roomRef && roomData?.status === 'challenge'){
+    try { roomRef.child('challenge/list').set(parseChallengeList()); } catch(_){}
+  }
+}
+
+function renderChallengeList(){
+  const wrap = $('challengeList'); if (!wrap) return;
+  wrap.innerHTML = '';
+  const items = parseChallengeList();
+  if (items.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'challenge-empty';
+    empty.textContent = 'Belum ada tantangan. Tambah minimal 2 biar bisa di-SPIN!';
+    wrap.appendChild(empty);
+    return;
+  }
+  items.forEach((txt, i) => {
+    const row = document.createElement('div'); row.className = 'challenge-row';
+    const emo = document.createElement('span'); emo.className = 'emo'; emo.textContent = pickChallengeEmoji(txt);
+    const t = document.createElement('span'); t.className = 'txt'; t.textContent = txt;
+    const del = document.createElement('button'); del.className = 'del'; del.type = 'button';
+    del.innerHTML = '×'; del.title = 'Hapus tantangan';
+    del.onclick = () => {
+      challengeItems.splice(i, 1);
+      renderChallengeList();
+      updateChallengeRate();
+      syncChallengeListToRoom();
+    };
+    row.appendChild(emo); row.appendChild(t); row.appendChild(del);
+    wrap.appendChild(row);
+  });
+}
+
 function updateChallengeRate(){
   const n = parseChallengeList().length;
   $('challengeCountInfo').textContent = n + ' tantangan aktif';
@@ -2229,21 +2386,42 @@ function updateChallengeRate(){
   const btn = $('btnChallengeSpin');
   btn.disabled = n < 2;
   btn.textContent = (n < 2) ? '⚠️ Min 2 tantangan' : ('🎯 SPIN! ('+n+' opsi)');
+  const addBtn = $('btnAddChallenge');
+  if (addBtn) addBtn.disabled = (n >= 20);
+  if (addBtn) addBtn.textContent = (n >= 20) ? '⚠️ Maks 20 tantangan' : '+ Tambah Tantangan';
 }
-$('challengeListInput').addEventListener('input', () => {
-  updateChallengeRate();
-  // Semua pemain bisa edit — last write wins, debounced 350ms
-  if (roomRef && roomData?.status === 'challenge'){
-    clearTimeout($('challengeListInput')._t);
-    $('challengeListInput')._t = setTimeout(() => {
-      try { roomRef.child('challenge/list').set(parseChallengeList()); } catch(_){}
-    }, 350);
+
+function addChallengeFromInput(){
+  const inp = $('newChallengeInput');
+  const txt = (inp.value || '').trim().slice(0, 60);
+  if (!txt) { inp.focus(); return; }
+  if (challengeItems.length >= 20){
+    return alertModal('Penuh', 'Max 20 tantangan, hapus dulu yang lama biar bisa nambah', '⚠️');
   }
-});
-$('btnChallengeReset').onclick = () => {
-  $('challengeListInput').value = DEFAULT_CHALLENGES.join('\n');
+  // Avoid exact duplicates
+  if (challengeItems.some(x => x.toLowerCase() === txt.toLowerCase())){
+    inp.value = '';
+    return toast('Tantangan udah ada di list 👀', 1800);
+  }
+  challengeItems.push(txt);
+  inp.value = '';
+  renderChallengeList();
   updateChallengeRate();
-  if (roomRef) roomRef.child('challenge/list').set([...DEFAULT_CHALLENGES]);
+  syncChallengeListToRoom();
+  // Keep focus so user can keep adding fast
+  inp.focus();
+}
+
+$('btnAddChallenge').onclick = addChallengeFromInput;
+$('newChallengeInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter'){ e.preventDefault(); addChallengeFromInput(); }
+});
+
+$('btnChallengeReset').onclick = () => {
+  challengeItems = [...DEFAULT_CHALLENGES];
+  renderChallengeList();
+  updateChallengeRate();
+  syncChallengeListToRoom();
 };
 $('btnChallengeSpin').onclick = async () => {
   if (!isHost || !roomRef) return;
@@ -2326,14 +2504,17 @@ function renderChallenge(data){
     $('challengeSetupCard').style.display = 'block';
     $('challengeSpinnerCard').style.display = 'none';
     // Semua pemain bisa edit list & reset; cuma SPIN yang tetap host-only biar gak rebutan
-    $('challengeListInput').disabled = false;
     $('btnChallengeReset').style.display = 'inline-block';
     $('btnChallengeSpin').style.display = isHost ? 'inline-block' : 'none';
     $('challengeWaitNote').style.display = isHost ? 'none' : 'block';
     if (!isHost) $('challengeWaitNote').textContent = '✏️ Semua bisa tambah tantangan. Tunggu host pencet SPIN!';
-    if (document.activeElement !== $('challengeListInput')){
-      const incoming = (list.length ? list : DEFAULT_CHALLENGES).join('\n');
-      if ($('challengeListInput').value !== incoming) $('challengeListInput').value = incoming;
+    // Sync local state from remote, but don't trample what the user is typing
+    const incoming = (list.length ? list : [...DEFAULT_CHALLENGES]);
+    if (JSON.stringify(challengeItems) !== JSON.stringify(incoming)){
+      challengeItems = incoming.slice(0, 20);
+      renderChallengeList();
+    } else if (!$('challengeList').children.length){
+      renderChallengeList();
     }
     updateChallengeRate();
     _spinAnimated = false;
