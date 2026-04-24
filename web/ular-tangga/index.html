@@ -17,6 +17,7 @@
     color: #fff; min-height: 100vh; overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
   }
+  .screen#screenGame { max-width: 560px; }
   .screen { display:none; min-height:100vh; padding: 16px; max-width: 720px; margin: 0 auto; }
   .screen.active { display:block; }
   h1, h2, h3 { margin: 0 0 12px; font-weight: 800; }
@@ -83,16 +84,29 @@
   .video-tile.has-stream .vt-fallback { display:none; }
   .vt-status { position:absolute; top:3px; right:3px; font-size:11px; background:rgba(0,0,0,.6); border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; }
 
-  /* BOARD */
-  .board-wrap { position: relative; aspect-ratio: 1/1; max-width: 480px; margin: 0 auto 14px; }
-  .board { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); width: 100%; height: 100%; border: 3px solid rgba(255,216,110,.4); border-radius: 12px; overflow: hidden; background: #1a0f33; position: relative; }
+  /* BOARD — Play Store style cream + brown checker */
+  .board-wrap {
+    position: relative; aspect-ratio: 1/1; max-width: 540px; margin: 0 auto 14px;
+    padding: 14px; background: #f3e0c1;
+    border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.35), inset 0 0 0 4px #d9b783;
+  }
+  .board {
+    display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
+    width: 100%; height: 100%;
+    border: 2px solid #6b3a1a; border-radius: 6px; overflow: hidden;
+    background: #8b5a3c; position: relative;
+  }
   .cell { position: relative; padding: 2px; }
-  .cell.even { background: rgba(255,255,255,.04); }
-  .cell.odd  { background: rgba(255,255,255,.02); }
-  .cell.start { background: linear-gradient(135deg, #4ade80, #16a34a) !important; }
-  .cell.finish { background: linear-gradient(135deg, #fbbf24, #d97706) !important; color:#1a0f33; }
-  .cell .num { position:absolute; top:1px; left:3px; font-size: 9px; font-weight: 700; opacity:.65; }
-  .cell.finish .num { color:#1a0f33; opacity: 1; }
+  .cell.even { background: #f3e0c1; }
+  .cell.odd  { background: #8b5a3c; }
+  .cell.start { background: linear-gradient(135deg, #f3e0c1, #d9b783) !important; }
+  .cell.finish { background: linear-gradient(135deg, #fde68a, #fbbf24) !important; }
+  .cell .num {
+    position:absolute; top:2px; left:3px; font-size: 9px; font-weight: 800;
+    color: #2a1b4d; opacity: .9;
+  }
+  .cell.odd .num { color: #fde68a; opacity: .95; }
+  .cell.finish .num, .cell.start .num { color:#1a0f33; opacity: 1; }
   .board-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
   .pawns-layer { position:absolute; inset:0; pointer-events:none; z-index:3; }
   .pawn-piece {
@@ -220,21 +234,22 @@
   <div class="video-row" id="videoRow"></div>
 
   <div class="board-wrap">
-    <div class="board" id="board"></div>
-    <svg class="board-overlay" id="boardOverlay" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#dc2626"/>
-          <stop offset="50%" stop-color="#ef4444"/>
-          <stop offset="100%" stop-color="#7f1d1d"/>
-        </linearGradient>
-        <linearGradient id="ladderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#fbbf24"/>
-          <stop offset="100%" stop-color="#92400e"/>
-        </linearGradient>
-      </defs>
-    </svg>
-    <div class="pawns-layer" id="pawnsLayer"></div>
+    <div class="board" id="board">
+      <svg class="board-overlay" id="boardOverlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#86c060"/>
+            <stop offset="50%" stop-color="#a8d272"/>
+            <stop offset="100%" stop-color="#5e8a3a"/>
+          </linearGradient>
+          <linearGradient id="ladderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#7dd3fc"/>
+            <stop offset="100%" stop-color="#0284c7"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="pawns-layer" id="pawnsLayer"></div>
+    </div>
   </div>
 
   <div class="dice-area">
@@ -741,26 +756,26 @@ function drawLadder(svg, bot, top){
   const len = Math.hypot(dx, dy);
   const px = -dy/len * 1.6, py = dx/len * 1.6;
 
-  // Two rails
+  // Two rails (blue)
   for (const sign of [1,-1]){
     const line = svgEl('line');
     line.setAttribute('x1', a.x+px*sign); line.setAttribute('y1', a.y+py*sign);
     line.setAttribute('x2', b.x+px*sign); line.setAttribute('y2', b.y+py*sign);
     line.setAttribute('stroke', 'url(#ladderGrad)');
-    line.setAttribute('stroke-width', '0.7');
+    line.setAttribute('stroke-width', '0.85');
     line.setAttribute('stroke-linecap', 'round');
     svg.appendChild(line);
   }
-  // Rungs
-  const numRungs = Math.max(3, Math.floor(len / 3.5));
+  // Rungs (white horizontal lines like reference)
+  const numRungs = Math.max(3, Math.floor(len / 3));
   for (let i=1; i<numRungs; i++){
     const t = i/numRungs;
     const cx = a.x + dx*t, cy = a.y + dy*t;
     const rung = svgEl('line');
     rung.setAttribute('x1', cx+px); rung.setAttribute('y1', cy+py);
     rung.setAttribute('x2', cx-px); rung.setAttribute('y2', cy-py);
-    rung.setAttribute('stroke', '#fbbf24');
-    rung.setAttribute('stroke-width', '0.45');
+    rung.setAttribute('stroke', '#ffffff');
+    rung.setAttribute('stroke-width', '0.7');
     rung.setAttribute('stroke-linecap', 'round');
     svg.appendChild(rung);
   }
@@ -777,65 +792,75 @@ function drawSnake(svg, head, tail){
   const c1 = { x: a.x + dx*0.33 + px*wave, y: a.y + dy*0.33 + py*wave };
   const c2 = { x: a.x + dx*0.66 - px*wave, y: a.y + dy*0.66 - py*wave };
 
-  // Body outline (thicker/darker)
+  // Body outline (thicker/darker green)
   const outline = svgEl('path');
   outline.setAttribute('d', `M${a.x},${a.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${b.x},${b.y}`);
-  outline.setAttribute('stroke', '#450a0a');
-  outline.setAttribute('stroke-width', '2.6');
+  outline.setAttribute('stroke', '#3d5a1f');
+  outline.setAttribute('stroke-width', '3.2');
   outline.setAttribute('fill', 'none');
   outline.setAttribute('stroke-linecap', 'round');
   svg.appendChild(outline);
 
-  // Body main
+  // Body main (green gradient)
   const body = svgEl('path');
   body.setAttribute('d', `M${a.x},${a.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${b.x},${b.y}`);
   body.setAttribute('stroke', 'url(#snakeGrad)');
-  body.setAttribute('stroke-width', '1.9');
+  body.setAttribute('stroke-width', '2.4');
   body.setAttribute('fill', 'none');
   body.setAttribute('stroke-linecap', 'round');
   svg.appendChild(body);
 
-  // Diamond pattern dots along body
-  for (let t=0.15; t<=0.85; t+=0.18){
+  // Belly highlight (lighter, thinner)
+  const belly = svgEl('path');
+  belly.setAttribute('d', `M${a.x},${a.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${b.x},${b.y}`);
+  belly.setAttribute('stroke', '#cdef9e');
+  belly.setAttribute('stroke-width', '0.6');
+  belly.setAttribute('fill', 'none');
+  belly.setAttribute('stroke-linecap', 'round');
+  belly.setAttribute('opacity', '0.7');
+  svg.appendChild(belly);
+
+  // Pattern dots along body (darker green spots)
+  for (let t=0.12; t<=0.88; t+=0.13){
     const u = 1-t;
     const sx = u*u*u*a.x + 3*u*u*t*c1.x + 3*u*t*t*c2.x + t*t*t*b.x;
     const sy = u*u*u*a.y + 3*u*u*t*c1.y + 3*u*t*t*c2.y + t*t*t*b.y;
     const dot = svgEl('circle');
-    dot.setAttribute('cx', sx); dot.setAttribute('cy', sy); dot.setAttribute('r', '0.4');
-    dot.setAttribute('fill', '#fbbf24');
+    dot.setAttribute('cx', sx); dot.setAttribute('cy', sy); dot.setAttribute('r', '0.45');
+    dot.setAttribute('fill', '#3d5a1f');
     svg.appendChild(dot);
   }
 
-  // Head circle (bigger at the head/start position)
-  const headCirc = svgEl('circle');
+  // Head — slightly larger, green with darker outline
+  const headCirc = svgEl('ellipse');
   headCirc.setAttribute('cx', a.x); headCirc.setAttribute('cy', a.y);
-  headCirc.setAttribute('r', '1.8');
-  headCirc.setAttribute('fill', '#dc2626');
-  headCirc.setAttribute('stroke', '#450a0a');
+  headCirc.setAttribute('rx', '2.2'); headCirc.setAttribute('ry', '1.9');
+  headCirc.setAttribute('fill', '#86c060');
+  headCirc.setAttribute('stroke', '#3d5a1f');
   headCirc.setAttribute('stroke-width', '0.4');
   svg.appendChild(headCirc);
 
-  // Eyes
+  // Eyes (white with black pupils)
   for (const sign of [1,-1]){
     const eye = svgEl('circle');
-    eye.setAttribute('cx', a.x + px*0.7*sign);
-    eye.setAttribute('cy', a.y + py*0.7*sign);
-    eye.setAttribute('r', '0.35');
+    eye.setAttribute('cx', a.x + px*0.85*sign);
+    eye.setAttribute('cy', a.y + py*0.85*sign);
+    eye.setAttribute('r', '0.45');
     eye.setAttribute('fill', '#fff');
     svg.appendChild(eye);
     const pupil = svgEl('circle');
-    pupil.setAttribute('cx', a.x + px*0.7*sign);
-    pupil.setAttribute('cy', a.y + py*0.7*sign);
-    pupil.setAttribute('r', '0.18');
+    pupil.setAttribute('cx', a.x + px*0.85*sign);
+    pupil.setAttribute('cy', a.y + py*0.85*sign);
+    pupil.setAttribute('r', '0.22');
     pupil.setAttribute('fill', '#000');
     svg.appendChild(pupil);
   }
 
-  // Forked tongue
-  const tx = a.x - dx/len*1.5, ty = a.y - dy/len*1.5;
+  // Forked tongue (red)
+  const tx = a.x - dx/len*2.2, ty = a.y - dy/len*2.2;
   const tongue = svgEl('path');
-  tongue.setAttribute('d', `M${a.x},${a.y} L${tx},${ty} m${px*0.5},${py*0.5} L${tx+px*0.8},${ty+py*0.8} m${-px},${-py} L${tx-px*0.3},${ty-py*0.3}`);
-  tongue.setAttribute('stroke', '#dc2626'); tongue.setAttribute('stroke-width', '0.3');
+  tongue.setAttribute('d', `M${a.x},${a.y} L${tx},${ty} m${px*0.6},${py*0.6} L${tx+px*1.1},${ty+py*1.1} m${-px*1.2},${-py*1.2} L${tx-px*0.6},${ty-py*0.6}`);
+  tongue.setAttribute('stroke', '#dc2626'); tongue.setAttribute('stroke-width', '0.35');
   tongue.setAttribute('fill', 'none'); tongue.setAttribute('stroke-linecap', 'round');
   svg.appendChild(tongue);
 }
