@@ -1338,7 +1338,9 @@ function cleanupAllPeers(){
 
 /* ============== ROOM ============== */
 async function createRoom(){
-  await setupMedia();
+  // Kick off media setup in background — JANGAN di-await biar room
+  // langsung dibikin instan tanpa nungguin permission dialog cam/mic.
+  setupMedia().catch(()=>{});
   if (!db) throw new Error('Firebase belum siap (cek FIREBASE_CONFIG)');
   let code, attempts = 0;
   while (true){
@@ -1363,7 +1365,8 @@ async function createRoom(){
 }
 
 async function joinRoom(code){
-  await setupMedia();
+  // Media setup di background — join room langsung tanpa nunggu cam/mic.
+  setupMedia().catch(()=>{});
   const snap = await db.ref('rooms/'+code).get();
   if (!snap.exists()) return alertModal('Room ga ketemu', 'Cek lagi kodenya, atau room-nya udah bubar', '🔍');
   const data = snap.val();
@@ -2645,8 +2648,9 @@ async function startBotGame(level){
   botColor = candidates[Math.floor(Math.random()*candidates.length)].id;
   botName = ['Bocil Bot','Bot Andi','Mas Bot','Bot Jaya','Bot Riko'][Math.floor(Math.random()*5)];
 
-  // Self-view camera (so player can still see themselves on cam)
-  await setupMedia();
+  // Self-view camera (so player can still see themselves on cam) — bg only,
+  // jangan di-await biar game vs bot langsung mulai instan.
+  setupMedia().catch(()=>{});
 
   // Build local roomData (no Firebase, no roomRef)
   roomCode = 'BOT';
