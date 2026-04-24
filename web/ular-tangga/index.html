@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
 <meta name="theme-color" content="#2a1b4d" />
-<title>🎲 Ular Tangga Online — Mabar bareng temen</title>
+<title>🎲 ULAR TANGGA BY LAWRENZ — Mabar bareng temen</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>" />
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
@@ -21,7 +21,24 @@
   .screen { display:none; min-height:100vh; padding: 16px; max-width: 720px; margin: 0 auto; }
   .screen.active { display:block; }
   h1, h2, h3 { margin: 0 0 12px; font-weight: 800; }
-  h1 { font-size: 28px; text-align:center; background: linear-gradient(90deg, #ffd86e, #ff8e6e, #ff6ec4); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  h1 { font-size: 28px; text-align:center; background: linear-gradient(90deg, #ffd86e, #ff8e6e, #ff6ec4); -webkit-background-clip: text; background-clip:text; color: transparent; line-height:1.15; letter-spacing:1px; }
+  h1 .by { display:block; font-size: 14px; letter-spacing: 6px; margin-top: 4px; -webkit-text-fill-color: transparent; background: linear-gradient(90deg,#ff6ec4,#7c3aed); -webkit-background-clip: text; background-clip:text; }
+  /* Brand watermark — small badge always visible top-right */
+  .brand-watermark {
+    position: fixed; top: 8px; right: 10px; z-index: 90;
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    padding: 5px 10px; border-radius: 100px;
+    background: rgba(0,0,0,.45); border: 1px solid rgba(255,216,110,.35);
+    color: #ffd86e; backdrop-filter: blur(6px); pointer-events:none;
+    text-shadow: 0 1px 4px rgba(0,0,0,.6);
+  }
+  .brand-watermark .b { color:#ff6ec4; }
+  /* Faint diagonal corner stamp on board */
+  .board-wrap::after {
+    content: 'BY LAWRENZ'; position:absolute; bottom: 6px; right: 10px;
+    font-size: 9px; font-weight: 800; letter-spacing: 3px;
+    color: rgba(43,27,77,.35); pointer-events:none;
+  }
   h2 { font-size: 22px; }
   p { line-height: 1.5; opacity: .9; }
   button {
@@ -222,16 +239,119 @@
   .modal h2 { font-size: 26px; }
 
   .footer-note { text-align:center; font-size: 11px; opacity:.4; margin-top: 20px; }
+
+  /* ===== Custom emoji reaction buttons ===== */
+  .reactions-bar .react-btn { width: 46px; height: 46px; padding: 4px; }
+  .reactions-bar .react-btn svg { width: 100%; height: 100%; display:block; }
+  .reactions-bar .react-btn.cooldown { opacity: .35; cursor: wait; }
+
+  /* ===== Center broadcast reaction overlay ===== */
+  .center-react-layer { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
+  .center-react {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(.2);
+    width: 200px; height: 200px;
+    opacity: 0;
+    animation: centerReactPop 2.4s cubic-bezier(.18,1.4,.4,1) forwards;
+    filter: drop-shadow(0 12px 40px rgba(0,0,0,.7));
+  }
+  .center-react svg { width:100%; height:100%; display:block; }
+  .center-react .cr-name {
+    position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    margin-top: 10px; padding: 6px 14px; border-radius: 100px;
+    background: rgba(0,0,0,.7); border: 2px solid rgba(255,255,255,.2);
+    font-weight: 800; font-size: 14px; white-space: nowrap; color:#fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,.7);
+  }
+  @keyframes centerReactPop {
+    0%   { transform: translate(-50%, -50%) scale(.1) rotate(-30deg); opacity: 0; }
+    18%  { transform: translate(-50%, -50%) scale(1.35) rotate(8deg); opacity: 1; }
+    28%  { transform: translate(-50%, -50%) scale(1.05) rotate(-4deg); opacity: 1; }
+    40%  { transform: translate(-50%, -50%) scale(1.15) rotate(2deg); opacity: 1; }
+    75%  { transform: translate(-50%, -50%) scale(1.1)  rotate(0deg); opacity: 1; }
+    100% { transform: translate(-50%, -85%) scale(.7)  rotate(0deg); opacity: 0; }
+  }
+  /* extra confetti burst layer for some emojis */
+  .center-react .spark {
+    position:absolute; left:50%; top:50%; width:10px; height:10px; border-radius:50%;
+    transform: translate(-50%,-50%);
+    animation: sparkFly .9s ease-out forwards;
+  }
+  @keyframes sparkFly {
+    0%   { transform: translate(-50%,-50%) scale(.4); opacity:1; }
+    100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity:0; }
+  }
+
+  /* ===== Chat panel ===== */
+  .chat-badge {
+    display:inline-block; min-width:18px; height:18px; line-height:18px; padding:0 5px;
+    margin-left:6px; border-radius:100px; background:#ef4444; color:#fff;
+    font-size:11px; font-weight:800; vertical-align: middle;
+  }
+  .chat-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:150; display:none; }
+  .chat-backdrop.show { display:block; }
+  .chat-panel {
+    position: fixed; right: 0; bottom: 0; left: 0;
+    max-width: 480px; margin: 0 auto;
+    height: 70vh; max-height: 560px;
+    background: linear-gradient(180deg, #2a1b4d 0%, #1a0f33 100%);
+    border-top: 2px solid rgba(255,216,110,.3);
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,.5);
+    z-index: 160; display:flex; flex-direction:column;
+    transform: translateY(110%); transition: transform .28s cubic-bezier(.3,1,.4,1);
+  }
+  .chat-panel.show { transform: translateY(0); }
+  .chat-head { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
+  .chat-close { background:rgba(255,255,255,.1); color:#fff; width:34px; height:34px; padding:0; border-radius:50%; font-size:16px; font-weight:700; }
+  .chat-list { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:8px; }
+  .chat-empty { text-align:center; opacity:.5; font-size:13px; padding:30px 10px; }
+  .chat-msg { max-width:78%; padding:8px 12px; border-radius:14px; font-size:14px; line-height:1.35; word-wrap:break-word; }
+  .chat-msg.them { align-self:flex-start; background:rgba(255,255,255,.09); border-bottom-left-radius:4px; }
+  .chat-msg.me   { align-self:flex-end;   background:linear-gradient(135deg,#7c3aed,#ff6ec4); border-bottom-right-radius:4px; }
+  .chat-msg .who { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; opacity:.85; margin-bottom:3px; }
+  .chat-msg .who .dot { width:10px; height:10px; border-radius:50%; box-shadow:0 0 0 1px rgba(255,255,255,.4) inset; }
+  .chat-msg.me .who { display:none; }
+  .chat-msg .ts { font-size:10px; opacity:.55; margin-top:3px; text-align:right; }
+  /* Voice message bubble */
+  .vn-msg { display:flex; align-items:center; gap:10px; min-width:160px; }
+  .vn-msg .vn-play { width:34px; height:34px; border-radius:50%; flex-shrink:0; background:rgba(255,255,255,.18); border:none; color:#fff; font-size:14px; cursor:pointer; }
+  .vn-msg .vn-bars { flex:1; display:flex; align-items:center; gap:2px; height:24px; }
+  .vn-msg .vn-bars span { flex:1; background: rgba(255,255,255,.45); border-radius:2px; min-width:2px; }
+  .vn-msg.playing .vn-bars span { animation: vnBar .9s ease-in-out infinite; }
+  .vn-msg .vn-bars span:nth-child(2n) { animation-delay: .15s; }
+  .vn-msg .vn-bars span:nth-child(3n) { animation-delay: .3s; }
+  .vn-msg .vn-bars span:nth-child(5n) { animation-delay: .45s; }
+  @keyframes vnBar { 0%,100%{ transform: scaleY(.4);} 50% { transform: scaleY(1);} }
+  .vn-msg .vn-dur { font-size:11px; opacity:.85; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; }
+  .chat-input-bar { display:flex; gap:6px; padding:10px 12px 14px; border-top:1px solid rgba(255,255,255,.08); align-items:center; }
+  .chat-input { flex:1; padding:10px 14px; border-radius:100px; border:1px solid rgba(255,255,255,.15); background:rgba(0,0,0,.3); color:#fff; font:inherit; font-size:14px; }
+  .chat-input:focus { outline:none; border-color:#ff6ec4; }
+  .chat-send, .chat-vn { width:42px; height:42px; padding:0; border-radius:50%; flex-shrink:0; font-size:18px; font-weight:700; }
+  .chat-send { background: linear-gradient(135deg,#ff6ec4,#7c3aed); color:#fff; }
+  .chat-vn   { background: linear-gradient(135deg,#10b981,#047857); color:#fff; user-select:none; touch-action: none; }
+  .chat-vn.recording { background: linear-gradient(135deg,#ef4444,#991b1b); transform: scale(1.15); box-shadow:0 0 0 6px rgba(239,68,68,.25); }
+  .chat-rec-overlay {
+    position:absolute; inset:auto 0 60px 0; padding:18px;
+    background: linear-gradient(180deg, transparent, rgba(239,68,68,.18));
+    text-align:center; display:none;
+  }
+  .chat-rec-overlay.show { display:block; }
+  .rec-pulse { width:14px; height:14px; border-radius:50%; background:#ef4444; margin:0 auto 6px; animation: recPulse 1s ease-in-out infinite; }
+  @keyframes recPulse { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.5); opacity:.4; } }
+  .rec-time { font-weight:800; font-size:18px; font-variant-numeric:tabular-nums; }
 </style>
 </head>
 <body>
+
+<div class="brand-watermark">⚡ ULAR TANGGA <span class="b">BY LAWRENZ</span></div>
 
 <!-- ===== WELCOME ===== -->
 <div class="screen active" id="screenWelcome">
   <div class="welcome-hero">
     <span class="dice-emoji">🎲</span>
-    <h1>Ular Tangga Online</h1>
-    <p style="margin-top:4px;">Mabar bareng temen<br>Voice + video, real-time 🎤📹</p>
+    <h1>ULAR TANGGA<span class="by">BY LAWRENZ</span></h1>
+    <p style="margin-top:4px;">Mabar bareng temen<br>Voice + video + chat, real-time 🎤📹💬</p>
   </div>
 
   <div class="card">
@@ -339,26 +459,46 @@
   </div>
 
   <div class="reactions-bar" id="reactionsBar">
-    <span class="react-label">Reaksi:</span>
-    <button class="react-btn" data-emoji="🤣" title="Ngakak">🤣</button>
-    <button class="react-btn" data-emoji="😂" title="Lucu">😂</button>
-    <button class="react-btn" data-emoji="🤡" title="Badut">🤡</button>
-    <button class="react-btn" data-emoji="💀" title="Mati">💀</button>
-    <button class="react-btn" data-emoji="🥱" title="Bosen">🥱</button>
-    <button class="react-btn" data-emoji="😴" title="Ngantuk">😴</button>
-    <button class="react-btn" data-emoji="🔥" title="Api">🔥</button>
-    <button class="react-btn" data-emoji="👏" title="Tepuk tangan">👏</button>
-    <button class="react-btn" data-emoji="👍" title="Mantap">👍</button>
-    <button class="react-btn" data-emoji="🎉" title="Pesta">🎉</button>
+    <span class="react-label">Spam:</span>
+    <!-- buttons injected by JS with custom SVG emojis -->
   </div>
 
   <div class="av-controls">
     <button class="btn-secondary" id="btnMic">🎤 Mute</button>
     <button class="btn-secondary" id="btnCam">📹 Off Cam</button>
+    <button class="btn-secondary" id="btnChat">💬 Chat<span class="chat-badge" id="chatBadge" style="display:none;">0</span></button>
     <button class="btn-secondary" id="btnMusic">🎵 Musik</button>
     <button class="btn-secondary" id="btnLeaveGame">🚪 Keluar</button>
   </div>
 </div>
+
+<!-- ===== CENTER REACTION OVERLAY (broadcast to room) ===== -->
+<div class="center-react-layer" id="centerReactLayer"></div>
+
+<!-- ===== CHAT PANEL ===== -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <div>
+      <div style="font-weight:800;font-size:15px;">💬 Chat Room</div>
+      <div style="font-size:11px;opacity:.65;">Bisa text & voice note (tahan mic)</div>
+    </div>
+    <button class="chat-close" id="btnChatClose">✕</button>
+  </div>
+  <div class="chat-list" id="chatList">
+    <div class="chat-empty">Belum ada pesan. Sapa temen kamu yuk! 👋</div>
+  </div>
+  <div class="chat-input-bar">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ketik pesan..." maxlength="200" />
+    <button class="chat-send" id="btnChatSend" title="Kirim">➤</button>
+    <button class="chat-vn" id="btnChatVN" title="Tahan untuk rekam suara">🎤</button>
+  </div>
+  <div class="chat-rec-overlay" id="chatRecOverlay">
+    <div class="rec-pulse"></div>
+    <div class="rec-time" id="recTime">0:00</div>
+    <div style="font-size:12px;opacity:.7;margin-top:4px;">Lepas jari = kirim · Geser ke kiri = batal</div>
+  </div>
+</div>
+<div class="chat-backdrop" id="chatBackdrop"></div>
 
 <div class="modal-bg" id="winModal">
   <div class="modal">
@@ -1043,6 +1183,7 @@ function subscribeRoom(){
     roomData = data;
     onRoomUpdate(data);
   });
+  setupChatListener();
 }
 
 function onRoomUpdate(data){
@@ -1069,10 +1210,67 @@ function onRoomUpdate(data){
   connectToAllPlayers();
 }
 
-/* ============== EMOJI REACTIONS ============== */
-let reactionTarget = null;       // currently armed emoji to send
-let reactionPickerEmoji = null;  // emoji selected, waiting for tile click
+/* ============== CUSTOM EMOJI REACTIONS (broadcast → center of screen) ============== */
+// Custom hand-drawn SVG emojis (NOT phone emojis). Each has its own sound.
+const CUSTOM_EMOJIS = {
+  fire: {
+    label: 'Api',
+    svg: `<svg viewBox="0 0 100 100"><defs><radialGradient id="frG" cx="50%" cy="70%" r="60%"><stop offset="0%" stop-color="#fff5b8"/><stop offset="35%" stop-color="#ffb547"/><stop offset="70%" stop-color="#ff5722"/><stop offset="100%" stop-color="#b71c1c"/></radialGradient></defs><path fill="url(#frG)" stroke="#7a1a00" stroke-width="2" d="M50 8 C 60 28, 78 36, 72 56 C 84 50, 88 70, 78 82 C 90 78, 90 96, 70 96 L 30 96 C 12 96, 10 78, 22 80 C 12 70, 18 52, 32 56 C 22 38, 38 30, 42 14 C 44 22, 50 24, 50 8 Z"/><path fill="#fff7c2" opacity=".85" d="M52 40 C 58 50, 60 62, 52 72 C 48 64, 42 60, 46 50 Z"/></svg>`,
+    play(){ playNoise({ dur: 0.8, vol: 0.18, filterFreq: 1200, when: 0 }); playTone({ freq: 220, freqEnd: 80, type:'sawtooth', dur:0.8, vol:0.10 }); }
+  },
+  heart: {
+    label: 'Cinta',
+    svg: `<svg viewBox="0 0 100 100"><defs><radialGradient id="hrG" cx="35%" cy="30%" r="80%"><stop offset="0%" stop-color="#ffb3c8"/><stop offset="50%" stop-color="#ff3366"/><stop offset="100%" stop-color="#9c1844"/></radialGradient></defs><path fill="url(#hrG)" stroke="#5a0a26" stroke-width="2" stroke-linejoin="round" d="M50 86 C 22 66, 6 50, 6 32 C 6 18, 18 10, 30 12 C 40 14, 46 22, 50 30 C 54 22, 60 14, 70 12 C 82 10, 94 18, 94 32 C 94 50, 78 66, 50 86 Z"/><ellipse cx="34" cy="30" rx="10" ry="6" fill="#fff" opacity=".55"/></svg>`,
+    play(){ playTone({ freq: 880, type:'sine', dur:0.18, vol:0.18 }); playTone({ freq: 1320, type:'sine', dur:0.18, vol:0.14, when:0.08 }); playTone({ freq: 1760, type:'triangle', dur:0.25, vol:0.10, when:0.18 }); }
+  },
+  laugh: {
+    label: 'Ngakak',
+    svg: `<svg viewBox="0 0 100 100"><defs><radialGradient id="lgG" cx="40%" cy="35%" r="70%"><stop offset="0%" stop-color="#fff7a3"/><stop offset="60%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/></radialGradient></defs><circle cx="50" cy="50" r="42" fill="url(#lgG)" stroke="#5a3d00" stroke-width="3"/><path d="M22 38 L 38 30 M 38 38 L 22 30" stroke="#1a0f33" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M62 38 L 78 30 M 78 38 L 62 30" stroke="#1a0f33" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M28 58 Q 50 86 72 58 Z" fill="#1a0f33" stroke="#1a0f33" stroke-width="2"/><path d="M30 60 Q 50 78 70 60" fill="#ff4757"/><ellipse cx="50" cy="74" rx="12" ry="6" fill="#fff" opacity=".7"/><path d="M14 56 Q 8 66 14 76 Q 20 70 18 60 Z" fill="#5dade2" stroke="#2c5777" stroke-width="1.5"/><path d="M86 56 Q 92 66 86 76 Q 80 70 82 60 Z" fill="#5dade2" stroke="#2c5777" stroke-width="1.5"/></svg>`,
+    play(){ for (let i=0;i<6;i++){ const t=i*0.09; playTone({ freq: 440+(i%2)*120, type:'square', dur:0.06, vol:0.12, when:t }); playTone({ freq: 660+(i%2)*120, type:'square', dur:0.05, vol:0.08, when:t+0.02 }); } }
+  },
+  skull: {
+    label: 'Mati',
+    svg: `<svg viewBox="0 0 100 100"><path fill="#f5f5f5" stroke="#1a1a1a" stroke-width="2.5" d="M50 8 C 26 8, 12 26, 12 46 C 12 60, 18 70, 26 76 L 26 86 C 26 92, 32 92, 36 92 L 38 86 L 44 86 L 44 92 L 56 92 L 56 86 L 62 86 L 64 92 C 68 92, 74 92, 74 86 L 74 76 C 82 70, 88 60, 88 46 C 88 26, 74 8, 50 8 Z"/><ellipse cx="34" cy="48" rx="10" ry="12" fill="#1a1a1a"/><ellipse cx="66" cy="48" rx="10" ry="12" fill="#1a1a1a"/><circle cx="36" cy="50" r="3" fill="#fff" opacity=".7"/><circle cx="68" cy="50" r="3" fill="#fff" opacity=".7"/><path d="M44 70 L 50 60 L 56 70 Z" fill="#1a1a1a"/><path d="M34 80 L 38 86 M 42 80 L 42 86 M 50 80 L 50 86 M 58 80 L 58 86 M 66 80 L 62 86" stroke="#1a1a1a" stroke-width="2"/></svg>`,
+    play(){ playTone({ freq: 200, freqEnd: 80, type:'sawtooth', dur:0.45, vol:0.20 }); playNoise({ dur: 0.6, vol: 0.10, filterFreq: 400, when: 0.1 }); playTone({ freq: 90, freqEnd: 50, type:'square', dur:0.6, vol:0.15, when:0.2 }); }
+  },
+  clap: {
+    label: 'Tepuk',
+    svg: `<svg viewBox="0 0 100 100"><g><path fill="#fbbf24" stroke="#7a4a00" stroke-width="2" d="M22 54 C 20 40, 30 28, 38 30 L 40 50 L 44 26 C 46 18, 56 18, 54 28 L 52 50 L 56 22 C 58 14, 68 14, 66 24 L 60 56 L 64 36 C 66 28, 74 30, 72 38 L 60 70 C 56 82, 36 82, 28 72 Z"/><path fill="#dc8a00" opacity=".5" d="M30 60 L 60 60 L 56 70 L 36 70 Z"/></g><path d="M76 22 L 86 16 M 80 30 L 92 28 M 80 40 L 92 44" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/></svg>`,
+    play(){ for (let i=0;i<3;i++){ playNoise({ dur:0.08, vol:0.22, filterFreq: 3500, when:i*0.13 }); } }
+  },
+  party: {
+    label: 'Pesta',
+    svg: `<svg viewBox="0 0 100 100"><path fill="#7c3aed" stroke="#3b1378" stroke-width="2" d="M20 88 L 60 30 L 78 48 L 32 90 Z"/><path fill="#ff6ec4" d="M20 88 L 30 78 L 38 86 Z"/><circle cx="70" cy="20" r="5" fill="#fbbf24"/><circle cx="84" cy="32" r="4" fill="#10b981"/><rect x="58" y="12" width="6" height="6" fill="#ef4444" transform="rotate(20 61 15)"/><rect x="78" y="44" width="5" height="5" fill="#3b82f6" transform="rotate(45 80 46)"/><circle cx="90" cy="58" r="3" fill="#fbbf24"/><path d="M64 24 L 72 18 M 76 38 L 86 30 M 88 50 L 92 44" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+    play(){ const notes=[523,659,784,1047]; notes.forEach((f,i)=>playTone({freq:f,type:'triangle',dur:0.14,vol:0.18,when:i*0.07})); playNoise({ dur:0.4, vol:0.06, filterFreq: 4500, when:0.3 }); }
+  },
+  poop: {
+    label: 'Ngeselin',
+    svg: `<svg viewBox="0 0 100 100"><defs><radialGradient id="pG" cx="40%" cy="35%" r="70%"><stop offset="0%" stop-color="#a0623a"/><stop offset="60%" stop-color="#6b3a1a"/><stop offset="100%" stop-color="#3a1f0a"/></radialGradient></defs><path fill="url(#pG)" stroke="#2a1505" stroke-width="2" d="M30 92 L 70 92 C 84 92, 88 78, 78 72 C 88 66, 84 54, 72 54 C 82 48, 78 36, 66 38 C 74 30, 66 20, 54 24 C 56 14, 44 12, 42 22 C 32 18, 22 28, 30 36 C 18 38, 18 50, 28 54 C 16 56, 14 70, 26 72 C 14 76, 16 92, 30 92 Z"/><circle cx="38" cy="58" r="5" fill="#fff"/><circle cx="38" cy="58" r="2.5" fill="#1a1a1a"/><circle cx="62" cy="58" r="5" fill="#fff"/><circle cx="62" cy="58" r="2.5" fill="#1a1a1a"/><path d="M40 76 Q 50 84 60 76" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+    play(){ playTone({ freq: 90, freqEnd: 50, type:'square', dur:0.45, vol:0.15 }); playTone({ freq: 60, type:'sawtooth', dur:0.45, vol:0.10, when:0.05 }); playNoise({ dur:0.45, vol:0.08, filterFreq: 200 }); }
+  },
+  crown: {
+    label: 'Raja',
+    svg: `<svg viewBox="0 0 100 100"><defs><linearGradient id="cwG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff7a3"/><stop offset="50%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/></linearGradient></defs><path fill="url(#cwG)" stroke="#5a3d00" stroke-width="2.5" stroke-linejoin="round" d="M14 72 L 20 30 L 36 52 L 50 22 L 64 52 L 80 30 L 86 72 Z"/><rect x="14" y="72" width="72" height="14" fill="#b8860b" stroke="#5a3d00" stroke-width="2.5"/><circle cx="20" cy="30" r="5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1.5"/><circle cx="50" cy="22" r="6" fill="#3b82f6" stroke="#1e3a8a" stroke-width="1.5"/><circle cx="80" cy="30" r="5" fill="#10b981" stroke="#064e3b" stroke-width="1.5"/><circle cx="32" cy="79" r="3" fill="#ef4444"/><circle cx="50" cy="79" r="3.5" fill="#3b82f6"/><circle cx="68" cy="79" r="3" fill="#10b981"/></svg>`,
+    play(){ playTone({ freq: 523, type:'triangle', dur:0.18, vol:0.20 }); playTone({ freq: 659, type:'triangle', dur:0.18, vol:0.20, when:0.18 }); playTone({ freq: 784, type:'triangle', dur:0.32, vol:0.22, when:0.36 }); playTone({ freq: 1047, type:'sine', dur:0.4, vol:0.12, when:0.36 }); }
+  }
+};
+
+// Inject buttons into reactions bar
+(function buildReactionBar(){
+  const bar = $('reactionsBar');
+  if (!bar) return;
+  for (const [key, em] of Object.entries(CUSTOM_EMOJIS)){
+    const b = document.createElement('button');
+    b.className = 'react-btn';
+    b.dataset.emoji = key;
+    b.title = em.label;
+    b.innerHTML = em.svg;
+    bar.appendChild(b);
+  }
+})();
+
 const seenReactionIds = new Set();
+const reactionCooldown = {}; // emoji key -> ts (per-button anti-spam)
 
 function handleReactions(data){
   const reactions = data.reactions || {};
@@ -1080,89 +1278,294 @@ function handleReactions(data){
   for (const [id, r] of Object.entries(reactions)){
     if (!r || !r.ts || !r.emoji) continue;
     if (seenReactionIds.has(id)) continue;
-    if (now - r.ts > 6000) { seenReactionIds.add(id); continue; }  // skip old
+    if (now - r.ts > 6000) { seenReactionIds.add(id); continue; }
     seenReactionIds.add(id);
-    showFlyingReaction(r.to, r.emoji, r.from);
-    // Auto-cleanup after 6s by the sender to keep DB tidy
-    if (r.from === myPlayerIdx){
-      setTimeout(() => { try { roomRef && roomRef.child('reactions/'+id).remove(); } catch(_){} }, 6000);
+    // Skip our own (we already played it locally)
+    if (r.from === myPlayerIdx) {
+      if (roomRef) setTimeout(() => { try { roomRef.child('reactions/'+id).remove(); } catch(_){} }, 6000);
+      continue;
+    }
+    const fromName = (data.players && data.players[r.from] && data.players[r.from].name) || 'Pemain';
+    showCenterReaction(r.emoji, fromName);
+  }
+}
+
+function showCenterReaction(emojiKey, fromName){
+  const em = CUSTOM_EMOJIS[emojiKey];
+  if (!em) return;
+  const layer = $('centerReactLayer');
+  if (!layer) return;
+  // Cap concurrent center popups
+  while (layer.children.length >= 3) layer.removeChild(layer.firstChild);
+  const wrap = document.createElement('div');
+  wrap.className = 'center-react';
+  wrap.innerHTML = em.svg + (fromName ? '<div class="cr-name">' + escapeHtml(fromName) + '</div>' : '');
+  // Confetti sparkles for some
+  if (emojiKey === 'party' || emojiKey === 'crown' || emojiKey === 'fire'){
+    const colors = ['#ffd86e','#ff6ec4','#7c3aed','#10b981','#3b82f6','#ef4444'];
+    for (let i=0;i<14;i++){
+      const s = document.createElement('div');
+      s.className = 'spark';
+      const ang = (Math.PI*2) * (i/14);
+      const dist = 90 + Math.random()*60;
+      s.style.setProperty('--dx', (Math.cos(ang)*dist) + 'px');
+      s.style.setProperty('--dy', (Math.sin(ang)*dist) + 'px');
+      s.style.background = colors[i % colors.length];
+      s.style.animationDelay = (Math.random()*0.15)+'s';
+      wrap.appendChild(s);
     }
   }
+  layer.appendChild(wrap);
+  try { em.play(); } catch(_){}
+  setTimeout(() => { try { wrap.remove(); } catch(_){} }, 2500);
 }
 
-function showFlyingReaction(targetIdx, emoji, fromIdx){
-  const tile = document.querySelector('.video-tile[data-idx="'+targetIdx+'"]');
-  if (!tile) return;
-  const fly = document.createElement('div');
-  fly.className = 'react-fly';
-  fly.textContent = emoji;
-  tile.appendChild(fly);
-  setTimeout(() => fly.remove(), 2300);
-  // tiny "pop" sound for everyone
-  try { sfx.click(); } catch(_){}
-}
-
-function armReaction(emoji, btn){
-  // Toggle off if same emoji clicked again
-  if (reactionPickerEmoji === emoji){
-    cancelReactionPicker();
-    return;
-  }
-  cancelReactionPicker();
-  reactionPickerEmoji = emoji;
-  btn.classList.add('targeting');
-  // Highlight all OTHER players' tiles as targets
-  document.querySelectorAll('.video-tile').forEach(t => {
-    if (Number(t.dataset.idx) !== myPlayerIdx) t.classList.add('react-target');
-  });
-  toast('Tap pemain yang mau dikirim ' + emoji, 3000);
-  // Auto-cancel after 5s if no target picked
-  reactionTarget = setTimeout(cancelReactionPicker, 5000);
-}
-
-function cancelReactionPicker(){
-  reactionPickerEmoji = null;
-  if (reactionTarget) { clearTimeout(reactionTarget); reactionTarget = null; }
-  document.querySelectorAll('.react-btn.targeting').forEach(b => b.classList.remove('targeting'));
-  document.querySelectorAll('.video-tile.react-target').forEach(t => t.classList.remove('react-target'));
-}
-
-function sendReaction(toIdx, emoji){
-  if (toIdx === myPlayerIdx) { toast('Ga bisa kirim ke diri sendiri 😅'); return; }
-  // Local instant feedback (don't wait for Firebase echo)
-  showFlyingReaction(toIdx, emoji, myPlayerIdx);
-  if (isBotMode){
-    // Bot mode is local-only, just show on bot's tile
-    return;
-  }
-  if (!roomRef) return;
-  const id = Date.now() + '_' + myPlayerIdx + '_' + Math.floor(Math.random()*1000);
-  seenReactionIds.add(id); // we already showed it locally
+function sendReaction(emojiKey){
+  const em = CUSTOM_EMOJIS[emojiKey]; if (!em) return;
+  const now = Date.now();
+  if (reactionCooldown[emojiKey] && now - reactionCooldown[emojiKey] < 800) return;
+  reactionCooldown[emojiKey] = now;
+  // Local instant: play sound + show in center
+  showCenterReaction(emojiKey, 'Kamu');
+  if (isBotMode) return;
+  if (!roomRef || myPlayerIdx < 0) return;
+  const id = now + '_' + myPlayerIdx + '_' + Math.floor(Math.random()*1000);
+  seenReactionIds.add(id);
   roomRef.child('reactions/'+id).set({
-    from: myPlayerIdx, to: toIdx, emoji, ts: Date.now()
+    from: myPlayerIdx, emoji: emojiKey, ts: now
   }).catch(e => console.warn('reaction write failed', e));
 }
 
-// Wire up reaction buttons
+// Wire up reaction buttons (1-click broadcast, no target picking)
 document.querySelectorAll('.reactions-bar .react-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     const emoji = btn.dataset.emoji;
-    armReaction(emoji, btn);
+    btn.classList.add('cooldown');
+    setTimeout(() => btn.classList.remove('cooldown'), 800);
+    sendReaction(emoji);
   });
 });
 
-// Click on a video tile while a reaction is armed → send to that player
-document.addEventListener('click', (e) => {
-  if (!reactionPickerEmoji) return;
-  const tile = e.target.closest('.video-tile');
-  if (!tile) return;
-  const idx = Number(tile.dataset.idx);
-  if (Number.isNaN(idx)) return;
-  const emoji = reactionPickerEmoji;
-  cancelReactionPicker();
-  sendReaction(idx, emoji);
-});
+/* ============== ROOM CHAT (text + voice notes) ============== */
+let chatListenerSet = false;
+let chatUnreadCount = 0;
+let chatOpen = false;
+const seenChatIds = new Set();
+
+function openChat(){
+  chatOpen = true;
+  $('chatPanel').classList.add('show');
+  $('chatBackdrop').classList.add('show');
+  chatUnreadCount = 0;
+  $('chatBadge').style.display = 'none';
+  setTimeout(() => { const cl = $('chatList'); cl.scrollTop = cl.scrollHeight; }, 50);
+}
+function closeChat(){
+  chatOpen = false;
+  $('chatPanel').classList.remove('show');
+  $('chatBackdrop').classList.remove('show');
+}
+
+function chatTimeFmt(ts){
+  const d = new Date(ts); const hh = String(d.getHours()).padStart(2,'0'); const mm = String(d.getMinutes()).padStart(2,'0');
+  return hh+':'+mm;
+}
+
+function appendChatMessage(m, opts){
+  const list = $('chatList');
+  if (!list) return;
+  // Remove "empty" placeholder
+  const empty = list.querySelector('.chat-empty');
+  if (empty) empty.remove();
+
+  const isMe = m.from === myPlayerIdx;
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + (isMe ? 'me' : 'them');
+  const colorHexStr = colorHex(m.color || 'red');
+  let inner = '';
+  if (!isMe){
+    inner += '<div class="who"><span class="dot" style="background:'+colorHexStr+'"></span><span>'+escapeHtml(m.name||'Pemain')+'</span></div>';
+  }
+  if (m.kind === 'voice' && m.audio){
+    const dur = m.dur || 0;
+    const bars = Array.from({length: 14}, () => '<span style="height:'+(20+Math.random()*60)+'%"></span>').join('');
+    inner += '<div class="vn-msg"><button class="vn-play">▶</button><div class="vn-bars">'+bars+'</div><span class="vn-dur">'+formatDur(dur)+'</span></div>';
+  } else {
+    inner += '<div>' + escapeHtml(m.text||'') + '</div>';
+  }
+  inner += '<div class="ts">'+chatTimeFmt(m.ts||Date.now())+'</div>';
+  div.innerHTML = inner;
+  list.appendChild(div);
+
+  if (m.kind === 'voice' && m.audio){
+    const playBtn = div.querySelector('.vn-play');
+    const vn = div.querySelector('.vn-msg');
+    let audio = null;
+    playBtn.addEventListener('click', () => {
+      if (!audio){
+        audio = new Audio(m.audio);
+        audio.addEventListener('ended', () => { vn.classList.remove('playing'); playBtn.textContent = '▶'; });
+      }
+      if (audio.paused){
+        audio.currentTime = 0; audio.play();
+        vn.classList.add('playing'); playBtn.textContent = '■';
+      } else {
+        audio.pause(); vn.classList.remove('playing'); playBtn.textContent = '▶';
+      }
+    });
+  }
+
+  list.scrollTop = list.scrollHeight;
+
+  if (!chatOpen && !(opts && opts.silent)){
+    chatUnreadCount++;
+    const badge = $('chatBadge'); badge.style.display = 'inline-block'; badge.textContent = chatUnreadCount > 99 ? '99+' : chatUnreadCount;
+  }
+}
+
+function formatDur(s){
+  s = Math.max(0, Math.round(s));
+  const mm = Math.floor(s/60); const ss = s%60;
+  return mm+':'+String(ss).padStart(2,'0');
+}
+
+function setupChatListener(){
+  if (chatListenerSet || !roomRef) return;
+  chatListenerSet = true;
+  roomRef.child('messages').on('child_added', snap => {
+    const id = snap.key; const m = snap.val();
+    if (!m || seenChatIds.has(id)) return;
+    seenChatIds.add(id);
+    // Skip ancient messages (older than session join + 2s buffer)
+    if (m.ts && Date.now() - m.ts > 24*3600*1000) return;
+    appendChatMessage(m);
+  });
+}
+
+function sendChatText(){
+  const input = $('chatInput');
+  const txt = input.value.trim();
+  if (!txt) return;
+  const me = roomData && roomData.players && roomData.players[myPlayerIdx];
+  const msg = {
+    from: myPlayerIdx, name: (me && me.name) || myName || 'Pemain',
+    color: (me && me.color) || myColor || 'red',
+    text: txt.slice(0, 200), kind: 'text', ts: Date.now()
+  };
+  input.value = '';
+  if (isBotMode){
+    // Bot mode: local only echo
+    appendChatMessage(msg, {silent:true});
+    return;
+  }
+  if (!roomRef) return toast('Belum ada room');
+  const id = roomRef.child('messages').push().key;
+  seenChatIds.add(id);
+  appendChatMessage(msg, {silent:true});
+  roomRef.child('messages/'+id).set(msg).catch(e => console.warn('chat send failed', e));
+}
+
+/* ====== Voice Notes (hold-to-record) ====== */
+let _vnRecorder = null, _vnChunks = [], _vnStart = 0, _vnTimer = null, _vnCancel = false, _vnStream = null;
+const VN_MAX_SEC = 15; // keep small enough for Realtime DB (base64 ~ ≤ 200KB)
+
+async function vnStart(){
+  if (_vnRecorder) return;
+  try {
+    _vnStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation:true, noiseSuppression:true } });
+  } catch(e){
+    toast('🎤 Mic ga bisa diakses', 2500);
+    return;
+  }
+  let mime = '';
+  const tries = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
+  for (const t of tries){ if (window.MediaRecorder && MediaRecorder.isTypeSupported(t)) { mime = t; break; } }
+  try {
+    _vnRecorder = new MediaRecorder(_vnStream, mime ? { mimeType: mime, audioBitsPerSecond: 16000 } : undefined);
+  } catch(e){
+    toast('🎤 Recorder ga support di browser ini', 3000);
+    _vnStream.getTracks().forEach(t => t.stop()); _vnStream = null;
+    return;
+  }
+  _vnChunks = []; _vnCancel = false; _vnStart = Date.now();
+  _vnRecorder.ondataavailable = (e) => { if (e.data && e.data.size) _vnChunks.push(e.data); };
+  _vnRecorder.onstop = () => {
+    const dur = (Date.now() - _vnStart) / 1000;
+    const stream = _vnStream;
+    _vnStream = null; _vnRecorder = null;
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    if (_vnTimer) { clearInterval(_vnTimer); _vnTimer = null; }
+    $('chatRecOverlay').classList.remove('show');
+    $('btnChatVN').classList.remove('recording');
+    if (_vnCancel || dur < 0.5) return;
+    const blob = new Blob(_vnChunks, { type: _vnChunks[0]?.type || 'audio/webm' });
+    if (blob.size > 280*1024){ toast('Suara kepanjangan, coba lebih singkat', 3000); return; }
+    const reader = new FileReader();
+    reader.onload = () => sendVoiceNote(reader.result, dur);
+    reader.readAsDataURL(blob);
+  };
+  _vnRecorder.start();
+  $('chatRecOverlay').classList.add('show');
+  $('btnChatVN').classList.add('recording');
+  $('recTime').textContent = '0:00';
+  _vnTimer = setInterval(() => {
+    const sec = (Date.now() - _vnStart) / 1000;
+    $('recTime').textContent = formatDur(sec);
+    if (sec >= VN_MAX_SEC) vnStop(false);
+  }, 200);
+}
+function vnStop(cancel){
+  if (!_vnRecorder) return;
+  _vnCancel = !!cancel;
+  try { _vnRecorder.stop(); } catch(_){}
+}
+function sendVoiceNote(dataUrl, dur){
+  const me = roomData && roomData.players && roomData.players[myPlayerIdx];
+  const msg = {
+    from: myPlayerIdx, name: (me && me.name) || myName || 'Pemain',
+    color: (me && me.color) || myColor || 'red',
+    kind: 'voice', audio: dataUrl, dur: Math.round(dur*10)/10, ts: Date.now()
+  };
+  if (isBotMode){ appendChatMessage(msg, {silent:true}); return; }
+  if (!roomRef) return;
+  const id = roomRef.child('messages').push().key;
+  seenChatIds.add(id);
+  appendChatMessage(msg, {silent:true});
+  roomRef.child('messages/'+id).set(msg).catch(e => console.warn('vn send failed', e));
+}
+
+// Wire chat UI
+$('btnChat').addEventListener('click', openChat);
+$('btnChatClose').addEventListener('click', closeChat);
+$('chatBackdrop').addEventListener('click', closeChat);
+$('btnChatSend').addEventListener('click', sendChatText);
+$('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendChatText(); });
+
+// Hold-to-record VN with cancel-by-swipe-left
+(function setupVNHold(){
+  const btn = $('btnChatVN');
+  let startX = 0, swipedCancel = false;
+  const onDown = (e) => {
+    e.preventDefault();
+    startX = (e.touches ? e.touches[0].clientX : e.clientX) || 0;
+    swipedCancel = false;
+    vnStart();
+  };
+  const onMove = (e) => {
+    if (!_vnRecorder) return;
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) || 0;
+    if (startX - x > 80){ swipedCancel = true; }
+  };
+  const onUp = () => { if (_vnRecorder) vnStop(swipedCancel); };
+  btn.addEventListener('mousedown', onDown);
+  btn.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: true });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+  window.addEventListener('touchcancel', onUp);
+})();
 
 function renderLobby(data){
   const list = $('playerList'); list.innerHTML = '';
@@ -1944,6 +2347,15 @@ function cleanupAndGoHome(){
   roomData = null; roomCode = null; myPlayerIdx = -1; isHost = false;
   lastAnimatedRollTs = 0; isAnimating = false; myPendingRoll = false;
   isBotMode = false; botLevel = 0; botFavor = 0;
+  // Reset chat
+  try {
+    chatListenerSet = false;
+    seenChatIds.clear();
+    chatUnreadCount = 0;
+    $('chatBadge').style.display = 'none';
+    $('chatList').innerHTML = '<div class="chat-empty">Belum ada pesan. Sapa temen kamu yuk! 👋</div>';
+    closeChat();
+  } catch(_){}
   showScreen('screenWelcome');
 }
 
