@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2a1b4d">
-<title>🎨 TEBAK GAMBAR BY LAWRENZ — Mockup</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+<meta name="theme-color" content="#1e3a8a">
+<title>🧩 TEBAK GAMBAR BY LAWRENZ — Mockup</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #2a1b4d 0%, #1a0f33 50%, #0d0820 100%);
-    color: #fff; min-height: 100vh; padding: 14px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 50%, #0c0a2e 100%);
+    color: #fff; min-height: 100vh; padding: 20px 14px;
   }
   .brand-watermark {
     position: fixed; top: 8px; right: 10px; z-index: 90;
@@ -21,133 +21,202 @@
     color: #ffd86e; backdrop-filter: blur(6px);
   }
   .brand-watermark .b { color:#ff6ec4; }
-  .container { max-width: 1100px; margin: 0 auto; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .mockup-title { text-align: center; margin-bottom: 20px; }
+  .mockup-title h1 { font-size: 28px; font-weight: 900; letter-spacing: 1px; }
+  .mockup-title p { opacity: .7; font-size: 13px; margin-top: 4px; }
 
-  /* HEADER */
-  .game-header {
+  /* TWO PHONE MOCKUPS */
+  .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 880px){ .preview-grid { grid-template-columns: 1fr; } }
+
+  .phone-card {
+    background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 24px; padding: 18px; display: flex; flex-direction: column; align-items: center;
+  }
+  .phone-card .phone-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: .7;
+    margin-bottom: 12px; color: #ffd86e;
+  }
+  .phone-frame {
+    width: 100%; max-width: 380px;
+    background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 32px; box-shadow: 0 20px 50px rgba(0,0,0,.5);
+    overflow: hidden; padding: 16px; min-height: 700px;
+    color: #1e1b4b;
+  }
+
+  /* TOP HUD */
+  .hud {
     display: flex; justify-content: space-between; align-items: center;
-    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
-    border-radius: 14px; padding: 12px 18px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 14px;
   }
-  .room-info { display: flex; align-items: center; gap: 14px; }
-  .room-code { font-size: 22px; font-weight: 900; color: #ffd86e; letter-spacing: 3px; }
-  .round-pill { font-size: 12px; padding: 4px 10px; background: rgba(255,255,255,.08); border-radius: 100px; }
-  .timer {
-    display: flex; align-items: center; gap: 8px;
-    background: linear-gradient(135deg, #ff6ec4, #7c3aed);
-    padding: 8px 18px; border-radius: 100px; font-weight: 800; font-size: 18px;
-    box-shadow: 0 4px 12px rgba(124,58,237,.4);
+  .icon-btn {
+    background: rgba(0,0,0,.08); border: none; padding: 8px 12px;
+    border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; color: #1e1b4b;
   }
-  .word-display {
-    text-align: center; padding: 14px;
-    background: rgba(255,216,110,.1); border: 2px dashed rgba(255,216,110,.4);
-    border-radius: 14px; margin-bottom: 12px;
-  }
-  .word-display .label { font-size: 11px; opacity: .7; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
-  .word-display .word { font-size: 32px; font-weight: 900; letter-spacing: 8px; color: #ffd86e; }
-  .word-display .hint { font-size: 11px; opacity: .6; margin-top: 4px; }
-
-  /* MAIN GRID */
-  .main-grid { display: grid; grid-template-columns: 220px 1fr 280px; gap: 12px; }
-  @media (max-width: 900px){
-    .main-grid { grid-template-columns: 1fr; }
+  .coins { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; }
+  .lives { background: linear-gradient(135deg, #f87171, #ef4444); color: #fff; }
+  .level-badge {
+    background: linear-gradient(135deg, #6366f1, #4338ca); color: #fff;
+    padding: 6px 16px; border-radius: 100px; font-weight: 800; font-size: 14px;
+    box-shadow: 0 4px 10px rgba(99,102,241,.4);
   }
 
-  /* PLAYERS */
-  .panel {
-    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
-    border-radius: 14px; padding: 14px;
+  /* PUZZLE IMAGE */
+  .puzzle-frame {
+    background: #fff; border-radius: 18px; padding: 8px;
+    border: 3px solid #6366f1;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    margin-bottom: 14px;
   }
-  .panel h3 { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; opacity: .7; margin-bottom: 10px; }
-  .player-row {
-    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-    background: rgba(0,0,0,.25); border-radius: 10px; margin-bottom: 6px;
-    font-size: 13px;
+  .puzzle-frame img {
+    width: 100%; display: block; border-radius: 12px;
+    aspect-ratio: 16/9; object-fit: cover;
   }
-  .player-row.drawing { background: linear-gradient(135deg, rgba(255,216,110,.25), rgba(255,142,110,.15)); border: 1px solid rgba(255,216,110,.4); }
-  .player-row.guessed { background: rgba(74,222,128,.18); }
-  .pawn-mini { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
-  .player-row .name { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .player-row .score { font-weight: 800; color: #ffd86e; font-size: 14px; }
-  .player-row .badge { font-size: 9px; padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.1); }
-  .badge.draw { background: rgba(255,216,110,.4); color: #fff; }
-  .badge.ok { background: #4ade80; color: #0d0820; }
 
-  /* CANVAS */
-  .canvas-wrap { display: flex; flex-direction: column; gap: 8px; }
-  .canvas-area {
-    background: #fff; border-radius: 14px; aspect-ratio: 4/3;
-    box-shadow: 0 8px 24px rgba(0,0,0,.4); position: relative; overflow: hidden;
+  /* CATEGORY PILL */
+  .category-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 100px;
+    background: rgba(99,102,241,.15); color: #4338ca;
+    font-size: 11px; font-weight: 800; letter-spacing: 1px;
+    margin-bottom: 12px;
   }
-  .canvas-area svg { width: 100%; height: 100%; display: block; }
-  .canvas-tools {
-    display: flex; gap: 8px; align-items: center; padding: 10px;
-    background: rgba(255,255,255,.05); border-radius: 12px; flex-wrap: wrap;
-  }
-  .color-dot {
-    width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
-    border: 2px solid rgba(255,255,255,.2); transition: transform .1s;
-  }
-  .color-dot.selected { border-color: #ffd86e; transform: scale(1.15); }
-  .brush-size {
+
+  /* ANSWER SLOTS */
+  .answer-slots { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 6px; }
+  .word-group { display: flex; gap: 5px; }
+  .slot {
+    width: 32px; height: 38px; border-radius: 8px;
+    background: #fff; border: 2px solid #cbd5e1;
     display: flex; align-items: center; justify-content: center;
-    width: 32px; height: 32px; border-radius: 50%;
-    background: rgba(255,255,255,.08); cursor: pointer;
+    font-weight: 900; font-size: 18px; color: #1e1b4b;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.05);
   }
-  .brush-size .dot { background: #fff; border-radius: 50%; }
-  .brush-size.s1 .dot { width: 4px; height: 4px; }
-  .brush-size.s2 .dot { width: 8px; height: 8px; }
-  .brush-size.s3 .dot { width: 14px; height: 14px; }
-  .brush-size.selected { background: rgba(255,216,110,.3); }
-  .tool-btn {
-    background: rgba(255,255,255,.08); border: none; color: #fff;
-    padding: 8px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; font-weight: 600;
-  }
-  .tool-btn.danger { background: rgba(239,68,68,.25); color: #f87171; }
+  .slot.filled { background: linear-gradient(180deg, #fef3c7, #fde68a); border-color: #f59e0b; }
+  .slot.empty { background: #f1f5f9; }
+  .slot.cursor { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.2); animation: blink 1.2s infinite; }
+  @keyframes blink { 50% { border-color: #f59e0b; } }
 
-  /* CHAT */
-  .chat-box { display: flex; flex-direction: column; height: 100%; min-height: 460px; }
-  .chat-msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; max-height: 460px; }
-  .msg {
-    padding: 7px 11px; border-radius: 10px; font-size: 13px; line-height: 1.4;
-    background: rgba(0,0,0,.25); word-wrap: break-word;
-  }
-  .msg .who { font-weight: 800; margin-right: 5px; }
-  .msg.me { background: rgba(124,58,237,.25); align-self: flex-end; max-width: 85%; }
-  .msg.correct { background: rgba(74,222,128,.25); border: 1px solid rgba(74,222,128,.4); font-weight: 700; }
-  .msg.correct .who { color: #4ade80; }
-  .msg.system { background: rgba(255,216,110,.15); color: #ffd86e; text-align: center; font-size: 11px; font-weight: 700; }
-  .msg.close { background: rgba(255,142,110,.2); border: 1px solid rgba(255,142,110,.4); color: #ffb088; font-style: italic; }
-  .msg.close .hint-text { font-size: 11px; opacity: .8; }
-  .chat-input {
-    display: flex; gap: 6px; padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,.08);
-  }
-  .chat-input input {
-    flex: 1; padding: 10px 14px; border: 1px solid rgba(255,255,255,.15);
-    background: rgba(0,0,0,.25); color: #fff; border-radius: 10px;
-    font-size: 13px; font-family: inherit;
-  }
-  .chat-input button {
-    padding: 10px 16px; border: none; border-radius: 10px; cursor: pointer;
-    background: linear-gradient(135deg, #ff6ec4, #7c3aed); color: #fff; font-weight: 700;
+  .word-label {
+    text-align: center; font-size: 10px; opacity: .55; margin-bottom: 8px; font-weight: 700; letter-spacing: 1px;
   }
 
-  /* VOICE strip */
-  .voice-strip {
-    display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding: 4px;
+  /* LETTER POOL */
+  .letter-pool {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+    margin-top: 16px; margin-bottom: 14px;
   }
-  .voice-tile {
-    flex: 0 0 64px; height: 64px; border-radius: 50%; background: #1a0f33;
-    border: 3px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center;
-    font-size: 26px; position: relative;
+  .letter-tile {
+    aspect-ratio: 1; border-radius: 10px;
+    background: linear-gradient(180deg, #fff, #f1f5f9);
+    border: 2px solid #cbd5e1;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; color: #1e1b4b; cursor: pointer;
+    box-shadow: 0 3px 0 #cbd5e1; transition: transform .1s;
   }
-  .voice-tile.speaking { border-color: #4ade80; box-shadow: 0 0 12px rgba(74,222,128,.5); }
-  .voice-tile.muted::after {
-    content: '🔇'; position: absolute; bottom: -2px; right: -2px; font-size: 12px;
-    background: #ef4444; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  .letter-tile.used { background: #e2e8f0; color: transparent; box-shadow: none; }
+  .letter-tile.hot { border-color: #f59e0b; box-shadow: 0 3px 0 #f59e0b; background: linear-gradient(180deg,#fff,#fef3c7); }
+
+  /* ACTIONS */
+  .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .action-btn {
+    padding: 10px 8px; border: none; border-radius: 12px; cursor: pointer;
+    font-weight: 800; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    color: #fff;
   }
-  .voice-tile .lbl { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font-size: 9px; opacity: .8; white-space: nowrap; }
+  .action-btn .ico { font-size: 18px; }
+  .action-btn .cost { font-size: 9px; opacity: .9; }
+  .btn-hint { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+  .btn-remove { background: linear-gradient(135deg, #f87171, #ef4444); }
+  .btn-skip { background: linear-gradient(135deg, #94a3b8, #64748b); }
+
+  /* LEVEL GRID PHONE */
+  .level-header {
+    text-align: center; margin-bottom: 12px;
+  }
+  .level-header h2 {
+    font-size: 22px; font-weight: 900; color: #4338ca; letter-spacing: 1px;
+  }
+  .level-header p { font-size: 11px; opacity: .65; margin-top: 2px; font-weight: 600; }
+  .progress-bar {
+    height: 10px; background: rgba(0,0,0,.08); border-radius: 100px; overflow: hidden;
+    margin: 12px 4px;
+  }
+  .progress-fill {
+    height: 100%; width: 8%;
+    background: linear-gradient(90deg, #4ade80, #22c55e);
+    border-radius: 100px;
+  }
+  .progress-text {
+    text-align: center; font-size: 11px; font-weight: 700; opacity: .7; margin-bottom: 14px;
+  }
+  .chapter-title {
+    background: linear-gradient(135deg, #6366f1, #4338ca); color: #fff;
+    padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 13px;
+    margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .level-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    margin-bottom: 16px;
+  }
+  .level-tile {
+    aspect-ratio: 1; border-radius: 12px;
+    background: linear-gradient(180deg, #fff, #f1f5f9);
+    border: 2px solid #cbd5e1; box-shadow: 0 3px 0 #cbd5e1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 16px; color: #1e1b4b; position: relative; cursor: pointer;
+  }
+  .level-tile.done {
+    background: linear-gradient(180deg, #4ade80, #22c55e);
+    border-color: #16a34a; box-shadow: 0 3px 0 #16a34a; color: #fff;
+  }
+  .level-tile.current {
+    background: linear-gradient(180deg, #fbbf24, #f59e0b);
+    border-color: #d97706; box-shadow: 0 3px 0 #d97706; color: #fff;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 50% { transform: translateY(-2px); } }
+  .level-tile.locked {
+    background: #e2e8f0; color: #94a3b8; border-color: #cbd5e1; box-shadow: none;
+  }
+  .level-tile .stars {
+    position: absolute; bottom: 2px; left: 0; right: 0;
+    font-size: 8px; color: #fde047; text-shadow: 0 1px 0 rgba(0,0,0,.3);
+  }
+  .level-tile .lock-ico { font-size: 12px; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    display: flex; justify-content: space-around; padding: 12px 8px 4px;
+    border-top: 2px solid rgba(0,0,0,.08); margin-top: 14px;
+  }
+  .nav-item {
+    text-align: center; font-size: 10px; opacity: .6; font-weight: 700;
+  }
+  .nav-item.active { opacity: 1; color: #4338ca; }
+  .nav-item .ico { font-size: 22px; display: block; }
+
+  /* INFO SECTION */
+  .info-section {
+    margin-top: 30px; background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 22px;
+  }
+  .info-section h2 { font-size: 18px; margin-bottom: 12px; color: #ffd86e; }
+  .info-section ul { list-style: none; padding-left: 0; }
+  .info-section li {
+    padding: 8px 0 8px 28px; position: relative; font-size: 14px; line-height: 1.5;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .info-section li::before { content: '✓'; position: absolute; left: 0; top: 8px; color: #4ade80; font-weight: 900; }
+  .info-section li:last-child { border-bottom: none; }
+  .chapters-preview { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .chapter-chip {
+    padding: 5px 11px; border-radius: 100px;
+    background: rgba(255,216,110,.15); color: #ffd86e;
+    font-size: 11px; font-weight: 700; border: 1px solid rgba(255,216,110,.25);
+  }
 </style>
 </head>
 <body>
@@ -155,157 +224,207 @@
 <div class="brand-watermark">⚡ TEBAK GAMBAR <span class="b">BY LAWRENZ</span></div>
 
 <div class="container">
-
-  <!-- HEADER -->
-  <div class="game-header">
-    <div class="room-info">
-      <div>🎨</div>
-      <div>
-        <div class="room-code">XK7M</div>
-        <div style="font-size:10px;opacity:.6;letter-spacing:1px;">ROOM CODE</div>
-      </div>
-      <div class="round-pill">🔄 Ronde 3 / 8</div>
-    </div>
-    <div class="timer">⏱ 0:42</div>
+  <div class="mockup-title">
+    <h1>🧩 Tebak Gambar — Preview</h1>
+    <p>Single player · 200 level · Tebak rebus puzzle ala Indo</p>
   </div>
 
-  <!-- VOICE STRIP -->
-  <div class="voice-strip" style="margin-bottom:24px;">
-    <div class="voice-tile speaking">🐱<div class="lbl">Andi</div></div>
-    <div class="voice-tile">🐶<div class="lbl">Budi</div></div>
-    <div class="voice-tile muted">🦊<div class="lbl">Citra</div></div>
-    <div class="voice-tile">🐼<div class="lbl">Dewi</div></div>
-    <div class="voice-tile">🦁<div class="lbl">Eko</div></div>
-  </div>
+  <div class="preview-grid">
 
-  <!-- WORD DISPLAY -->
-  <div class="word-display">
-    <div class="label">Kata yang ditebak</div>
-    <div class="word">K _ C _ _ G</div>
-    <div class="hint">6 huruf · kategori: Hewan · 2 huruf udah ke-buka</div>
-  </div>
+    <!-- ============ PHONE 1: GAMEPLAY ============ -->
+    <div class="phone-card">
+      <div class="phone-label">📱 Tampilan Main</div>
+      <div class="phone-frame">
 
-  <!-- MAIN GRID -->
-  <div class="main-grid">
+        <!-- HUD -->
+        <div class="hud">
+          <button class="icon-btn">‹</button>
+          <div class="level-badge">LEVEL 1</div>
+          <button class="icon-btn coins">💰 250</button>
+        </div>
 
-    <!-- LEFT: PLAYERS -->
-    <div class="panel">
-      <h3>👥 Pemain (5)</h3>
-      <div class="player-row drawing">
-        <div class="pawn-mini" style="background:linear-gradient(135deg,#ffb3c8,#ff3366);"></div>
-        <div class="name">Andi</div>
-        <div class="badge draw">✏️</div>
-        <div class="score">820</div>
-      </div>
-      <div class="player-row guessed">
-        <div class="pawn-mini" style="background:linear-gradient(135deg,#a5f3fc,#0891b2);"></div>
-        <div class="name">Budi</div>
-        <div class="badge ok">✓</div>
-        <div class="score">650</div>
-      </div>
-      <div class="player-row guessed">
-        <div class="pawn-mini" style="background:linear-gradient(135deg,#fde68a,#f59e0b);"></div>
-        <div class="name">Citra</div>
-        <div class="badge ok">✓</div>
-        <div class="score">540</div>
-      </div>
-      <div class="player-row">
-        <div class="pawn-mini" style="background:linear-gradient(135deg,#bbf7d0,#16a34a);"></div>
-        <div class="name">Dewi</div>
-        <div class="score">410</div>
-      </div>
-      <div class="player-row">
-        <div class="pawn-mini" style="background:linear-gradient(135deg,#ddd6fe,#7c3aed);"></div>
-        <div class="name">Eko (kamu)</div>
-        <div class="score">380</div>
-      </div>
-    </div>
+        <div style="text-align:center;">
+          <div class="category-pill">🏆 BAB 1 · OLAHRAGA</div>
+        </div>
 
-    <!-- CENTER: CANVAS -->
-    <div class="canvas-wrap">
-      <div class="canvas-area">
-        <!-- Sample cat doodle -->
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <!-- Body -->
-          <ellipse cx="200" cy="190" rx="85" ry="55" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
-          <!-- Head -->
-          <circle cx="200" cy="120" r="55" fill="none" stroke="#1a0f33" stroke-width="4"/>
-          <!-- Ears -->
-          <path d="M 155 85 L 145 50 L 178 75 Z" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linejoin="round"/>
-          <path d="M 245 85 L 255 50 L 222 75 Z" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linejoin="round"/>
-          <!-- Inner ears (pink) -->
-          <path d="M 158 80 L 152 60 L 172 73 Z" fill="#ff8eb3"/>
-          <path d="M 242 80 L 248 60 L 228 73 Z" fill="#ff8eb3"/>
-          <!-- Eyes -->
-          <circle cx="180" cy="115" r="6" fill="#1a0f33"/>
-          <circle cx="220" cy="115" r="6" fill="#1a0f33"/>
-          <circle cx="182" cy="113" r="2" fill="#fff"/>
-          <circle cx="222" cy="113" r="2" fill="#fff"/>
-          <!-- Nose -->
-          <path d="M 195 130 L 205 130 L 200 138 Z" fill="#ff8eb3" stroke="#1a0f33" stroke-width="2"/>
-          <!-- Mouth -->
-          <path d="M 200 138 Q 190 148 185 142" fill="none" stroke="#1a0f33" stroke-width="3" stroke-linecap="round"/>
-          <path d="M 200 138 Q 210 148 215 142" fill="none" stroke="#1a0f33" stroke-width="3" stroke-linecap="round"/>
-          <!-- Whiskers -->
-          <line x1="155" y1="130" x2="175" y2="132" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
-          <line x1="155" y1="138" x2="175" y2="138" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
-          <line x1="225" y1="132" x2="245" y2="130" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
-          <line x1="225" y1="138" x2="245" y2="138" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
-          <!-- Tail -->
-          <path d="M 280 200 Q 320 170 310 130 Q 305 110 320 105" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
-          <!-- Legs -->
-          <line x1="160" y1="240" x2="160" y2="255" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
-          <line x1="180" y1="245" x2="180" y2="258" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
-          <line x1="220" y1="245" x2="220" y2="258" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
-          <line x1="240" y1="240" x2="240" y2="255" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
-          <!-- Floor shadow -->
-          <ellipse cx="200" cy="262" rx="80" ry="5" fill="#000" opacity=".15"/>
-        </svg>
-      </div>
-      <div class="canvas-tools">
-        <div class="color-dot" style="background:#1a0f33;"></div>
-        <div class="color-dot selected" style="background:#ff6ec4;"></div>
-        <div class="color-dot" style="background:#ffd86e;"></div>
-        <div class="color-dot" style="background:#4ade80;"></div>
-        <div class="color-dot" style="background:#38bdf8;"></div>
-        <div class="color-dot" style="background:#ef4444;"></div>
-        <div class="color-dot" style="background:#a78bfa;"></div>
-        <div class="color-dot" style="background:#fff; border-color:#666;"></div>
-        <div style="width:1px; height:24px; background:rgba(255,255,255,.15); margin: 0 4px;"></div>
-        <div class="brush-size s1"><div class="dot"></div></div>
-        <div class="brush-size s2 selected"><div class="dot"></div></div>
-        <div class="brush-size s3"><div class="dot"></div></div>
-        <div style="flex:1;"></div>
-        <button class="tool-btn">↶ Undo</button>
-        <button class="tool-btn danger">🗑 Hapus</button>
+        <!-- PUZZLE IMAGE -->
+        <div class="puzzle-frame">
+          <img src="img/lvl1.jpeg" alt="puzzle">
+        </div>
+
+        <!-- ANSWER SLOTS -->
+        <div class="answer-slots">
+          <div class="word-group">
+            <div class="slot filled">S</div>
+            <div class="slot filled">E</div>
+            <div class="slot filled">P</div>
+            <div class="slot filled">A</div>
+            <div class="slot cursor"></div>
+          </div>
+          <div class="word-group">
+            <div class="slot empty"></div>
+            <div class="slot empty"></div>
+            <div class="slot empty"></div>
+            <div class="slot empty"></div>
+          </div>
+        </div>
+        <div class="word-label">9 huruf · 2 kata</div>
+
+        <!-- LETTER POOL -->
+        <div class="letter-pool">
+          <div class="letter-tile used">S</div>
+          <div class="letter-tile used">E</div>
+          <div class="letter-tile used">P</div>
+          <div class="letter-tile used">A</div>
+          <div class="letter-tile hot">K</div>
+          <div class="letter-tile">B</div>
+          <div class="letter-tile">O</div>
+          <div class="letter-tile">L</div>
+          <div class="letter-tile">A</div>
+          <div class="letter-tile">M</div>
+          <div class="letter-tile">R</div>
+          <div class="letter-tile">T</div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+          <button class="action-btn btn-hint">
+            <span class="ico">💡</span>
+            <span>Buka Huruf</span>
+            <span class="cost">−25 💰</span>
+          </button>
+          <button class="action-btn btn-remove">
+            <span class="ico">🗑️</span>
+            <span>Buang Huruf</span>
+            <span class="cost">−40 💰</span>
+          </button>
+          <button class="action-btn btn-skip">
+            <span class="ico">⏭️</span>
+            <span>Skip</span>
+            <span class="cost">−100 💰</span>
+          </button>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="ico">🏠</span>Home</div>
+          <div class="nav-item active"><span class="ico">🧩</span>Main</div>
+          <div class="nav-item"><span class="ico">🏆</span>Skor</div>
+          <div class="nav-item"><span class="ico">⚙️</span>Setting</div>
+        </div>
       </div>
     </div>
 
-    <!-- RIGHT: CHAT -->
-    <div class="panel chat-box">
-      <h3>💬 Tebakan & Chat</h3>
-      <div class="chat-msgs">
-        <div class="msg system">🎨 Andi lagi gambar — tebak dong!</div>
-        <div class="msg"><span class="who" style="color:#a5f3fc;">Budi:</span> binatang ini</div>
-        <div class="msg"><span class="who" style="color:#a5f3fc;">Budi:</span> anjing?</div>
-        <div class="msg close">🔥 Hampir nih! <span class="hint-text">(huruf cocok 4)</span></div>
-        <div class="msg correct"><span class="who">✅ Budi</span> tebak bener! +120 poin</div>
-        <div class="msg"><span class="who" style="color:#fde68a;">Citra:</span> kucing</div>
-        <div class="msg correct"><span class="who">✅ Citra</span> tebak bener! +80 poin</div>
-        <div class="msg"><span class="who" style="color:#bbf7d0;">Dewi:</span> meong</div>
-        <div class="msg close">🔥 Hampir banget!</div>
-        <div class="msg me"><span class="who">Kamu:</span> kuching</div>
-        <div class="msg close">🔥 Tinggal dikit lagi!</div>
-      </div>
-      <div class="chat-input">
-        <input type="text" placeholder="Ketik tebakanmu..." value="">
-        <button>➤</button>
+    <!-- ============ PHONE 2: LEVEL SELECT ============ -->
+    <div class="phone-card">
+      <div class="phone-label">📱 Pilih Level</div>
+      <div class="phone-frame">
+
+        <div class="hud">
+          <button class="icon-btn">‹</button>
+          <div class="level-badge">200 LEVEL</div>
+          <button class="icon-btn coins">💰 250</button>
+        </div>
+
+        <div class="level-header">
+          <h2>🧩 Tebak Gambar</h2>
+          <p>by Lawrenz · 200 puzzle seru</p>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text">Progress: 16 / 200 (8%)</div>
+
+        <div class="chapter-title">
+          <span>📚 BAB 1 — Olahraga</span>
+          <span style="font-size:11px;">15/20</span>
+        </div>
+
+        <div class="level-grid">
+          <div class="level-tile done">1<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">2<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">3<div class="stars">⭐⭐</div></div>
+          <div class="level-tile done">4<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">5<div class="stars">⭐</div></div>
+          <div class="level-tile done">6<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">7<div class="stars">⭐⭐</div></div>
+          <div class="level-tile done">8<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">9<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">10<div class="stars">⭐⭐</div></div>
+          <div class="level-tile done">11<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">12<div class="stars">⭐⭐</div></div>
+          <div class="level-tile done">13<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">14<div class="stars">⭐⭐⭐</div></div>
+          <div class="level-tile done">15<div class="stars">⭐</div></div>
+          <div class="level-tile current">16</div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+        </div>
+
+        <div class="chapter-title" style="background:linear-gradient(135deg,#94a3b8,#64748b);">
+          <span>🔒 BAB 2 — Sains & Tech</span>
+          <span style="font-size:11px;">0/20</span>
+        </div>
+
+        <div class="level-grid">
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+          <div class="level-tile locked"><span class="lock-ico">🔒</span></div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active"><span class="ico">🏠</span>Home</div>
+          <div class="nav-item"><span class="ico">🧩</span>Main</div>
+          <div class="nav-item"><span class="ico">🏆</span>Skor</div>
+          <div class="nav-item"><span class="ico">⚙️</span>Setting</div>
+        </div>
       </div>
     </div>
+
   </div>
 
-  <div style="text-align:center; margin-top:14px; font-size:11px; opacity:.5;">
-    Mockup preview · Voice mesh real-time · Firebase RTDB
+  <!-- INFO SECTION -->
+  <div class="info-section">
+    <h2>📋 Detail Game</h2>
+    <ul>
+      <li><b>200 level</b> dibagi jadi 10 BAB tematik (20 level per bab) — biar gak monoton</li>
+      <li><b>Sistem koin:</b> jawab bener +25 koin, dapet bintang 3 +50 bonus. Hint pake koin</li>
+      <li><b>3 hint:</b> Buka 1 huruf (25💰), Buang huruf salah (40💰), Skip level (100💰)</li>
+      <li><b>Bintang:</b> 3⭐ = jawab tanpa hint · 2⭐ = pake 1-2 hint · 1⭐ = pake banyak hint/skip</li>
+      <li><b>Auto-save:</b> progress disimpan di browser pake localStorage (gak hilang refresh)</li>
+      <li><b>Mobile-first:</b> tampilan dioptimasi buat HP, tap-tap nyaman</li>
+      <li><b>Anti-cheat:</b> jawaban di-hash, gak bisa intip lewat inspect element</li>
+    </ul>
+
+    <h2 style="margin-top:24px;">📚 10 BAB (200 level total)</h2>
+    <div class="chapters-preview">
+      <div class="chapter-chip">1. Olahraga</div>
+      <div class="chapter-chip">2. Sains & Tech</div>
+      <div class="chapter-chip">3. Makanan</div>
+      <div class="chapter-chip">4. Binatang</div>
+      <div class="chapter-chip">5. Tempat & Negara</div>
+      <div class="chapter-chip">6. Pekerjaan</div>
+      <div class="chapter-chip">7. Film & Musik</div>
+      <div class="chapter-chip">8. Idiom & Peribahasa</div>
+      <div class="chapter-chip">9. Brand & Logo</div>
+      <div class="chapter-chip">10. Random Susah</div>
+    </div>
+
+    <h2 style="margin-top:24px;">🎨 Cara bikin gambar puzzle</h2>
+    <ul>
+      <li><b>Opsi A (cepet):</b> aku generate gambar pake AI buat tiap level (200 gambar) dengan style mirip contoh kamu — buku coret-coret + ikon emoji + teks "Tu=K" dll. Gambar hasil AI di-cache, sekali generate selamanya</li>
+      <li><b>Opsi B (manual):</b> kamu kasih 200 jawaban + ide gambar tiap level, aku susun layoutnya pake SVG (lebih ringan, gak butuh AI)</li>
+      <li><b>Opsi C (hybrid):</b> 50 level pertama pake gambar AI premium, sisanya pake template SVG dengan emoji + teks</li>
+    </ul>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:11px; opacity:.5;">
+    Mockup preview · Static preview only · Belum playable
   </div>
 </div>
 
