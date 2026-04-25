@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
 <meta name="theme-color" content="#2a1b4d" />
 <!-- WEB VERSION: V2 — naik ke V3, V4 dst tiap kali publish ulang ke GitHub Pages -->
-<title>🎲 ULAR TANGGA BY LAWRENZ V2 — Mabar bareng temen</title>
+<title>🎲 ULAR TANGGA BY LAWRENZ V3 — Mabar bareng temen</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>" />
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
@@ -954,42 +954,51 @@ function playNoise({ dur=0.18, vol=0.15, when=0, filterFreq=2000 }){
   src.start(t0); src.stop(t0 + dur + 0.02);
 }
 
+// Helper noise dgn opsi tipe filter (tambahan utk lowpass dll)
+function playNoise2({ dur=0.18, vol=0.15, when=0, filterFreq=2000, type='bandpass', Q=0.8 }){
+  const ctx = ensureAudioCtx(); if (!ctx || _sfxMuted) return;
+  const t0 = ctx.currentTime + when;
+  const sr = ctx.sampleRate;
+  const buf = ctx.createBuffer(1, sr * dur, sr);
+  const ch = buf.getChannelData(0);
+  for (let i=0; i<ch.length; i++) ch[i] = (Math.random()*2-1) * (1 - i/ch.length);
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const filt = ctx.createBiquadFilter(); filt.type = type; filt.frequency.value = filterFreq; filt.Q.value = Q;
+  const gain = ctx.createGain(); gain.gain.setValueAtTime(vol, t0); gain.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+  src.connect(filt).connect(gain).connect(ctx.destination);
+  src.start(t0); src.stop(t0 + dur + 0.02);
+}
+
 const sfx = {
   click(){
-    // UI button pop — quick "tik"
-    playTone({ freq: 880, freqEnd: 1200, type:'sine', dur:0.04, vol:0.10 });
-    playTone({ freq: 1600, type:'triangle', dur:0.03, vol:0.05, when:0.02 });
+    // 💧 Bubble Plop — pop manis kayak iOS
+    playTone({ freq: 600, freqEnd: 1400, type:'sine', dur:0.06, vol:0.12 });
   },
   diceRattle(){
-    // Cartoony shake-shake-BOING
-    for (let i=0; i<8; i++){
-      const t = i * 0.13;
-      playTone({ freq: 180+Math.random()*100, type:'square', dur:0.05, vol:0.08, when: t });
-      playNoise({ dur: 0.05, vol: 0.08, when: t+0.02, filterFreq: 2000+Math.random()*1500 });
+    // 🎱 Marble Roll — kelereng ngegelinding smooth + clicks
+    playNoise2({ dur: 1.2, vol: 0.06, filterFreq: 800, type: 'lowpass', Q: 1 });
+    for (let i=0; i<14; i++){
+      const t = i * 0.085;
+      playTone({ freq: 200+Math.random()*300, type:'triangle', dur:0.03, vol:0.05, when: t });
     }
-    // Cartoon "wheeeee" right before land
-    playTone({ freq: 300, freqEnd: 1200, type:'sawtooth', dur:0.35, vol:0.10, when: 1.05 });
+    playTone({ freq: 600, freqEnd: 200, type:'sine', dur:0.15, vol:0.12, when: 1.1 });
   },
   diceLand(value){
-    // BOING + comedy horn (proportional to value)
-    playTone({ freq: 800, freqEnd: 200, type:'sine', dur:0.18, vol:0.20 });
-    playTone({ freq: 200, freqEnd: 80, type:'triangle', dur:0.22, vol:0.15, when: 0.05 });
-    // Honk!
-    playTone({ freq: 350+value*60, freqEnd: 250+value*40, type:'sawtooth', dur:0.18, vol:0.16, when: 0.20 });
-    playTone({ freq: 280+value*50, freqEnd: 200+value*40, type:'sawtooth', dur:0.18, vol:0.14, when: 0.42 });
+    // 💥 Cartoon Splat — plak! kayak kena pie di muka
+    playNoise2({ dur: 0.25, vol: 0.25, filterFreq: 600, type: 'lowpass' });
+    playTone({ freq: 250, freqEnd: 60, type:'sawtooth', dur:0.18, vol:0.14 });
+    playTone({ freq: 1200, freqEnd: 200, type:'square', dur:0.08, vol:0.08, when: 0.04 });
   },
   hop(){
-    // Cartoon "boing" per step
-    playTone({ freq: 600, freqEnd: 900, type:'sine', dur:0.06, vol:0.10 });
-    playTone({ freq: 900, freqEnd: 600, type:'sine', dur:0.06, vol:0.08, when: 0.05 });
+    // 💧 Bubble Pop — plop ringan tiap loncat
+    playTone({ freq: 400, freqEnd: 900, type:'sine', dur:0.04, vol:0.12 });
+    playNoise({ dur: 0.03, vol: 0.06, when: 0.01, filterFreq: 3000 });
   },
   ladder(){
-    // Slide whistle "WHEEEEEEEE!" naik — ngeledek pas naik tangga
-    playTone({ freq: 200, freqEnd: 1800, type:'sine', dur:0.7, vol:0.18 });
-    // sparkle on top
-    playTone({ freq: 1800, type:'triangle', dur:0.1, vol:0.10, when: 0.7 });
-    playTone({ freq: 2200, type:'triangle', dur:0.08, vol:0.08, when: 0.8 });
-    playTone({ freq: 2600, type:'triangle', dur:0.08, vol:0.06, when: 0.88 });
+    // ⚡ Mario Power Up — arpeggio naik kayak ambil mushroom
+    const notes = [392, 523, 659, 784, 1047, 1319];
+    notes.forEach((f, i) => playTone({ freq: f, type:'square', dur:0.08, vol:0.16, when: i*0.06 }));
+    playTone({ freq: 1568, type:'square', dur:0.2, vol:0.18, when: 0.4 });
   },
   snake(){
     // Sad trombone "wah-wah-waaaah" — full ngeledek pas turun
@@ -1358,7 +1367,16 @@ $('btnCreateRoom').onclick = async () => {
   if (!name) return alertModal('Eh', 'Nama-nya diisi dulu yaa', '✏️');
   myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
   const btn = $('btnCreateRoom'); const oldHtml = btn.innerHTML;
-  btn.disabled = true; btn.innerHTML = '⏳ Bikin room...';
+  btn.disabled = true; btn.innerHTML = '⏳ Minta izin cam/mic...';
+  // FORCE prompt cam/mic — tiap klik bakal nge-trigger getUserMedia lagi
+  // sampai user bener-bener izinin. Kalo user nolak, tinggal tekan tombol lagi.
+  const stream = await requestMediaPersistent();
+  if (!stream){
+    btn.disabled = false; btn.innerHTML = oldHtml;
+    alertModal('Izinin cam/mic dulu', 'Buat seru-seruan, izinin akses kamera & mic di HP kamu, terus tekan tombolnya lagi yaa 🎥🎤', '🎥');
+    return;
+  }
+  btn.innerHTML = '⏳ Bikin room...';
   try {
     await createRoom();
   } catch(e){
@@ -1375,7 +1393,16 @@ $('btnJoinRoom').onclick = async () => {
   if (code.length < 4 || code.length > 6) return alertModal('Eh', 'Kode room harus 4-6 angka', '🔢');
   myName = name; try { localStorage.setItem('ut_name', name); } catch(_){}
   const btn = $('btnJoinRoom'); const oldHtml = btn.innerHTML;
-  btn.disabled = true; btn.innerHTML = '⏳ Join room...';
+  btn.disabled = true; btn.innerHTML = '⏳ Minta izin cam/mic...';
+  // FORCE prompt cam/mic dulu sebelum masuk room — biar pas masuk lobby
+  // langsung ada video & voice. Klik ulang kalo nolak.
+  const stream = await requestMediaPersistent();
+  if (!stream){
+    btn.disabled = false; btn.innerHTML = oldHtml;
+    alertModal('Izinin cam/mic dulu', 'Buat seru-seruan, izinin akses kamera & mic di HP kamu, terus tekan tombolnya lagi yaa 🎥🎤', '🎥');
+    return;
+  }
+  btn.innerHTML = '⏳ Join room...';
   try {
     await joinRoom(code);
   } catch(e){
@@ -1404,6 +1431,51 @@ document.querySelectorAll('.diff-btn').forEach(btn => {
 /* ============== MEDIA ============== */
 let mediaSetupAttempted = false;
 let mediaSetupInFlight = null;
+let mediaAutoRetryTimer = null;
+let mediaLastUserDenied = false;
+
+/* requestMediaPersistent — dipanggil dari klik tombol user.
+   Tiap dipanggil bakal force panggil getUserMedia lagi (reset state),
+   jadi browser bakal MUNCULIN PROMPT IZIN tiap kali user nolak terus klik ulang. */
+async function requestMediaPersistent(){
+  if (localStream && localStream.getTracks().length > 0) return localStream;
+  // Reset state biar setupMedia bener-bener nyoba lagi
+  mediaSetupAttempted = false;
+  if (mediaSetupInFlight){
+    try { await mediaSetupInFlight; } catch(_){}
+  }
+  const s = await setupMedia();
+  return s;
+}
+
+/* startMediaAutoRetry — buat di dalam room (lobby/game).
+   Kalo user nolak izin, tiap 4 detik kita coba panggil lagi.
+   Browser bakal munculin prompt lagi (atau auto-reject kalo udah di-block permanent),
+   tapi kita keep nyoba sampai dapet stream — biar user keinget terus & langsung
+   bisa pake voice + video begitu izinin. */
+function startMediaAutoRetry(){
+  if (mediaAutoRetryTimer) return;
+  mediaAutoRetryTimer = setInterval(async () => {
+    if (localStream && localStream.getTracks().length > 0){ stopMediaAutoRetry(); return; }
+    if (document.hidden) return; // jangan ganggu kalo tab di background
+    try {
+      mediaSetupAttempted = false;
+      await setupMedia();
+    } catch(_){}
+    if (localStream && localStream.getTracks().length > 0){
+      stopMediaAutoRetry();
+      // Reflect ke UI
+      try { syncMicUI(); } catch(_){}
+      try { if (roomData) renderVideoTiles(roomData); } catch(_){}
+      const r = document.getElementById('mediaRetryBtn'); if (r) r.remove();
+      toast('🎥 Cam & mic aktif — siap mabar!', 2500);
+    }
+  }, 4000);
+}
+function stopMediaAutoRetry(){
+  if (mediaAutoRetryTimer){ clearInterval(mediaAutoRetryTimer); mediaAutoRetryTimer = null; }
+}
+
 async function setupMedia(){
   if (localStream) return localStream;
   if (mediaSetupInFlight) return mediaSetupInFlight; // dedupe parallel calls
@@ -1851,6 +1923,11 @@ function enterLobby(){
   $('lobbyHint').textContent = isHost ? 'Tunggu temen join, terus klik "Mulai Mabar"' : 'Tunggu host mulai game...';
   showScreen('screenLobby');
   subscribeRoom();
+  // Mulai nag user buat izinin cam/mic — biar pas mabar langsung ada video & voice
+  if (!localStream || localStream.getTracks().length === 0){
+    setupMedia().catch(()=>{});
+    startMediaAutoRetry();
+  }
 }
 
 function subscribeRoom(){
@@ -3623,10 +3700,15 @@ function syncMicUI(){
   }
 }
 
-function toggleMyMic(){
-  if (!localStream){
-    toast('Mic blm aktif, izinin dulu');
-    setupMedia().then(()=> syncMicUI()).catch(()=>{});
+async function toggleMyMic(){
+  if (!localStream || localStream.getAudioTracks().length === 0){
+    toast('🎤 Minta izin mic...');
+    const s = await requestMediaPersistent();
+    if (!s){
+      alertModal('Izinin mic dulu', 'Browser nolak akses mic. Tekan tombol Mute lagi buat coba lagi, atau buka Setting browser & izinin mic.', '🎤');
+      return;
+    }
+    myMicOn = true; syncMicUI(); toast('🎤 Mic ON');
     return;
   }
   const t = localStream.getAudioTracks()[0];
@@ -3652,8 +3734,18 @@ function togglePeerListen(idx){
 }
 
 $('btnMic').onclick = toggleMyMic;
-$('btnCam').onclick = () => {
-  if (!localStream) return toast('Kamera ga aktif');
+$('btnCam').onclick = async () => {
+  if (!localStream || localStream.getVideoTracks().length === 0){
+    toast('📷 Minta izin kamera...');
+    const s = await requestMediaPersistent();
+    if (!s || !s.getVideoTracks || s.getVideoTracks().length === 0){
+      alertModal('Izinin kamera dulu', 'Browser nolak akses kamera. Tekan tombol Off Cam lagi buat coba lagi, atau buka Setting browser & izinin kamera.', '📷');
+      return;
+    }
+    $('btnCam').textContent = '📹 Off Cam';
+    toast('📹 Kamera ON');
+    return;
+  }
   const t = localStream.getVideoTracks()[0]; if (!t) return;
   t.enabled = !t.enabled;
   $('btnCam').textContent = t.enabled ? '📹 Off Cam' : '📷 On Cam';
@@ -3689,6 +3781,7 @@ async function leaveRoom(){
   cleanupAndGoHome();
 }
 function cleanupAndGoHome(){
+  stopMediaAutoRetry();
   cleanupAllPeers();
   try { localStream && localStream.getTracks().forEach(t=>t.stop()); } catch(_){}
   for (const k of Object.keys(remoteStreams)) delete remoteStreams[k];
@@ -3731,7 +3824,9 @@ const CLIENT_ID = (() => {
 })();
 
 const SESSION_KEY = 'ut_session';
-const SESSION_TTL_MS = 60 * 60 * 1000; // 1 jam — abis itu session expired
+// Session permanen — gak ada expired TTL. User bakal auto-reconnect ke room
+// terakhirnya selamanya, sampai room-nya bubar / dia keluar manual / clear browser.
+const SESSION_TTL_MS = Infinity;
 
 function saveSession(){
   if (!roomCode || myPlayerIdx < 0) return;
