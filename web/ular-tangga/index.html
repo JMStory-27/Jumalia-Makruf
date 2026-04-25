@@ -6,7 +6,21 @@
 <meta name="theme-color" content="#2a1b4d" />
 <!-- WEB VERSION: V2 — naik ke V3, V4 dst tiap kali publish ulang ke GitHub Pages -->
 <title>🎲 ULAR TANGGA BY LAWRENZ V4 — Mabar bareng temen</title>
-<link rel="iconV4href="data:image/svg+xml,<svg _=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>" />
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Ular Tangga" />
+<meta name="mobile-web-app-capable" content="yes" />
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW reg failed', e));
+    });
+  }
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
 <style>
