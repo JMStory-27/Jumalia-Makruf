@@ -1430,7 +1430,9 @@ document.querySelectorAll('.diff-btn').forEach(btn => {
 
 /* ============== MEDIA ============== */
 let mediaSetupAttempted = false;
-let mediaSetupInFlight = null;
+let mediaSetupInFlight = null;       // backward-compat ref: skrg track audio stage
+let mediaAudioInFlight = null;        // STAGE 1: audio (instant) — voice mesh langsung connect
+let mediaVideoInFlight = null;        // STAGE 2: video (background) — di-upgrade tanpa block voice
 let mediaAutoRetryTimer = null;
 let mediaLastUserDenied = false;
 
@@ -1441,9 +1443,8 @@ async function requestMediaPersistent(){
   if (localStream && localStream.getTracks().length > 0) return localStream;
   // Reset state biar setupMedia bener-bener nyoba lagi
   mediaSetupAttempted = false;
-  if (mediaSetupInFlight){
-    try { await mediaSetupInFlight; } catch(_){}
-  }
+  if (mediaAudioInFlight){ try { await mediaAudioInFlight; } catch(_){} }
+  if (mediaVideoInFlight){ try { await mediaVideoInFlight; } catch(_){} }
   const s = await setupMedia();
   return s;
 }
@@ -1476,80 +1477,129 @@ function stopMediaAutoRetry(){
   if (mediaAutoRetryTimer){ clearInterval(mediaAutoRetryTimer); mediaAutoRetryTimer = null; }
 }
 
+/* setupMedia — 2 STAGE biar voice INSTAN:
+   STAGE 1: audio-only (cepet, biasanya <500ms) → langsung set localStream + connect peer mesh
+   STAGE 2: video upgrade di background → tambahin video track ke localStream + renegotiate peers
+   Hasil: user masuk room langsung bisa ngobrol, kamera nyusul. */
 async function setupMedia(){
-  if (localStream) return localStream;
-  if (mediaSetupInFlight) return mediaSetupInFlight; // dedupe parallel calls
-  mediaSetupInFlight = (async () => {
+  // Kick off audio (instant) + video (background). Return SECEPATNYA setelah audio siap.
+  await setupAudioFast();
+  // Video upgrade jalan paralel — TIDAK di-await biar caller (peer setup) ga nungguin kamera
+  upgradeMediaVideo().catch(()=>{});
+  return localStream;
+}
+
+/* STAGE 1: Audio dulu — instan biar voice mesh langsung jalan */
+async function setupAudioFast(){
+  if (localStream && localStream.getAudioTracks().length > 0) return localStream;
+  if (mediaAudioInFlight) return mediaAudioInFlight;
+  mediaAudioInFlight = (async () => {
     mediaSetupAttempted = true;
+    const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
     try {
-      // Cascade HD → SD — peer connection auto-downscale per receiver kalo bandwidth kurang.
-      const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
-      const hdConstraints = {
-        facingMode: 'user',
-        width:  { ideal: 1280, min: 640 },
-        height: { ideal: 720,  min: 480 },
-        frameRate: { ideal: 30, min: 15, max: 30 },
-        aspectRatio: { ideal: 16/9 },
-        // Hint ke browser: pengen video sebagus mungkin (Chrome/Edge)
-        resizeMode: 'none'
-      };
-      const sdConstraints = {
-        facingMode: 'user',
-        width:  { ideal: 640 },
-        height: { ideal: 480 },
-        frameRate: { ideal: 24, max: 30 }
-      };
-      try {
-        // First try HD
-        localStream = await navigator.mediaDevices.getUserMedia({
-          audio: audioConstraints, video: hdConstraints
-        });
-        console.log('[Media] HD camera locked');
-      } catch(eHd){
-        console.warn('[Media] HD gagal, fallback SD', eHd);
-        try {
-          localStream = await navigator.mediaDevices.getUserMedia({
-            audio: audioConstraints, video: sdConstraints
-          });
-          console.log('[Media] SD camera locked');
-        } catch(eSd){
-          console.warn('[Media] SD gagal, fallback audio-only', eSd);
-          // Last resort: audio only
-          try {
-            localStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
-            toast('🎤 Cuma mic yang aktif (kamera ga bisa diakses)', 3000);
-          } catch(eAudio){
-            console.warn('[Media] audio-only gagal juga', eAudio);
-            throw eAudio;
-          }
-        }
+      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
+      if (!localStream){
+        localStream = audioStream;
+      } else {
+        for (const t of audioStream.getAudioTracks()) localStream.addTrack(t);
       }
-      // Apply advanced constraints (auto-focus, exposure, white-balance) — bikin gambar lebih hidup
-      const vt = localStream.getVideoTracks()[0];
-      if (vt && vt.applyConstraints){
-        try {
-          const caps = vt.getCapabilities ? vt.getCapabilities() : {};
-          const adv = {};
-          if (caps.focusMode && caps.focusMode.includes('continuous')) adv.focusMode = 'continuous';
-          if (caps.exposureMode && caps.exposureMode.includes('continuous')) adv.exposureMode = 'continuous';
-          if (caps.whiteBalanceMode && caps.whiteBalanceMode.includes('continuous')) adv.whiteBalanceMode = 'continuous';
-          if (Object.keys(adv).length) await vt.applyConstraints({ advanced: [adv] });
-        } catch(_){}
-      }
-      console.log('[Media] localStream ready:', localStream.getTracks().map(t=>t.kind+':'+t.enabled));
-      // Renegotiate all existing peer connections so they actually send our tracks
-      renegotiateAllPeers();
+      console.log('[Media] AUDIO ready (fast) — voice mesh aktif');
+      // Tambahin audio ke peer connection yang udah ada (kalo ada)
+      addLocalTracksToAllPeers();
+      try { syncMicUI(); } catch(_){}
       return localStream;
     } catch(e){
-      console.warn('media access failed', e);
-      toast('⚠️ Mic/kamera diblok. Klik "🎥 Aktifkan Cam/Mic" di bawah buat coba lagi', 5000);
+      console.warn('[Media] audio gagal', e);
+      toast('⚠️ Mic diblok. Klik "🎥 Aktifkan Cam/Mic" buat coba lagi', 5000);
       showMediaRetryButton();
       return null;
     } finally {
+      mediaAudioInFlight = null;
       mediaSetupInFlight = null;
     }
   })();
-  return mediaSetupInFlight;
+  mediaSetupInFlight = mediaAudioInFlight; // backward-compat
+  return mediaAudioInFlight;
+}
+
+/* STAGE 2: Video upgrade — di background, ga nge-block voice */
+async function upgradeMediaVideo(){
+  if (localStream && localStream.getVideoTracks().length > 0) return localStream;
+  if (mediaVideoInFlight) return mediaVideoInFlight;
+  mediaVideoInFlight = (async () => {
+    const hdConstraints = {
+      facingMode: 'user',
+      width:  { ideal: 1280, min: 640 },
+      height: { ideal: 720,  min: 480 },
+      frameRate: { ideal: 30, min: 15, max: 30 },
+      aspectRatio: { ideal: 16/9 },
+      resizeMode: 'none'
+    };
+    const sdConstraints = {
+      facingMode: 'user',
+      width:  { ideal: 640 },
+      height: { ideal: 480 },
+      frameRate: { ideal: 24, max: 30 }
+    };
+    let videoStream = null;
+    try {
+      videoStream = await navigator.mediaDevices.getUserMedia({ video: hdConstraints });
+      console.log('[Media] HD video ready (upgrade)');
+    } catch(eHd){
+      console.warn('[Media] HD gagal, coba SD', eHd);
+      try {
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: sdConstraints });
+        console.log('[Media] SD video ready (upgrade)');
+      } catch(eSd){
+        console.warn('[Media] video gagal — audio-only mode', eSd);
+        toast('🎤 Cuma mic yang aktif (kamera ga bisa diakses)', 3000);
+      }
+    }
+    if (videoStream){
+      const vt = videoStream.getVideoTracks()[0];
+      if (vt){
+        if (vt.applyConstraints){
+          try {
+            const caps = vt.getCapabilities ? vt.getCapabilities() : {};
+            const adv = {};
+            if (caps.focusMode && caps.focusMode.includes('continuous')) adv.focusMode = 'continuous';
+            if (caps.exposureMode && caps.exposureMode.includes('continuous')) adv.exposureMode = 'continuous';
+            if (caps.whiteBalanceMode && caps.whiteBalanceMode.includes('continuous')) adv.whiteBalanceMode = 'continuous';
+            if (Object.keys(adv).length) await vt.applyConstraints({ advanced: [adv] });
+          } catch(_){}
+        }
+        if (!localStream){
+          localStream = videoStream;
+        } else {
+          localStream.addTrack(vt);
+        }
+        console.log('[Media] localStream tracks:', localStream.getTracks().map(t=>t.kind+':'+t.enabled));
+        // Renegotiate biar video kebawa ke peer (audio tetep jalan via track replace flow)
+        renegotiateAllPeers();
+        try { if (roomData) renderVideoTiles(roomData); } catch(_){}
+      }
+    }
+    mediaVideoInFlight = null;
+    return localStream;
+  })();
+  return mediaVideoInFlight;
+}
+
+/* Tambahin local tracks ke peer connection yang udah ada (tanpa teardown) */
+function addLocalTracksToAllPeers(){
+  if (!localStream) return;
+  for (const idx of Object.keys(peerConnections)){
+    const pc = peerConnections[idx];
+    if (!pc || pc.signalingState === 'closed') continue;
+    const senders = pc.getSenders ? pc.getSenders() : [];
+    const senderKinds = new Set(senders.filter(s => s.track).map(s => s.track.kind));
+    for (const t of localStream.getTracks()){
+      if (!senderKinds.has(t.kind)){
+        try { pc.addTrack(t, localStream); }
+        catch(e){ console.warn('addTrack to existing peer', e); }
+      }
+    }
+  }
 }
 
 async function boostSenderBitrate(pc){
@@ -1582,8 +1632,8 @@ function renegotiateAllPeers(){
   // Clear old signals so we don't pick up stale offer/answer
   if (roomRef){
     roomRef.child('signals').remove().catch(()=>{}).then(() => {
-      // Reconnect after a brief moment
-      setTimeout(connectToAllPlayers, 300);
+      // Reconnect ASAP — kecilin delay biar voice cepet nyambung lagi
+      setTimeout(connectToAllPlayers, 50);
     });
   }
 }
