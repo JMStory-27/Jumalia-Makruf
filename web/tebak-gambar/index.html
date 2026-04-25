@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a1b4d">
+<title>🎨 TEBAK GAMBAR BY LAWRENZ — Mockup</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #2a1b4d 0%, #1a0f33 50%, #0d0820 100%);
+    color: #fff; min-height: 100vh; padding: 14px;
+  }
+  .brand-watermark {
+    position: fixed; top: 8px; right: 10px; z-index: 90;
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    padding: 5px 10px; border-radius: 100px;
+    background: rgba(0,0,0,.45); border: 1px solid rgba(255,216,110,.35);
+    color: #ffd86e; backdrop-filter: blur(6px);
+  }
+  .brand-watermark .b { color:#ff6ec4; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* HEADER */
+  .game-header {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 12px 18px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
+  }
+  .room-info { display: flex; align-items: center; gap: 14px; }
+  .room-code { font-size: 22px; font-weight: 900; color: #ffd86e; letter-spacing: 3px; }
+  .round-pill { font-size: 12px; padding: 4px 10px; background: rgba(255,255,255,.08); border-radius: 100px; }
+  .timer {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #ff6ec4, #7c3aed);
+    padding: 8px 18px; border-radius: 100px; font-weight: 800; font-size: 18px;
+    box-shadow: 0 4px 12px rgba(124,58,237,.4);
+  }
+  .word-display {
+    text-align: center; padding: 14px;
+    background: rgba(255,216,110,.1); border: 2px dashed rgba(255,216,110,.4);
+    border-radius: 14px; margin-bottom: 12px;
+  }
+  .word-display .label { font-size: 11px; opacity: .7; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .word-display .word { font-size: 32px; font-weight: 900; letter-spacing: 8px; color: #ffd86e; }
+  .word-display .hint { font-size: 11px; opacity: .6; margin-top: 4px; }
+
+  /* MAIN GRID */
+  .main-grid { display: grid; grid-template-columns: 220px 1fr 280px; gap: 12px; }
+  @media (max-width: 900px){
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* PLAYERS */
+  .panel {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 14px;
+  }
+  .panel h3 { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; opacity: .7; margin-bottom: 10px; }
+  .player-row {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    background: rgba(0,0,0,.25); border-radius: 10px; margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .player-row.drawing { background: linear-gradient(135deg, rgba(255,216,110,.25), rgba(255,142,110,.15)); border: 1px solid rgba(255,216,110,.4); }
+  .player-row.guessed { background: rgba(74,222,128,.18); }
+  .pawn-mini { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
+  .player-row .name { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .player-row .score { font-weight: 800; color: #ffd86e; font-size: 14px; }
+  .player-row .badge { font-size: 9px; padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.1); }
+  .badge.draw { background: rgba(255,216,110,.4); color: #fff; }
+  .badge.ok { background: #4ade80; color: #0d0820; }
+
+  /* CANVAS */
+  .canvas-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .canvas-area {
+    background: #fff; border-radius: 14px; aspect-ratio: 4/3;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4); position: relative; overflow: hidden;
+  }
+  .canvas-area svg { width: 100%; height: 100%; display: block; }
+  .canvas-tools {
+    display: flex; gap: 8px; align-items: center; padding: 10px;
+    background: rgba(255,255,255,.05); border-radius: 12px; flex-wrap: wrap;
+  }
+  .color-dot {
+    width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+    border: 2px solid rgba(255,255,255,.2); transition: transform .1s;
+  }
+  .color-dot.selected { border-color: #ffd86e; transform: scale(1.15); }
+  .brush-size {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,.08); cursor: pointer;
+  }
+  .brush-size .dot { background: #fff; border-radius: 50%; }
+  .brush-size.s1 .dot { width: 4px; height: 4px; }
+  .brush-size.s2 .dot { width: 8px; height: 8px; }
+  .brush-size.s3 .dot { width: 14px; height: 14px; }
+  .brush-size.selected { background: rgba(255,216,110,.3); }
+  .tool-btn {
+    background: rgba(255,255,255,.08); border: none; color: #fff;
+    padding: 8px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; font-weight: 600;
+  }
+  .tool-btn.danger { background: rgba(239,68,68,.25); color: #f87171; }
+
+  /* CHAT */
+  .chat-box { display: flex; flex-direction: column; height: 100%; min-height: 460px; }
+  .chat-msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; max-height: 460px; }
+  .msg {
+    padding: 7px 11px; border-radius: 10px; font-size: 13px; line-height: 1.4;
+    background: rgba(0,0,0,.25); word-wrap: break-word;
+  }
+  .msg .who { font-weight: 800; margin-right: 5px; }
+  .msg.me { background: rgba(124,58,237,.25); align-self: flex-end; max-width: 85%; }
+  .msg.correct { background: rgba(74,222,128,.25); border: 1px solid rgba(74,222,128,.4); font-weight: 700; }
+  .msg.correct .who { color: #4ade80; }
+  .msg.system { background: rgba(255,216,110,.15); color: #ffd86e; text-align: center; font-size: 11px; font-weight: 700; }
+  .msg.close { background: rgba(255,142,110,.2); border: 1px solid rgba(255,142,110,.4); color: #ffb088; font-style: italic; }
+  .msg.close .hint-text { font-size: 11px; opacity: .8; }
+  .chat-input {
+    display: flex; gap: 6px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+  .chat-input input {
+    flex: 1; padding: 10px 14px; border: 1px solid rgba(255,255,255,.15);
+    background: rgba(0,0,0,.25); color: #fff; border-radius: 10px;
+    font-size: 13px; font-family: inherit;
+  }
+  .chat-input button {
+    padding: 10px 16px; border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(135deg, #ff6ec4, #7c3aed); color: #fff; font-weight: 700;
+  }
+
+  /* VOICE strip */
+  .voice-strip {
+    display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding: 4px;
+  }
+  .voice-tile {
+    flex: 0 0 64px; height: 64px; border-radius: 50%; background: #1a0f33;
+    border: 3px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center;
+    font-size: 26px; position: relative;
+  }
+  .voice-tile.speaking { border-color: #4ade80; box-shadow: 0 0 12px rgba(74,222,128,.5); }
+  .voice-tile.muted::after {
+    content: '🔇'; position: absolute; bottom: -2px; right: -2px; font-size: 12px;
+    background: #ef4444; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  }
+  .voice-tile .lbl { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font-size: 9px; opacity: .8; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<div class="brand-watermark">⚡ TEBAK GAMBAR <span class="b">BY LAWRENZ</span></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="game-header">
+    <div class="room-info">
+      <div>🎨</div>
+      <div>
+        <div class="room-code">XK7M</div>
+        <div style="font-size:10px;opacity:.6;letter-spacing:1px;">ROOM CODE</div>
+      </div>
+      <div class="round-pill">🔄 Ronde 3 / 8</div>
+    </div>
+    <div class="timer">⏱ 0:42</div>
+  </div>
+
+  <!-- VOICE STRIP -->
+  <div class="voice-strip" style="margin-bottom:24px;">
+    <div class="voice-tile speaking">🐱<div class="lbl">Andi</div></div>
+    <div class="voice-tile">🐶<div class="lbl">Budi</div></div>
+    <div class="voice-tile muted">🦊<div class="lbl">Citra</div></div>
+    <div class="voice-tile">🐼<div class="lbl">Dewi</div></div>
+    <div class="voice-tile">🦁<div class="lbl">Eko</div></div>
+  </div>
+
+  <!-- WORD DISPLAY -->
+  <div class="word-display">
+    <div class="label">Kata yang ditebak</div>
+    <div class="word">K _ C _ _ G</div>
+    <div class="hint">6 huruf · kategori: Hewan · 2 huruf udah ke-buka</div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT: PLAYERS -->
+    <div class="panel">
+      <h3>👥 Pemain (5)</h3>
+      <div class="player-row drawing">
+        <div class="pawn-mini" style="background:linear-gradient(135deg,#ffb3c8,#ff3366);"></div>
+        <div class="name">Andi</div>
+        <div class="badge draw">✏️</div>
+        <div class="score">820</div>
+      </div>
+      <div class="player-row guessed">
+        <div class="pawn-mini" style="background:linear-gradient(135deg,#a5f3fc,#0891b2);"></div>
+        <div class="name">Budi</div>
+        <div class="badge ok">✓</div>
+        <div class="score">650</div>
+      </div>
+      <div class="player-row guessed">
+        <div class="pawn-mini" style="background:linear-gradient(135deg,#fde68a,#f59e0b);"></div>
+        <div class="name">Citra</div>
+        <div class="badge ok">✓</div>
+        <div class="score">540</div>
+      </div>
+      <div class="player-row">
+        <div class="pawn-mini" style="background:linear-gradient(135deg,#bbf7d0,#16a34a);"></div>
+        <div class="name">Dewi</div>
+        <div class="score">410</div>
+      </div>
+      <div class="player-row">
+        <div class="pawn-mini" style="background:linear-gradient(135deg,#ddd6fe,#7c3aed);"></div>
+        <div class="name">Eko (kamu)</div>
+        <div class="score">380</div>
+      </div>
+    </div>
+
+    <!-- CENTER: CANVAS -->
+    <div class="canvas-wrap">
+      <div class="canvas-area">
+        <!-- Sample cat doodle -->
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Body -->
+          <ellipse cx="200" cy="190" rx="85" ry="55" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
+          <!-- Head -->
+          <circle cx="200" cy="120" r="55" fill="none" stroke="#1a0f33" stroke-width="4"/>
+          <!-- Ears -->
+          <path d="M 155 85 L 145 50 L 178 75 Z" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M 245 85 L 255 50 L 222 75 Z" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linejoin="round"/>
+          <!-- Inner ears (pink) -->
+          <path d="M 158 80 L 152 60 L 172 73 Z" fill="#ff8eb3"/>
+          <path d="M 242 80 L 248 60 L 228 73 Z" fill="#ff8eb3"/>
+          <!-- Eyes -->
+          <circle cx="180" cy="115" r="6" fill="#1a0f33"/>
+          <circle cx="220" cy="115" r="6" fill="#1a0f33"/>
+          <circle cx="182" cy="113" r="2" fill="#fff"/>
+          <circle cx="222" cy="113" r="2" fill="#fff"/>
+          <!-- Nose -->
+          <path d="M 195 130 L 205 130 L 200 138 Z" fill="#ff8eb3" stroke="#1a0f33" stroke-width="2"/>
+          <!-- Mouth -->
+          <path d="M 200 138 Q 190 148 185 142" fill="none" stroke="#1a0f33" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 200 138 Q 210 148 215 142" fill="none" stroke="#1a0f33" stroke-width="3" stroke-linecap="round"/>
+          <!-- Whiskers -->
+          <line x1="155" y1="130" x2="175" y2="132" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
+          <line x1="155" y1="138" x2="175" y2="138" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
+          <line x1="225" y1="132" x2="245" y2="130" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
+          <line x1="225" y1="138" x2="245" y2="138" stroke="#1a0f33" stroke-width="2" stroke-linecap="round"/>
+          <!-- Tail -->
+          <path d="M 280 200 Q 320 170 310 130 Q 305 110 320 105" fill="none" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
+          <!-- Legs -->
+          <line x1="160" y1="240" x2="160" y2="255" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
+          <line x1="180" y1="245" x2="180" y2="258" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
+          <line x1="220" y1="245" x2="220" y2="258" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
+          <line x1="240" y1="240" x2="240" y2="255" stroke="#1a0f33" stroke-width="4" stroke-linecap="round"/>
+          <!-- Floor shadow -->
+          <ellipse cx="200" cy="262" rx="80" ry="5" fill="#000" opacity=".15"/>
+        </svg>
+      </div>
+      <div class="canvas-tools">
+        <div class="color-dot" style="background:#1a0f33;"></div>
+        <div class="color-dot selected" style="background:#ff6ec4;"></div>
+        <div class="color-dot" style="background:#ffd86e;"></div>
+        <div class="color-dot" style="background:#4ade80;"></div>
+        <div class="color-dot" style="background:#38bdf8;"></div>
+        <div class="color-dot" style="background:#ef4444;"></div>
+        <div class="color-dot" style="background:#a78bfa;"></div>
+        <div class="color-dot" style="background:#fff; border-color:#666;"></div>
+        <div style="width:1px; height:24px; background:rgba(255,255,255,.15); margin: 0 4px;"></div>
+        <div class="brush-size s1"><div class="dot"></div></div>
+        <div class="brush-size s2 selected"><div class="dot"></div></div>
+        <div class="brush-size s3"><div class="dot"></div></div>
+        <div style="flex:1;"></div>
+        <button class="tool-btn">↶ Undo</button>
+        <button class="tool-btn danger">🗑 Hapus</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: CHAT -->
+    <div class="panel chat-box">
+      <h3>💬 Tebakan & Chat</h3>
+      <div class="chat-msgs">
+        <div class="msg system">🎨 Andi lagi gambar — tebak dong!</div>
+        <div class="msg"><span class="who" style="color:#a5f3fc;">Budi:</span> binatang ini</div>
+        <div class="msg"><span class="who" style="color:#a5f3fc;">Budi:</span> anjing?</div>
+        <div class="msg close">🔥 Hampir nih! <span class="hint-text">(huruf cocok 4)</span></div>
+        <div class="msg correct"><span class="who">✅ Budi</span> tebak bener! +120 poin</div>
+        <div class="msg"><span class="who" style="color:#fde68a;">Citra:</span> kucing</div>
+        <div class="msg correct"><span class="who">✅ Citra</span> tebak bener! +80 poin</div>
+        <div class="msg"><span class="who" style="color:#bbf7d0;">Dewi:</span> meong</div>
+        <div class="msg close">🔥 Hampir banget!</div>
+        <div class="msg me"><span class="who">Kamu:</span> kuching</div>
+        <div class="msg close">🔥 Tinggal dikit lagi!</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="Ketik tebakanmu..." value="">
+        <button>➤</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:14px; font-size:11px; opacity:.5;">
+    Mockup preview · Voice mesh real-time · Firebase RTDB
+  </div>
+</div>
+
+</body>
+</html>
