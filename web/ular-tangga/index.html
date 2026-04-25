@@ -2906,13 +2906,13 @@ function drawSnakeLadderOverlay(){
   // Clear non-defs
   Array.from(svg.children).forEach(c => { if (c.tagName !== 'defs') svg.removeChild(c); });
 
-  // LADDERS — draw two rails + rungs
-  for (const [bot, top] of Object.entries(LADDERS)){
-    drawLadder(svg, +bot, +top);
-  }
-  // SNAKES — wavy body + head
+  // SNAKES dulu — wavy body + head (digambar di belakang)
   for (const [head, tail] of Object.entries(SNAKES)){
     drawSnake(svg, +head, +tail);
+  }
+  // LADDERS di atas — biar tangga gak ketutup ular pas crossing
+  for (const [bot, top] of Object.entries(LADDERS)){
+    drawLadder(svg, +bot, +top);
   }
 }
 
