@@ -580,6 +580,116 @@
     .ceremony-cam .ceremony-cam-fallback { font-size: 60px; }
     .ceremony-medal { width: 42px; height: 42px; font-size: 22px; }
   }
+
+  /* ===== Compact pion config (1 button each, opens modal) ===== */
+  .pion-config-row { display:flex; gap:10px; margin-top: 6px; }
+  .pion-btn {
+    flex:1; display:flex; align-items:center; gap:10px;
+    padding: 10px 12px; border-radius: 14px;
+    background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.14);
+    cursor:pointer; transition: background .15s, border-color .15s, transform .1s;
+    color:#fff; font-family: inherit; text-align:left; min-height: 56px;
+  }
+  .pion-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,216,110,.35); }
+  .pion-btn:active { transform: scale(.97); }
+  .pion-btn .chip {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink:0;
+    box-shadow: 0 3px 8px rgba(0,0,0,.4), inset 0 0 0 2px rgba(255,255,255,.15);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .pion-btn .chip svg { width: 88%; height: 88%; }
+  .pion-btn .lbl-wrap { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .pion-btn .lbl-top { font-size: 10px; opacity:.6; letter-spacing:1.2px; text-transform:uppercase; font-weight:700; }
+  .pion-btn .lbl-bot { font-size: 14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pion-btn .caret { opacity:.5; font-size:14px; flex-shrink:0; }
+
+  /* ===== Modal grids (color + shape) — reuse .modal-bg / .modal ===== */
+  #colorModal .modal, #shapeModal .modal { max-width: 360px; padding: 22px 18px; }
+  .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 14px; color:#fff; }
+  .modal-close-x { position:absolute; top: 8px; right: 12px; background:none; border:none; color:#fff; opacity:.55; font-size: 22px; cursor:pointer; padding: 4px 10px; border-radius: 8px; line-height:1; font-family: inherit; }
+  .modal-close-x:hover { opacity:1; background: rgba(255,255,255,.08); }
+  .modal { position: relative; }
+  #colorModal .gradient-picker { margin-bottom: 4px; }
+  #colorModal .preset-row { margin-top: 14px; padding: 6px 4px 2px; }
+  #shapeModal .shape-picker { padding: 4px 0; }
+  .modal-done-btn { margin-top: 14px; width:100%; padding: 12px; border-radius: 12px; background: linear-gradient(135deg, #ff6ec4, #7c3aed); color:#fff; font-weight: 800; border:none; cursor:pointer; font-size: 14px; letter-spacing:.5px; }
+  .modal-done-btn:active { transform: scale(.98); }
+
+  /* ===== Tutorial slider (under hero) ===== */
+  .tutorial-slider { position:relative; margin: 4px 0 18px; }
+  .tut-track {
+    display:flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; -ms-overflow-style: none;
+    padding: 4px 4px 8px; scroll-padding: 4px;
+  }
+  .tut-track::-webkit-scrollbar { display:none; }
+  .tut-slide {
+    flex: 0 0 100%; scroll-snap-align: center;
+    background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(255,110,196,.12));
+    border: 1.5px solid rgba(255,216,110,.25);
+    border-radius: 18px; padding: 14px 14px 16px;
+    display:flex; flex-direction:column; align-items:center; gap: 10px;
+    min-height: 240px;
+  }
+  .tut-slide .tut-step { font-size: 11px; opacity:.65; letter-spacing: 2px; font-weight: 800; text-transform: uppercase; color:#ffd86e; }
+  .tut-slide .tut-title { font-size: 18px; font-weight: 900; text-align:center; line-height: 1.2; background: linear-gradient(135deg, #fff, #ffd86e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .tut-slide .tut-desc { font-size: 12.5px; opacity:.85; text-align:center; line-height: 1.4; max-width: 280px; }
+  .tut-slide .tut-art { flex:1; display:flex; align-items:center; justify-content:center; width: 100%; padding: 4px; min-height: 130px; }
+
+  /* Mini-phone mockup illustrations */
+  .mini-phone {
+    width: 168px; min-height: 130px; background: linear-gradient(180deg, #1a0f33, #2a1b4d);
+    border: 2.5px solid rgba(255,255,255,.18); border-radius: 16px;
+    padding: 8px 9px; display:flex; flex-direction:column; gap: 6px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,216,110,.1);
+    position: relative; overflow:hidden;
+  }
+  .mini-phone .mp-bar { height: 4px; background: rgba(255,255,255,.1); border-radius: 2px; }
+  .mini-phone .mp-bar.lg { height: 22px; background: linear-gradient(135deg, #ff6ec4, #7c3aed); border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 9px; font-weight: 800; color:#fff; padding: 0 4px; }
+  .mini-phone .mp-bar.gn { background: linear-gradient(135deg, #4ade80, #16a34a); }
+  .mini-phone .mp-bar.or { background: linear-gradient(135deg, #f59e0b, #b45309); }
+  .mini-phone .mp-row { display:flex; gap: 4px; align-items:center; }
+  .mini-phone .mp-chip { background: rgba(255,255,255,.1); border-radius: 6px; padding: 3px 6px; font-size: 9px; font-weight: 700; color:#fff; }
+  .mini-phone .mp-code { font-family: monospace; font-size: 16px; font-weight: 900; color: #ffd86e; text-align:center; letter-spacing: 4px; padding: 4px 0; background: rgba(0,0,0,.35); border-radius: 8px; border: 1px dashed rgba(255,216,110,.4); }
+  .mini-phone .mp-input { background: rgba(0,0,0,.35); border-radius: 8px; padding: 5px 7px; font-size: 10px; color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.12); }
+  .mini-phone .mp-cams { display:grid; grid-template-columns: 1fr 1fr; gap: 4px; flex:1; }
+  .mini-phone .mp-cam { aspect-ratio: 1; border-radius: 8px; background: linear-gradient(135deg, #4c1d95, #1e1b4b); display:flex; align-items:center; justify-content:center; font-size: 18px; border: 1.5px solid rgba(255,216,110,.3); }
+  .mini-phone .mp-board { aspect-ratio: 1; flex:1; background:
+    linear-gradient(45deg, #d4a574 25%, transparent 25%, transparent 75%, #d4a574 75%),
+    linear-gradient(45deg, #d4a574 25%, #8b5a2b 25%, #8b5a2b 75%, #d4a574 75%);
+    background-size: 14px 14px; background-position: 0 0, 7px 7px;
+    border-radius: 6px; position: relative; border: 1.5px solid rgba(255,216,110,.4);
+  }
+  .mini-phone .mp-board::after { content: '🐍'; position:absolute; top: 22%; right: 18%; font-size: 18px; transform: rotate(35deg); }
+  .mini-phone .mp-board::before { content: '🪜'; position:absolute; bottom: 18%; left: 22%; font-size: 16px; }
+  .mini-phone .mp-pawn-row { display:flex; gap: 4px; justify-content:center; padding: 2px 0; }
+  .mini-phone .mp-pawn { width: 18px; height: 22px; border-radius: 50% 50% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,.4); }
+  .mini-phone .mp-chat-bubble { background: rgba(124,58,237,.5); border-radius: 10px 10px 10px 2px; padding: 4px 7px; font-size: 9px; color:#fff; align-self: flex-start; max-width: 80%; }
+  .mini-phone .mp-chat-bubble.me { background: rgba(255,110,196,.5); border-radius: 10px 10px 2px 10px; align-self: flex-end; }
+  .mini-phone .mp-emoji-rain { font-size: 16px; letter-spacing: 2px; text-align:center; padding: 2px 0; }
+  .mini-phone .mp-challenge { background: rgba(0,0,0,.3); border: 1px solid rgba(255,216,110,.3); border-radius: 8px; padding: 5px 7px; font-size: 9px; color:#fff; display:flex; align-items:center; gap: 5px; }
+  .mini-phone .mp-challenge .ch-emo { font-size: 14px; }
+
+  .tut-dots { display:flex; gap: 6px; justify-content:center; margin-top: 8px; }
+  .tut-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.25); cursor:pointer; transition: background .2s, transform .15s; padding: 0; border: none; }
+  .tut-dot.active { background: #ffd86e; transform: scale(1.4); }
+
+  .tut-arrow {
+    position:absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+    width: 32px; height: 32px; border-radius: 50%; border:none;
+    background: rgba(0,0,0,.5); color:#fff; font-size: 20px; line-height:1;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    backdrop-filter: blur(6px); transition: background .15s, transform .1s;
+    font-family: inherit; padding: 0;
+  }
+  .tut-arrow:hover { background: rgba(0,0,0,.75); }
+  .tut-arrow:active { transform: translateY(-50%) scale(.9); }
+  .tut-prev { left: 4px; }
+  .tut-next { right: 4px; }
+  @media (max-width: 360px){
+    .tut-arrow { display:none; }
+    .tut-slide { padding: 12px 10px 14px; }
+  }
 </style>
 </head>
 <body>
@@ -594,33 +704,155 @@
     <p style="margin-top:4px;">Mabar bareng temen<br>Voice + video + chat, real-time 🎤📹💬</p>
   </div>
 
+  <!-- ===== TUTORIAL SLIDER ===== -->
+  <div class="tutorial-slider" id="tutSlider">
+    <div class="tut-track" id="tutTrack">
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 1 dari 7</div>
+        <div class="tut-title">🎮 Cara Main</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-row" style="justify-content:center; font-size:24px;">🎲🪜🐍</div>
+            <div class="mp-board"></div>
+            <div class="mp-row" style="justify-content:center; font-size:9px; opacity:.7;">Lempar dadu • Naik tangga • Hindari ular</div>
+          </div>
+        </div>
+        <div class="tut-desc">Klasik ular tangga 1-100. Sampai petak 100 duluan = menang! Plus voice + cam jadi rame bareng temen.</div>
+      </div>
+
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 2 dari 7</div>
+        <div class="tut-title">🏠 Bikin Room</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-input">Nama: lawrenz</div>
+            <div class="mp-row"><div class="mp-chip">🎨 Pink</div><div class="mp-chip">👻 Hantu</div></div>
+            <div class="mp-bar lg">🎮 Bikin Room Baru</div>
+            <div class="mp-code">7421</div>
+            <div class="mp-row" style="justify-content:center; font-size:9px; opacity:.7;">Share kode ini ke temen</div>
+          </div>
+        </div>
+        <div class="tut-desc">Tap <b>Bikin Room Baru</b> → dapet kode 4 digit. Kirim kode itu ke temen biar mereka bisa join.</div>
+      </div>
+
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 3 dari 7</div>
+        <div class="tut-title">🚪 Join Room Temen</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-input">Nama: andi</div>
+            <div class="mp-input" style="text-align:center; font-size:16px; font-weight:900; letter-spacing:6px; color:#ffd86e;">7421</div>
+            <div class="mp-bar lg gn">🚪 Join Room</div>
+            <div class="mp-row" style="justify-content:center; gap:6px; padding-top:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#ff6ec4,#7c3aed);"></div>
+              <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#16a34a);"></div>
+              <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#fbbf24,#ef4444);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tut-desc">Minta kode dari temen → masukin di kolom <b>Kode room</b> → tap <b>Join Room</b>. Langsung masuk lobby bareng.</div>
+      </div>
+
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 4 dari 7</div>
+        <div class="tut-title">🎨 Atur Pion & Warna</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-row" style="gap:6px;">
+              <div class="mp-chip" style="background:linear-gradient(135deg,#ff6ec4,#7c3aed); padding:6px 10px;">🎨 Warna</div>
+              <div class="mp-chip" style="padding:6px 10px;">👻 Bentuk</div>
+            </div>
+            <div class="mp-pawn-row" style="padding-top:6px;">
+              <div class="mp-pawn" style="background:linear-gradient(180deg,#ff6ec4,#7c3aed);"></div>
+              <div class="mp-pawn" style="background:linear-gradient(180deg,#4ade80,#16a34a);"></div>
+              <div class="mp-pawn" style="background:linear-gradient(180deg,#fbbf24,#ef4444);"></div>
+              <div class="mp-pawn" style="background:linear-gradient(180deg,#22d3ee,#0e7490);"></div>
+            </div>
+            <div class="mp-row" style="justify-content:center; font-size:9px; opacity:.7;">Pilih gradasi bebas + 10 bentuk pion</div>
+          </div>
+        </div>
+        <div class="tut-desc">Tap tombol <b>🎨 Warna</b> buat ganti gradasi pion. Tap <b>👻 Bentuk</b> buat pilih 1 dari 10 karakter (Klasik/Raja/Hantu/Robot dll).</div>
+      </div>
+
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 5 dari 7</div>
+        <div class="tut-title">⚔️ Tantangan / Challenge</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-challenge"><span class="ch-emo">🎤</span><span>Yang kalah nyanyi 30 detik</span></div>
+            <div class="mp-challenge"><span class="ch-emo">💃</span><span>Push up 10x di depan cam</span></div>
+            <div class="mp-challenge"><span class="ch-emo">📞</span><span>Telp gebetan & say hi</span></div>
+            <div class="mp-bar lg or" style="margin-top:auto;">+ Tambah Tantangan</div>
+          </div>
+        </div>
+        <div class="tut-desc">Bikin daftar hukuman seru sebelum mulai. Yang kalah harus jalanin tantangan acak di depan cam — biar makin rame!</div>
+      </div>
+
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 6 dari 7</div>
+        <div class="tut-title">💬 Chat & Spam Emoji</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-chat-bubble">Hahaha kena ular!</div>
+            <div class="mp-chat-bubble me">Sabar bro 😂</div>
+            <div class="mp-chat-bubble">Aku udah deket finish nih</div>
+            <div class="mp-emoji-rain">😂🔥💀😭🎉</div>
+            <div class="mp-row" style="gap:4px;">
+              <div class="mp-input" style="flex:1; font-size:9px;">Ketik chat...</div>
+              <div class="mp-chip" style="padding:5px 8px;">😀</div>
+            </div>
+          </div>
+        </div>
+        <div class="tut-desc">Ada tombol <b>💬 Chat</b> buat ngobrol teks, plus <b>😀 Spam Emoji</b> yang muncul melayang di layar semua pemain real-time.</div>
+      </div>
+
+      <div class="tut-slide">
+        <div class="tut-step">Langkah 7 dari 7</div>
+        <div class="tut-title">🎲 Mabar + On-Cam!</div>
+        <div class="tut-art">
+          <div class="mini-phone">
+            <div class="mp-cams">
+              <div class="mp-cam" style="background:linear-gradient(135deg,#ff6ec4,#7c3aed);">😎</div>
+              <div class="mp-cam" style="background:linear-gradient(135deg,#4ade80,#16a34a);">🤩</div>
+              <div class="mp-cam" style="background:linear-gradient(135deg,#fbbf24,#ef4444);">😂</div>
+              <div class="mp-cam" style="background:linear-gradient(135deg,#22d3ee,#0e7490);">😱</div>
+            </div>
+            <div class="mp-bar lg" style="font-size:9px;">🎲 Lempar Dadu</div>
+          </div>
+        </div>
+        <div class="tut-desc">Semua pemain on-cam + voice barengan! Berasa mabar di rumah temen — liat ekspresi mereka pas kena ular atau dapet tangga 🐍🪜</div>
+      </div>
+    </div>
+    <div class="tut-dots" id="tutDots"></div>
+    <button class="tut-arrow tut-prev" id="tutPrev" aria-label="Sebelumnya">‹</button>
+    <button class="tut-arrow tut-next" id="tutNext" aria-label="Selanjutnya">›</button>
+  </div>
+
   <div class="card">
     <div class="form-group">
       <label>Nama kamu</label>
       <input type="text" class="input name-input" id="inputName" placeholder="Misal: Andi" maxlength="14" />
     </div>
     <div class="form-group">
-      <label>Warna pion (gradasi bebas)</label>
-      <div class="gradient-picker">
-        <div class="color-input-group">
-          <input type="color" id="colorStart" value="#ff6ec4" />
-          <span class="color-label">Atas</span>
-        </div>
-        <div class="gradient-preview" id="gradientPreview"></div>
-        <div class="color-input-group">
-          <input type="color" id="colorEnd" value="#7c3aed" />
-          <span class="color-label">Bawah</span>
-        </div>
+      <label>Atur pion kamu</label>
+      <div class="pion-config-row">
+        <button type="button" class="pion-btn" id="btnOpenColor">
+          <div class="chip" id="colorChip"></div>
+          <div class="lbl-wrap">
+            <span class="lbl-top">Warna</span>
+            <span class="lbl-bot">Gradasi</span>
+          </div>
+          <span class="caret">▾</span>
+        </button>
+        <button type="button" class="pion-btn" id="btnOpenShape">
+          <div class="chip" id="shapeChip"></div>
+          <div class="lbl-wrap">
+            <span class="lbl-top">Bentuk</span>
+            <span class="lbl-bot" id="shapeNameLbl">Hantu</span>
+          </div>
+          <span class="caret">▾</span>
+        </button>
       </div>
-      <div class="preset-row" id="presetRow"></div>
-    </div>
-    <div class="form-group">
-      <label>Bentuk pion (10 macam — pilih satu)</label>
-      <div class="shape-picker" id="shapePicker"></div>
-    </div>
-    <div class="pawn-preview-wrap">
-      <div class="pawn-preview" id="pawnPreview"></div>
-      <div class="pawn-preview-label">✨ Preview Pion Kamu</div>
     </div>
   </div>
 
@@ -637,6 +869,37 @@
   </div>
 
   <p class="footer-note">Web bakal minta izin akses kamera & mic biar bisa voice + video. Aman, langsung HP-ke-HP, ga lewat server.</p>
+</div>
+
+<!-- ===== COLOR MODAL ===== -->
+<div class="modal-bg" id="colorModal">
+  <div class="modal">
+    <button type="button" class="modal-close-x" data-close-modal="colorModal" aria-label="Tutup">×</button>
+    <div class="modal-title">🎨 Pilih Warna Pion</div>
+    <div class="gradient-picker">
+      <div class="color-input-group">
+        <input type="color" id="colorStart" value="#ff6ec4" />
+        <span class="color-label">Atas</span>
+      </div>
+      <div class="gradient-preview" id="gradientPreview"></div>
+      <div class="color-input-group">
+        <input type="color" id="colorEnd" value="#7c3aed" />
+        <span class="color-label">Bawah</span>
+      </div>
+    </div>
+    <div class="preset-row" id="presetRow"></div>
+    <button type="button" class="modal-done-btn" data-close-modal="colorModal">✓ Selesai</button>
+  </div>
+</div>
+
+<!-- ===== SHAPE MODAL ===== -->
+<div class="modal-bg" id="shapeModal">
+  <div class="modal">
+    <button type="button" class="modal-close-x" data-close-modal="shapeModal" aria-label="Tutup">×</button>
+    <div class="modal-title">👻 Pilih Bentuk Pion</div>
+    <div class="shape-picker" id="shapePicker"></div>
+    <button type="button" class="modal-done-btn" data-close-modal="shapeModal">✓ Selesai</button>
+  </div>
 </div>
 
 <!-- ===== DIFFICULTY MODAL ===== -->
@@ -1284,10 +1547,21 @@ function svgEl(name){ return document.createElementNS('http://www.w3.org/2000/sv
 function updateGradientPreview(){
   const el = $('gradientPreview');
   if (el) el.style.background = 'linear-gradient(180deg, '+myColor1+' 0%, '+myColor2+' 100%)';
+  // Compact button chip (warna)
+  const chip = $('colorChip');
+  if (chip) chip.style.background = 'linear-gradient(180deg, '+myColor1+' 0%, '+myColor2+' 100%)';
 }
 function updatePawnPreview(){
   const el = $('pawnPreview');
   if (el) el.innerHTML = shapeSVG(myShape, myColor1, myColor2, darkenHex(myColor2, 0.45));
+  // Compact button chip (bentuk pion mini)
+  const chip = $('shapeChip');
+  if (chip) chip.innerHTML = shapeSVG(myShape, myColor1, myColor2, darkenHex(myColor2, 0.45));
+  const lbl = $('shapeNameLbl');
+  if (lbl) {
+    const found = SHAPES.find(s => s.id === myShape);
+    if (found) lbl.textContent = found.name;
+  }
 }
 function refreshPresetSelection(){
   document.querySelectorAll('#presetRow .preset-swatch').forEach((sw, i) => {
@@ -1353,6 +1627,80 @@ function initPawnPicker(){
   updatePawnPreview();
 }
 initPawnPicker();
+
+/* ============== Compact pion config buttons → open modals ============== */
+function openModal(id){ const m = $(id); if (m) m.classList.add('show'); }
+function closeModal(id){ const m = $(id); if (m) m.classList.remove('show'); }
+$('btnOpenColor') && $('btnOpenColor').addEventListener('click', () => openModal('colorModal'));
+$('btnOpenShape') && $('btnOpenShape').addEventListener('click', () => openModal('shapeModal'));
+document.querySelectorAll('[data-close-modal]').forEach(btn => {
+  btn.addEventListener('click', e => { e.stopPropagation(); closeModal(btn.getAttribute('data-close-modal')); });
+});
+// Click backdrop (outside .modal) to close
+['colorModal','shapeModal'].forEach(id => {
+  const bg = $(id);
+  if (bg) bg.addEventListener('click', e => { if (e.target === bg) closeModal(id); });
+});
+
+/* ============== Tutorial slider (auto-advance + dots + arrows) ============== */
+function initTutorialSlider(){
+  const track = $('tutTrack'); if (!track) return;
+  const slides = track.querySelectorAll('.tut-slide');
+  const total = slides.length;
+  const dotsWrap = $('tutDots');
+  const prevBtn = $('tutPrev');
+  const nextBtn = $('tutNext');
+  let current = 0;
+  let autoTimer = null;
+  let userInteracted = false;
+
+  // Build dots
+  for (let i = 0; i < total; i++){
+    const d = document.createElement('button');
+    d.className = 'tut-dot' + (i===0 ? ' active' : '');
+    d.type = 'button';
+    d.setAttribute('aria-label', 'Slide '+(i+1));
+    d.addEventListener('click', () => { userInteracted = true; goTo(i); });
+    dotsWrap.appendChild(d);
+  }
+
+  function setActive(idx){
+    current = idx;
+    dotsWrap.querySelectorAll('.tut-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+  }
+  function goTo(idx){
+    if (idx < 0) idx = total - 1;
+    if (idx >= total) idx = 0;
+    const slide = slides[idx];
+    track.scrollTo({ left: slide.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+    setActive(idx);
+  }
+  prevBtn && prevBtn.addEventListener('click', () => { userInteracted = true; goTo(current - 1); });
+  nextBtn && nextBtn.addEventListener('click', () => { userInteracted = true; goTo(current + 1); });
+
+  // Track scroll → update active dot (for swipe)
+  let scrollDebounce = null;
+  track.addEventListener('scroll', () => {
+    userInteracted = true;
+    if (scrollDebounce) clearTimeout(scrollDebounce);
+    scrollDebounce = setTimeout(() => {
+      const slideWidth = slides[0].offsetWidth + 12; // +gap
+      const idx = Math.round(track.scrollLeft / slideWidth);
+      if (idx >= 0 && idx < total && idx !== current) setActive(idx);
+    }, 60);
+  }, { passive: true });
+
+  // Auto-advance every 5s, stop after user interacts
+  function startAuto(){
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = setInterval(() => {
+      if (userInteracted) { clearInterval(autoTimer); autoTimer = null; return; }
+      goTo(current + 1);
+    }, 5000);
+  }
+  startAuto();
+}
+initTutorialSlider();
 try { myName = localStorage.getItem('ut_name') || ''; $('inputName').value = myName; } catch(_){}
 const urlParams = new URLSearchParams(location.search);
 const urlRoom = (urlParams.get('r')||'').replace(/[^0-9]/g,'').slice(0,6);
