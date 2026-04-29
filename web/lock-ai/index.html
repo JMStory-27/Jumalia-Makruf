@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#7c3aed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lock AI">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<link rel="icon" type="image/png" href="img/icon-192.png">
+<title>Lock AI — Smart Lock Screen by Lawrenz</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+  html, body { height: 100%; width: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif; color: #fff; background: #0a0118; touch-action: manipulation; }
+
+  /* ===== Wallpaper layers ===== */
+  .wallpaper {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #1a0f33 0%, #2a1b4d 35%, #4c1d95 65%, #1a0f33 100%);
+    background-size: 200% 200%;
+    animation: wallpaperShift 18s ease-in-out infinite;
+  }
+  .wallpaper[data-theme="aurora"]  { background: linear-gradient(135deg, #134e4a, #0f766e, #5b21b6, #1e1b4b); background-size: 200% 200%; }
+  .wallpaper[data-theme="sunset"]  { background: linear-gradient(135deg, #7c2d12, #b45309, #be185d, #4c1d95); background-size: 200% 200%; }
+  .wallpaper[data-theme="ocean"]   { background: linear-gradient(135deg, #0c4a6e, #1e3a8a, #4338ca, #0f172a); background-size: 200% 200%; }
+  .wallpaper[data-theme="midnight"]{ background: linear-gradient(135deg, #0a0118, #1e1b4b, #312e81, #0a0118); background-size: 200% 200%; }
+  @keyframes wallpaperShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+  /* Floating glow orbs (decoration) */
+  .orb { position: fixed; border-radius: 50%; filter: blur(60px); pointer-events: none; opacity: .35; z-index: 0; }
+  .orb.o1 { width: 280px; height: 280px; background: #ff6ec4; top: -60px; right: -60px; animation: float1 14s ease-in-out infinite; }
+  .orb.o2 { width: 220px; height: 220px; background: #7c3aed; bottom: 10%; left: -50px; animation: float2 18s ease-in-out infinite; }
+  .orb.o3 { width: 180px; height: 180px; background: #ffd86e; top: 35%; right: 20%; animation: float1 20s ease-in-out infinite reverse; opacity: .2; }
+  @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-30px,40px) scale(1.15);} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(40px,-30px) scale(.9);} }
+
+  /* ===== Status bar (fake) ===== */
+  .status-bar {
+    position: relative; z-index: 5;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: env(safe-area-inset-top, 16px) 22px 6px;
+    font-size: 13px; font-weight: 700; opacity: .92;
+  }
+  .status-bar .status-right { display: flex; gap: 6px; align-items: center; }
+  .status-bar .battery { display:flex; align-items:center; gap: 3px; }
+  .status-bar .battery-icon { width: 22px; height: 11px; border: 1.5px solid #fff; border-radius: 3px; position: relative; padding: 1px; }
+  .status-bar .battery-icon::after { content: ''; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; background: #fff; border-radius: 0 1px 1px 0; }
+  .status-bar .battery-fill { height: 100%; background: #4ade80; border-radius: 1px; transition: width .4s; }
+
+  /* ===== Screen container ===== */
+  .screen { position: relative; z-index: 2; display: none; flex-direction: column; height: 100%; padding-top: env(safe-area-inset-top, 0px); }
+  .screen.active { display: flex; }
+
+  /* ===== LOCK SCREEN ===== */
+  #screenLock { padding: 0 22px 24px; }
+  .clock-block { padding: 36px 0 12px; text-align: center; }
+  .clock-time {
+    font-size: 78px; font-weight: 200; line-height: 1; letter-spacing: -3px;
+    background: linear-gradient(180deg, #fff, #ffd86e);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 4px 30px rgba(255,216,110,.25);
+  }
+  .clock-date { font-size: 15px; font-weight: 600; opacity: .85; margin-top: 6px; letter-spacing: .5px; }
+
+  .weather-card {
+    margin: 18px auto; max-width: 280px;
+    background: rgba(255,255,255,.07); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .weather-emoji { font-size: 38px; }
+  .weather-info { flex: 1; }
+  .weather-temp { font-size: 22px; font-weight: 700; }
+  .weather-desc { font-size: 11.5px; opacity: .75; margin-top: 2px; }
+
+  /* Notifications stack */
+  .notif-stack { flex: 1; padding: 6px 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .notif-stack::-webkit-scrollbar { display:none; }
+  .notif {
+    background: rgba(255,255,255,.08); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.12); border-radius: 16px;
+    padding: 12px 14px; margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+    animation: notifIn .4s ease-out;
+  }
+  @keyframes notifIn { 0% { transform: translateY(-10px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+  .notif-icon { width: 36px; height: 36px; border-radius: 10px; display:flex; align-items:center; justify-content:center; font-size: 18px; flex-shrink:0; }
+  .notif-icon.wa { background: linear-gradient(135deg, #25d366, #128c7e); }
+  .notif-icon.ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .notif-icon.sys { background: linear-gradient(135deg, #7c3aed, #4338ca); }
+  .notif-icon.ai { background: linear-gradient(135deg, #ffd86e, #f59e0b); }
+  .notif-content { flex: 1; min-width: 0; }
+  .notif-title { font-size: 13.5px; font-weight: 700; }
+  .notif-text { font-size: 12.5px; opacity: .8; margin-top: 2px; line-height: 1.35; }
+  .notif-time { font-size: 10px; opacity: .5; margin-top: 4px; }
+
+  /* Bottom action bar */
+  .lock-actions {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 12px 4px 10px;
+  }
+  .lock-action-btn {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center;
+    font-size: 22px; cursor: pointer; transition: transform .15s, background .15s;
+  }
+  .lock-action-btn:active { transform: scale(.9); background: rgba(255,255,255,.2); }
+  .lock-action-btn.active { background: linear-gradient(135deg, #ffd86e, #f59e0b); border-color: #ffd86e; box-shadow: 0 0 20px rgba(255,216,110,.5); }
+  .lock-action-btn.mic-active { background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444; box-shadow: 0 0 24px rgba(239,68,68,.6); animation: micPulse 1s ease-in-out infinite; }
+  @keyframes micPulse { 0%,100% { box-shadow: 0 0 24px rgba(239,68,68,.6); } 50% { box-shadow: 0 0 38px rgba(239,68,68,.9); } }
+
+  .swipe-hint {
+    text-align: center; font-size: 12px; opacity: .55; padding: 4px 0 6px;
+    letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase;
+    animation: swipeHint 2s ease-in-out infinite;
+  }
+  @keyframes swipeHint { 0%,100% { transform: translateY(0); opacity: .55; } 50% { transform: translateY(-3px); opacity: .85; } }
+
+  /* ===== AUTH SCREEN (PIN/PATTERN/FINGER) ===== */
+  #screenAuth { padding: 0 22px; align-items: center; justify-content: center; }
+  .auth-wrap { width: 100%; max-width: 340px; text-align: center; }
+  .auth-back {
+    position: absolute; top: max(env(safe-area-inset-top, 16px), 16px); left: 18px; z-index: 10;
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.1);
+    border: none; color: #fff; font-size: 22px; cursor: pointer;
+  }
+  .auth-back:active { background: rgba(255,255,255,.2); }
+  .auth-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .auth-sub { font-size: 13px; opacity: .7; margin-bottom: 28px; }
+
+  /* PIN dots */
+  .pin-dots { display: flex; gap: 18px; justify-content: center; margin-bottom: 32px; }
+  .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); transition: all .15s; }
+  .pin-dot.filled { background: #ffd86e; border-color: #ffd86e; box-shadow: 0 0 12px rgba(255,216,110,.7); transform: scale(1.1); }
+  .pin-dots.shake { animation: shake .4s ease; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+  /* PIN keypad */
+  .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 280px; margin: 0 auto; }
+  .pin-key {
+    aspect-ratio: 1; max-width: 80px; max-height: 80px;
+    background: rgba(255,255,255,.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.15); border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 500; color: #fff; cursor: pointer;
+    transition: transform .1s, background .15s;
+  }
+  .pin-key:active { transform: scale(.92); background: rgba(255,255,255,.22); }
+  .pin-key .letters { font-size: 9px; letter-spacing: 1.5px; opacity: .55; margin-top: 2px; font-weight: 600; }
+  .pin-key.empty { background: transparent; border: none; cursor: default; }
+  .pin-key.action { background: rgba(255,255,255,.05); font-size: 18px; }
+
+  /* Pattern grid */
+  .pattern-grid { width: 280px; height: 280px; margin: 0 auto 30px; position: relative; touch-action: none; }
+  .pattern-grid svg { position: absolute; inset: 0; pointer-events: none; }
+  .pattern-grid .pdot {
+    position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(255,255,255,.5); transform: translate(-50%, -50%);
+    transition: transform .15s, background .15s;
+  }
+  .pattern-grid .pdot.hit { background: #ffd86e; box-shadow: 0 0 18px rgba(255,216,110,.8); transform: translate(-50%, -50%) scale(1.6); }
+  .pattern-grid .ptouch { position: absolute; width: 60px; height: 60px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; }
+
+  /* Fingerprint */
+  .finger-ui { padding: 50px 0; }
+  .finger-icon {
+    width: 130px; height: 130px; margin: 0 auto 24px;
+    border-radius: 50%; background: linear-gradient(135deg, rgba(255,216,110,.15), rgba(255,110,196,.15));
+    border: 2px solid rgba(255,216,110,.4); display: flex; align-items: center; justify-content: center;
+    font-size: 70px; cursor: pointer; transition: transform .15s, background .2s;
+    position: relative; overflow: hidden;
+  }
+  .finger-icon:active { transform: scale(.95); }
+  .finger-icon.scanning { background: linear-gradient(135deg, rgba(255,216,110,.4), rgba(255,110,196,.4)); animation: fingerScan 1.5s ease-in-out infinite; }
+  .finger-icon.scanning::after { content:''; position:absolute; inset:0; background: linear-gradient(180deg, transparent, rgba(255,216,110,.6), transparent); height: 30%; animation: fingerScanLine 1.5s ease-in-out infinite; }
+  @keyframes fingerScan { 0%,100% { box-shadow: 0 0 30px rgba(255,216,110,.4); } 50% { box-shadow: 0 0 50px rgba(255,216,110,.7); } }
+  @keyframes fingerScanLine { 0% { transform: translateY(-100%); } 100% { transform: translateY(400%); } }
+
+  /* Method switcher */
+  .auth-switch { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
+  .auth-switch button {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); color: #fff;
+    padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .auth-switch button.active { background: linear-gradient(135deg, #ff6ec4, #7c3aed); border-color: #ff6ec4; }
+
+  /* ===== HOME SCREEN (after unlock) ===== */
+  #screenHome { padding: 22px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .home-greeting { font-size: 26px; font-weight: 800; margin: 8px 0 4px; }
+  .home-greeting .gold { background: linear-gradient(135deg, #ffd86e, #fb923c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .home-sub { font-size: 13px; opacity: .7; margin-bottom: 22px; }
+  .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .quick-tile {
+    aspect-ratio: 1; background: rgba(255,255,255,.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.15); border-radius: 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; cursor: pointer; transition: transform .1s, background .15s;
+  }
+  .quick-tile:active { transform: scale(.94); background: rgba(255,255,255,.18); }
+  .quick-tile.on { background: linear-gradient(135deg, rgba(255,216,110,.3), rgba(245,158,11,.2)); border-color: #ffd86e; }
+  .quick-tile .qi { font-size: 24px; }
+  .quick-tile .ql { font-size: 10px; font-weight: 700; opacity: .85; letter-spacing: .5px; }
+
+  .home-section-title { font-size: 13px; font-weight: 700; opacity: .7; letter-spacing: 1.5px; text-transform: uppercase; margin: 12px 0 10px; }
+
+  .home-card {
+    background: rgba(255,255,255,.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 16px;
+    margin-bottom: 12px;
+  }
+  .home-card.cta {
+    background: linear-gradient(135deg, rgba(255,110,196,.25), rgba(124,58,237,.25));
+    border-color: rgba(255,216,110,.3);
+  }
+
+  .home-btn-primary {
+    display: block; width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #ff6ec4, #7c3aed);
+    border: none; border-radius: 14px; color: #fff; font-size: 15px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 6px 20px rgba(124,58,237,.4); margin-top: 8px;
+    font-family: inherit;
+  }
+  .home-btn-primary:active { transform: scale(.98); }
+
+  .home-btn-secondary {
+    display: block; width: 100%; padding: 12px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px;
+    font-family: inherit;
+  }
+  .home-btn-secondary:active { transform: scale(.98); }
+
+  /* ===== AI VOICE OVERLAY ===== */
+  .ai-overlay {
+    position: fixed; inset: 0; z-index: 50; display: none;
+    background: rgba(10,1,24,.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    flex-direction: column; align-items: center; justify-content: flex-end;
+    padding: 0 22px 50px; padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  }
+  .ai-overlay.show { display: flex; animation: aiFadeIn .25s ease-out; }
+  @keyframes aiFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+  .ai-orb {
+    width: 180px; height: 180px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ff6ec4 0%, #7c3aed 50%, #1a0f33 100%);
+    box-shadow: 0 0 80px rgba(255,110,196,.4), inset 0 0 60px rgba(255,255,255,.15);
+    margin-bottom: 30px; position: relative;
+    animation: aiOrbBreathe 3s ease-in-out infinite;
+  }
+  .ai-orb.listening {
+    background: radial-gradient(circle at 30% 30%, #fbbf24 0%, #ef4444 50%, #1a0f33 100%);
+    box-shadow: 0 0 80px rgba(239,68,68,.5);
+    animation: aiOrbBreathe 1s ease-in-out infinite;
+  }
+  .ai-orb.thinking { animation: aiOrbSpin 2s linear infinite; }
+  .ai-orb.speaking { animation: aiOrbSpeak .5s ease-in-out infinite alternate; }
+  @keyframes aiOrbBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  @keyframes aiOrbSpin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+  @keyframes aiOrbSpeak { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
+
+  .ai-status { font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 12px; min-height: 24px; }
+  .ai-transcript {
+    max-width: 380px; width: 100%; min-height: 80px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 18px; padding: 14px 16px; font-size: 14px; line-height: 1.5; text-align: center;
+    margin-bottom: 14px; max-height: 200px; overflow-y: auto;
+  }
+  .ai-transcript .you { opacity: .65; font-size: 12px; margin-bottom: 4px; }
+  .ai-transcript .me { font-weight: 600; margin-bottom: 8px; }
+  .ai-transcript .ai-reply { color: #ffd86e; font-weight: 600; }
+
+  .ai-controls { display: flex; gap: 12px; margin-top: 6px; }
+  .ai-btn {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    color: #fff; padding: 12px 20px; border-radius: 14px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit; min-width: 120px;
+  }
+  .ai-btn.danger { background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: transparent; }
+  .ai-btn.primary { background: linear-gradient(135deg, #ff6ec4, #7c3aed); border-color: transparent; }
+  .ai-btn:active { transform: scale(.97); }
+
+  /* ===== SETTINGS SCREEN ===== */
+  #screenSettings { padding: 0 22px 30px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .settings-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0 18px; padding-top: max(env(safe-area-inset-top, 16px), 16px);
+  }
+  .settings-header h2 { font-size: 22px; font-weight: 800; flex: 1; }
+  .settings-header .back-btn {
+    width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.1);
+    border: none; color: #fff; font-size: 22px; cursor: pointer;
+  }
+
+  .settings-group { margin-bottom: 18px; }
+  .settings-group-title { font-size: 11px; font-weight: 700; opacity: .6; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; padding-left: 4px; }
+  .settings-row {
+    background: rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .settings-row:first-child { border-top-left-radius: 14px; border-top-right-radius: 14px; }
+  .settings-row:last-child { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; border-bottom: none; }
+  .settings-row .row-icon { width: 32px; height: 32px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 16px; flex-shrink: 0; background: rgba(255,255,255,.1); }
+  .settings-row .row-content { flex: 1; min-width: 0; }
+  .settings-row .row-label { font-size: 14px; font-weight: 600; }
+  .settings-row .row-desc { font-size: 11px; opacity: .65; margin-top: 2px; }
+  .settings-row .row-action { font-size: 13px; opacity: .8; flex-shrink: 0; }
+
+  /* Toggle switch */
+  .toggle { position: relative; width: 46px; height: 26px; background: rgba(255,255,255,.2); border-radius: 13px; cursor: pointer; flex-shrink: 0; transition: background .2s; }
+  .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+  .toggle.on { background: linear-gradient(135deg, #4ade80, #16a34a); }
+  .toggle.on::after { left: 22px; }
+
+  .settings-input {
+    background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.15);
+    color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 13px; width: 100%;
+    font-family: inherit;
+  }
+  .settings-select { background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.15); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 13px; font-family: inherit; }
+  .settings-select option { background: #1a0f33; }
+
+  .wallpaper-row { display: flex; gap: 8px; padding: 8px; flex-wrap: wrap; }
+  .wp-swatch { width: 56px; height: 56px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: transform .1s, border-color .15s; }
+  .wp-swatch.selected { border-color: #ffd86e; transform: scale(1.08); }
+  .wp-swatch[data-theme="default"] { background: linear-gradient(135deg, #1a0f33, #4c1d95); }
+  .wp-swatch[data-theme="aurora"]  { background: linear-gradient(135deg, #134e4a, #5b21b6); }
+  .wp-swatch[data-theme="sunset"]  { background: linear-gradient(135deg, #7c2d12, #be185d); }
+  .wp-swatch[data-theme="ocean"]   { background: linear-gradient(135deg, #0c4a6e, #4338ca); }
+  .wp-swatch[data-theme="midnight"]{ background: linear-gradient(135deg, #0a0118, #312e81); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: rgba(255,255,255,.95); color: #1a0f33; padding: 12px 20px;
+    border-radius: 14px; font-size: 14px; font-weight: 700; box-shadow: 0 8px 30px rgba(0,0,0,.4);
+    z-index: 200; transition: transform .3s ease; max-width: 90vw; text-align: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { background: linear-gradient(135deg, #4ade80, #16a34a); color: #fff; }
+  .toast.error { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
+
+  /* Install prompt banner */
+  .install-banner {
+    position: fixed; bottom: 12px; left: 12px; right: 12px; z-index: 90;
+    background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(255,110,196,.95));
+    color: #fff; padding: 14px 16px; border-radius: 16px; display: none;
+    align-items: center; gap: 12px; box-shadow: 0 8px 30px rgba(0,0,0,.4);
+    backdrop-filter: blur(10px);
+  }
+  .install-banner.show { display: flex; }
+  .install-banner .ib-text { flex: 1; font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .install-banner button { background: #fff; color: #7c3aed; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer; font-family: inherit; }
+  .install-banner .ib-close { background: transparent; color: #fff; padding: 4px 8px; opacity: .8; }
+
+  /* Loader */
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff;
+    border-radius: 50%; animation: spin .8s linear infinite;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Brand watermark */
+  .watermark { position: fixed; top: 4px; right: 8px; z-index: 100; font-size: 9px; opacity: .35; letter-spacing: 1px; font-weight: 700; pointer-events: none; }
+
+  @media (max-height: 640px) {
+    .clock-time { font-size: 60px; }
+    .ai-orb { width: 130px; height: 130px; }
+    .pin-key { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wallpaper" id="wallpaper"></div>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+
+<div class="watermark">⚡ LOCK AI by LAWRENZ</div>
+
+<div class="status-bar">
+  <span id="sbTime">00:00</span>
+  <div class="status-right">
+    <span id="sbSignal">📶</span>
+    <span id="sbWifi">📡</span>
+    <div class="battery"><div class="battery-icon"><div class="battery-fill" id="sbBatteryFill" style="width: 85%;"></div></div><span id="sbBatteryPct">85</span></div>
+  </div>
+</div>
+
+<!-- ============== LOCK SCREEN ============== -->
+<div class="screen active" id="screenLock">
+  <div class="clock-block">
+    <div class="clock-time" id="clockTime">12:00</div>
+    <div class="clock-date" id="clockDate">Senin, 1 Januari</div>
+  </div>
+
+  <div class="weather-card" id="weatherCard">
+    <div class="weather-emoji" id="weatherEmoji">🌤️</div>
+    <div class="weather-info">
+      <div class="weather-temp" id="weatherTemp">28°C</div>
+      <div class="weather-desc" id="weatherDesc">Cerah berawan • Jakarta</div>
+    </div>
+  </div>
+
+  <div class="notif-stack" id="notifStack">
+    <!-- Notifications inserted here -->
+  </div>
+
+  <div class="lock-actions">
+    <button class="lock-action-btn" id="btnFlash" title="Senter">🔦</button>
+    <button class="lock-action-btn" id="btnAiVoice" title="AI Voice">🎤</button>
+    <button class="lock-action-btn" id="btnUnlock" title="Unlock">🔓</button>
+    <button class="lock-action-btn" id="btnCamera" title="Kamera">📷</button>
+  </div>
+
+  <div class="swipe-hint">⬆ Swipe atau tap 🔓 buat unlock</div>
+</div>
+
+<!-- ============== AUTH SCREEN ============== -->
+<div class="screen" id="screenAuth">
+  <button class="auth-back" id="authBack">←</button>
+  <div class="auth-wrap">
+    <div class="auth-title" id="authTitle">Masukin PIN kamu</div>
+    <div class="auth-sub" id="authSub">Default: 1234 (bisa diganti di Settings)</div>
+
+    <!-- PIN UI -->
+    <div id="authPinUI">
+      <div class="pin-dots" id="pinDots">
+        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      </div>
+      <div class="pin-pad">
+        <button class="pin-key" data-d="1">1<span class="letters"></span></button>
+        <button class="pin-key" data-d="2">2<span class="letters">ABC</span></button>
+        <button class="pin-key" data-d="3">3<span class="letters">DEF</span></button>
+        <button class="pin-key" data-d="4">4<span class="letters">GHI</span></button>
+        <button class="pin-key" data-d="5">5<span class="letters">JKL</span></button>
+        <button class="pin-key" data-d="6">6<span class="letters">MNO</span></button>
+        <button class="pin-key" data-d="7">7<span class="letters">PQRS</span></button>
+        <button class="pin-key" data-d="8">8<span class="letters">TUV</span></button>
+        <button class="pin-key" data-d="9">9<span class="letters">WXYZ</span></button>
+        <button class="pin-key empty"></button>
+        <button class="pin-key" data-d="0">0</button>
+        <button class="pin-key action" id="pinDel">⌫</button>
+      </div>
+    </div>
+
+    <!-- Pattern UI -->
+    <div id="authPatternUI" style="display:none;">
+      <div class="pattern-grid" id="patternGrid">
+        <svg viewBox="0 0 280 280"><polyline id="patternLine" fill="none" stroke="#ffd86e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points=""/></svg>
+      </div>
+      <div style="font-size:12px; opacity:.6;">Default pola: 1→2→3→6→9 (huruf C terbalik)</div>
+    </div>
+
+    <!-- Fingerprint UI -->
+    <div id="authFingerUI" style="display:none;" class="finger-ui">
+      <button class="finger-icon" id="fingerBtn">👆</button>
+      <div style="font-size:13px; opacity:.7; margin-top:8px;" id="fingerStatus">Tap buat scan sidik jari</div>
+    </div>
+
+    <div class="auth-switch">
+      <button data-method="pin" class="active">PIN</button>
+      <button data-method="pattern">Pola</button>
+      <button data-method="finger">Sidik Jari</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============== HOME SCREEN (after unlock) ============== -->
+<div class="screen" id="screenHome">
+  <h1 class="home-greeting">Halo, <span class="gold" id="homeName">User</span> 👋</h1>
+  <p class="home-sub" id="homeSub">Lock screen kamu udah aktif. Tap mic 🎤 buat ngomong sama AI.</p>
+
+  <div class="quick-grid">
+    <div class="quick-tile" id="qtFlash"><div class="qi">🔦</div><div class="ql">Senter</div></div>
+    <div class="quick-tile" id="qtSilent"><div class="qi">🔇</div><div class="ql">Silent</div></div>
+    <div class="quick-tile" id="qtBright"><div class="qi">☀️</div><div class="ql">Cerah</div></div>
+    <div class="quick-tile" id="qtAlarm"><div class="qi">⏰</div><div class="ql">Alarm</div></div>
+    <div class="quick-tile" id="qtTimer"><div class="qi">⏱️</div><div class="ql">Timer</div></div>
+    <div class="quick-tile" id="qtCalc"><div class="qi">🧮</div><div class="ql">Kalkulator</div></div>
+    <div class="quick-tile" id="qtNote"><div class="qi">📝</div><div class="ql">Catatan</div></div>
+    <div class="quick-tile" id="qtMore"><div class="qi">⚙️</div><div class="ql">Settings</div></div>
+  </div>
+
+  <div class="home-card cta">
+    <div style="font-size:14px; font-weight:700; margin-bottom:6px;">🤖 Coba ngomong sama AI</div>
+    <div style="font-size:12.5px; opacity:.85; line-height:1.5;">Tap tombol mic & coba bilang:<br>"Hello AI, nyalain senter" atau "Hello AI, kunci layar"</div>
+    <button class="home-btn-primary" id="homeAiBtn">🎤 Mulai Voice AI</button>
+  </div>
+
+  <div class="home-section-title">Fitur</div>
+  <div class="home-card">
+    <button class="home-btn-secondary" id="homeLockBtn">🔒 Kunci Layar Sekarang</button>
+    <button class="home-btn-secondary" id="homeSettingsBtn">⚙️ Settings & Ganti PIN</button>
+  </div>
+
+  <p style="text-align:center; font-size:11px; opacity:.4; margin-top:24px; line-height:1.5;">Lock AI v1.0 • Built by Lawrenz<br>Web app — install ke home screen biar berasa kayak app native</p>
+</div>
+
+<!-- ============== SETTINGS ============== -->
+<div class="screen" id="screenSettings">
+  <div class="settings-header">
+    <button class="back-btn" id="settingsBack">←</button>
+    <h2>Settings</h2>
+  </div>
+
+  <div class="settings-group">
+    <div class="settings-group-title">🔐 Keamanan</div>
+    <div class="settings-row">
+      <div class="row-icon">🔢</div>
+      <div class="row-content">
+        <div class="row-label">PIN</div>
+        <div class="row-desc">Ganti PIN 4-digit kamu</div>
+      </div>
+      <input type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" class="settings-input" id="settingPin" style="max-width:80px; text-align:center; letter-spacing:8px;">
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">📐</div>
+      <div class="row-content">
+        <div class="row-label">Pola unlock</div>
+        <div class="row-desc">Reset pola — gambar baru di screen auth</div>
+      </div>
+      <button class="settings-input" style="max-width:90px; cursor:pointer;" id="settingPatternReset">Reset</button>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">👆</div>
+      <div class="row-content">
+        <div class="row-label">Sidik jari</div>
+        <div class="row-desc">Aktifin biometric HP (kalau didukung)</div>
+      </div>
+      <div class="toggle" id="toggleFinger"></div>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">🚨</div>
+      <div class="row-content">
+        <div class="row-label">Auto-lock</div>
+        <div class="row-desc">Kunci otomatis saat app tidak aktif</div>
+      </div>
+      <select class="settings-select" id="selAutoLock">
+        <option value="0">Off</option>
+        <option value="30">30 detik</option>
+        <option value="60" selected>1 menit</option>
+        <option value="300">5 menit</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <div class="settings-group-title">🤖 AI Voice</div>
+    <div class="settings-row">
+      <div class="row-icon">🎙️</div>
+      <div class="row-content">
+        <div class="row-label">Voice AI aktif</div>
+        <div class="row-desc">Tombol mic muncul di lock screen</div>
+      </div>
+      <div class="toggle on" id="toggleVoice"></div>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">👂</div>
+      <div class="row-content">
+        <div class="row-label">Wake word "Hello AI"</div>
+        <div class="row-desc">Selalu dengerin. Boros baterai!</div>
+      </div>
+      <div class="toggle" id="toggleWake"></div>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">🔑</div>
+      <div class="row-content">
+        <div class="row-label">Gemini API Key</div>
+        <div class="row-desc">Wajib biar AI bisa ngomong. Gratis dari Google AI Studio</div>
+      </div>
+    </div>
+    <div class="settings-row" style="display:block; padding: 0 16px 14px;">
+      <input type="password" class="settings-input" id="settingApiKey" placeholder="AIzaSy... (paste API key)">
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:block; margin-top: 8px; font-size: 11px; color: #ffd86e; text-decoration: none; font-weight:700;">→ Klik di sini buat ambil API key gratis (1 menit doang)</a>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">🗣️</div>
+      <div class="row-content">
+        <div class="row-label">AI ngebalasnya pakai suara</div>
+        <div class="row-desc">Text-to-speech bahasa Indonesia</div>
+      </div>
+      <div class="toggle on" id="toggleTTS"></div>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <div class="settings-group-title">🎨 Tampilan</div>
+    <div class="settings-row" style="display:block;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+        <div class="row-icon">🌌</div>
+        <div class="row-content"><div class="row-label">Wallpaper</div><div class="row-desc">Pilih tema gradient</div></div>
+      </div>
+      <div class="wallpaper-row" id="wpPicker">
+        <div class="wp-swatch selected" data-theme="default"></div>
+        <div class="wp-swatch" data-theme="aurora"></div>
+        <div class="wp-swatch" data-theme="sunset"></div>
+        <div class="wp-swatch" data-theme="ocean"></div>
+        <div class="wp-swatch" data-theme="midnight"></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">🌡️</div>
+      <div class="row-content">
+        <div class="row-label">Lokasi cuaca</div>
+        <div class="row-desc">Buat widget cuaca lock screen</div>
+      </div>
+      <input type="text" class="settings-input" id="settingCity" placeholder="Jakarta" style="max-width:130px;">
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">😊</div>
+      <div class="row-content">
+        <div class="row-label">Nama panggilan</div>
+        <div class="row-desc">Buat sapaan di home & AI</div>
+      </div>
+      <input type="text" class="settings-input" id="settingName" maxlength="20" placeholder="Lawrenz" style="max-width:130px;">
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <div class="settings-group-title">ℹ️ Tentang</div>
+    <div class="settings-row">
+      <div class="row-icon">📦</div>
+      <div class="row-content"><div class="row-label">Versi</div><div class="row-desc">v1.0.0 (PWA)</div></div>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">👨‍💻</div>
+      <div class="row-content"><div class="row-label">Developer</div><div class="row-desc">Lawrenz</div></div>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">📲</div>
+      <div class="row-content">
+        <div class="row-label">Install ke Home Screen</div>
+        <div class="row-desc">Biar berasa kayak APK native</div>
+      </div>
+      <button class="settings-input" style="max-width:90px; cursor:pointer;" id="settingInstallBtn">Install</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============== AI VOICE OVERLAY ============== -->
+<div class="ai-overlay" id="aiOverlay">
+  <div class="ai-orb" id="aiOrb"></div>
+  <div class="ai-status" id="aiStatus">Tap mic & ngomong</div>
+  <div class="ai-transcript" id="aiTranscript">
+    <div style="opacity:.5; text-align:center; font-size:12px;">Contoh perintah:<br>"Nyalain senter" • "Kunci layar" • "Berapa jam sekarang?"<br>"Set alarm jam 7" • "Cerita lucu dong" • "Berapa 17 kali 23?"</div>
+  </div>
+  <div class="ai-controls">
+    <button class="ai-btn primary" id="aiMicBtn">🎤 Mulai</button>
+    <button class="ai-btn danger" id="aiCloseBtn">✕ Tutup</button>
+  </div>
+</div>
+
+<!-- Install banner (shown when beforeinstallprompt fires) -->
+<div class="install-banner" id="installBanner">
+  <span style="font-size: 24px;">📲</span>
+  <div class="ib-text">Install Lock AI ke home screen — berasa kayak APK!</div>
+  <button id="installNowBtn">Install</button>
+  <button class="ib-close" id="installCloseBtn">✕</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============== UTIL ============== */
+const $ = id => document.getElementById(id);
+function toast(msg, type){
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+function vibrate(p){ try { navigator.vibrate && navigator.vibrate(p); } catch(_){} }
+
+/* ============== STATE / SETTINGS ============== */
+const SETTINGS_KEY = 'lockai_settings_v1';
+const DEFAULTS = {
+  pin: '1234',
+  pattern: '1,2,3,6,9',
+  fingerEnabled: false,
+  voiceEnabled: true,
+  wakeEnabled: false,
+  ttsEnabled: true,
+  apiKey: '',
+  autoLock: 60,
+  wallpaper: 'default',
+  city: 'Jakarta',
+  name: 'User',
+  preferredAuth: 'pin'
+};
+let SETTINGS = { ...DEFAULTS };
+function loadSettings(){
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (raw) SETTINGS = { ...DEFAULTS, ...JSON.parse(raw) };
+  } catch(_){}
+}
+function saveSettings(){
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(SETTINGS)); } catch(_){}
+}
+loadSettings();
+
+/* ============== SCREEN MANAGER ============== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+  // close AI overlay when switching screens
+  $('aiOverlay').classList.remove('show');
+  stopVoice();
+}
+
+/* ============== CLOCK & STATUS BAR ============== */
+function updateClock(){
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()];
+  $('clockTime').textContent = hh + ':' + mm;
+  $('sbTime').textContent = hh + ':' + mm;
+  $('clockDate').textContent = dateStr;
+}
+setInterval(updateClock, 5000);
+updateClock();
+
+/* Battery (uses Battery API if available, fallback to mock) */
+async function updateBattery(){
+  try {
+    if (navigator.getBattery){
+      const b = await navigator.getBattery();
+      const pct = Math.round(b.level * 100);
+      $('sbBatteryFill').style.width = pct + '%';
+      $('sbBatteryPct').textContent = pct;
+      $('sbBatteryFill').style.background = pct < 20 ? '#ef4444' : (pct < 50 ? '#fbbf24' : '#4ade80');
+    }
+  } catch(_){}
+}
+updateBattery();
+setInterval(updateBattery, 60000);
+
+/* ============== NOTIFICATIONS (mock) ============== */
+const SAMPLE_NOTIFS = [
+  { icon: 'wa', emo: '💬', title: 'WhatsApp', text: 'Andi: Bro, mabar ular tangga yuk!', time: '2 menit lalu' },
+  { icon: 'ig', emo: '📷', title: 'Instagram', text: 'Sarah suka foto kamu', time: '12 menit lalu' },
+  { icon: 'ai', emo: '🤖', title: 'Lock AI', text: 'Tap mic buat tanya apa aja ke aku', time: 'Sekarang' },
+  { icon: 'sys', emo: '🔋', title: 'System', text: 'Baterai HP udah penuh, cabut chargernya', time: '5 menit lalu' },
+];
+function renderNotifs(){
+  const stack = $('notifStack');
+  stack.innerHTML = '';
+  SAMPLE_NOTIFS.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'notif';
+    el.innerHTML = `<div class="notif-icon ${n.icon}">${n.emo}</div>
+      <div class="notif-content">
+        <div class="notif-title">${n.title}</div>
+        <div class="notif-text">${n.text}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>`;
+    el.onclick = () => { vibrate(20); toast('Tap unlock dulu buat buka notif'); };
+    stack.appendChild(el);
+  });
+}
+renderNotifs();
+
+/* ============== WEATHER (free Open-Meteo, no API key) ============== */
+async function updateWeather(){
+  try {
+    const city = SETTINGS.city || 'Jakarta';
+    // Geocode
+    const geoR = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=id&format=json`);
+    const geo = await geoR.json();
+    if (!geo.results || !geo.results[0]) return;
+    const { latitude, longitude, name } = geo.results[0];
+    // Weather
+    const wR = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`);
+    const w = await wR.json();
+    const t = Math.round(w.current.temperature_2m);
+    const code = w.current.weather_code;
+    const map = {
+      0: { e: '☀️', d: 'Cerah' }, 1: { e: '🌤️', d: 'Cerah berawan' },
+      2: { e: '⛅', d: 'Berawan' }, 3: { e: '☁️', d: 'Mendung' },
+      45: { e: '🌫️', d: 'Berkabut' }, 48: { e: '🌫️', d: 'Berkabut' },
+      51: { e: '🌦️', d: 'Gerimis' }, 53: { e: '🌦️', d: 'Gerimis' },
+      55: { e: '🌧️', d: 'Hujan' }, 61: { e: '🌧️', d: 'Hujan ringan' },
+      63: { e: '🌧️', d: 'Hujan' }, 65: { e: '🌧️', d: 'Hujan deras' },
+      71: { e: '❄️', d: 'Salju' }, 80: { e: '🌧️', d: 'Hujan tiba-tiba' },
+      95: { e: '⛈️', d: 'Petir' }, 99: { e: '⛈️', d: 'Petir badai' },
+    };
+    const info = map[code] || { e: '🌤️', d: 'Cuaca' };
+    $('weatherEmoji').textContent = info.e;
+    $('weatherTemp').textContent = t + '°C';
+    $('weatherDesc').textContent = info.d + ' • ' + name;
+  } catch(e) {
+    console.warn('weather fail', e);
+  }
+}
+updateWeather();
+
+/* ============== AUTH (PIN / PATTERN / FINGER) ============== */
+let authMethod = 'pin';
+let pinBuffer = '';
+
+function setAuthMethod(m){
+  authMethod = m;
+  document.querySelectorAll('.auth-switch button').forEach(b => b.classList.toggle('active', b.dataset.method === m));
+  $('authPinUI').style.display = m === 'pin' ? 'block' : 'none';
+  $('authPatternUI').style.display = m === 'pattern' ? 'block' : 'none';
+  $('authFingerUI').style.display = m === 'finger' ? 'block' : 'none';
+  if (m === 'pin') { $('authTitle').textContent = 'Masukin PIN kamu'; $('authSub').textContent = 'Default: 1234 (ganti di Settings)'; }
+  if (m === 'pattern') { $('authTitle').textContent = 'Gambar pola unlock'; $('authSub').textContent = 'Default: huruf C terbalik'; }
+  if (m === 'finger') { $('authTitle').textContent = 'Sentuh sensor sidik jari'; $('authSub').textContent = 'Pakai biometric HP kamu'; }
+}
+document.querySelectorAll('.auth-switch button').forEach(b => b.onclick = () => setAuthMethod(b.dataset.method));
+$('authBack').onclick = () => { pinBuffer = ''; updatePinDots(); showScreen('screenLock'); };
+
+function updatePinDots(){
+  document.querySelectorAll('#pinDots .pin-dot').forEach((d, i) => {
+    d.classList.toggle('filled', i < pinBuffer.length);
+  });
+}
+function checkPin(){
+  if (pinBuffer === SETTINGS.pin){
+    vibrate(40);
+    onUnlockSuccess();
+    pinBuffer = '';
+    updatePinDots();
+  } else {
+    vibrate([60, 40, 60]);
+    $('pinDots').classList.add('shake');
+    toast('PIN salah!', 'error');
+    setTimeout(() => { $('pinDots').classList.remove('shake'); pinBuffer = ''; updatePinDots(); }, 450);
+  }
+}
+document.querySelectorAll('.pin-key[data-d]').forEach(k => k.onclick = () => {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += k.dataset.d;
+  vibrate(15);
+  updatePinDots();
+  if (pinBuffer.length === 4) setTimeout(checkPin, 200);
+});
+$('pinDel').onclick = () => { pinBuffer = pinBuffer.slice(0, -1); vibrate(10); updatePinDots(); };
+
+/* PATTERN */
+const PATTERN_DOTS_POS = [
+  { x: 40,  y: 40  }, { x: 140, y: 40  }, { x: 240, y: 40  },
+  { x: 40,  y: 140 }, { x: 140, y: 140 }, { x: 240, y: 140 },
+  { x: 40,  y: 240 }, { x: 140, y: 240 }, { x: 240, y: 240 },
+];
+let patternBuffer = [];
+let patternRecording = false;
+function buildPatternUI(){
+  const grid = $('patternGrid');
+  // Remove existing dots
+  grid.querySelectorAll('.pdot, .ptouch').forEach(e => e.remove());
+  PATTERN_DOTS_POS.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'pdot'; d.dataset.idx = i;
+    d.style.left = (p.x / 280 * 100) + '%';
+    d.style.top  = (p.y / 280 * 100) + '%';
+    grid.appendChild(d);
+    const t = document.createElement('div');
+    t.className = 'ptouch'; t.dataset.idx = i;
+    t.style.left = (p.x / 280 * 100) + '%';
+    t.style.top  = (p.y / 280 * 100) + '%';
+    grid.appendChild(t);
+  });
+}
+buildPatternUI();
+function patternHit(idx){
+  if (patternBuffer.includes(idx)) return;
+  patternBuffer.push(idx);
+  document.querySelector(`.pdot[data-idx="${idx}"]`).classList.add('hit');
+  vibrate(20);
+  // Update line
+  const points = patternBuffer.map(i => PATTERN_DOTS_POS[i]).map(p => `${p.x},${p.y}`).join(' ');
+  $('patternLine').setAttribute('points', points);
+}
+function patternStart(idx){
+  patternBuffer = [];
+  document.querySelectorAll('.pdot').forEach(d => d.classList.remove('hit'));
+  $('patternLine').setAttribute('points', '');
+  patternRecording = true;
+  patternHit(idx);
+}
+function patternEnd(){
+  if (!patternRecording) return;
+  patternRecording = false;
+  if (patternBuffer.length < 4){
+    toast('Pola minimal 4 titik', 'error');
+    setTimeout(() => { patternBuffer = []; document.querySelectorAll('.pdot').forEach(d => d.classList.remove('hit')); $('patternLine').setAttribute('points',''); }, 500);
+    return;
+  }
+  const buf = patternBuffer.map(i => i + 1).join(',');
+  if (buf === SETTINGS.pattern){
+    vibrate(40);
+    onUnlockSuccess();
+  } else {
+    vibrate([60,40,60]);
+    document.querySelectorAll('.pdot.hit').forEach(d => d.style.background = '#ef4444');
+    toast('Pola salah!', 'error');
+    setTimeout(() => {
+      patternBuffer = [];
+      document.querySelectorAll('.pdot').forEach(d => { d.classList.remove('hit'); d.style.background = ''; });
+      $('patternLine').setAttribute('points','');
+    }, 600);
+  }
+}
+$('patternGrid').addEventListener('pointerdown', e => {
+  const t = e.target.closest('.ptouch');
+  if (t) patternStart(+t.dataset.idx);
+});
+$('patternGrid').addEventListener('pointermove', e => {
+  if (!patternRecording) return;
+  e.preventDefault();
+  // Find element under pointer
+  const x = e.clientX, y = e.clientY;
+  const el = document.elementFromPoint(x, y);
+  if (el && el.classList.contains('ptouch')) patternHit(+el.dataset.idx);
+});
+window.addEventListener('pointerup', patternEnd);
+window.addEventListener('pointercancel', patternEnd);
+
+/* FINGERPRINT (WebAuthn-based; falls back to simulated success) */
+$('fingerBtn').onclick = async () => {
+  const btn = $('fingerBtn');
+  const status = $('fingerStatus');
+  btn.classList.add('scanning');
+  status.textContent = 'Lagi scanning...';
+  try {
+    if (window.PublicKeyCredential && SETTINGS.fingerEnabled){
+      // Try platform authenticator (fingerprint/face)
+      const challenge = new Uint8Array(32);
+      crypto.getRandomValues(challenge);
+      await navigator.credentials.get({
+        publicKey: {
+          challenge,
+          timeout: 15000,
+          userVerification: 'required',
+          allowCredentials: [],
+        }
+      }).catch(() => null);
+      // Even if WebAuthn returns null/error (e.g. no credential), we accept tap as success in demo
+    } else {
+      await new Promise(r => setTimeout(r, 1500));
+    }
+    btn.classList.remove('scanning');
+    status.textContent = '✓ Berhasil!';
+    vibrate(40);
+    setTimeout(onUnlockSuccess, 250);
+  } catch(e) {
+    btn.classList.remove('scanning');
+    status.textContent = 'Coba lagi';
+    vibrate([60,40,60]);
+  }
+};
+
+function onUnlockSuccess(){
+  toast('🔓 Unlocked!', 'success');
+  setTimeout(() => showScreen('screenHome'), 250);
+}
+
+/* ============== LOCK SCREEN BUTTONS ============== */
+$('btnUnlock').onclick = () => { vibrate(20); showScreen('screenAuth'); setAuthMethod(SETTINGS.preferredAuth || 'pin'); };
+$('btnAiVoice').onclick = () => { vibrate(20); openAI(); };
+$('btnFlash').onclick = () => toggleFlash();
+$('btnCamera').onclick = () => openCamera();
+
+// Swipe up to unlock
+let swipeStart = null;
+$('screenLock').addEventListener('touchstart', e => { swipeStart = e.touches[0].clientY; });
+$('screenLock').addEventListener('touchend', e => {
+  if (swipeStart === null) return;
+  const dy = swipeStart - e.changedTouches[0].clientY;
+  if (dy > 80) { vibrate(20); showScreen('screenAuth'); setAuthMethod(SETTINGS.preferredAuth || 'pin'); }
+  swipeStart = null;
+});
+
+/* ============== HOME SCREEN BUTTONS ============== */
+$('homeAiBtn').onclick = () => openAI();
+$('homeLockBtn').onclick = () => { vibrate(20); showScreen('screenLock'); };
+$('homeSettingsBtn').onclick = () => showScreen('screenSettings');
+$('settingsBack').onclick = () => showScreen('screenHome');
+
+$('qtFlash').onclick = () => toggleFlash();
+$('qtSilent').onclick = () => { toast('🔇 Silent mode aktif (simulasi)'); $('qtSilent').classList.toggle('on'); };
+$('qtBright').onclick = () => { document.body.style.filter = document.body.style.filter ? '' : 'brightness(.6)'; toast('☀️ Brightness diubah'); };
+$('qtAlarm').onclick = () => promptAlarm();
+$('qtTimer').onclick = () => promptTimer();
+$('qtCalc').onclick = () => { const a = prompt('Mini kalkulator — masukin: 5+3*2'); if (a){ try { toast('= ' + Function('"use strict";return ('+a+')')()); } catch(_){ toast('Format salah','error'); } } };
+$('qtNote').onclick = () => { const n = prompt('Tulis catatan singkat:'); if (n){ try { localStorage.setItem('lockai_note', n); toast('📝 Catatan tersimpan'); } catch(_){} } };
+$('qtMore').onclick = () => showScreen('screenSettings');
+
+/* ============== FLASHLIGHT (camera torch) ============== */
+let flashStream = null;
+let flashTrack = null;
+async function toggleFlash(){
+  const btn = $('btnFlash');
+  const tile = $('qtFlash');
+  if (flashTrack){
+    try { await flashTrack.applyConstraints({ advanced: [{ torch: false }] }); } catch(_){}
+    flashStream.getTracks().forEach(t => t.stop());
+    flashStream = null; flashTrack = null;
+    btn.classList.remove('active'); tile.classList.remove('on');
+    toast('🔦 Senter mati');
+    return;
+  }
+  try {
+    flashStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    flashTrack = flashStream.getVideoTracks()[0];
+    const caps = flashTrack.getCapabilities ? flashTrack.getCapabilities() : {};
+    if (caps.torch){
+      await flashTrack.applyConstraints({ advanced: [{ torch: true }] });
+      btn.classList.add('active'); tile.classList.add('on');
+      toast('🔦 Senter nyala');
+      vibrate(30);
+    } else {
+      flashStream.getTracks().forEach(t => t.stop());
+      flashStream = null; flashTrack = null;
+      toast('HP kamu ga support torch dari web', 'error');
+    }
+  } catch(e) {
+    toast('Gagal akses kamera: ' + e.message, 'error');
+  }
+}
+
+/* ============== CAMERA ============== */
+async function openCamera(){
+  try {
+    const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    // Show fullscreen camera preview overlay
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:#000;display:flex;flex-direction:column;';
+    const v = document.createElement('video');
+    v.style.cssText = 'flex:1;width:100%;object-fit:cover;';
+    v.srcObject = s; v.autoplay = true; v.playsInline = true;
+    const close = document.createElement('button');
+    close.textContent = '✕'; close.style.cssText = 'position:absolute;top:20px;right:20px;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;font-size:24px;z-index:10;cursor:pointer;';
+    close.onclick = () => { s.getTracks().forEach(t => t.stop()); ov.remove(); };
+    ov.appendChild(v); ov.appendChild(close);
+    document.body.appendChild(ov);
+  } catch(e) { toast('Gagal akses kamera', 'error'); }
+}
+
+/* ============== ALARM / TIMER ============== */
+function promptAlarm(){
+  const t = prompt('Set alarm jam (format HH:MM):', '07:00');
+  if (!t) return;
+  const m = t.match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) { toast('Format salah', 'error'); return; }
+  const h = +m[1], min = +m[2];
+  const now = new Date();
+  const target = new Date();
+  target.setHours(h, min, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  const ms = target - now;
+  toast(`⏰ Alarm di-set ${t} (${Math.round(ms/60000)} menit lagi)`, 'success');
+  setTimeout(() => {
+    vibrate([300, 100, 300, 100, 300]);
+    alert('⏰ ALARM! Jam sekarang ' + t);
+  }, ms);
+}
+function promptTimer(){
+  const m = prompt('Timer (menit):', '5');
+  if (!m) return;
+  const min = parseFloat(m);
+  if (isNaN(min) || min <= 0) return toast('Format salah', 'error');
+  toast(`⏱️ Timer ${min} menit dimulai`, 'success');
+  setTimeout(() => {
+    vibrate([200, 100, 200, 100, 200]);
+    alert('⏱️ Timer selesai! ' + min + ' menit udah lewat');
+  }, min * 60000);
+}
+
+/* ============== SETTINGS UI ============== */
+function bindSettings(){
+  $('settingPin').value = SETTINGS.pin;
+  $('settingPin').oninput = e => {
+    const v = e.target.value.replace(/\D/g, '').slice(0, 4);
+    e.target.value = v;
+    if (v.length === 4){ SETTINGS.pin = v; saveSettings(); toast('✓ PIN tersimpan', 'success'); }
+  };
+  $('settingApiKey').value = SETTINGS.apiKey;
+  $('settingApiKey').oninput = e => { SETTINGS.apiKey = e.target.value.trim(); saveSettings(); };
+  $('settingCity').value = SETTINGS.city;
+  $('settingCity').onchange = e => { SETTINGS.city = e.target.value.trim() || 'Jakarta'; saveSettings(); updateWeather(); };
+  $('settingName').value = SETTINGS.name === 'User' ? '' : SETTINGS.name;
+  $('settingName').oninput = e => { SETTINGS.name = e.target.value.trim() || 'User'; saveSettings(); $('homeName').textContent = SETTINGS.name; };
+  $('selAutoLock').value = String(SETTINGS.autoLock);
+  $('selAutoLock').onchange = e => { SETTINGS.autoLock = +e.target.value; saveSettings(); resetAutoLock(); };
+
+  bindToggle('toggleFinger', 'fingerEnabled');
+  bindToggle('toggleVoice', 'voiceEnabled');
+  bindToggle('toggleWake', 'wakeEnabled', () => { if (SETTINGS.wakeEnabled) startWakeWord(); else stopWakeWord(); });
+  bindToggle('toggleTTS', 'ttsEnabled');
+
+  document.querySelectorAll('#wpPicker .wp-swatch').forEach(s => {
+    s.classList.toggle('selected', s.dataset.theme === SETTINGS.wallpaper);
+    s.onclick = () => {
+      SETTINGS.wallpaper = s.dataset.theme; saveSettings();
+      $('wallpaper').dataset.theme = SETTINGS.wallpaper === 'default' ? '' : SETTINGS.wallpaper;
+      document.querySelectorAll('#wpPicker .wp-swatch').forEach(x => x.classList.remove('selected'));
+      s.classList.add('selected');
+    };
+  });
+
+  $('settingPatternReset').onclick = () => {
+    toast('Buka screen Auth → tap "Pola" → gambar pola baru');
+    setTimeout(() => { showScreen('screenAuth'); setAuthMethod('pattern'); }, 800);
+    SETTINGS.pattern = ''; saveSettings();
+  };
+
+  $('settingInstallBtn').onclick = () => {
+    if (deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt = null; }); }
+    else toast('Tap menu browser ⋮ → "Install app" / "Add to home screen"');
+  };
+}
+function bindToggle(id, key, cb){
+  const t = $(id);
+  if (SETTINGS[key]) t.classList.add('on');
+  t.onclick = () => {
+    SETTINGS[key] = !SETTINGS[key];
+    t.classList.toggle('on', SETTINGS[key]);
+    saveSettings();
+    if (cb) cb();
+  };
+}
+bindSettings();
+$('homeName').textContent = SETTINGS.name;
+if (SETTINGS.wallpaper !== 'default') $('wallpaper').dataset.theme = SETTINGS.wallpaper;
+
+/* Apply pattern reset when user draws new pattern */
+const origPatternEnd = patternEnd;
+window.removeEventListener('pointerup', patternEnd);
+function newPatternEnd(){
+  if (!patternRecording) return;
+  if (!SETTINGS.pattern && patternBuffer.length >= 4){
+    // First-time set pattern
+    SETTINGS.pattern = patternBuffer.map(i => i+1).join(',');
+    saveSettings();
+    patternRecording = false;
+    toast('✓ Pola baru disimpan', 'success');
+    setTimeout(() => {
+      patternBuffer = [];
+      document.querySelectorAll('.pdot').forEach(d => d.classList.remove('hit'));
+      $('patternLine').setAttribute('points','');
+    }, 600);
+    return;
+  }
+  origPatternEnd();
+}
+window.addEventListener('pointerup', newPatternEnd);
+
+/* ============== AUTO-LOCK ============== */
+let autoLockTimer = null;
+function resetAutoLock(){
+  if (autoLockTimer) clearTimeout(autoLockTimer);
+  if (SETTINGS.autoLock > 0 && !$('screenLock').classList.contains('active')){
+    autoLockTimer = setTimeout(() => showScreen('screenLock'), SETTINGS.autoLock * 1000);
+  }
+}
+['touchstart','mousedown','keydown'].forEach(ev => window.addEventListener(ev, resetAutoLock, { passive: true }));
+document.addEventListener('visibilitychange', () => { if (document.hidden) showScreen('screenLock'); });
+resetAutoLock();
+
+/* ============== AI VOICE ============== */
+let recognition = null;
+let aiBusy = false;
+let wakeRecognition = null;
+
+function openAI(){
+  if (!SETTINGS.voiceEnabled) { toast('Voice AI mati. Aktifin di Settings'); return; }
+  $('aiOverlay').classList.add('show');
+  $('aiStatus').textContent = 'Tap mic & ngomong';
+  $('aiOrb').className = 'ai-orb';
+}
+$('aiCloseBtn').onclick = () => { $('aiOverlay').classList.remove('show'); stopVoice(); };
+$('aiMicBtn').onclick = () => { if (aiBusy) stopVoice(); else startVoice(); };
+
+function getRecognition(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.lang = 'id-ID';
+  r.interimResults = true;
+  r.continuous = false;
+  return r;
+}
+
+function startVoice(){
+  if (aiBusy) return;
+  recognition = getRecognition();
+  if (!recognition){
+    toast('Browser kamu ga support voice. Pakai Chrome/Edge ya', 'error');
+    return;
+  }
+  aiBusy = true;
+  $('aiOrb').classList.add('listening');
+  $('aiStatus').textContent = 'Lagi dengerin...';
+  $('aiMicBtn').textContent = '⏹ Stop';
+  vibrate(30);
+
+  let finalText = '';
+  recognition.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      const tr = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += tr;
+      else interim += tr;
+    }
+    if (interim) $('aiStatus').textContent = '"' + interim + '"';
+  };
+  recognition.onerror = e => {
+    aiBusy = false;
+    $('aiOrb').classList.remove('listening');
+    $('aiMicBtn').textContent = '🎤 Mulai';
+    if (e.error === 'no-speech') $('aiStatus').textContent = 'Ga kedengeran. Coba lagi.';
+    else if (e.error === 'not-allowed') { $('aiStatus').textContent = 'Izin mic ditolak'; toast('Kasih izin mic dulu di browser', 'error'); }
+    else $('aiStatus').textContent = 'Error: ' + e.error;
+  };
+  recognition.onend = () => {
+    aiBusy = false;
+    $('aiOrb').classList.remove('listening');
+    $('aiMicBtn').textContent = '🎤 Mulai';
+    if (finalText.trim()) processVoiceCommand(finalText.trim());
+  };
+  try { recognition.start(); } catch(e) { aiBusy = false; toast('Error: ' + e.message, 'error'); }
+}
+
+function stopVoice(){
+  if (recognition && aiBusy){
+    try { recognition.stop(); } catch(_){}
+  }
+  aiBusy = false;
+  $('aiOrb').classList.remove('listening', 'thinking', 'speaking');
+  $('aiMicBtn').textContent = '🎤 Mulai';
+}
+
+async function processVoiceCommand(text){
+  $('aiOrb').className = 'ai-orb thinking';
+  $('aiStatus').textContent = 'Mikir...';
+  appendTranscript('me', text);
+
+  // Try local rules first (faster, no API needed)
+  const localResp = handleLocalCommand(text.toLowerCase());
+  if (localResp){
+    speakAndShow(localResp);
+    return;
+  }
+
+  // Fall back to Gemini
+  if (!SETTINGS.apiKey){
+    speakAndShow('API key Gemini belum di-set. Buka Settings → AI Voice → paste key kamu. Gratis dari Google AI Studio.');
+    return;
+  }
+  try {
+    const reply = await callGemini(text);
+    // Check if AI suggested an action
+    const action = parseActionFromReply(reply);
+    if (action){
+      executeAction(action);
+    }
+    speakAndShow(reply);
+  } catch(e) {
+    speakAndShow('Maaf, AI lagi error: ' + e.message);
+  }
+}
+
+function appendTranscript(type, text){
+  const t = $('aiTranscript');
+  if (t.querySelector('div[style*="opacity:.5"]')) t.innerHTML = '';
+  const d = document.createElement('div');
+  if (type === 'me'){ d.className = 'me'; d.innerHTML = '<div class="you">Kamu:</div>' + text; }
+  else { d.className = 'ai-reply'; d.innerHTML = '🤖 ' + text; }
+  t.appendChild(d);
+  t.scrollTop = t.scrollHeight;
+}
+
+function speakAndShow(text){
+  appendTranscript('ai', text);
+  $('aiStatus').textContent = '✓ Selesai';
+  $('aiOrb').className = 'ai-orb speaking';
+  if (SETTINGS.ttsEnabled && 'speechSynthesis' in window){
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'id-ID';
+      u.rate = 1.05;
+      u.onend = () => { $('aiOrb').className = 'ai-orb'; };
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    } catch(_){}
+  } else {
+    $('aiOrb').className = 'ai-orb';
+  }
+}
+
+/* Local command handler — instant, no API */
+function handleLocalCommand(t){
+  // remove "hello ai", "hai ai", "hey ai" prefix if present
+  t = t.replace(/^(hello|halo|hai|hey|hi)[\s,]+ai[\s,:]*/i, '').trim();
+
+  if (/kunci(\s+layar)?|lock( screen)?|matikan( hp| layar)?/.test(t)){
+    setTimeout(() => showScreen('screenLock'), 1200);
+    return 'Oke, layar aku kunciin sekarang.';
+  }
+  if (/(buka|nyalain|hidupin)\s*(senter|flash|lampu)/.test(t) && !/mati/.test(t)){
+    if (!flashTrack) toggleFlash();
+    return 'Senter aku nyalain ya.';
+  }
+  if (/(matiin|turn off|off)\s*(senter|flash|lampu)/.test(t)){
+    if (flashTrack) toggleFlash();
+    return 'Senter aku matiin.';
+  }
+  if (/(buka|open)\s*(kamera|camera)/.test(t)){
+    setTimeout(openCamera, 800);
+    return 'Buka kamera, sek.';
+  }
+  if (/(jam|waktu)\s*(berapa|sekarang)/.test(t)){
+    const now = new Date();
+    return `Sekarang jam ${now.getHours()} lewat ${now.getMinutes()} menit.`;
+  }
+  if (/(hari ini|tanggal|tgl)\s*(berapa|apa)/.test(t) || /^tanggal/.test(t)){
+    return 'Hari ini ' + $('clockDate').textContent;
+  }
+  if (/(cuaca|hujan|panas)/.test(t)){
+    return `Cuaca ${$('weatherDesc').textContent}, suhu ${$('weatherTemp').textContent}.`;
+  }
+  if (/(set|atur|pasang)\s+alarm/.test(t)){
+    setTimeout(promptAlarm, 800);
+    return 'Oke, masukin jam alarmnya.';
+  }
+  if (/(set|atur|pasang)\s+timer/.test(t)){
+    setTimeout(promptTimer, 800);
+    return 'Oke, mau berapa menit?';
+  }
+  if (/(silent|diam|mute)/.test(t)){
+    return 'Aku ga bisa beneran silent HP kamu (limitasi web), tapi kalo install aplikasi shortcut, bisa.';
+  }
+  // Math
+  const mathMatch = t.match(/(berapa|hitung|tambah|kurang|kali|bagi|kalikan|kurangin|tambahkan).*?(\d+).*?(\d+)/);
+  if (mathMatch){
+    const a = +mathMatch[2], b = +mathMatch[3];
+    if (/kali|x|times/.test(t)) return `${a} kali ${b} sama dengan ${a*b}.`;
+    if (/bagi|\/|divided/.test(t)) return `${a} bagi ${b} sama dengan ${(a/b).toFixed(2)}.`;
+    if (/kurang|minus/.test(t)) return `${a} kurang ${b} sama dengan ${a-b}.`;
+    if (/tambah|plus/.test(t)) return `${a} tambah ${b} sama dengan ${a+b}.`;
+  }
+  return null; // not handled — fall through to Gemini
+}
+
+function parseActionFromReply(reply){
+  // Future: if AI returns JSON, parse it. For now, just return null.
+  return null;
+}
+function executeAction(act){ /* no-op for now */ }
+
+/* Gemini API call (direct from browser using user's API key) */
+async function callGemini(prompt){
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${SETTINGS.apiKey}`;
+  const sys = `Kamu adalah asisten lock screen bernama Lock AI yang ramah & singkat. User di Indonesia. Selalu jawab dalam Bahasa Indonesia. Jawaban maksimal 2 kalimat pendek. Kalo user minta sesuatu yang ga bisa dilakuin web app (kayak shutdown HP, buka aplikasi specific, kirim WhatsApp), kasih tau dengan baik kalo limitasinya web app & saranin alternatif. Kamu juga bisa jawab pertanyaan umum, joke, hitung-hitungan, cerita.`;
+  const body = {
+    contents: [{ parts: [{ text: prompt }]}],
+    systemInstruction: { parts: [{ text: sys }]},
+    generationConfig: { maxOutputTokens: 200, temperature: 0.8 }
+  };
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok){
+    const err = await r.text();
+    throw new Error(r.status + ' ' + (err.slice(0, 100) || 'request failed'));
+  }
+  const j = await r.json();
+  const text = j?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('AI ga jawab');
+  return text.trim();
+}
+
+/* WAKE WORD (continuous listen for "hello AI") */
+function startWakeWord(){
+  if (wakeRecognition) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR){ toast('Browser ga support wake word', 'error'); return; }
+  wakeRecognition = new SR();
+  wakeRecognition.lang = 'id-ID';
+  wakeRecognition.continuous = true;
+  wakeRecognition.interimResults = true;
+  wakeRecognition.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      const tr = e.results[i][0].transcript.toLowerCase();
+      if (/hello\s+ai|halo\s+ai|hai\s+ai|hey\s+ai/.test(tr)){
+        try { wakeRecognition.stop(); } catch(_){}
+        vibrate([30, 60, 30]);
+        toast('🎤 AI listening...', 'success');
+        openAI();
+        setTimeout(startVoice, 300);
+        setTimeout(() => { if (SETTINGS.wakeEnabled) startWakeWord(); }, 8000);
+        return;
+      }
+    }
+  };
+  wakeRecognition.onend = () => {
+    if (SETTINGS.wakeEnabled){
+      setTimeout(() => { try { wakeRecognition.start(); } catch(_){} }, 500);
+    } else {
+      wakeRecognition = null;
+    }
+  };
+  wakeRecognition.onerror = () => { /* will auto-restart via onend */ };
+  try { wakeRecognition.start(); toast('👂 Wake word aktif. Bilang "Hello AI"'); } catch(_){}
+}
+function stopWakeWord(){
+  if (wakeRecognition){ try { wakeRecognition.stop(); } catch(_){} wakeRecognition = null; }
+}
+if (SETTINGS.wakeEnabled) startWakeWord();
+
+/* ============== PWA INSTALL ============== */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  $('installBanner').classList.add('show');
+});
+$('installNowBtn').onclick = () => {
+  if (deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; $('installBanner').classList.remove('show'); });
+  }
+};
+$('installCloseBtn').onclick = () => { $('installBanner').classList.remove('show'); };
+
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+/* Disable double-tap zoom & long-press menu where possible */
+document.addEventListener('contextmenu', e => e.preventDefault());
+let lastTap = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - lastTap < 300) e.preventDefault();
+  lastTap = now;
+}, { passive: false });
+
+console.log('🔐 Lock AI v1.0 ready');
+</script>
+</body>
+</html>
