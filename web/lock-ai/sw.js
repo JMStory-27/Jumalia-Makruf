@@ -1,6 +1,6 @@
 /* Lock AI — Service Worker
    Cache shell for offline + PWA install */
-const CACHE = 'lock-ai-v1';
+const CACHE = 'lock-ai-v2';
 const SHELL = [
   './',
   './index.html',

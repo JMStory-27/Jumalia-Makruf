@@ -571,15 +571,12 @@
       <div class="toggle" id="toggleWake"></div>
     </div>
     <div class="settings-row">
-      <div class="row-icon">🔑</div>
+      <div class="row-icon">✨</div>
       <div class="row-content">
-        <div class="row-label">Gemini API Key</div>
-        <div class="row-desc">Wajib biar AI bisa ngomong. Gratis dari Google AI Studio</div>
+        <div class="row-label">AI Engine</div>
+        <div class="row-desc">Pake Gemini 2.5 Flash via server bot — udah aktif, ga perlu setup apa-apa</div>
       </div>
-    </div>
-    <div class="settings-row" style="display:block; padding: 0 16px 14px;">
-      <input type="password" class="settings-input" id="settingApiKey" placeholder="AIzaSy... (paste API key)">
-      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:block; margin-top: 8px; font-size: 11px; color: #ffd86e; text-decoration: none; font-weight:700;">→ Klik di sini buat ambil API key gratis (1 menit doang)</a>
+      <div style="font-size:11px; color:#4ade80; font-weight:800;">● ON</div>
     </div>
     <div class="settings-row">
       <div class="row-icon">🗣️</div>
@@ -1088,8 +1085,6 @@ function bindSettings(){
     e.target.value = v;
     if (v.length === 4){ SETTINGS.pin = v; saveSettings(); toast('✓ PIN tersimpan', 'success'); }
   };
-  $('settingApiKey').value = SETTINGS.apiKey;
-  $('settingApiKey').oninput = e => { SETTINGS.apiKey = e.target.value.trim(); saveSettings(); };
   $('settingCity').value = SETTINGS.city;
   $('settingCity').onchange = e => { SETTINGS.city = e.target.value.trim() || 'Jakarta'; saveSettings(); updateWeather(); };
   $('settingName').value = SETTINGS.name === 'User' ? '' : SETTINGS.name;
@@ -1256,11 +1251,7 @@ async function processVoiceCommand(text){
     return;
   }
 
-  // Fall back to Gemini
-  if (!SETTINGS.apiKey){
-    speakAndShow('API key Gemini belum di-set. Buka Settings → AI Voice → paste key kamu. Gratis dari Google AI Studio.');
-    return;
-  }
+  // Fall back to server-side Gemini (no key needed)
   try {
     const reply = await callGemini(text);
     // Check if AI suggested an action
@@ -1362,28 +1353,22 @@ function parseActionFromReply(reply){
 }
 function executeAction(act){ /* no-op for now */ }
 
-/* Gemini API call (direct from browser using user's API key) */
+/* Server-side Gemini proxy — pake AI key bot, user ga perlu setup apa-apa */
+const AI_ENDPOINT = 'https://4e698f77-eed3-4561-942b-2ae1cb2777f2-00-3afg6df9rwanr.pike.replit.dev/api/lockai/chat';
 async function callGemini(prompt){
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${SETTINGS.apiKey}`;
-  const sys = `Kamu adalah asisten lock screen bernama Lock AI yang ramah & singkat. User di Indonesia. Selalu jawab dalam Bahasa Indonesia. Jawaban maksimal 2 kalimat pendek. Kalo user minta sesuatu yang ga bisa dilakuin web app (kayak shutdown HP, buka aplikasi specific, kirim WhatsApp), kasih tau dengan baik kalo limitasinya web app & saranin alternatif. Kamu juga bisa jawab pertanyaan umum, joke, hitung-hitungan, cerita.`;
-  const body = {
-    contents: [{ parts: [{ text: prompt }]}],
-    systemInstruction: { parts: [{ text: sys }]},
-    generationConfig: { maxOutputTokens: 200, temperature: 0.8 }
-  };
-  const r = await fetch(url, {
+  const r = await fetch(AI_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ prompt }),
   });
   if (!r.ok){
-    const err = await r.text();
-    throw new Error(r.status + ' ' + (err.slice(0, 100) || 'request failed'));
+    let errMsg = r.status + '';
+    try { const j = await r.json(); if (j.error) errMsg = j.error; } catch(_){}
+    throw new Error(errMsg);
   }
   const j = await r.json();
-  const text = j?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('AI ga jawab');
-  return text.trim();
+  if (!j.reply) throw new Error('AI ga jawab');
+  return j.reply;
 }
 
 /* WAKE WORD (continuous listen for "hello AI") */
