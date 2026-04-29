@@ -366,8 +366,60 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Brand watermark */
-  .watermark { position: fixed; top: 4px; right: 8px; z-index: 100; font-size: 9px; opacity: .35; letter-spacing: 1px; font-weight: 700; pointer-events: none; }
+  /* Brand watermark — only shown when lock screen is active, bottom-center */
+  .watermark { position: fixed; bottom: 4px; left: 50%; transform: translateX(-50%); z-index: 1; font-size: 9px; opacity: .25; letter-spacing: 2px; font-weight: 700; pointer-events: none; padding-bottom: env(safe-area-inset-bottom, 0); }
+
+  /* ===== WELCOME / PERMISSION SCREEN ===== */
+  .welcome {
+    position: fixed; inset: 0; z-index: 500; display: none;
+    background: linear-gradient(160deg, #1a0f33 0%, #4c1d95 50%, #1a0f33 100%);
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: env(safe-area-inset-top, 30px) 24px env(safe-area-inset-bottom, 30px);
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
+  .welcome.show { display: flex; }
+  .welcome-logo {
+    width: 110px; height: 110px; border-radius: 26px;
+    background: linear-gradient(135deg, #ff6ec4, #7c3aed);
+    box-shadow: 0 12px 40px rgba(124,58,237,.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 56px; margin-bottom: 22px;
+  }
+  .welcome h1 { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 6px;
+    background: linear-gradient(135deg, #fff, #ffd86e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .welcome .sub { font-size: 13px; opacity: .75; text-align: center; max-width: 320px; line-height: 1.5; margin-bottom: 24px; }
+
+  .perm-list { width: 100%; max-width: 360px; margin-bottom: 24px; }
+  .perm-row {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px; padding: 12px 14px; margin-bottom: 8px;
+    transition: all .25s;
+  }
+  .perm-row.ok { background: linear-gradient(135deg, rgba(74,222,128,.2), rgba(22,163,74,.15)); border-color: #4ade80; }
+  .perm-row.fail { background: linear-gradient(135deg, rgba(239,68,68,.2), rgba(185,28,28,.15)); border-color: rgba(239,68,68,.4); }
+  .perm-row .pico { width: 38px; height: 38px; border-radius: 10px; display:flex; align-items:center; justify-content:center; font-size: 19px; flex-shrink: 0; background: rgba(255,255,255,.1); }
+  .perm-row .pname { font-size: 13.5px; font-weight: 700; }
+  .perm-row .pdesc { font-size: 11px; opacity: .65; margin-top: 1px; }
+  .perm-row .pstatus { font-size: 18px; flex-shrink: 0; opacity: .4; min-width: 22px; text-align: center; }
+  .perm-row.ok .pstatus { opacity: 1; }
+  .perm-row.fail .pstatus { opacity: 1; }
+  .perm-row .pcontent { flex: 1; min-width: 0; }
+
+  .welcome-btn {
+    width: 100%; max-width: 360px; padding: 16px;
+    background: linear-gradient(135deg, #ff6ec4, #7c3aed);
+    border: none; border-radius: 16px; color: #fff; font-size: 16px; font-weight: 800;
+    cursor: pointer; box-shadow: 0 10px 30px rgba(124,58,237,.45);
+    font-family: inherit; margin-bottom: 8px;
+  }
+  .welcome-btn:active { transform: scale(.97); }
+  .welcome-btn:disabled { opacity: .5; cursor: wait; }
+  .welcome-skip {
+    background: transparent; border: none; color: #fff; opacity: .6; font-size: 12px;
+    cursor: pointer; padding: 8px; font-family: inherit; text-decoration: underline;
+  }
+  .welcome-note { font-size: 11px; opacity: .55; text-align: center; max-width: 340px; margin-top: 14px; line-height: 1.5; }
 
   @media (max-height: 640px) {
     .clock-time { font-size: 60px; }
@@ -395,6 +447,60 @@
 </div>
 
 <!-- ============== LOCK SCREEN ============== -->
+<!-- ===== WELCOME / PERMISSION SCREEN (first launch) ===== -->
+<div class="welcome" id="welcome">
+  <div class="welcome-logo">🤖</div>
+  <h1>Selamat Datang di Lock AI</h1>
+  <div class="sub">Biar semua fitur bisa jalan mulus, izinin akses ini ya. Cuma diminta sekali aja kok.</div>
+
+  <div class="perm-list" id="permList">
+    <div class="perm-row" id="permMic">
+      <div class="pico">🎤</div>
+      <div class="pcontent">
+        <div class="pname">Mikrofon</div>
+        <div class="pdesc">Buat ngomong sama AI voice assistant</div>
+      </div>
+      <div class="pstatus" id="psMic">○</div>
+    </div>
+    <div class="perm-row" id="permCam">
+      <div class="pico">📷</div>
+      <div class="pcontent">
+        <div class="pname">Kamera</div>
+        <div class="pdesc">Buat foto + senter LED (flashlight)</div>
+      </div>
+      <div class="pstatus" id="psCam">○</div>
+    </div>
+    <div class="perm-row" id="permNotif">
+      <div class="pico">🔔</div>
+      <div class="pcontent">
+        <div class="pname">Notifikasi</div>
+        <div class="pdesc">Buat alarm & timer bunyi walau layar mati</div>
+      </div>
+      <div class="pstatus" id="psNotif">○</div>
+    </div>
+    <div class="perm-row" id="permLoc">
+      <div class="pico">📍</div>
+      <div class="pcontent">
+        <div class="pname">Lokasi</div>
+        <div class="pdesc">Buat cuaca akurat di kota kamu</div>
+      </div>
+      <div class="pstatus" id="psLoc">○</div>
+    </div>
+    <div class="perm-row" id="permWake">
+      <div class="pico">💡</div>
+      <div class="pcontent">
+        <div class="pname">Layar Tetap Nyala</div>
+        <div class="pdesc">Pas lagi pake AI biar layar gak mati</div>
+      </div>
+      <div class="pstatus" id="psWake">○</div>
+    </div>
+  </div>
+
+  <button class="welcome-btn" id="permBtn" onclick="requestAllPerms()">✨ Izinin Semua &amp; Mulai</button>
+  <button class="welcome-skip" onclick="skipPerms()">Lewati dulu →</button>
+  <div class="welcome-note">Izin yang ditolak bisa diaktifin lagi nanti dari pengaturan browser kamu.</div>
+</div>
+
 <div class="screen active" id="screenLock">
   <div class="clock-block">
     <div class="clock-time" id="clockTime">12:00</div>
@@ -519,7 +625,7 @@
         <div class="row-label">PIN</div>
         <div class="row-desc">Ganti PIN 4-digit kamu</div>
       </div>
-      <input type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" class="settings-input" id="settingPin" style="max-width:80px; text-align:center; letter-spacing:8px;">
+      <form autocomplete="off" onsubmit="return false;" style="display:contents;"><input type="password" autocomplete="new-password" maxlength="4" inputmode="numeric" pattern="[0-9]*" class="settings-input" id="settingPin" style="max-width:80px; text-align:center; letter-spacing:8px;"></form>
     </div>
     <div class="settings-row">
       <div class="row-icon">📐</div>
@@ -625,7 +731,7 @@
     <div class="settings-group-title">ℹ️ Tentang</div>
     <div class="settings-row">
       <div class="row-icon">📦</div>
-      <div class="row-content"><div class="row-label">Versi</div><div class="row-desc">v1.0.0 (PWA)</div></div>
+      <div class="row-content"><div class="row-label">Versi</div><div class="row-desc">v1.1.0 (PWA)</div></div>
     </div>
     <div class="settings-row">
       <div class="row-icon">👨‍💻</div>
@@ -638,6 +744,14 @@
         <div class="row-desc">Biar berasa kayak APK native</div>
       </div>
       <button class="settings-input" style="max-width:90px; cursor:pointer;" id="settingInstallBtn">Install</button>
+    </div>
+    <div class="settings-row">
+      <div class="row-icon">🔐</div>
+      <div class="row-content">
+        <div class="row-label">Minta izin lagi</div>
+        <div class="row-desc">Mic, kamera, notifikasi, lokasi</div>
+      </div>
+      <button class="settings-input" style="max-width:90px; cursor:pointer;" onclick="welcomeEl.classList.add('show')">Buka</button>
     </div>
   </div>
 </div>
@@ -1439,7 +1553,122 @@ document.addEventListener('touchend', e => {
   lastTap = now;
 }, { passive: false });
 
-console.log('🔐 Lock AI v1.0 ready');
+/* ===== WELCOME / PERMISSIONS FLOW ===== */
+const PERM_DONE_KEY = 'lockai_perm_done';
+const welcomeEl = document.getElementById('welcome');
+
+function setPermStatus(rowId, statusId, ok){
+  const row = document.getElementById(rowId);
+  const st  = document.getElementById(statusId);
+  if (!row || !st) return;
+  row.classList.remove('ok','fail');
+  if (ok === true)  { row.classList.add('ok');   st.textContent = '✓'; }
+  else if (ok === false) { row.classList.add('fail'); st.textContent = '✗'; }
+  else { st.textContent = '○'; }
+}
+
+async function reqMic(){
+  try {
+    if (!navigator.mediaDevices?.getUserMedia) throw new Error('unsupported');
+    const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+    s.getTracks().forEach(t => t.stop());
+    return true;
+  } catch (e) { return false; }
+}
+async function reqCam(){
+  try {
+    if (!navigator.mediaDevices?.getUserMedia) throw new Error('unsupported');
+    const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    s.getTracks().forEach(t => t.stop());
+    return true;
+  } catch (e) {
+    try {
+      const s = await navigator.mediaDevices.getUserMedia({ video: true });
+      s.getTracks().forEach(t => t.stop());
+      return true;
+    } catch (e2) { return false; }
+  }
+}
+async function reqNotif(){
+  try {
+    if (!('Notification' in window)) return false;
+    if (Notification.permission === 'granted') return true;
+    const r = await Notification.requestPermission();
+    return r === 'granted';
+  } catch (e) { return false; }
+}
+function reqLoc(){
+  return new Promise(resolve => {
+    if (!navigator.geolocation) return resolve(false);
+    navigator.geolocation.getCurrentPosition(
+      () => resolve(true),
+      () => resolve(false),
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  });
+}
+async function reqWake(){
+  try {
+    if (!('wakeLock' in navigator)) return false;
+    const wl = await navigator.wakeLock.request('screen');
+    setTimeout(() => { try { wl.release(); } catch(_){} }, 1500);
+    return true;
+  } catch (e) { return false; }
+}
+
+async function requestAllPerms(){
+  const btn = document.getElementById('permBtn');
+  btn.disabled = true; btn.textContent = '⏳ Lagi minta izin…';
+
+  /* Run sequentially so browser shows prompts one by one (cleaner UX) */
+  btn.textContent = '🎤 Minta akses mikrofon…';
+  setPermStatus('permMic','psMic', await reqMic());
+
+  btn.textContent = '📷 Minta akses kamera…';
+  setPermStatus('permCam','psCam', await reqCam());
+
+  btn.textContent = '🔔 Minta akses notifikasi…';
+  setPermStatus('permNotif','psNotif', await reqNotif());
+
+  btn.textContent = '📍 Minta akses lokasi…';
+  setPermStatus('permLoc','psLoc', await reqLoc());
+
+  btn.textContent = '💡 Cek wake lock…';
+  setPermStatus('permWake','psWake', await reqWake());
+
+  btn.textContent = '✓ Selesai! Masuk…';
+  localStorage.setItem(PERM_DONE_KEY, '1');
+  setTimeout(() => {
+    welcomeEl.classList.remove('show');
+    btn.disabled = false; btn.textContent = '✨ Izinin Semua & Mulai';
+  }, 900);
+}
+
+function skipPerms(){
+  localStorage.setItem(PERM_DONE_KEY, '1');
+  welcomeEl.classList.remove('show');
+}
+
+/* Show welcome on first ever launch */
+if (!localStorage.getItem(PERM_DONE_KEY)) {
+  welcomeEl.classList.add('show');
+}
+
+/* Hash-based screen routing for quick testing: #auth #home #settings #ai */
+function applyHashRoute(){
+  const h = (location.hash || '').replace('#','').toLowerCase();
+  if (h === 'welcome')  { localStorage.removeItem(PERM_DONE_KEY); welcomeEl.classList.add('show'); }
+  else if (h === 'auth')     { showScreen('screenAuth'); setAuthMethod('pin'); }
+  else if (h === 'authpat') { showScreen('screenAuth'); setAuthMethod('pattern'); }
+  else if (h === 'authfin') { showScreen('screenAuth'); setAuthMethod('finger'); }
+  else if (h === 'home')    { showScreen('screenHome'); }
+  else if (h === 'settings'){ showScreen('screenSettings'); }
+  else if (h === 'ai')      { openAI(); }
+}
+window.addEventListener('hashchange', applyHashRoute);
+applyHashRoute();
+
+console.log('🔐 Lock AI v1.1 ready');
 </script>
 </body>
 </html>
