@@ -1649,7 +1649,9 @@ function skipPerms(){
   welcomeEl.classList.remove('show');
 }
 
-/* Show welcome on first ever launch */
+/* Show welcome on first ever launch (or via ?welcome=1 for testing) */
+const _qs = new URLSearchParams(location.search);
+if (_qs.get('welcome') === '1') localStorage.removeItem(PERM_DONE_KEY);
 if (!localStorage.getItem(PERM_DONE_KEY)) {
   welcomeEl.classList.add('show');
 }
@@ -1668,7 +1670,7 @@ function applyHashRoute(){
 window.addEventListener('hashchange', applyHashRoute);
 applyHashRoute();
 
-console.log('🔐 Lock AI v1.1 ready');
+console.log('🔐 Lock AI v1.2 ready');
 </script>
 </body>
 </html>
