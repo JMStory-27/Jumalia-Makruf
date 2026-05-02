@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>♟ Chess Royal</title>
+<title>♟ Album Abadi Chess</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#c9a227">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chess Abadi">
+<meta name="description" content="Game catur premium — AI Stockfish depth-20, offline, gratis!">
 <style>
 :root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#f0d9b5;--sq-d:#b58863;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -475,25 +482,24 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — horse head facing left -->
+<!-- WHITE KNIGHT — horse head facing left (ref: skakmat image) -->
 <g id="wN">
   <rect fill="#fff" stroke="#404040" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
   <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 27,37
-       C 31,35 35,30 35,23
-       C 35,16 31,10 27,8
-       C 24,7 21,7 19,8
-       C 18,7 17,5 16,4
-       C 15,3 14,4 14,6
-       C 13,7 13,10 14,12
-       C 12,14 10,17 9,21
-       C 8,25 9,29 11,31
-       C 11,34 11,36 12,37 Z"/>
-  <circle fill="#404040" cx="27" cy="13" r="2.2"/>
+    d="M 13,37
+       C 12,33 10,29 9,26
+       C 8,23 8,20 10,18
+       C 11,16 13,14 15,13
+       C 15,10 15,6 16,4
+       C 17,3 19,4 19,6
+       C 21,5 24,5 27,7
+       C 31,9 35,14 36,21
+       C 37,28 35,34 33,37 Z"/>
+  <circle fill="#404040" cx="29" cy="12" r="2"/>
   <path fill="none" stroke="#404040" stroke-width="1.3" stroke-linecap="round"
-    d="M 10,21 C 9,19 11,18 12,20"/>
+    d="M 9,24 C 8,22 9,21 11,22"/>
   <path fill="none" stroke="#404040" stroke-width="1.2" stroke-linecap="round"
-    d="M 19,8 C 18,6 19,4 21,5 M 21,6 C 22,4 24,5 23,7"/>
+    d="M 19,6 C 18,4 20,3 21,5 M 22,5 C 23,3 25,4 24,6"/>
 </g>
 <!-- WHITE PAWN — round head + smooth waist + round base -->
 <g id="wP">
@@ -538,25 +544,24 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — horse head facing left -->
+<!-- BLACK KNIGHT — horse head facing left (ref: skakmat image) -->
 <g id="bN">
   <rect fill="#111" stroke="#ccc" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
   <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 27,37
-       C 31,35 35,30 35,23
-       C 35,16 31,10 27,8
-       C 24,7 21,7 19,8
-       C 18,7 17,5 16,4
-       C 15,3 14,4 14,6
-       C 13,7 13,10 14,12
-       C 12,14 10,17 9,21
-       C 8,25 9,29 11,31
-       C 11,34 11,36 12,37 Z"/>
-  <circle fill="#ccc" cx="27" cy="13" r="2.2"/>
+    d="M 13,37
+       C 12,33 10,29 9,26
+       C 8,23 8,20 10,18
+       C 11,16 13,14 15,13
+       C 15,10 15,6 16,4
+       C 17,3 19,4 19,6
+       C 21,5 24,5 27,7
+       C 31,9 35,14 36,21
+       C 37,28 35,34 33,37 Z"/>
+  <circle fill="#ccc" cx="29" cy="12" r="2"/>
   <path fill="none" stroke="#ccc" stroke-width="1.3" stroke-linecap="round"
-    d="M 10,21 C 9,19 11,18 12,20"/>
+    d="M 9,24 C 8,22 9,21 11,22"/>
   <path fill="none" stroke="#ccc" stroke-width="1.2" stroke-linecap="round"
-    d="M 19,8 C 18,6 19,4 21,5 M 21,6 C 22,4 24,5 23,7"/>
+    d="M 19,6 C 18,4 20,3 21,5 M 22,5 C 23,3 25,4 24,6"/>
 </g>
 <!-- BLACK PAWN — round head + smooth waist + round base -->
 <g id="bP">
@@ -1846,95 +1851,51 @@ function showHint(){
   const hintBtn=document.getElementById('btn-hint');
   const hintLabel=hintBtn?hintBtn.querySelector('span:last-child'):null;
   const origLabel=hintLabel?hintLabel.textContent:'Petunjuk';
-  if(hintLabel)hintLabel.textContent='Analisis...';
   hintBtn?.classList.add('hint-active');
-  const fen=toFEN(gs);
-  const snapGS=cloneGS(gs);
-  const snapTurn=c;
 
-  function applyMove(moveStr){
-    if(!moveStr||moveStr.length<4||moveStr==='(none)')return false;
-    const fc=moveStr.charCodeAt(0)-97;
-    const fr=8-parseInt(moveStr[1]);
-    const tc=moveStr.charCodeAt(2)-97;
-    const tr=8-parseInt(moveStr[3]);
-    if(fr<0||fr>7||fc<0||fc>7||tr<0||tr>7||tc<0||tc>7)return false;
-    hintMove={fr,fc,tr,tc};
-    selected=[fr,fc];
-    legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===fr&&m.fc===fc);
+  // ── INSTANT: depth-1 on main thread (< 5ms) ────────────────────────────────
+  const quickMv=getBestMove(gs,c,1);
+  if(quickMv){
+    hintMove={fr:quickMv.fr,fc:quickMv.fc,tr:quickMv.tr,tc:quickMv.tc};
+    selected=[hintMove.fr,hintMove.fc];
+    legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
+    if(hintLabel)hintLabel.textContent='D1✓';
     renderBoard();
-    return true;
+    toast('💡 Petunjuk siap!');
   }
 
-  function useMagnusFallback(){
-    if(!_magnusWorkerURL){
-      const mv=getBestMove(snapGS,snapTurn,3);
-      if(mv){hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};selected=[hintMove.fr,hintMove.fc];legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);renderBoard();}
-      if(hintLabel)hintLabel.textContent=origLabel;
-      toast('💡 Langkah terbaik ditemukan!');
-      return;
-    }
-    try{
-      const w=new Worker(_magnusWorkerURL);
-      _hintWorker=w;
-      const MD=6;
-      w.onmessage=(e)=>{
-        const d=e.data;if(!d||!d.move)return;
-        const mv=d.move;
-        hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-        selected=[hintMove.fr,hintMove.fc];
-        legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===mv.fr&&m.fc===mv.fc);
-        if(hintLabel)hintLabel.textContent='D'+d.depth+'/'+MD+'✓';
-        renderBoard();
-        if(d.depth>=MD){if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;toast('💡 Engine Magnus: langkah terbaik D'+MD+'!');}
-      };
-      w.onerror=()=>{if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
-      w.postMessage({gs:snapGS,color:snapTurn,depth:MD});
-    }catch(e){if(hintLabel)hintLabel.textContent=origLabel;}
-  }
+  // ── BACKGROUND: Magnus worker deepens to D6 ────────────────────────────────
+  if(!_magnusWorkerURL){if(hintLabel)hintLabel.textContent=origLabel;return;}
+  const snapGS=cloneGS(gs);
+  const MD=6;
+  try{
+    const w=new Worker(_magnusWorkerURL);
+    _hintWorker=w;
+    w.onmessage=(e)=>{
+      const d=e.data;if(!d||!d.move)return;
+      const mv=d.move;
+      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+      selected=[hintMove.fr,hintMove.fc];
+      legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===mv.fr&&m.fc===mv.fc);
+      if(hintLabel)hintLabel.textContent='D'+d.depth+'/'+MD+'✓';
+      renderBoard();
+      if(d.depth>=MD){
+        if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+        if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
+        if(hintLabel)hintLabel.textContent=origLabel;
+        toast('💡 Analisis selesai! (D'+MD+')');
+      }
+    };
+    w.onerror=()=>{if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
+    w.postMessage({gs:snapGS,color:c,depth:MD});
+  }catch(e){if(hintLabel)hintLabel.textContent=origLabel;}
 
-  (async()=>{
-    const sfURL=await _loadSF();
-    if(!sfURL){toast('⚡ Engine Magnus menganalisis (offline)...');useMagnusFallback();return;}
-    try{
-      const sf=new Worker(sfURL);
-      _hintWorker=sf;
-      let bestDepth=0,uciReady=false;
-      sf.onmessage=(e)=>{
-        const msg=typeof e.data==='string'?e.data:String(e.data);
-        if(msg==='uciok'){sf.postMessage('isready');}
-        else if(msg==='readyok'){
-          uciReady=true;
-          sf.postMessage('setoption name MultiPV value 1');
-          sf.postMessage('position fen '+fen);
-          sf.postMessage('go depth 20');
-          toast('🤖 Stockfish depth-20 menganalisis...');
-        }
-        else if(uciReady&&msg.startsWith('info')&&msg.includes(' pv ')){
-          const dm=msg.match(/\bdepth (\d+)/);
-          const pm=msg.match(/ pv ([a-h][1-8][a-h][1-8][qrbn]?)/);
-          if(dm&&pm){const d=parseInt(dm[1]);if(d>bestDepth){bestDepth=d;applyMove(pm[1]);if(hintLabel)hintLabel.textContent='SF D'+d+'✓';}}
-        }
-        else if(msg.startsWith('bestmove')){
-          const bm=msg.split(' ')[1];
-          applyMove(bm);
-          sf.terminate();_hintWorker=null;
-          if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
-          if(hintLabel)hintLabel.textContent=origLabel;
-          toast('🤖 Stockfish: best move ditemukan! (D'+bestDepth+')');
-        }
-      };
-      sf.onerror=()=>{sf.terminate();_hintWorker=null;toast('⚡ Stockfish gagal, pakai Magnus...');useMagnusFallback();};
-      sf.postMessage('uci');
-    }catch(e){toast('⚡ Pakai engine Magnus...');useMagnusFallback();}
-
-    _hintTimer=setTimeout(()=>{
-      _hintTimer=null;
-      if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-      if(hintLabel)hintLabel.textContent=origLabel;
-      if(!hintMove){selected=null;legalFromSel=[];hintBtn?.classList.remove('hint-active');renderBoard();}
-    },25000);
-  })();
+  _hintTimer=setTimeout(()=>{
+    _hintTimer=null;
+    if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+    if(hintLabel)hintLabel.textContent=origLabel;
+    if(!hintMove){selected=null;legalFromSel=[];hintBtn?.classList.remove('hint-active');renderBoard();}
+  },20000);
 }
 
 // ═══════════════════════════════════════
@@ -2966,6 +2927,10 @@ window.addEventListener('DOMContentLoaded',()=>{
 window.addEventListener('resize',()=>{
   if(gs&&document.getElementById('s-game').style.display!=='none')initBoardDOM(),renderBoard();
 });
+// ── PWA Service Worker ────────────────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(()=>{}).catch(()=>{});
+}
 </script>
 </body>
 </html>
