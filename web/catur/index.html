@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>♟ Chess Royal</title>
 <style>
-:root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#ebbd76;--sq-d:#692a0a;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
+:root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#f0d9b5;--sq-d:#b58863;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior:none}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px}
@@ -293,7 +293,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #voice-timer{font-size:20px;font-weight:700;color:var(--gold)}
 
 /* ── BOARD THEMES ── */
-#board-grid.t-classic{--sq-l:#ebbd76;--sq-d:#692a0a}
+#board-grid.t-classic{--sq-l:#f0d9b5;--sq-d:#b58863}
 #board-grid.t-oak{--sq-l:#e0be90;--sq-d:#8b5228}
 #board-grid.t-walnut{--sq-l:#d4b082;--sq-d:#5c2d0e}
 #board-grid.t-ebony{--sq-l:#eae0cc;--sq-d:#2d1a0a}
@@ -438,107 +438,96 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ SVG PIECE DEFS ══ -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<!-- White: bright clean ivory with subtle shading -->
-<linearGradient id="wGrad" x1="22.5" y1="4" x2="22.5" y2="41" gradientUnits="userSpaceOnUse">
-  <stop offset="0%" stop-color="#ffffff"/>
-  <stop offset="100%" stop-color="#e8e8e8"/>
-</linearGradient>
-<!-- Black: true dark with slight 3D depth (not brownish) -->
-<linearGradient id="bGrad" x1="22.5" y1="4" x2="22.5" y2="41" gradientUnits="userSpaceOnUse">
-  <stop offset="0%" stop-color="#5a5a5a"/>
-  <stop offset="100%" stop-color="#111111"/>
-</linearGradient>
-
 <!-- WHITE KING -->
 <g id="wK">
-  <path fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25c0,0,4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3c-3,6,6,10.5,6,10.5V37z"/>
-  <path fill="none" stroke="#333" stroke-width="1.5" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25c0,0,4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3c-3,6,6,10.5,6,10.5V37z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/>
 </g>
 <!-- WHITE QUEEN -->
 <g id="wQ">
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-0.3-14.1L22.5,24.5l-7-13.6L14,25L6.5,13.5L9,26z"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4c1,1.5,1,1,1,3.5c-1.5,1-1,2.5-1,2.5c-1.5,1.5,2.5,2.5,2.5,2.5c4,1,14,1,18,0c0,0,4-1,2.5-2.5c0,0,0.5-1.5-1-2.5c0-2.5,0-2,1-3.5c1-2,2.5-2,2.5-4c-8.5-1.5-18.5-1.5-27,0z"/>
-  <path fill="none" stroke="#333" stroke-width="1.5" d="M11.5,30c3.5-1,18.5-1,22,0M12,33.5c3.5-1,17.5-1,21,0M11.5,37c3.5-1,18-1,22,0"/>
-  <circle fill="#333" cx="6" cy="12" r="2"/>
-  <circle fill="#333" cx="14" cy="9" r="2"/>
-  <circle fill="#333" cx="22.5" cy="8" r="2"/>
-  <circle fill="#333" cx="31" cy="9" r="2"/>
-  <circle fill="#333" cx="39" cy="12" r="2"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-0.3-14.1L22.5,24.5l-7-13.6L14,25L6.5,13.5L9,26z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4c1,1.5,1,1,1,3.5c-1.5,1-1,2.5-1,2.5c-1.5,1.5,2.5,2.5,2.5,2.5c4,1,14,1,18,0c0,0,4-1,2.5-2.5c0,0,0.5-1.5-1-2.5c0-2.5,0-2,1-3.5c1-2,2.5-2,2.5-4c-8.5-1.5-18.5-1.5-27,0z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" d="M11.5,30c3.5-1,18.5-1,22,0M12,33.5c3.5-1,17.5-1,21,0M11.5,37c3.5-1,18-1,22,0"/>
+  <circle fill="#404040" cx="6" cy="12" r="2"/>
+  <circle fill="#404040" cx="14" cy="9" r="2"/>
+  <circle fill="#404040" cx="22.5" cy="8" r="2"/>
+  <circle fill="#404040" cx="31" cy="9" r="2"/>
+  <circle fill="#404040" cx="39" cy="12" r="2"/>
 </g>
 <!-- WHITE ROOK -->
 <g id="wR">
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
-  <path fill="none" stroke="#333" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
 </g>
 <!-- WHITE BISHOP -->
 <g id="wB">
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10c-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/>
-  <path fill="none" stroke="#333" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8c0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/>
-  <circle fill="#333" cx="22.5" cy="8" r="1.7"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10c-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8c0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/>
+  <circle fill="#404040" cx="22.5" cy="8" r="1.7"/>
 </g>
-<!-- WHITE KNIGHT — standard cburnett horse silhouette -->
+<!-- WHITE KNIGHT — cburnett horse silhouette -->
 <g id="wN">
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.285,28.96 13.34,32.25 13,33.5 C 10.9,34.15 11.85,31.83 9,32 C 7.346,32.67 12.5,35 12,36 L 22,36 C 22,36 27.22,28.67 19,22 C 17.98,21.02 22,10 22,10"/>
-  <circle fill="#333" cx="9.5" cy="25.5" r="0.8"/>
-  <path fill="none" stroke="#333" stroke-width="1.5" d="M 15,15.5 A 0.5,1.5 0 1 1 14,15.5 A 0.5,1.5 0 1 1 15,15.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.285,28.96 13.34,32.25 13,33.5 C 10.9,34.15 11.85,31.83 9,32 C 7.346,32.67 12.5,35 12,36 L 22,36 C 22,36 27.22,28.67 19,22 C 17.98,21.02 22,10 22,10"/>
+  <circle fill="#404040" cx="9.5" cy="25.5" r="0.8"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" d="M 15,15.5 A 0.5,1.5 0 1 1 14,15.5 A 0.5,1.5 0 1 1 15,15.5"/>
 </g>
-<!-- WHITE PAWN — round head + smooth curved base (no stacked bars) -->
+<!-- WHITE PAWN — round head + smooth base -->
 <g id="wP">
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4c0,1.7,1,3.1,2.5,3.7C18.2,17.6,16.5,19.8,16.5,22H28.5c0-2.2-1.7-4.4-4.5-5.3c1.5-0.6,2.5-2,2.5-3.7C26.5,10.8,24.7,9,22.5,9z"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M15.5,22L14,28h17l-1.5-6H15.5z"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12,35c0-3.5,21-3.5,21,0v2c0,0.5-0.5,1-1,1H13c-0.5,0-1-0.5-1-1V35z"/>
-  <path fill="url(#wGrad)" stroke="#333" stroke-width="1.5" d="M13.5,28h18L33,35H12L13.5,28z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.5,0-4.5,2-4.5,4.5c0,1.8,1,3.3,2.5,4.1C17.5,18.8,16,21,16,23.5H29c0-2.5-1.5-4.7-4.5-5.9c1.5-0.8,2.5-2.3,2.5-4.1C27,11,25,9,22.5,9z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12,37c0-4,4.5-6.5,10.5-6.5S33,33,33,37v2H12V37z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M14,35.5C14,32.5,18,30,22.5,30S31,32.5,31,35.5H14z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M15,23.5H30V26H15zM13.5,26H31.5V29H13.5z"/>
 </g>
 
 <!-- BLACK KING -->
 <g id="bK">
-  <path fill="none" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25c0,0,4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3c-3,6,6,10.5,6,10.5V37z"/>
-  <path fill="none" stroke="#e0c468" stroke-width="1.2" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25c0,0,4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3c-3,6,6,10.5,6,10.5V37z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/>
 </g>
 <!-- BLACK QUEEN -->
 <g id="bQ">
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-0.3-14.1L22.5,24.5l-7-13.6L14,25L6.5,13.5L9,26z"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4c1,1.5,1,1,1,3.5c-1.5,1-1,2.5-1,2.5c-1.5,1.5,2.5,2.5,2.5,2.5c4,1,14,1,18,0c0,0,4-1,2.5-2.5c0,0,0.5-1.5-1-2.5c0-2.5,0-2,1-3.5c1-2,2.5-2,2.5-4c-8.5-1.5-18.5-1.5-27,0z"/>
-  <path fill="none" stroke="#e0c468" stroke-width="1.2" d="M11.5,30c3.5-1,18.5-1,22,0M12,33.5c3.5-1,17.5-1,21,0M11.5,37c3.5-1,18-1,22,0"/>
-  <circle fill="#e0c468" cx="6" cy="12" r="2"/>
-  <circle fill="#e0c468" cx="14" cy="9" r="2"/>
-  <circle fill="#e0c468" cx="22.5" cy="8" r="2"/>
-  <circle fill="#e0c468" cx="31" cy="9" r="2"/>
-  <circle fill="#e0c468" cx="39" cy="12" r="2"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-0.3-14.1L22.5,24.5l-7-13.6L14,25L6.5,13.5L9,26z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4c1,1.5,1,1,1,3.5c-1.5,1-1,2.5-1,2.5c-1.5,1.5,2.5,2.5,2.5,2.5c4,1,14,1,18,0c0,0,4-1,2.5-2.5c0,0,0.5-1.5-1-2.5c0-2.5,0-2,1-3.5c1-2,2.5-2,2.5-4c-8.5-1.5-18.5-1.5-27,0z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" d="M11.5,30c3.5-1,18.5-1,22,0M12,33.5c3.5-1,17.5-1,21,0M11.5,37c3.5-1,18-1,22,0"/>
+  <circle fill="#ccc" cx="6" cy="12" r="2"/>
+  <circle fill="#ccc" cx="14" cy="9" r="2"/>
+  <circle fill="#ccc" cx="22.5" cy="8" r="2"/>
+  <circle fill="#ccc" cx="31" cy="9" r="2"/>
+  <circle fill="#ccc" cx="39" cy="12" r="2"/>
 </g>
 <!-- BLACK ROOK -->
 <g id="bR">
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
-  <path fill="none" stroke="#e0c468" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
 </g>
 <!-- BLACK BISHOP -->
 <g id="bB">
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10c-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/>
-  <path fill="none" stroke="#e0c468" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8c0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/>
-  <circle fill="#e0c468" cx="22.5" cy="8" r="1.7"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10c-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8c0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/>
+  <circle fill="#ccc" cx="22.5" cy="8" r="1.7"/>
 </g>
-<!-- BLACK KNIGHT — standard cburnett horse silhouette -->
+<!-- BLACK KNIGHT — cburnett horse silhouette -->
 <g id="bN">
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.285,28.96 13.34,32.25 13,33.5 C 10.9,34.15 11.85,31.83 9,32 C 7.346,32.67 12.5,35 12,36 L 22,36 C 22,36 27.22,28.67 19,22 C 17.98,21.02 22,10 22,10"/>
-  <circle fill="#e0c468" cx="9.5" cy="25.5" r="0.8"/>
-  <path fill="none" stroke="#e0c468" stroke-width="1.5" d="M 15,15.5 A 0.5,1.5 0 1 1 14,15.5 A 0.5,1.5 0 1 1 15,15.5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.285,28.96 13.34,32.25 13,33.5 C 10.9,34.15 11.85,31.83 9,32 C 7.346,32.67 12.5,35 12,36 L 22,36 C 22,36 27.22,28.67 19,22 C 17.98,21.02 22,10 22,10"/>
+  <circle fill="#ccc" cx="9.5" cy="25.5" r="0.8"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.5" d="M 15,15.5 A 0.5,1.5 0 1 1 14,15.5 A 0.5,1.5 0 1 1 15,15.5"/>
 </g>
-<!-- BLACK PAWN — round head + smooth curved base -->
+<!-- BLACK PAWN — round head + smooth base -->
 <g id="bP">
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4c0,1.7,1,3.1,2.5,3.7C18.2,17.6,16.5,19.8,16.5,22H28.5c0-2.2-1.7-4.4-4.5-5.3c1.5-0.6,2.5-2,2.5-3.7C26.5,10.8,24.7,9,22.5,9z"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M15.5,22L14,28h17l-1.5-6H15.5z"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12,35c0-3.5,21-3.5,21,0v2c0,0.5-0.5,1-1,1H13c-0.5,0-1-0.5-1-1V35z"/>
-  <path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.5" d="M13.5,28h18L33,35H12L13.5,28z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.5,0-4.5,2-4.5,4.5c0,1.8,1,3.3,2.5,4.1C17.5,18.8,16,21,16,23.5H29c0-2.5-1.5-4.7-4.5-5.9c1.5-0.8,2.5-2.3,2.5-4.1C27,11,25,9,22.5,9z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12,37c0-4,4.5-6.5,10.5-6.5S33,33,33,37v2H12V37z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M14,35.5C14,32.5,18,30,22.5,30S31,32.5,31,35.5H14z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M15,23.5H30V26H15zM13.5,26H31.5V29H13.5z"/>
 </g>
 </defs>
 </svg>
