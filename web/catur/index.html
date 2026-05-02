@@ -226,17 +226,43 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .resign-opt .ro-label{font-size:12px;color:var(--txt2)}
 
 /* Analysis */
-.analysis-grid{display:flex;gap:12px;margin-bottom:16px}
-.an-stat{flex:1;padding:12px;border-radius:12px;border:1px solid var(--card-b);background:rgba(255,255,255,.03);text-align:center}
-.an-num{font-size:28px;font-weight:900;color:var(--gold)}
-.an-label{font-size:10px;color:var(--txt2);margin-top:3px}
-.move-list{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
-.move-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03)}
-.mr-num{width:24px;font-size:11px;color:var(--txt2);text-align:right;flex-shrink:0}
-.mr-move{flex:1;font-size:13px;font-weight:600}
-.mr-rating{font-size:16px;flex-shrink:0}
-.mr-label{width:70px;font-size:11px;text-align:right;font-weight:600}
+.analysis-grid{display:flex;gap:8px;margin-bottom:10px}
+.an-stat{flex:1;padding:10px 6px;border-radius:12px;border:1px solid var(--card-b);background:rgba(255,255,255,.03);text-align:center}
+.an-num{font-size:24px;font-weight:900;color:var(--gold)}
+.an-label{font-size:10px;color:var(--txt2);margin-top:2px}
+.move-list{overflow-y:auto;display:flex;flex-direction:column;gap:3px}
+.move-row{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.03)}
+.mr-num{width:22px;font-size:11px;color:var(--txt2);text-align:right;flex-shrink:0}
+.mr-move{flex:1;font-size:12px;font-weight:600}
+.mr-rating{font-size:15px;flex-shrink:0}
+.mr-label{font-size:10px;text-align:right;font-weight:600}
 .rate-brilliant{color:#22d3ee}.rate-great{color:#4ade80}.rate-inacc{color:#fbbf24}.rate-mistake{color:#fb923c}.rate-blunder{color:#f87171}
+/* Replay controls */
+.an-ctrl{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:7px 13px;font-size:17px;cursor:pointer;transition:background .15s;font-family:inherit;flex-shrink:0}
+.an-ctrl:active{background:rgba(255,255,255,.28)}
+.an-ctrl.wide{padding:7px 16px;font-size:12px;font-weight:700;letter-spacing:.4px}
+/* Mini replay board */
+.an-replay-board{display:grid;grid-template-columns:repeat(8,1fr);border:2px solid rgba(212,175,55,.35);border-radius:3px;overflow:hidden;flex-shrink:0}
+.an-rsq{aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.an-rsq.rsl{background:#f0d9b5}.an-rsq.rsd{background:#b58863}
+.an-rsq.rs-from{outline:3px solid rgba(90,190,255,.85);outline-offset:-3px}
+.an-rsq.rs-to{outline:3px solid rgba(90,190,255,.95);outline-offset:-3px}
+.an-rsq.rs-blunder{background:#c0392b !important;outline:3px solid #ff4444;outline-offset:-3px}
+.an-rsq.rs-brilliant{background:#c8a800 !important;outline:3px solid #f9ca24;outline-offset:-3px}
+.an-rsq.rs-mistake{background:#c0530a !important;outline:3px solid #e67e22;outline-offset:-3px}
+/* Eval bar */
+.an-eval-bar{height:7px;background:#1a1a1a;border-radius:4px;overflow:hidden}
+.an-eval-fill{height:100%;background:#f0d9b5;transition:width .45s ease;border-radius:4px}
+/* Move list clickable */
+.mr-row-click{cursor:pointer;transition:background .12s;border-left:3px solid transparent}
+.mr-row-click:hover{background:rgba(255,255,255,.06) !important}
+.mr-row-click.active-row{background:rgba(212,175,55,.18) !important;border-left-color:var(--gold)}
+.an-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;flex-shrink:0;white-space:nowrap}
+.an-badge.rate-brilliant{background:#0891b2;color:#fff}
+.an-badge.rate-great{background:#16a34a;color:#fff}
+.an-badge.rate-inacc{background:#6b7280;color:#fff}
+.an-badge.rate-mistake{background:#ea580c;color:#fff}
+.an-badge.rate-blunder{background:#dc2626;color:#fff}
 
 /* ── FLOATING UI ── */
 #toast{position:fixed;bottom:calc(20px + var(--safe));left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,8,28,.95);border:1px solid var(--card-b);color:var(--txt);padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .3s;white-space:nowrap;backdrop-filter:blur(12px);pointer-events:none}
@@ -752,17 +778,37 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   </div>
 </div>
 
-<!-- ══ OVERLAY: ANALYSIS ══ -->
+<!-- ══ OVERLAY: ANALYSIS REPLAY ══ -->
 <div id="o-analysis" class="overlay">
-  <div class="overlay-sheet glass centered" style="position:relative">
-    <div class="ov-close" onclick="closeOverlay('o-analysis')">✕</div>
-    <div class="ov-title">📊 Analisis Partai</div>
-    <div class="analysis-grid">
-      <div class="an-stat glass"><div id="an-n0" class="an-num">0</div><div class="an-label">✨ Sempurna</div></div>
-      <div class="an-stat glass"><div id="an-n1" class="an-num">0</div><div class="an-label">⚠️ Salah</div></div>
-      <div class="an-stat glass"><div id="an-n2" class="an-num">0</div><div class="an-label">💀 Blunder</div></div>
+  <div class="overlay-sheet glass" style="width:100%;max-width:460px;max-height:94vh;display:flex;flex-direction:column;padding:0;overflow:hidden;position:relative">
+    <div style="padding:14px 16px 6px;flex-shrink:0">
+      <div class="ov-close" onclick="closeAnalysis()">✕</div>
+      <div class="ov-title" style="margin-bottom:8px">📊 Replay Analisis</div>
+      <div class="analysis-grid">
+        <div class="an-stat glass"><div id="an-n0" class="an-num">0</div><div class="an-label">✨ Brilian</div></div>
+        <div class="an-stat glass"><div id="an-n1" class="an-num">0</div><div class="an-label">⚠️ Salah</div></div>
+        <div class="an-stat glass"><div id="an-n2" class="an-num">0</div><div class="an-label">💀 Blunder</div></div>
+      </div>
     </div>
-    <div id="analysis-list" class="move-list"></div>
+    <div style="display:flex;justify-content:center;padding:0 12px;flex-shrink:0">
+      <div id="an-board" class="an-replay-board" style="width:100%"></div>
+    </div>
+    <div style="padding:4px 16px 2px;flex-shrink:0">
+      <div class="an-eval-bar"><div id="an-eval-fill" class="an-eval-fill" style="width:50%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--txt2);margin-top:2px"><span>⬛ Hitam unggul</span><span>⬜ Putih unggul</span></div>
+    </div>
+    <div style="text-align:center;padding:4px 16px;flex-shrink:0;min-height:52px">
+      <div id="an-move-label" style="font-size:13px;font-weight:700;color:var(--gold)">Posisi Awal</div>
+      <div id="an-move-comment" style="font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4;min-height:14px"></div>
+    </div>
+    <div style="display:flex;gap:5px;justify-content:center;padding:4px 16px 8px;flex-shrink:0">
+      <button class="an-ctrl" onclick="replayGoto(-1)">⏮</button>
+      <button class="an-ctrl" onclick="replayPrev()">◀</button>
+      <button class="an-ctrl wide" id="an-play-btn" onclick="toggleReplayPlay()">▶ Play</button>
+      <button class="an-ctrl" onclick="replayNext()">▶</button>
+      <button class="an-ctrl" onclick="replayGoto(_analysisData.length-1)">⏭</button>
+    </div>
+    <div id="analysis-list" class="move-list" style="flex:1;overflow-y:auto;padding:4px 10px 14px;max-height:none"></div>
   </div>
 </div>
 
@@ -858,6 +904,7 @@ const PST={
 let gs=null,moveHistory=[],gameSnapshots=[],positionHist={};
 let selected=null,legalFromSel=[],lastMove=null,hintMove=null,flipped=false;
 let thinkTimer=null,bubbleTimer=null;
+let _analysisData=[],_replayIdx=-1,_replayTimer=null;
 
 // ═══════════════════════════════════════
 // FIREBASE INIT  (last — wrapped in try/catch so a failure never blocks the game)
@@ -1525,11 +1572,13 @@ function showGameOver(result){
   document.getElementById('go-sub').textContent=sub;
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
+  if(gameMode==='bot'||gameMode==='pass'){setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);}
 }
 function showAutoDraw(reason){
   document.getElementById('draw-reason').textContent=reason;
   document.getElementById('o-draw').classList.add('show');
   playSound('end');stopMusic();
+  if(gameMode==='bot'||gameMode==='pass'){setTimeout(()=>{closeOverlay('o-draw');showAnalysis();},3000);}
 }
 
 // ═══════════════════════════════════════
@@ -1571,37 +1620,169 @@ function showBotComment(type){
 }
 
 // ═══════════════════════════════════════
-// ANALYSIS
+// ANALYSIS REPLAY
 // ═══════════════════════════════════════
-function showAnalysis(){
-  closeMenu();
-  const list=document.getElementById('analysis-list');list.innerHTML='';
-  let perfect=0,mistakes=0,blunders=0;
-  const F='ABCDEFGH';
-  if(!gameSnapshots.length){toast('Belum ada langkah untuk dianalisis');return;}
-  gameSnapshots.forEach((snap,i)=>{
+const _AN_F='ABCDEFGH';
+function _anPcName(p){return PNAMES_ID[Math.abs(p)]||'?';}
+
+function buildAnalysisData(){
+  _analysisData=[];
+  let brilliant=0,mistakes=0,blunders=0;
+  gameSnapshots.forEach((snap)=>{
     const {state,move}=snap;
-    const bestMv=getBestMove(state,state.turn,2);
-    const evalBefore=evaluate(state);
-    const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evalBefore;
+    const bestMv=getBestMove(state,state.turn,1);
+    const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evaluate(state);
     const evalActual=evaluate(applyMove(state,move));
     const isW=state.turn==='w';
     const loss=isW?(evalBest-evalActual):(evalActual-evalBest);
-    let rating,rc,re;
-    if(loss<=0){rating='Sempurna';rc='rate-brilliant';re='✨';perfect++;}
-    else if(loss<50){rating='Bagus';rc='rate-great';re='👍';}
-    else if(loss<150){rating='Tidak Akurat';rc='rate-inacc';re='😐';}
-    else if(loss<300){rating='Kesalahan';rc='rate-mistake';re='⚠️';mistakes++;}
-    else{rating='Blunder';rc='rate-blunder';re='💀';blunders++;}
-    const pn=PNAMES_ID[abs(state.board[move.fr][move.fc])];
-    const notation=`${pn} ${F[move.fc]}${8-move.fr}→${F[move.tc]}${8-move.tr}`;
-    const row=document.createElement('div');row.className='move-row';
-    row.innerHTML=`<div class="mr-num">${i+1}.</div><div class="mr-move">${notation}</div><div class="mr-rating ${rc}">${re}</div><div class="mr-label">${rating}</div>`;
-    list.appendChild(row);
+    let rating,rc,re,comment;
+    if(loss<=-150){
+      rating='Brilian!';rc='rate-brilliant';re='✨';brilliant++;
+      const gain=Math.round(-loss/10)/10;
+      comment='✨ Langkah BRILIAN! Keunggulan +'+(Math.abs(gain)).toFixed(1)+' poin di atas prediksi!';
+    } else if(loss<=0){
+      rating='Sempurna';rc='rate-brilliant';re='✨';brilliant++;
+      comment='Langkah terbaik di posisi ini!';
+    } else if(loss<50){
+      rating='Bagus';rc='rate-great';re='👍';
+      comment='Langkah bagus. Hampir sempurna.';
+    } else if(loss<150){
+      rating='Tidak Akurat';rc='rate-inacc';re='😐';
+      const lv=Math.round(loss/10)/10;
+      comment='Kurang akurat. Kehilangan ~'+lv.toFixed(1)+' poin.';
+    } else if(loss<300){
+      rating='Kesalahan';rc='rate-mistake';re='⚠️';mistakes++;
+      const lv=Math.round(loss/10)/10;
+      comment='⚠️ Kesalahan! Kehilangan ~'+lv.toFixed(1)+' poin nilai posisi.';
+    } else {
+      rating='Blunder!';rc='rate-blunder';re='💀';blunders++;
+      const lv=Math.round(loss/10)/10;
+      const pc=_anPcName(state.board[move.fr][move.fc]);
+      comment='💀 BLUNDER! '+pc+' ke '+_AN_F[move.tc]+(8-move.tr)+' kehilangan ~'+lv.toFixed(1)+' poin!';
+      if(bestMv){
+        const bpc=_anPcName(state.board[bestMv.fr][bestMv.fc]);
+        comment+=' Lebih baik: '+bpc+' '+_AN_F[bestMv.fc]+(8-bestMv.fr)+'→'+_AN_F[bestMv.tc]+(8-bestMv.tr);
+      }
+    }
+    _analysisData.push({state,move,rating,rc,re,comment,loss,evalAfter:evalActual});
   });
-  document.getElementById('an-n0').textContent=perfect;
+  document.getElementById('an-n0').textContent=brilliant;
   document.getElementById('an-n1').textContent=mistakes;
   document.getElementById('an-n2').textContent=blunders;
+}
+
+function renderAnalysisBoard(stateObj,lastMv,rc){
+  const wrap=document.getElementById('an-board');if(!wrap)return;
+  const ow=wrap.parentElement?wrap.parentElement.clientWidth-24:Math.min(window.innerWidth-24,436);
+  const sz=Math.floor(Math.min(ow,440)/8);
+  wrap.style.cssText='display:grid;grid-template-columns:repeat(8,'+sz+'px);width:'+(sz*8)+'px;height:'+(sz*8)+'px;border:2px solid rgba(212,175,55,.35);border-radius:3px;overflow:hidden';
+  wrap.innerHTML='';
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const sq=document.createElement('div');
+    sq.className='an-rsq '+((r+c)%2===0?'rsl':'rsd');
+    sq.style.cssText='width:'+sz+'px;height:'+sz+'px';
+    if(lastMv){
+      if(r===lastMv.fr&&c===lastMv.fc)sq.classList.add('rs-from');
+      if(r===lastMv.tr&&c===lastMv.tc){
+        sq.classList.add('rs-to');
+        if(rc==='rate-blunder')sq.classList.add('rs-blunder');
+        else if(rc==='rate-brilliant')sq.classList.add('rs-brilliant');
+        else if(rc==='rate-mistake')sq.classList.add('rs-mistake');
+      }
+    }
+    const p=stateObj.board[r][c];
+    if(p){
+      const pc=(p>0?'w':'b');
+      const pid=pc+['P','N','B','R','Q','K'][Math.abs(p)-1];
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('viewBox','0 0 45 45');
+      svg.style.cssText='width:'+(sz*.86)+'px;height:'+(sz*.86)+'px;pointer-events:none';
+      const use=document.createElementNS('http://www.w3.org/2000/svg','use');
+      use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
+    }
+    wrap.appendChild(sq);
+  }
+  const ev=evaluate(stateObj);
+  const pct=Math.max(4,Math.min(96,50+ev*0.035));
+  const fill=document.getElementById('an-eval-fill');
+  if(fill)fill.style.width=pct+'%';
+}
+
+function replayGoto(idx){
+  if(!_analysisData.length)return;
+  _replayIdx=Math.max(-1,Math.min(_analysisData.length-1,idx));
+  document.querySelectorAll('#analysis-list .mr-row-click').forEach((r,i)=>{
+    r.classList.toggle('active-row',i===_replayIdx);
+    if(i===_replayIdx)r.scrollIntoView({block:'nearest',behavior:'smooth'});
+  });
+  const lbl=document.getElementById('an-move-label');
+  const cmt=document.getElementById('an-move-comment');
+  if(_replayIdx===-1){
+    const initState=_analysisData[0].state;
+    renderAnalysisBoard(initState,null,null);
+    if(lbl)lbl.textContent='Posisi Awal';
+    if(cmt)cmt.textContent='Klik ▶ Play untuk putar ulang permainan.';
+    return;
+  }
+  const d=_analysisData[_replayIdx];
+  const stateAfter=applyMove(d.state,d.move);
+  renderAnalysisBoard(stateAfter,d.move,d.rc);
+  const pc=_anPcName(d.state.board[d.move.fr][d.move.fc]);
+  const who=d.state.turn==='w'?'⬜ Putih':'⬛ Hitam';
+  if(lbl)lbl.textContent=(_replayIdx+1)+'. '+who+': '+pc+' '+_AN_F[d.move.fc]+(8-d.move.fr)+'→'+_AN_F[d.move.tc]+(8-d.move.tr)+' '+d.re;
+  if(cmt)cmt.textContent=d.comment;
+}
+
+function replayNext(){replayGoto(_replayIdx+1);}
+function replayPrev(){replayGoto(_replayIdx-1);}
+
+function toggleReplayPlay(){
+  const btn=document.getElementById('an-play-btn');
+  if(_replayTimer){
+    clearInterval(_replayTimer);_replayTimer=null;
+    if(btn)btn.textContent='▶ Play';
+  } else {
+    if(_replayIdx>=_analysisData.length-1)replayGoto(-1);
+    if(btn)btn.textContent='⏸ Pause';
+    _replayTimer=setInterval(()=>{
+      if(_replayIdx>=_analysisData.length-1){
+        clearInterval(_replayTimer);_replayTimer=null;
+        if(btn)btn.textContent='▶ Play';
+      } else {replayNext();}
+    },1600);
+  }
+}
+
+function closeAnalysis(){
+  if(_replayTimer){clearInterval(_replayTimer);_replayTimer=null;}
+  const btn=document.getElementById('an-play-btn');
+  if(btn)btn.textContent='▶ Play';
+  closeOverlay('o-analysis');
+}
+
+function showAnalysis(){
+  closeMenu();
+  if(!gameSnapshots.length){toast('Belum ada langkah untuk dianalisis');return;}
+  if(_replayTimer){clearInterval(_replayTimer);_replayTimer=null;}
+  const btn=document.getElementById('an-play-btn');
+  if(btn)btn.textContent='▶ Play';
+  buildAnalysisData();
+  const list=document.getElementById('analysis-list');list.innerHTML='';
+  _analysisData.forEach((d,i)=>{
+    const pc=_anPcName(d.state.board[d.move.fr][d.move.fc]);
+    const notation=pc+' '+_AN_F[d.move.fc]+(8-d.move.fr)+'→'+_AN_F[d.move.tc]+(8-d.move.tr);
+    const who=d.state.turn==='w'?'⬜':'⬛';
+    const row=document.createElement('div');
+    row.className='move-row mr-row-click';
+    row.innerHTML='<div class="mr-num">'+(i+1)+'.</div>'
+      +'<div class="mr-num" style="font-size:12px;color:inherit">'+who+'</div>'
+      +'<div class="mr-move">'+notation+'</div>'
+      +'<div class="mr-rating '+d.rc+'">'+d.re+'</div>'
+      +'<span class="an-badge '+d.rc+'">'+d.rating+'</span>';
+    row.onclick=()=>replayGoto(i);
+    list.appendChild(row);
+  });
+  replayGoto(-1);
   document.getElementById('o-analysis').classList.add('show');
 }
 
