@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>♟ Chess Royal</title>
 <style>
-:root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#f0d9b5;--sq-d:#b58863;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
+:root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#d4a96a;--sq-d:#7a3c1a;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior:none}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px}
@@ -166,7 +166,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .board-files{display:flex;justify-content:flex-start;margin-top:3px}
 .board-coord{font-size:9px;color:var(--txt2);text-align:center;user-select:none;font-weight:600}
 #board-grid{display:grid;grid-template-columns:repeat(8,1fr);position:relative;border-radius:2px;overflow:hidden}
-.sq{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.sq{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
 .sq.light{background:var(--sq-l)}.sq.dark{background:var(--sq-d)}
 .sq.sel{box-shadow:inset 0 0 0 3px var(--gold),inset 0 0 20px rgba(212,175,55,.35)}
 .sq.legal-move::after{content:'';position:absolute;width:32%;height:32%;border-radius:50%;background:rgba(0,0,0,.35);pointer-events:none;z-index:2}
@@ -186,7 +186,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 @keyframes capFly{to{transform:scale(0) rotate(90deg);opacity:0}}
 
 .game-actions{display:flex;gap:8px;padding:6px 14px;flex-shrink:0}
-.act-btn{flex:1;padding:10px 0;border-radius:12px;border:1px solid var(--card-b);background:var(--card);font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.act-btn{flex:1;padding:10px 0;border-radius:12px;border:1px solid var(--card-b);background:var(--card);font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
 .act-btn .act-icon{font-size:18px}
 .act-btn:hover{border-color:rgba(212,175,55,.4);color:var(--txt);transform:translateY(-1px)}
 .act-btn:active{transform:scale(.97)}
@@ -293,7 +293,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #voice-timer{font-size:20px;font-weight:700;color:var(--gold)}
 
 /* ── BOARD THEMES ── */
-#board-grid.t-classic{--sq-l:#f0d9b5;--sq-d:#b58863}
+#board-grid.t-classic{--sq-l:#d4a96a;--sq-d:#7a3c1a}
 #board-grid.t-oak{--sq-l:#e0be90;--sq-d:#8b5228}
 #board-grid.t-walnut{--sq-l:#d4b082;--sq-d:#5c2d0e}
 #board-grid.t-ebony{--sq-l:#eae0cc;--sq-d:#2d1a0a}
@@ -394,18 +394,30 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ SVG PIECE DEFS ══ -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<g id="wK"><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25s4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3-3,6,6,10.5,6,10.5V37z"/><path fill="none" stroke="#1a0800" stroke-width="1.5" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/></g>
-<g id="wQ"><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-.3-14.1L22.5,24.5l-7-13.6L14,25,6.5,13.5,9,26z"/><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4,1,1.5,1,1,1,3.5-1.5,1-1,2.5-1,2.5-1.5,1.5,2.5,2.5,2.5,2.5,4,1,14,1,18,0,0,0,4-1,2.5-2.5,0,0,.5-1.5-1-2.5,0-2.5,0-2,1-3.5,1-2,2.5-2,2.5-4-8.5-1.5-18.5-1.5-27,0z"/><circle fill="#1a0800" cx="6" cy="12" r="2"/><circle fill="#1a0800" cx="14" cy="9" r="2"/><circle fill="#1a0800" cx="22.5" cy="8" r="2"/><circle fill="#1a0800" cx="31" cy="9" r="2"/><circle fill="#1a0800" cx="39" cy="12" r="2"/></g>
-<g id="wR"><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/><path fill="#fff" stroke="#1a0800" stroke-width="1.5" d="M14,17v15h17V17H14z"/><path fill="none" stroke="#1a0800" stroke-width="1" d="M9,39h27M12,36h21M11,14h23"/></g>
-<g id="wB"><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/><path fill="#fff" stroke="#1a0800" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/><path fill="none" stroke="#1a0800" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8,0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/><circle fill="#1a0800" cx="22.5" cy="8" r="1.5"/></g>
-<g id="wN"><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22,10c10.5,3.5,8,29,8,29H15c0,0-1-7.5-1.5-11,0,0-1.5-1-2.5-2,0-1,1-3.5,1-3.5-1-2.5-4-3-4.5-6.5-.5-3.5,2-5,3-6,2-2,4-2,6-2,1,0,2,1,2,1C21,9,22,10,22,10z"/><path fill="#1a0800" stroke="#1a0800" stroke-width="1" d="M11.5,37h22l1,2H10l1.5-2z"/><path fill="none" stroke="#1a0800" stroke-width="1.2" d="M12,35.5c4-4,9-7,9-7M17,25c2-2.5,2.5-5,1.5-7M11,23c1-1,2-2,4-2"/></g>
-<g id="wP"><path fill="#fff" stroke="#1a0800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4,0,1.7,1,3.1,2.5,3.7-2.8,1-4.5,3-4.5,5.3H29c0-2.3-1.7-4.3-4.5-5.3,1.5-.6,2.5-2,2.5-3.7,0-2.2-1.8-4-4.5-4z"/><path fill="#fff" stroke="#1a0800" stroke-width="1.5" d="M15.5,25v2h14v-2H15.5zM14,28v3h17v-3H14zM12,32v3h21v-3H12z"/></g>
-<g id="bK"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25s4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3-3,6,6,10.5,6,10.5V37z"/><path fill="none" stroke="#f0d9b5" stroke-width="1" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0"/></g>
-<g id="bQ"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-.3-14.1L22.5,24.5l-7-13.6L14,25,6.5,13.5,9,26z"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4,1,1.5,1,1,1,3.5-1.5,1-1,2.5-1,2.5-1.5,1.5,2.5,2.5,2.5,2.5,4,1,14,1,18,0,0,0,4-1,2.5-2.5,0,0,.5-1.5-1-2.5,0-2.5,0-2,1-3.5,1-2,2.5-2,2.5-4-8.5-1.5-18.5-1.5-27,0z"/><circle fill="#f0d9b5" cx="6" cy="12" r="2"/><circle fill="#f0d9b5" cx="14" cy="9" r="2"/><circle fill="#f0d9b5" cx="22.5" cy="8" r="2"/><circle fill="#f0d9b5" cx="31" cy="9" r="2"/><circle fill="#f0d9b5" cx="39" cy="12" r="2"/></g>
-<g id="bR"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" d="M14,17v15h17V17H14z"/><path fill="none" stroke="#f0d9b5" stroke-width="1" d="M9,39h27M12,36h21M11,14h23"/></g>
-<g id="bB"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/><circle fill="#f0d9b5" cx="22.5" cy="8" r="1.5"/></g>
-<g id="bN"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22,10c10.5,3.5,8,29,8,29H15c0,0-1-7.5-1.5-11,0,0-1.5-1-2.5-2,0-1,1-3.5,1-3.5-1-2.5-4-3-4.5-6.5-.5-3.5,2-5,3-6,2-2,4-2,6-2,1,0,2,1,2,1C21,9,22,10,22,10z"/><path fill="#f0d9b5" stroke="none" d="M11.5,37h22l1,2H10l1.5-2z"/><path fill="none" stroke="#f0d9b5" stroke-width="1.2" d="M12,35.5c4-4,9-7,9-7M17,25c2-2.5,2.5-5,1.5-7"/></g>
-<g id="bP"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4,0,1.7,1,3.1,2.5,3.7-2.8,1-4.5,3-4.5,5.3H29c0-2.3-1.7-4.3-4.5-5.3,1.5-.6,2.5-2,2.5-3.7,0-2.2-1.8-4-4.5-4z"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" d="M15.5,25v2h14v-2H15.5zM14,28v3h17v-3H14zM12,32v3h21v-3H12z"/></g>
+<!-- White piece gradient: bright ivory top → warm shadowed bottom -->
+<linearGradient id="wGrad" x1="22.5" y1="4" x2="22.5" y2="41" gradientUnits="userSpaceOnUse">
+  <stop offset="0%" stop-color="#ffffff"/>
+  <stop offset="55%" stop-color="#f0e8da"/>
+  <stop offset="100%" stop-color="#c4b098"/>
+</linearGradient>
+<!-- Black piece gradient: dark warm brown top → near-black bottom -->
+<linearGradient id="bGrad" x1="22.5" y1="4" x2="22.5" y2="41" gradientUnits="userSpaceOnUse">
+  <stop offset="0%" stop-color="#4a2a14"/>
+  <stop offset="50%" stop-color="#1c0e06"/>
+  <stop offset="100%" stop-color="#060200"/>
+</linearGradient>
+<g id="wK"><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25s4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3-3,6,6,10.5,6,10.5V37z"/><path fill="none" stroke="#2d1000" stroke-width="1.5" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/></g>
+<g id="wQ"><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-.3-14.1L22.5,24.5l-7-13.6L14,25,6.5,13.5,9,26z"/><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4,1,1.5,1,1,1,3.5-1.5,1-1,2.5-1,2.5-1.5,1.5,2.5,2.5,2.5,2.5,4,1,14,1,18,0,0,0,4-1,2.5-2.5,0,0,.5-1.5-1-2.5,0-2.5,0-2,1-3.5,1-2,2.5-2,2.5-4-8.5-1.5-18.5-1.5-27,0z"/><circle fill="#2d1000" cx="6" cy="12" r="2.2"/><circle fill="#2d1000" cx="14" cy="9" r="2.2"/><circle fill="#2d1000" cx="22.5" cy="8" r="2.2"/><circle fill="#2d1000" cx="31" cy="9" r="2.2"/><circle fill="#2d1000" cx="39" cy="12" r="2.2"/></g>
+<g id="wR"><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" d="M14,17v15h17V17H14z"/><path fill="none" stroke="#2d1000" stroke-width="1.1" d="M9,39h27M12,36h21M11,14h23"/></g>
+<g id="wB"><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" d="M15,32c6-3,15-3,15,0v5H15V32z"/><path fill="none" stroke="#2d1000" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8,0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/><circle fill="#2d1000" cx="22.5" cy="8" r="1.7"/></g>
+<g id="wN"><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M22,10c10.5,3.5,8,29,8,29H15c0,0-1-7.5-1.5-11,0,0-1.5-1-2.5-2,0-1,1-3.5,1-3.5-1-2.5-4-3-4.5-6.5-.5-3.5,2-5,3-6,2-2,4-2,6-2,1,0,2,1,2,1C21,9,22,10,22,10z"/><path fill="#2d1000" stroke="#2d1000" stroke-width="1" d="M11.5,37h22l1,2H10l1.5-2z"/><path fill="none" stroke="#2d1000" stroke-width="1.3" d="M12,35.5c4-4,9-7,9-7M17,25c2-2.5,2.5-5,1.5-7M11,23c1-1,2-2,4-2"/></g>
+<g id="wP"><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4,0,1.7,1,3.1,2.5,3.7-2.8,1-4.5,3-4.5,5.3H29c0-2.3-1.7-4.3-4.5-5.3,1.5-.6,2.5-2,2.5-3.7,0-2.2-1.8-4-4.5-4z"/><path fill="url(#wGrad)" stroke="#2d1000" stroke-width="1.7" d="M15.5,25v2h14v-2H15.5zM14,28v3h17v-3H14zM12,32v3h21v-3H12z"/></g>
+<g id="bK"><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25s4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3-3,6,6,10.5,6,10.5V37z"/><path fill="none" stroke="#e0c468" stroke-width="1.1" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0"/></g>
+<g id="bQ"><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-.3-14.1L22.5,24.5l-7-13.6L14,25,6.5,13.5,9,26z"/><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4,1,1.5,1,1,1,3.5-1.5,1-1,2.5-1,2.5-1.5,1.5,2.5,2.5,2.5,2.5,4,1,14,1,18,0,0,0,4-1,2.5-2.5,0,0,.5-1.5-1-2.5,0-2.5,0-2,1-3.5,1-2,2.5-2,2.5-4-8.5-1.5-18.5-1.5-27,0z"/><circle fill="#e0c468" cx="6" cy="12" r="2.2"/><circle fill="#e0c468" cx="14" cy="9" r="2.2"/><circle fill="#e0c468" cx="22.5" cy="8" r="2.2"/><circle fill="#e0c468" cx="31" cy="9" r="2.2"/><circle fill="#e0c468" cx="39" cy="12" r="2.2"/></g>
+<g id="bR"><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" d="M14,17v15h17V17H14z"/><path fill="none" stroke="#e0c468" stroke-width="1.1" d="M9,39h27M12,36h21M11,14h23"/></g>
+<g id="bB"><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" d="M15,32c6-3,15-3,15,0v5H15V32z"/><circle fill="#e0c468" cx="22.5" cy="8" r="1.7"/></g>
+<g id="bN"><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M22,10c10.5,3.5,8,29,8,29H15c0,0-1-7.5-1.5-11,0,0-1.5-1-2.5-2,0-1,1-3.5,1-3.5-1-2.5-4-3-4.5-6.5-.5-3.5,2-5,3-6,2-2,4-2,6-2,1,0,2,1,2,1C21,9,22,10,22,10z"/><path fill="#e0c468" stroke="none" d="M11.5,37h22l1,2H10l1.5-2z"/><path fill="none" stroke="#e0c468" stroke-width="1.3" d="M12,35.5c4-4,9-7,9-7M17,25c2-2.5,2.5-5,1.5-7"/></g>
+<g id="bP"><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4,0,1.7,1,3.1,2.5,3.7-2.8,1-4.5,3-4.5,5.3H29c0-2.3-1.7-4.3-4.5-5.3,1.5-.6,2.5-2,2.5-3.7,0-2.2-1.8-4-4.5-4z"/><path fill="url(#bGrad)" stroke="#e0c468" stroke-width="1.7" d="M15.5,25v2h14v-2H15.5zM14,28v3h17v-3H14zM12,32v3h21v-3H12z"/></g>
 </defs>
 </svg>
 
@@ -855,7 +867,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 // BOARD THEMES  (declared first — before Firebase so they always exist)
 // ═══════════════════════════════════════
 const THEMES=[
-  {id:'classic',name:'Klasik',l:'#f0d9b5',d:'#b58863'},
+  {id:'classic',name:'Klasik',l:'#d4a96a',d:'#7a3c1a'},
   {id:'oak',name:'Oak',l:'#e0be90',d:'#8b5228'},
   {id:'walnut',name:'Walnut',l:'#d4b082',d:'#5c2d0e'},
   {id:'ebony',name:'Ebony',l:'#eae0cc',d:'#2d1a0a'},
@@ -876,7 +888,7 @@ cfg.snd=cfg.snd!==false;
 cfg.color=cfg.color||'w';
 cfg.musicTrack=cfg.musicTrack??0;
 cfg.musicOn=cfg.musicOn!==false;
-cfg.comment=cfg.comment!==false;
+cfg.comment=false;
 function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
 
 let gameMode=null,botLevel=1,myColor='w',roomCode=null,roomRef=null,roomListener=null;
@@ -1277,6 +1289,11 @@ function setPlayerNames(topName,botName,topColor,botColor){
 // BOARD CLICK HANDLER
 // ═══════════════════════════════════════
 let pendingPromo=null;
+let _cachedLegal=null,_cachedLegalGS=null;
+function _getLegal(s,c){
+  if(_cachedLegalGS!==s){_cachedLegal=legalMoves(s,c);_cachedLegalGS=s;}
+  return _cachedLegal;
+}
 function onSquareClick(r,c){
   if(!gs||gs.gameOver)return;
   if(gameMode==='online'&&gs.turn!==myColor)return;
@@ -1293,11 +1310,11 @@ function onSquareClick(r,c){
       executeMove(mv);return;
     }
   }
-  // Select piece
+  // Select piece — use cached legal moves
   const p=gs.board[clickR][clickC];
   if(p&&col(p)===gs.turn){
     selected=[clickR,clickC];
-    legalFromSel=legalMoves(gs,gs.turn).filter(m=>m.fr===clickR&&m.fc===clickC);
+    legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===clickR&&m.fc===clickC);
     renderBoard();
   }else{
     selected=null;legalFromSel=[];renderBoard();
@@ -1335,11 +1352,6 @@ function executeMove(mv){
   // Board glow on move
   const bsw=document.getElementById('board-shadow-wrap');
   if(bsw){bsw.classList.remove('move-flash');void bsw.offsetWidth;bsw.classList.add('move-flash');}
-  if(gameMode==='bot'&&cfg.comment){
-    const loss=Math.abs(evaluate(prevGS)-evaluate(gs));
-    if(loss>250)setTimeout(()=>showBotComment('blunder'),400);
-    else if(loss<30)setTimeout(()=>showBotComment('good'),400);
-  }
   const draw=checkAutoDraw(gs);
   if(draw.is){gs.gameOver=true;renderBoard();setTimeout(()=>showAutoDraw(draw.reason),400);return;}
   const legal=legalMoves(gs,gs.turn);
@@ -1349,7 +1361,7 @@ function executeMove(mv){
     else{gs.result='draw';}
     renderBoard();setTimeout(()=>showGameOver(gs.result),500);return;
   }
-  if(isInCheck(gs,gs.turn)){playSound('check');if(gameMode==='bot')setTimeout(()=>showBotComment('check'),200);}
+  if(isInCheck(gs,gs.turn)){playSound('check');}
   renderBoard();
   // Pass-and-play: show device handoff overlay
   if(gameMode==='pass'&&!gs.gameOver){
@@ -1531,17 +1543,37 @@ function showHint(){
   const c=gameMode==='online'?myColor:gs.turn;
   if(gs.turn!==c){toast('Bukan giliranmu!');return;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
-  const mv=getBestMove(gs,c,2);
-  if(!mv){toast('Tidak ada langkah tersedia');return;}
-  hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  // Instant: depth-1 shows immediately
+  const quick=getBestMove(gs,c,1);
+  if(!quick){toast('Tidak ada langkah tersedia');return;}
+  hintMove={fr:quick.fr,fc:quick.fc,tr:quick.tr,tc:quick.tc};
   document.getElementById('btn-hint')?.classList.add('hint-active');
   renderBoard();
+  // Async upgrade to depth-4 via Web Worker (non-blocking)
+  try{
+    if(_magnusWorkerURL){
+      const snapGS=cloneGS(gs);
+      _hintWorker=new Worker(_magnusWorkerURL);
+      _hintWorker.onmessage=(e)=>{
+        const mv=e.data;
+        if(mv&&hintMove){
+          hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+          renderBoard();
+        }
+        _hintWorker=null;
+      };
+      _hintWorker.onerror=()=>{_hintWorker=null;};
+      _hintWorker.postMessage({gs:snapGS,color:c,depth:4});
+    }
+  }catch(e){/*ignore*/}
   _hintTimer=setTimeout(()=>{
     hintMove=null;_hintTimer=null;
+    if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
     document.getElementById('btn-hint')?.classList.remove('hint-active');
     document.getElementById('hint-svg')?.remove();
     renderBoard();
-  },6000);
+  },9000);
 }
 
 // ═══════════════════════════════════════
@@ -1558,7 +1590,6 @@ function startVsBot(level){
     const topC=myColor==='w'?'b':'w';
     setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
     showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
-    setTimeout(()=>{if(cfg.comment)showBotComment('intro')},1200);
     if(myColor==='b')setTimeout(doBotMove,700);
   }catch(e){toast('Error: '+e.message);console.error(e);}
 }
