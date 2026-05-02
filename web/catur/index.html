@@ -1310,6 +1310,7 @@ function onSquareClick(r,c){
   if(p&&col(p)===gs.turn){
     selected=[clickR,clickC];
     legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===clickR&&m.fc===clickC);
+    playSound('select');
     renderBoard();
   }else{
     selected=null;legalFromSel=[];renderBoard();
@@ -1328,7 +1329,7 @@ function showPromo(templateMv){
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     const pid=(promoColor==='w'?'w':'b')+''+['P','N','B','R','Q','K'][pp-1];
     use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
-    sq.onclick=()=>{closeOverlay('o-promo');const mv={...templateMv,promo:actualPp};executeMove(mv);};
+    sq.onclick=()=>{closeOverlay('o-promo');playSound('promote');const mv={...templateMv,promo:actualPp};executeMove(mv);};
     wrap.appendChild(sq);
   });
   document.getElementById('o-promo').classList.add('show');
@@ -2020,20 +2021,91 @@ function toggleMusic(){
 }
 
 // ═══════════════════════════════════════
-// SOUND FX
+// SOUND FX  — authentic chess piece sounds (Web Audio synthesis)
 // ═══════════════════════════════════════
 function playSound(type){
   if(!cfg.snd)return;
   try{
     const ac=getACtx();if(!ac)return;
-    if(type==='end'){[[523,0],[659,.2],[784,.4]].forEach(([f,t])=>{if(!f)return;const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(.1,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+.35);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+.4);});return;}
-    if(type==='check'){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';o.frequency.setValueAtTime(880,ac.currentTime);o.frequency.exponentialRampToValueAtTime(440,ac.currentTime+.2);g.gain.setValueAtTime(.08,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.25);o.start();o.stop(ac.currentTime+.3);return;}
-    if(type==='castle'){[[520,.08],[580,.08],[640,.1]].forEach(([f,d],i)=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='triangle';o.frequency.value=f;const t=ac.currentTime+i*.12;g.gain.setValueAtTime(d,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.start(t);o.stop(t+.25);});return;}
-    const freqs={move:440,capture:280};
-    const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);
-    o.type=type==='capture'?'sawtooth':'triangle';o.frequency.value=freqs[type]||440;
-    g.gain.setValueAtTime(.1,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.18);
-    o.start();o.stop(ac.currentTime+.22);
+    if(ac.state==='suspended')ac.resume();
+    const now=ac.currentTime;
+
+    // Wooden impact: noise burst (click transient) + sine body resonance
+    function woodHit(t,clickHz,bodyHz,vol,dur){
+      const len=Math.ceil(ac.sampleRate*(dur+0.06));
+      const buf=ac.createBuffer(1,len,ac.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+      const src=ac.createBufferSource();src.buffer=buf;
+      const bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=clickHz;bp.Q.value=2.2;
+      const ng=ac.createGain();
+      ng.gain.setValueAtTime(vol,t);ng.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      src.connect(bp);bp.connect(ng);ng.connect(ac.destination);
+      src.start(t);src.stop(t+dur+0.06);
+      // Low body thud (board resonance)
+      const o=ac.createOscillator(),og=ac.createGain();
+      o.connect(og);og.connect(ac.destination);
+      o.type='sine';o.frequency.value=bodyHz;
+      og.gain.setValueAtTime(vol*0.28,t);og.gain.exponentialRampToValueAtTime(0.0001,t+dur*1.6);
+      o.start(t);o.stop(t+dur*1.6+0.05);
+    }
+
+    // Pure tone (bell / chime / fanfare note)
+    function chime(freq,vol,dur,t,wave='sine'){
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.type=wave;o.frequency.value=freq;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(vol,t+0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.start(t);o.stop(t+dur+0.04);
+    }
+
+    switch(type){
+      // ── Piece lands on square ── (short wooden clack like Lichess/chess.com)
+      case 'move':
+        woodHit(now,3400,260,0.58,0.072);
+        break;
+
+      // ── Piece captured ── (heavier double thud — attacker lands + knocked piece)
+      case 'capture':
+        woodHit(now,1900,170,0.72,0.095);
+        woodHit(now+0.008,4000,340,0.32,0.050);
+        break;
+
+      // ── Castling ── (two distinct clacks ~140ms apart)
+      case 'castle':
+        woodHit(now,3200,255,0.52,0.072);
+        woodHit(now+0.14,3500,270,0.52,0.072);
+        break;
+
+      // ── Piece lifted/selected ── (subtle soft click)
+      case 'select':
+        woodHit(now,5800,480,0.20,0.038);
+        break;
+
+      // ── Check ── (warning bell — 880 Hz double pulse)
+      case 'check':
+        chime(880,0.15,0.48,now);
+        chime(1320,0.07,0.36,now);
+        chime(880,0.09,0.36,now+0.22);
+        break;
+
+      // ── Promotion ── (ascending victory ding ×3)
+      case 'promote':
+        chime(1047,0.12,0.40,now);
+        chime(1319,0.11,0.42,now+0.13);
+        chime(1568,0.15,0.60,now+0.27);
+        break;
+
+      // ── Game over ── (triumphant ascending arpeggio)
+      case 'end':
+        [[523,0],[659,0.14],[784,0.29],[1047,0.47]].forEach(([f,dt])=>{
+          chime(f,0.11,0.55,now+dt,'sine');
+          chime(f*2,0.04,0.38,now+dt,'sine');
+        });
+        break;
+    }
   }catch(e){}
 }
 
