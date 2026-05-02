@@ -1040,15 +1040,32 @@ function checkAutoDraw(s){
 }
 
 function evaluate(s){
+  let sc=0,wMat=0,bMat=0;
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=s.board[r][c];if(!p)continue;const ap=abs(p),isW=p>0,pr=isW?r:7-r,ps=PST[ap]?PST[ap][pr][c]:0;sc+=isW?(PVAL[ap]+ps):-(PVAL[ap]+ps);if(ap!==K){if(isW)wMat+=PVAL[ap];else bMat+=PVAL[ap];}}
+  const md=wMat-bMat;
+  // Aggressive king-attack + adaptive defense
+  for(const side of['w','b']){
+    const isW=side==='w',opp=isW?'b':'w',myAdv=isW?md:-md;
+    const okp=findKing(s.board,opp),mkp=findKing(s.board,side);
+    if(okp){let atk=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==side)continue;const ap=abs(p);if(ap===K)continue;const d=Math.max(Math.abs(fr-okp[0]),Math.abs(fc-okp[1]));if(d<=2)atk+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)atk+=ap===Q?2:ap>=R?1:0;}const w=myAdv>-300?12:6;sc+=isW?atk*w:-(atk*w);}
+    if(mkp){let def=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==opp)continue;const ap=abs(p);if(ap===K)continue;const d=Math.max(Math.abs(fr-mkp[0]),Math.abs(fc-mkp[1]));if(d<=2)def+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)def+=ap===Q?2:ap>=R?1:0;}const w=myAdv<-200?10:4;sc+=isW?-(def*w):(def*w);}
+  }
+  return sc;
+}
+// Aggressive move ordering: king-zone attacks >> captures (MVV-LVA) >> promotions
+function _mvOrd(s,mv){
   let sc=0;
-  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=s.board[r][c];if(!p)continue;const ap=abs(p),isW=p>0,pr=isW?r:7-r,ps=PST[ap]?PST[ap][pr][c]:0;sc+=isW?(PVAL[ap]+ps):-(PVAL[ap]+ps);}
+  const cap=s.board[mv.tr][mv.tc];if(cap)sc+=abs(cap)*10-abs(s.board[mv.fr][mv.fc]);
+  if(mv.promo)sc+=700;
+  const okp=findKing(s.board,s.turn==='w'?'b':'w');
+  if(okp){const d=Math.max(Math.abs(mv.tr-okp[0]),Math.abs(mv.tc-okp[1]));if(d===0)sc+=900;else if(d===1)sc+=450;else if(d===2)sc+=150;}
   return sc;
 }
 function minimax(s,depth,alpha,beta,maxing){
   const c=s.turn,moves=legalMoves(s,c);
   if(!moves.length)return isInCheck(s,c)?(maxing?-900000+depth*1000:900000-depth*1000):0;
   if(depth===0)return evaluate(s);
-  moves.sort((a,b2)=>abs(s.board[b2.tr][b2.tc])-abs(s.board[a.tr][a.tc]));
+  moves.sort((a,b2)=>_mvOrd(s,b2)-_mvOrd(s,a));
   if(maxing){let best=-Infinity;for(const mv of moves){best=Math.max(best,minimax(applyMove(s,mv),depth-1,alpha,beta,false));alpha=Math.max(alpha,best);if(beta<=alpha)break;}return best;}
   else{let best=Infinity;for(const mv of moves){best=Math.min(best,minimax(applyMove(s,mv),depth-1,alpha,beta,true));beta=Math.min(beta,best);if(beta<=alpha)break;}return best;}
 }
@@ -1056,7 +1073,7 @@ function getBestMove(s,c,depth){
   const moves=legalMoves(s,c);if(!moves.length)return null;
   if(depth===0)return moves[Math.floor(Math.random()*moves.length)];
   const maxing=c==='w';let best=maxing?-Infinity:Infinity,bestMv=null;
-  moves.sort((a,b2)=>abs(s.board[b2.tr][b2.tc])-abs(s.board[a.tr][a.tc]));
+  moves.sort((a,b2)=>_mvOrd(s,b2)-_mvOrd(s,a));
   for(const mv of moves){const sc=minimax(applyMove(s,mv),depth-1,-Infinity,Infinity,!maxing);if(maxing?sc>best:sc<best){best=sc;bestMv=mv;}}
   return bestMv||moves[0];
 }
@@ -1456,13 +1473,25 @@ function legalMoves(s,c){
   }return moves;
 }
 function evaluate(s){
-  let sc=0;
-  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=s.board[r][c];if(!p)continue;const ap=ab(p),isW=p>0,pr=isW?r:7-r,ps=PST[ap]?PST[ap][pr][c]:0;sc+=isW?(PVAL[ap]+ps):-(PVAL[ap]+ps);}
+  let sc=0,wMat=0,bMat=0;
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=s.board[r][c];if(!p)continue;const ap=ab(p),isW=p>0,pr=isW?r:7-r,ps=PST[ap]?PST[ap][pr][c]:0;sc+=isW?(PVAL[ap]+ps):-(PVAL[ap]+ps);if(ap!==K){if(isW)wMat+=PVAL[ap];else bMat+=PVAL[ap];}}
+  const md=wMat-bMat;
+  // Aggressive king-attack + adaptive defense
   for(const side of['w','b']){
-    const kp=findKing(s.board,side);if(!kp)continue;
-    let danger=0;for(let dr=-2;dr<=2;dr++)for(let dc=-2;dc<=2;dc++){if(!dr&&!dc)continue;const nr=kp[0]+dr,nc=kp[1]+dc;if(inB(nr,nc)){const p=s.board[nr][nc];if(p&&col(p)!==(side==='w'?'w':'b'))danger+=ab(p)===Q?4:ab(p)>=R?2:1;}}
-    sc+=side==='w'?(-danger*4):(danger*4);
+    const isW=side==='w',opp=isW?'b':'w',myAdv=isW?md:-md;
+    const okp=findKing(s.board,opp),mkp=findKing(s.board,side);
+    if(okp){let atk=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==side)continue;const ap=ab(p);if(ap===K)continue;const d=Math.max(ab(fr-okp[0]),ab(fc-okp[1]));if(d<=2)atk+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)atk+=ap===Q?2:ap>=R?1:0;}const w=myAdv>-300?12:6;sc+=isW?atk*w:-(atk*w);}
+    if(mkp){let def=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==opp)continue;const ap=ab(p);if(ap===K)continue;const d=Math.max(ab(fr-mkp[0]),ab(fc-mkp[1]));if(d<=2)def+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)def+=ap===Q?2:ap>=R?1:0;}const w=myAdv<-200?10:4;sc+=isW?-(def*w):(def*w);}
   }
+  return sc;
+}
+// Aggressive move ordering: king-proximity >> captures (MVV-LVA) >> promotions
+function mvOrd(s,mv){
+  let sc=0;
+  const cap=s.board[mv.tr][mv.tc];if(cap)sc+=ab(cap)*10-ab(s.board[mv.fr][mv.fc]);
+  if(mv.promo)sc+=700;
+  const okp=findKing(s.board,s.turn==='w'?'b':'w');
+  if(okp){const d=Math.max(ab(mv.tr-okp[0]),ab(mv.tc-okp[1]));if(d===0)sc+=900;else if(d===1)sc+=450;else if(d===2)sc+=150;}
   return sc;
 }
 function quiesce(s,alpha,beta,isMax,ply){
@@ -1472,7 +1501,7 @@ function quiesce(s,alpha,beta,isMax,ply){
   else{if(stand<=alpha)return alpha;if(stand<beta)beta=stand;}
   const c=s.turn;
   const caps=legalMoves(s,c).filter(mv=>s.board[mv.tr][mv.tc]!==0||mv.promo);
-  caps.sort((a,b2)=>ab(s.board[b2.tr][b2.tc])-ab(s.board[a.tr][a.tc]));
+  caps.sort((a,b2)=>mvOrd(s,b2)-mvOrd(s,a));
   for(const mv of caps){const score=quiesce(applyMove(s,mv),alpha,beta,!isMax,ply+1);if(isMax){if(score>=beta)return beta;if(score>alpha)alpha=score;}else{if(score<=alpha)return alpha;if(score<beta)beta=score;}}
   return isMax?alpha:beta;
 }
@@ -1480,14 +1509,14 @@ function minimax(s,depth,alpha,beta,maxing){
   const c=s.turn,moves=legalMoves(s,c);
   if(!moves.length)return isInCheck(s,c)?(maxing?-900000+depth*1000:900000-depth*1000):0;
   if(depth===0)return quiesce(s,alpha,beta,maxing,0);
-  moves.sort((a,b2)=>ab(s.board[b2.tr][b2.tc])-ab(s.board[a.tr][a.tc]));
+  moves.sort((a,b2)=>mvOrd(s,b2)-mvOrd(s,a));
   if(maxing){let best=-Infinity;for(const mv of moves){best=Math.max(best,minimax(applyMove(s,mv),depth-1,alpha,beta,false));alpha=Math.max(alpha,best);if(beta<=alpha)break;}return best;}
   else{let best=Infinity;for(const mv of moves){best=Math.min(best,minimax(applyMove(s,mv),depth-1,alpha,beta,true));beta=Math.min(beta,best);if(beta<=alpha)break;}return best;}
 }
 function getBestMove(s,c,depth){
   const moves=legalMoves(s,c);if(!moves.length)return null;
   const maxing=c==='w';let best=maxing?-Infinity:Infinity,bestMv=null;
-  moves.sort((a,b2)=>ab(s.board[b2.tr][b2.tc])-ab(s.board[a.tr][a.tc]));
+  moves.sort((a,b2)=>mvOrd(s,b2)-mvOrd(s,a));
   for(const mv of moves){const sc=minimax(applyMove(s,mv),depth-1,-Infinity,Infinity,!maxing);if(maxing?sc>best:sc<best){best=sc;bestMv=mv;}}
   return bestMv||moves[0];
 }
