@@ -23,7 +23,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--dur) ease-in-out infinite alternate;opacity:var(--op,0.6)}
 @keyframes twinkle{from{opacity:calc(var(--op,0.6)*.3);transform:scale(.8)}to{opacity:var(--op,0.6);transform:scale(1)}}
 .dust{position:absolute;border-radius:50%;background:var(--gold);animation:drift var(--dur2) ease-in-out infinite;opacity:0}
-@keyframes drift{0%{transform:translateY(0) translateX(0) scale(1);opacity:0}20%{opacity:.7}80%{opacity:.4}100%{transform:translateY(var(--vy,−120px)) translateX(var(--vx,20px)) scale(.4);opacity:0}}
+@keyframes drift{0%{transform:translateY(0) translateX(0) scale(1);opacity:0}20%{opacity:.7}80%{opacity:.4}100%{transform:translateY(var(--vy,-120px)) translateX(var(--vx,20px)) scale(.4);opacity:0}}
 
 /* ── Screen system ── */
 .screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;z-index:10;overflow-y:auto;overflow-x:hidden;padding:12px 12px calc(12px + var(--safe));scrollbar-width:thin}
@@ -340,6 +340,8 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 @keyframes pieceDrop{0%{opacity:0;transform:translateY(-50px) scale(.4) rotate(-8deg)}65%{transform:translateY(5px) scale(1.1) rotate(1deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
 .intro-skip{z-index:3;font-size:12px;color:rgba(212,175,55,.45);letter-spacing:1.5px;cursor:pointer;border:1px solid rgba(212,175,55,.18);padding:8px 22px;border-radius:99px;transition:all .35s;animation:introFade .8s 2s forwards;opacity:0;user-select:none}
 .intro-skip:hover{color:var(--gold);border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.06)}
+.intro-tap-hint{z-index:3;font-size:11px;letter-spacing:2px;color:rgba(212,175,55,.6);text-transform:uppercase;animation:introFade .8s 2.4s forwards,tapPulse 2s 3s ease-in-out infinite;opacity:0;pointer-events:none;text-align:center}
+@keyframes tapPulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
 .intro-progress{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,transparent,#d4af37,#f5e6aa);animation:introProgress 7s linear forwards;width:0}
 @keyframes introProgress{from{width:0}to{width:100%}}
 /* Intro scanning line */
@@ -462,19 +464,36 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
   <path fill="none" stroke="#404040" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
 </g>
-<!-- WHITE BISHOP -->
+<!-- WHITE BISHOP — wide rounded body + prominent cross -->
 <g id="wB">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10c-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/>
-  <path fill="none" stroke="#404040" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8c0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/>
-  <circle fill="#404040" cx="22.5" cy="8" r="1.7"/>
+  <rect fill="#fff" stroke="#404040" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 11,37 C 11,34 15,32 22.5,32 C 30,32 34,34 34,37"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15,32 C 10,28 9,22 10,17 C 11,12 15,8 22.5,7 C 30,8 34,12 35,17 C 36,22 35,28 30,32 Z"/>
+  <circle fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="7" r="3.2"/>
+  <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
+  <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — cburnett horse silhouette -->
+<!-- WHITE KNIGHT — horse head facing left -->
 <g id="wN">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.285,28.96 13.34,32.25 13,33.5 C 10.9,34.15 11.85,31.83 9,32 C 7.346,32.67 12.5,35 12,36 L 22,36 C 22,36 27.22,28.67 19,22 C 17.98,21.02 22,10 22,10"/>
-  <circle fill="#404040" cx="9.5" cy="25.5" r="0.8"/>
-  <path fill="none" stroke="#404040" stroke-width="1.5" d="M 15,15.5 A 0.5,1.5 0 1 1 14,15.5 A 0.5,1.5 0 1 1 15,15.5"/>
+  <rect fill="#fff" stroke="#404040" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 27,37
+       C 31,35 35,30 35,23
+       C 35,16 31,10 27,8
+       C 24,7 21,7 19,8
+       C 18,7 17,5 16,4
+       C 15,3 14,4 14,6
+       C 13,7 13,10 14,12
+       C 12,14 10,17 9,21
+       C 8,25 9,29 11,31
+       C 11,34 11,36 12,37 Z"/>
+  <circle fill="#404040" cx="27" cy="13" r="2.2"/>
+  <path fill="none" stroke="#404040" stroke-width="1.3" stroke-linecap="round"
+    d="M 10,21 C 9,19 11,18 12,20"/>
+  <path fill="none" stroke="#404040" stroke-width="1.2" stroke-linecap="round"
+    d="M 19,8 C 18,6 19,4 21,5 M 21,6 C 22,4 24,5 23,7"/>
 </g>
 <!-- WHITE PAWN — round head + smooth waist + round base -->
 <g id="wP">
@@ -508,19 +527,36 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
   <path fill="none" stroke="#ccc" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
 </g>
-<!-- BLACK BISHOP -->
+<!-- BLACK BISHOP — wide rounded body + prominent cross -->
 <g id="bB">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,36c3.4-2.5,20.7-2.5,27,0l2-1.5c-5-5.5,4-5,4-10c-1-8-10.5-8-13-8s-12,0-13,8c0,5,9,4.5,4,10L9,36z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M15,32c6-3,15-3,15,0v5H15V32z"/>
-  <path fill="none" stroke="#ccc" stroke-width="1.5" d="M22.5,8c0,0-3,4.5-3,8c0,2.5,1,4.5,3,4.5s3-2,3-4.5c0-3.5-3-8-3-8z"/>
-  <circle fill="#ccc" cx="22.5" cy="8" r="1.7"/>
+  <rect fill="#111" stroke="#ccc" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 11,37 C 11,34 15,32 22.5,32 C 30,32 34,34 34,37"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15,32 C 10,28 9,22 10,17 C 11,12 15,8 22.5,7 C 30,8 34,12 35,17 C 36,22 35,28 30,32 Z"/>
+  <circle fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="7" r="3.2"/>
+  <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
+  <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — cburnett horse silhouette -->
+<!-- BLACK KNIGHT — horse head facing left -->
 <g id="bN">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.285,28.96 13.34,32.25 13,33.5 C 10.9,34.15 11.85,31.83 9,32 C 7.346,32.67 12.5,35 12,36 L 22,36 C 22,36 27.22,28.67 19,22 C 17.98,21.02 22,10 22,10"/>
-  <circle fill="#ccc" cx="9.5" cy="25.5" r="0.8"/>
-  <path fill="none" stroke="#ccc" stroke-width="1.5" d="M 15,15.5 A 0.5,1.5 0 1 1 14,15.5 A 0.5,1.5 0 1 1 15,15.5"/>
+  <rect fill="#111" stroke="#ccc" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 27,37
+       C 31,35 35,30 35,23
+       C 35,16 31,10 27,8
+       C 24,7 21,7 19,8
+       C 18,7 17,5 16,4
+       C 15,3 14,4 14,6
+       C 13,7 13,10 14,12
+       C 12,14 10,17 9,21
+       C 8,25 9,29 11,31
+       C 11,34 11,36 12,37 Z"/>
+  <circle fill="#ccc" cx="27" cy="13" r="2.2"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.3" stroke-linecap="round"
+    d="M 10,21 C 9,19 11,18 12,20"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" stroke-linecap="round"
+    d="M 19,8 C 18,6 19,4 21,5 M 21,6 C 22,4 24,5 23,7"/>
 </g>
 <!-- BLACK PAWN — round head + smooth waist + round base -->
 <g id="bP">
@@ -545,6 +581,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <div id="intro-board-wrap">
     <div id="intro-board"></div>
   </div>
+  <div class="intro-tap-hint" id="intro-tap-hint">♪ Tap untuk suara megah</div>
   <div class="intro-skip" onclick="skipIntro()">⏭ Lewati</div>
 </div>
 
@@ -1536,12 +1573,13 @@ function undoMove(){
 }
 function confirmReset(){if(confirm('Ulangi permainan dari awal?'))restartSameMode()}
 // ═══════════════════════════════════════
-// MAGNUS-LEVEL HINT ENGINE (Web Worker — depth 5 + quiescence, unlimited)
+// GRANDMASTER HINT ENGINE — Iterative Deepening + TT + NMP + LMR + Killers
 // ═══════════════════════════════════════
 const _MAGNUS_CODE=`'use strict';
 const P=1,N=2,B=3,R=4,Q=5,K=6;
 const PVAL=[0,100,320,330,500,900,20000];
 const PST={1:[[0,0,0,0,0,0,0,0],[50,50,50,50,50,50,50,50],[10,10,20,30,30,20,10,10],[5,5,10,25,25,10,5,5],[0,0,0,20,20,0,0,0],[5,-5,-10,0,0,-10,-5,5],[5,10,10,-20,-20,10,10,5],[0,0,0,0,0,0,0,0]],2:[[-50,-40,-30,-30,-30,-30,-40,-50],[-40,-20,0,0,0,0,-20,-40],[-30,0,10,15,15,10,0,-30],[-30,5,15,20,20,15,5,-30],[-30,0,15,20,20,15,0,-30],[-30,5,10,15,15,10,5,-30],[-40,-20,0,5,5,0,-20,-40],[-50,-40,-30,-30,-30,-30,-40,-50]],3:[[-20,-10,-10,-10,-10,-10,-10,-20],[-10,0,0,0,0,0,0,-10],[-10,0,5,10,10,5,0,-10],[-10,5,5,10,10,5,5,-10],[-10,0,10,10,10,10,0,-10],[-10,10,10,10,10,10,10,-10],[-10,5,0,0,0,0,5,-10],[-20,-10,-10,-10,-10,-10,-10,-20]],4:[[0,0,0,0,0,0,0,0],[5,10,10,10,10,10,10,5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[0,0,0,5,5,0,0,0]],5:[[-20,-10,-10,-5,-5,-10,-10,-20],[-10,0,0,0,0,0,0,-10],[-10,0,5,5,5,5,0,-10],[-5,0,5,5,5,5,0,-5],[0,0,5,5,5,5,0,-5],[-10,5,5,5,5,5,0,-10],[-10,0,5,0,0,0,0,-10],[-20,-10,-10,-5,-5,-10,-10,-20]],6:[[-30,-40,-40,-50,-50,-40,-40,-30],[-30,-40,-40,-50,-50,-40,-40,-30],[-30,-40,-40,-50,-50,-40,-40,-30],[-30,-40,-40,-50,-50,-40,-40,-30],[-20,-30,-30,-40,-40,-30,-30,-20],[-10,-20,-20,-20,-20,-20,-20,-10],[20,20,0,0,0,0,20,20],[20,30,10,0,0,10,30,20]]};
+const KST_EG=[[-50,-40,-30,-20,-20,-30,-40,-50],[-30,-20,-10,0,0,-10,-20,-30],[-30,-10,20,30,30,20,-10,-30],[-30,-10,30,40,40,30,-10,-30],[-30,-10,30,40,40,30,-10,-30],[-30,-10,20,30,30,20,-10,-30],[-30,-20,-10,0,0,-10,-20,-30],[-50,-40,-30,-20,-20,-30,-40,-50]];
 function col(p){return p>0?'w':p<0?'b':null}
 function ab(p){return p<0?-p:p}
 function inB(r,c){return r>=0&&r<8&&c>=0&&c<8}
@@ -1592,55 +1630,187 @@ function legalMoves(s,c){
     for(const mv of pseudoMoves(s,r,cc)){if(mv.castle){const sq=mv.castle.endsWith('K')?[mv.fr,5]:[mv.fr,3];if(isInCheck(s,c)||isAttacked(s.board,sq[0],sq[1],c==='w'?'b':'w'))continue;}const ns=applyMove(s,mv);if(!isInCheck(ns,c))moves.push(mv);}
   }return moves;
 }
+// ── Transposition Table ──
+const TT=new Map();
+const TT_EXACT=0,TT_LOWER=1,TT_UPPER=2;
+const MAX_PLY=24;
+function boardKey(s){
+  let k=s.turn;const b=s.board;
+  for(let i=0;i<8;i++)for(let j=0;j<8;j++)k+=String.fromCharCode(b[i][j]+70);
+  k+=(s.castling.wK?'K':'_')+(s.castling.wQ?'Q':'_')+(s.castling.bK?'k':'_')+(s.castling.bQ?'q':'_');
+  k+=s.ep?s.ep[0]+''+s.ep[1]:'xx';return k;
+}
+// ── Killer Moves & History ──
+const killers=Array.from({length:MAX_PLY},()=>[null,null]);
+const history=new Int32Array(4096);
+function hi(mv){return(mv.fr*8+mv.fc)*64+(mv.tr*8+mv.tc);}
+// ── Improved Evaluation ──
+function countMob(s,c){let n=0;for(let r=0;r<8;r++)for(let cc=0;cc<8;cc++){const p=s.board[r][cc];if(p&&col(p)===c)n+=pseudoMoves(s,r,cc).length;}return n;}
 function evaluate(s){
-  let sc=0,wMat=0,bMat=0;
-  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=s.board[r][c];if(!p)continue;const ap=ab(p),isW=p>0,pr=isW?r:7-r,ps=PST[ap]?PST[ap][pr][c]:0;sc+=isW?(PVAL[ap]+ps):-(PVAL[ap]+ps);if(ap!==K){if(isW)wMat+=PVAL[ap];else bMat+=PVAL[ap];}}
+  let sc=0,wMat=0,bMat=0,wB=0,bB=0;
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const p=s.board[r][c];if(!p)continue;
+    const ap=ab(p),isW=p>0,pr=isW?r:7-r,ps=PST[ap]?PST[ap][pr][c]:0;
+    sc+=isW?(PVAL[ap]+ps):-(PVAL[ap]+ps);
+    if(ap!==K){if(isW)wMat+=PVAL[ap];else bMat+=PVAL[ap];}
+    if(ap===B){if(isW)wB++;else bB++;}
+  }
+  if(wB>=2)sc+=30;if(bB>=2)sc-=30;
+  const totMat=wMat+bMat;
+  const endPh=Math.min(1,Math.max(0,(3000-totMat)/2000));
+  // Pawn structure
+  for(let c=0;c<8;c++){
+    let wp=0,bp=0,wpR=[],bpR=[];
+    for(let r=0;r<8;r++){if(s.board[r][c]===P){wp++;wpR.push(r);}if(s.board[r][c]===-P){bp++;bpR.push(r);}}
+    if(wp>1)sc-=(wp-1)*22;if(bp>1)sc+=(bp-1)*22;
+    wpR.forEach(r=>{
+      let pass=true;
+      for(let c2=Math.max(0,c-1);pass&&c2<=Math.min(7,c+1);c2++)for(let r2=0;r2<r;r2++)if(s.board[r2][c2]===-P){pass=false;break;}
+      if(pass&&r<7)sc+=(7-r)*14;
+    });
+    bpR.forEach(r=>{
+      let pass=true;
+      for(let c2=Math.max(0,c-1);pass&&c2<=Math.min(7,c+1);c2++)for(let r2=r+1;r2<8;r2++)if(s.board[r2][c2]===P){pass=false;break;}
+      if(pass&&r>0)sc-=r*14;
+    });
+    let wAdj=false,bAdj=false;
+    for(let c2=c-1;c2<=c+1;c2+=2){if(c2<0||c2>=8)continue;for(let r=0;r<8;r++){if(s.board[r][c2]===P)wAdj=true;if(s.board[r][c2]===-P)bAdj=true;}}
+    if(wp>0&&!wAdj)sc-=18;if(bp>0&&!bAdj)sc+=18;
+    for(let r=0;r<8;r++){const p2=s.board[r][c];if(!p2)continue;const ap2=ab(p2);
+      if(ap2===R){const isW=p2>0;if(isW&&wp===0)sc+=(bp===0?22:12);if(!isW&&bp===0)sc-=(wp===0?22:12);}
+    }
+  }
+  // Mobility
+  sc+=(countMob(s,'w')-countMob(s,'b'))*3;
+  // King safety
+  const wKp=findKing(s.board,'w'),bKp=findKing(s.board,'b');
+  if(endPh<0.6){
+    if(wKp){let sh=0;for(let dc=-1;dc<=1;dc++){const kc=wKp[1]+dc;if(kc<0||kc>=8)continue;if(wKp[0]>0&&s.board[wKp[0]-1][kc]===P)sh+=15;else if(wKp[0]>1&&s.board[wKp[0]-2][kc]===P)sh+=7;}sc+=sh;}
+    if(bKp){let sh=0;for(let dc=-1;dc<=1;dc++){const kc=bKp[1]+dc;if(kc<0||kc>=8)continue;if(bKp[0]<7&&s.board[bKp[0]+1][kc]===-P)sh+=15;else if(bKp[0]<6&&s.board[bKp[0]+2][kc]===-P)sh+=7;}sc-=sh;}
+  }else{
+    if(wKp)sc+=(KST_EG[wKp[0]][wKp[1]]*endPh)|0;
+    if(bKp)sc-=(KST_EG[7-bKp[0]][bKp[1]]*endPh)|0;
+  }
+  // King attack heuristic
   const md=wMat-bMat;
-  // Aggressive king-attack + adaptive defense
   for(const side of['w','b']){
     const isW=side==='w',opp=isW?'b':'w',myAdv=isW?md:-md;
     const okp=findKing(s.board,opp),mkp=findKing(s.board,side);
-    if(okp){let atk=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==side)continue;const ap=ab(p);if(ap===K)continue;const d=Math.max(ab(fr-okp[0]),ab(fc-okp[1]));if(d<=2)atk+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)atk+=ap===Q?2:ap>=R?1:0;}const w=myAdv>-300?12:6;sc+=isW?atk*w:-(atk*w);}
-    if(mkp){let def=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==opp)continue;const ap=ab(p);if(ap===K)continue;const d=Math.max(ab(fr-mkp[0]),ab(fc-mkp[1]));if(d<=2)def+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)def+=ap===Q?2:ap>=R?1:0;}const w=myAdv<-200?10:4;sc+=isW?-(def*w):(def*w);}
+    if(okp){let atk=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==side)continue;const ap=ab(p);if(ap===K)continue;const d=Math.max(ab(fr-okp[0]),ab(fc-okp[1]));if(d<=2)atk+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)atk+=ap===Q?2:ap>=R?1:0;}const w=myAdv>-300?10:5;sc+=isW?atk*w:-(atk*w);}
+    if(mkp){let def=0;for(let fr=0;fr<8;fr++)for(let fc=0;fc<8;fc++){const p=s.board[fr][fc];if(!p||col(p)!==opp)continue;const ap=ab(p);if(ap===K)continue;const d=Math.max(ab(fr-mkp[0]),ab(fc-mkp[1]));if(d<=2)def+=ap===Q?7:ap>=R?4:ap===B||ap===N?3:2;else if(d===3)def+=ap===Q?2:ap>=R?1:0;}const w=myAdv<-200?8:4;sc+=isW?-(def*w):(def*w);}
   }
   return sc;
 }
-// Aggressive move ordering: king-proximity >> captures (MVV-LVA) >> promotions
-function mvOrd(s,mv){
+// ── Move Ordering ──
+function mvScore(s,mv,ply){
   let sc=0;
-  const cap=s.board[mv.tr][mv.tc];if(cap)sc+=ab(cap)*10-ab(s.board[mv.fr][mv.fc]);
-  if(mv.promo)sc+=700;
+  const cap=s.board[mv.tr][mv.tc];
+  if(cap){const cv=PVAL[ab(cap)],av=PVAL[ab(s.board[mv.fr][mv.fc])];sc+=20000+cv*10-av;}
+  if(mv.ep)sc+=18500;
+  if(mv.promo)sc+=18000+PVAL[ab(mv.promo)];
   const okp=findKing(s.board,s.turn==='w'?'b':'w');
-  if(okp){const d=Math.max(ab(mv.tr-okp[0]),ab(mv.tc-okp[1]));if(d===0)sc+=900;else if(d===1)sc+=450;else if(d===2)sc+=150;}
+  if(okp){const d=Math.max(ab(mv.tr-okp[0]),ab(mv.tc-okp[1]));if(d<=1)sc+=3000;else if(d<=2)sc+=1000;}
+  if(!cap&&!mv.promo&&ply>=0&&ply<MAX_PLY){
+    const k=killers[ply];
+    if(k[0]&&k[0].fr===mv.fr&&k[0].fc===mv.fc&&k[0].tr===mv.tr&&k[0].tc===mv.tc)sc+=900;
+    else if(k[1]&&k[1].fr===mv.fr&&k[1].fc===mv.fc&&k[1].tr===mv.tr&&k[1].tc===mv.tc)sc+=800;
+    sc+=history[hi(mv)]||0;
+  }
   return sc;
 }
+// ── Quiescence ──
 function quiesce(s,alpha,beta,isMax,ply){
   if(ply>8)return evaluate(s);
   const stand=evaluate(s);
   if(isMax){if(stand>=beta)return beta;if(stand>alpha)alpha=stand;}
   else{if(stand<=alpha)return alpha;if(stand<beta)beta=stand;}
   const c=s.turn;
-  const caps=legalMoves(s,c).filter(mv=>s.board[mv.tr][mv.tc]!==0||mv.promo);
-  caps.sort((a,b2)=>mvOrd(s,b2)-mvOrd(s,a));
+  const caps=legalMoves(s,c).filter(mv=>s.board[mv.tr][mv.tc]!==0||mv.promo||mv.ep);
+  caps.sort((a,b2)=>mvScore(s,b2,-1)-mvScore(s,a,-1));
   for(const mv of caps){const score=quiesce(applyMove(s,mv),alpha,beta,!isMax,ply+1);if(isMax){if(score>=beta)return beta;if(score>alpha)alpha=score;}else{if(score<=alpha)return alpha;if(score<beta)beta=score;}}
   return isMax?alpha:beta;
 }
-function minimax(s,depth,alpha,beta,maxing){
-  const c=s.turn,moves=legalMoves(s,c);
-  if(!moves.length)return isInCheck(s,c)?(maxing?-900000+depth*1000:900000-depth*1000):0;
+// ── Null Move Helpers ──
+function makeNullMove(s){const ns=cloneGS(s);ns.turn=ns.turn==='w'?'b':'w';ns.ep=null;return ns;}
+function hasMajor(s,c){for(let r=0;r<8;r++)for(let cc=0;cc<8;cc++){const p=s.board[r][cc];if(p&&col(p)===c&&ab(p)>=N&&ab(p)!==K)return true;}return false;}
+// ── Alpha-Beta: TT + Killers + LMR + NMP + Check Extension ──
+function minimax(s,depth,alpha,beta,maxing,ply){
+  const key=boardKey(s);
+  const tte=TT.get(key);
+  if(tte&&tte.depth>=depth){
+    if(tte.flag===TT_EXACT)return tte.score;
+    if(tte.flag===TT_LOWER&&tte.score>alpha){alpha=tte.score;if(alpha>=beta)return tte.score;}
+    if(tte.flag===TT_UPPER&&tte.score<beta){beta=tte.score;if(alpha>=beta)return tte.score;}
+  }
+  const c=s.turn;const inChk=isInCheck(s,c);
   if(depth===0)return quiesce(s,alpha,beta,maxing,0);
-  moves.sort((a,b2)=>mvOrd(s,b2)-mvOrd(s,a));
-  if(maxing){let best=-Infinity;for(const mv of moves){best=Math.max(best,minimax(applyMove(s,mv),depth-1,alpha,beta,false));alpha=Math.max(alpha,best);if(beta<=alpha)break;}return best;}
-  else{let best=Infinity;for(const mv of moves){best=Math.min(best,minimax(applyMove(s,mv),depth-1,alpha,beta,true));beta=Math.min(beta,best);if(beta<=alpha)break;}return best;}
+  const moves=legalMoves(s,c);
+  if(!moves.length)return inChk?(maxing?-900000+ply*1000:900000-ply*1000):0;
+  // Null move pruning: skip a turn, if still good → prune
+  if(depth>=3&&!inChk&&ply>0&&hasMajor(s,c)){
+    const R=depth>=6?4:3;
+    const ns=makeNullMove(s);
+    const nmSc=minimax(ns,Math.max(1,depth-R-1),alpha,beta,!maxing,ply+1);
+    if(maxing&&nmSc>=beta)return beta;
+    if(!maxing&&nmSc<=alpha)return alpha;
+  }
+  moves.sort((a,b2)=>mvScore(s,b2,ply)-mvScore(s,a,ply));
+  let best=maxing?-Infinity:Infinity,bestMv=null;
+  const origA=alpha,origB=beta;
+  for(let i=0;i<moves.length;i++){
+    const mv=moves[i];const ns=applyMove(s,mv);
+    // Check extension: if move gives check, search 1 ply deeper
+    const ext=(depth<12&&isInCheck(ns,ns.turn))?1:0;
+    const canLMR=i>=3&&depth>=3&&!mv.cap&&!mv.promo&&!mv.ep&&!inChk&&ext===0;
+    let score;
+    if(canLMR){
+      const R=i>=6?2:1;
+      score=minimax(ns,depth-1-R,alpha,beta,!maxing,ply+1);
+      if((maxing&&score>alpha)||(!maxing&&score<beta))
+        score=minimax(ns,depth-1+ext,alpha,beta,!maxing,ply+1);
+    }else{
+      score=minimax(ns,depth-1+ext,alpha,beta,!maxing,ply+1);
+    }
+    if(maxing){if(score>best){best=score;bestMv=mv;}alpha=Math.max(alpha,best);}
+    else{if(score<best){best=score;bestMv=mv;}beta=Math.min(beta,best);}
+    if(alpha>=beta){
+      if(!mv.cap&&!mv.promo&&ply<MAX_PLY){
+        killers[ply][1]=killers[ply][0];
+        killers[ply][0]={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+        const hidx=hi(mv);history[hidx]=Math.min(30000,(history[hidx]||0)+depth*depth);
+      }
+      break;
+    }
+  }
+  const flag=best>=origB?TT_LOWER:best<=origA?TT_UPPER:TT_EXACT;
+  if(TT.size<500000)TT.set(key,{depth,score:best,flag});
+  return best;
 }
-function getBestMove(s,c,depth){
-  const moves=legalMoves(s,c);if(!moves.length)return null;
-  const maxing=c==='w';let best=maxing?-Infinity:Infinity,bestMv=null;
-  moves.sort((a,b2)=>mvOrd(s,b2)-mvOrd(s,a));
-  for(const mv of moves){const sc=minimax(applyMove(s,mv),depth-1,-Infinity,Infinity,!maxing);if(maxing?sc>best:sc<best){best=sc;bestMv=mv;}}
-  return bestMv||moves[0];
+// ── Iterative Deepening Root ──
+function getBestMove(s,c,maxDepth){
+  TT.clear();
+  for(let i=0;i<MAX_PLY;i++){killers[i][0]=killers[i][1]=null;}
+  history.fill(0);
+  const moves=legalMoves(s,c);if(!moves.length)return;
+  if(moves.length===1){self.postMessage({depth:maxDepth,move:moves[0]});return;}
+  let bestMove=moves[0];const maxing=c==='w';
+  for(let depth=1;depth<=maxDepth;depth++){
+    let best=maxing?-Infinity:Infinity,bm=bestMove;
+    moves.sort((a,b2)=>{
+      const aB=a.fr===bestMove.fr&&a.fc===bestMove.fc&&a.tr===bestMove.tr&&a.tc===bestMove.tc;
+      const bB=b2.fr===bestMove.fr&&b2.fc===bestMove.fc&&b2.tr===bestMove.tr&&b2.tc===bestMove.tc;
+      if(aB)return -1;if(bB)return 1;return mvScore(s,b2,0)-mvScore(s,a,0);
+    });
+    for(const mv of moves){
+      const ns=applyMove(s,mv);
+      const score=minimax(ns,depth-1,-Infinity,Infinity,!maxing,1);
+      if(maxing?score>best:score<best){best=score;bm=mv;}
+    }
+    bestMove=bm;
+    self.postMessage({depth,move:bestMove,score:best});
+  }
 }
-self.onmessage=function(e){const{gs,color,depth}=e.data;self.postMessage(getBestMove(gs,color,depth));};`;
+self.onmessage=function(e){const{gs,color,depth}=e.data;getBestMove(gs,color,depth);};`;
 
 let _magnusWorkerURL=null;
 try{_magnusWorkerURL=URL.createObjectURL(new Blob([_MAGNUS_CODE],{type:'application/javascript'}));}catch(e){console.warn('Worker blob failed:',e.message);}
@@ -1653,47 +1823,70 @@ function showHint(){
   if(gs.turn!==c){toast('Bukan giliranmu!');return;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-  // Instant: depth-1 shows immediately
-  const quick=getBestMove(gs,c,1);
-  if(!quick){toast('Tidak ada langkah tersedia');return;}
-  hintMove={fr:quick.fr,fc:quick.fc,tr:quick.tr,tc:quick.tc};
-  // Auto-select piece — user just taps the bright green destination to move
-  selected=[hintMove.fr,hintMove.fc];
-  legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
-  document.getElementById('btn-hint')?.classList.add('hint-active');
-  renderBoard();
-  // Async upgrade to depth-4 via Web Worker (non-blocking)
+  hintMove=null;selected=null;legalFromSel=[];
+  const HINT_MAX_DEPTH=6;
+  // Show computing state on button
+  const hintBtn=document.getElementById('btn-hint');
+  const hintLabel=hintBtn?hintBtn.querySelector('span:last-child'):null;
+  const origLabelText=hintLabel?hintLabel.textContent:'Petunjuk';
+  if(hintLabel)hintLabel.textContent='Hitung...';
+  hintBtn?.classList.add('hint-active');
+  toast('💡 Analisis mendalam sedang berjalan...');
+  if(!_magnusWorkerURL){
+    // Fallback: main-thread depth-3
+    const mv=getBestMove(gs,c,3);
+    if(mv){hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};selected=[hintMove.fr,hintMove.fc];legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);renderBoard();}
+    if(hintLabel)hintLabel.textContent=origLabelText;
+    return;
+  }
   try{
-    if(_magnusWorkerURL){
-      const snapGS=cloneGS(gs);
-      _hintWorker=new Worker(_magnusWorkerURL);
-      _hintWorker.onmessage=(e)=>{
-        const mv=e.data;
-        if(mv&&hintMove){
-          hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-          selected=[hintMove.fr,hintMove.fc];
-          legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
-          renderBoard();
-        }
-        _hintWorker=null;
-      };
-      _hintWorker.onerror=()=>{_hintWorker=null;};
-      _hintWorker.postMessage({gs:snapGS,color:c,depth:4});
-    }
-  }catch(e){/*ignore*/}
+    const snapGS=cloneGS(gs);
+    _hintWorker=new Worker(_magnusWorkerURL);
+    _hintWorker.onmessage=(e)=>{
+      const data=e.data;
+      if(!data||!data.move)return;
+      const mv=data.move;
+      // Update hint with better move from each completed depth
+      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+      selected=[hintMove.fr,hintMove.fc];
+      legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
+      if(hintLabel)hintLabel.textContent='D'+data.depth+'/'+HINT_MAX_DEPTH+'✓';
+      renderBoard();
+      // Fully done at max depth
+      if(data.depth>=HINT_MAX_DEPTH){
+        if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+        if(hintLabel)hintLabel.textContent=origLabelText;
+        toast('💡 Langkah terbaik ditemukan! (kedalaman '+HINT_MAX_DEPTH+')');
+      }
+    };
+    _hintWorker.onerror=()=>{
+      if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+      if(hintLabel)hintLabel.textContent=origLabelText;
+    };
+    _hintWorker.postMessage({gs:snapGS,color:c,depth:HINT_MAX_DEPTH});
+  }catch(err){
+    if(hintLabel)hintLabel.textContent=origLabelText;
+  }
   _hintTimer=setTimeout(()=>{
-    hintMove=null;_hintTimer=null;
-    selected=null;legalFromSel=[];
+    _hintTimer=null;
     if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-    document.getElementById('btn-hint')?.classList.remove('hint-active');
-    renderBoard();
-  },9000);
+    // Keep last hint visible but clean up button after 15s
+    if(hintLabel)hintLabel.textContent=origLabelText;
+    if(!hintMove){
+      selected=null;legalFromSel=[];
+      hintBtn?.classList.remove('hint-active');
+      renderBoard();
+    }
+  },15000);
 }
 
 // ═══════════════════════════════════════
 // GAME MODES
 // ═══════════════════════════════════════
 function startVsBot(level){
+  clearTimeout(thinkTimer);thinkTimer=null;
+  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   try{
     gameMode='bot';botLevel=level;isHordeMode=false;
     myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
@@ -1738,6 +1931,9 @@ function getBotMove(s,c,level){
   return getBestMove(s,c,3);
 }
 function startPassPlay(){
+  clearTimeout(thinkTimer);thinkTimer=null;
+  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   try{
     gameMode='pass';myColor='w';flipped=false;isHordeMode=false;
     gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
@@ -1755,6 +1951,9 @@ function startPassPlay(){
   }catch(e){toast('Error: '+e.message);console.error(e);}
 }
 function startHorde(){
+  clearTimeout(thinkTimer);thinkTimer=null;
+  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   try{
     gameMode='bot';botLevel=2;isHordeMode=true;myColor='w';flipped=false;
     gs=newGS(true);moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
@@ -1847,7 +2046,7 @@ function buildAnalysisData(){
   let brilliant=0,mistakes=0,blunders=0;
   gameSnapshots.forEach((snap)=>{
     const {state,move}=snap;
-    const bestMv=getBestMove(state,state.turn,1);
+    const bestMv=getBestMove(state,state.turn,3);
     const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evaluate(state);
     const evalActual=evaluate(applyMove(state,move));
     const isW=state.turn==='w';
@@ -2196,7 +2395,7 @@ function toggleMusic(){
 }
 
 // ═══════════════════════════════════════
-// SOUND FX  — authentic chess piece sounds (Web Audio synthesis)
+// SOUND FX  — custom selected variants
 // ═══════════════════════════════════════
 function playSound(type){
   if(!cfg.snd)return;
@@ -2205,80 +2404,98 @@ function playSound(type){
     if(ac.state==='suspended')ac.resume();
     const now=ac.currentTime;
 
-    // Wooden impact: noise burst (click transient) + sine body resonance
-    function woodHit(t,clickHz,bodyHz,vol,dur){
+    // Bandpass noise burst
+    function noise(t,freqHz,Q,vol,dur){
       const len=Math.ceil(ac.sampleRate*(dur+0.06));
       const buf=ac.createBuffer(1,len,ac.sampleRate);
       const d=buf.getChannelData(0);
       for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
       const src=ac.createBufferSource();src.buffer=buf;
-      const bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=clickHz;bp.Q.value=2.2;
-      const ng=ac.createGain();
-      ng.gain.setValueAtTime(vol,t);ng.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      src.connect(bp);bp.connect(ng);ng.connect(ac.destination);
-      src.start(t);src.stop(t+dur+0.06);
-      // Low body thud (board resonance)
+      const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=freqHz;f.Q.value=Q;
+      const g=ac.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      src.connect(f);f.connect(g);g.connect(ac.destination);src.start(t);src.stop(t+dur+0.07);
+    }
+    // Lowpass noise (rumble/thud)
+    function noiseLow(t,vol,dur){
+      const len=Math.ceil(ac.sampleRate*(dur+0.1));
+      const buf=ac.createBuffer(1,len,ac.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+      const src=ac.createBufferSource();src.buffer=buf;
+      const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=200;
+      const g=ac.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      src.connect(f);f.connect(g);g.connect(ac.destination);src.start(t);src.stop(t+dur+0.1);
+    }
+    // Wooden impact (kept for select)
+    function woodHit(t,clickHz,bodyHz,vol,dur){
+      noise(t,clickHz,2.2,vol,dur);
       const o=ac.createOscillator(),og=ac.createGain();
       o.connect(og);og.connect(ac.destination);
       o.type='sine';o.frequency.value=bodyHz;
       og.gain.setValueAtTime(vol*0.28,t);og.gain.exponentialRampToValueAtTime(0.0001,t+dur*1.6);
       o.start(t);o.stop(t+dur*1.6+0.05);
     }
-
-    // Pure tone (bell / chime / fanfare note)
-    function chime(freq,vol,dur,t,wave='sine'){
+    // Pure oscillator tone
+    function tone(freq,waveType,vol,dur,t,atk=0.006){
       const o=ac.createOscillator(),g=ac.createGain();
       o.connect(g);g.connect(ac.destination);
-      o.type=wave;o.frequency.value=freq;
+      o.type=waveType;o.frequency.value=freq;
       g.gain.setValueAtTime(0,t);
-      g.gain.linearRampToValueAtTime(vol,t+0.006);
+      g.gain.linearRampToValueAtTime(vol,t+atk);
       g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      o.start(t);o.stop(t+dur+0.04);
+      o.start(t);o.stop(t+dur+0.05);
+    }
+    // Metallic ping (two partials)
+    function metalPing(t,freq,vol,dur){
+      tone(freq,'sine',vol,dur,t,0.002);
+      tone(freq*2.76,'sine',vol*0.3,dur*0.6,t,0.001);
     }
 
     switch(type){
-      // ── Piece lands on square ── (short wooden clack like Lichess/chess.com)
+      // ── Gerak Pion — Marmer Berat ──
       case 'move':
-        woodHit(now,3400,260,0.58,0.072);
+        noise(now,800,1.5,0.65,0.12);
+        tone(80,'sine',0.40,0.22,now);
         break;
 
-      // ── Piece captured ── (heavier double thud — attacker lands + knocked piece)
+      // ── Ambil Pion — Ledakan Drama ──
       case 'capture':
-        woodHit(now,1900,170,0.72,0.095);
-        woodHit(now+0.008,4000,340,0.32,0.050);
+        noise(now,1500,1,0.90,0.18);
+        noiseLow(now,0.60,0.25);
+        tone(60,'sine',0.50,0.30,now);
         break;
 
-      // ── Castling ── (two distinct clacks ~140ms apart)
+      // ── Rokade — Logam Ganda ──
       case 'castle':
-        woodHit(now,3200,255,0.52,0.072);
-        woodHit(now+0.14,3500,270,0.52,0.072);
+        metalPing(now,1800,0.28,0.50);
+        metalPing(now+0.18,2100,0.22,0.45);
         break;
 
-      // ── Piece lifted/selected ── (subtle soft click)
+      // ── Pilih Pion — Ketuk Bulat ──
       case 'select':
-        woodHit(now,5800,480,0.20,0.038);
+        woodHit(now,4000,350,0.28,0.05);
+        tone(320,'sine',0.08,0.10,now);
         break;
 
-      // ── Check ── (warning bell — 880 Hz double pulse)
+      // ── Skak! — Gemuruh Rendah ──
       case 'check':
-        chime(880,0.15,0.48,now);
-        chime(1320,0.07,0.36,now);
-        chime(880,0.09,0.36,now+0.22);
+        noiseLow(now,0.50,0.40);
+        tone(110,'sine',0.30,0.45,now);
+        tone(220,'sine',0.12,0.30,now+0.10);
         break;
 
-      // ── Promotion ── (ascending victory ding ×3)
+      // ── Promosi — Arpeggio 5 Nada ──
       case 'promote':
-        chime(1047,0.12,0.40,now);
-        chime(1319,0.11,0.42,now+0.13);
-        chime(1568,0.15,0.60,now+0.27);
+        [[523,0],[659,0.09],[784,0.18],[988,0.27],[1047,0.36]].forEach(([f,dt])=>tone(f,'sine',0.12,0.45,now+dt));
         break;
 
-      // ── Game over ── (triumphant ascending arpeggio)
+      // ── Game Over — Epic Kemenangan ──
       case 'end':
-        [[523,0],[659,0.14],[784,0.29],[1047,0.47]].forEach(([f,dt])=>{
-          chime(f,0.11,0.55,now+dt,'sine');
-          chime(f*2,0.04,0.38,now+dt,'sine');
+        [[261,0],[330,0.08],[392,0.17],[523,0.27],[659,0.38],[784,0.50],[1047,0.64]].forEach(([f,dt])=>{
+          tone(f,'sine',0.10,0.60,now+dt,0.01);
+          if(dt>0.3)tone(f*2,'sine',0.04,0.40,now+dt,0.01);
         });
+        [523,659,784,1047].forEach(f=>tone(f,'sine',0.10,1.00,now+0.85,0.05));
         break;
     }
   }catch(e){}
@@ -2306,6 +2523,70 @@ const INTRO_BOARD_LAYOUT=[
 ];
 const INTRO_PIECE_IDS={1:'wP',2:'wN',3:'wB',4:'wR',5:'wQ',6:'wK'};
 let _introTimer=null;
+let _introFanfarePlayed=false;
+
+// ═══════════════════════════════════════
+// EPIC WELCOME FANFARE
+// ═══════════════════════════════════════
+function playIntroFanfare(){
+  if(_introFanfarePlayed)return;
+  _introFanfarePlayed=true;
+  // Hide tap hint after played
+  const hint=document.getElementById('intro-tap-hint');
+  if(hint){hint.style.transition='opacity .5s';hint.style.opacity='0';}
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const now=ctx.currentTime;
+    const master=ctx.createGain();
+    master.gain.setValueAtTime(0.55,now);
+    master.connect(ctx.destination);
+    // note(freq, start, dur, vol, type, attack, release)
+    function note(freq,start,dur,vol,type,atk,rel){
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      const filt=ctx.createBiquadFilter();
+      filt.type='lowpass';filt.frequency.setValueAtTime(freq*7,now+start);
+      o.type=type||'triangle';
+      o.frequency.setValueAtTime(freq,now+start);
+      g.gain.setValueAtTime(0,now+start);
+      g.gain.linearRampToValueAtTime(vol,now+start+(atk||0.07));
+      g.gain.setValueAtTime(vol,now+start+dur-(rel||0.28));
+      g.gain.exponentialRampToValueAtTime(0.0001,now+start+dur);
+      o.connect(filt);filt.connect(g);g.connect(master);
+      o.start(now+start);o.stop(now+start+dur+0.1);
+    }
+    // Phase 1: Deep bass rumble 0.0s
+    note(73.4,0,5.2,0.45,'sawtooth',0.22,1.2);    // D2 bass
+    note(146.8,0,5.2,0.28,'sawtooth',0.22,1.2);   // D3
+    // Phase 2: Rising arpeggio sweep 0.35s
+    [146.8,185.0,220.0,261.6,311.1,369.9].forEach((f,i)=>
+      note(f,0.35+i*0.13,2.0,0.30,'triangle',0.05,0.35)
+    );
+    // Phase 3: Full minor chord bloom 1.1s
+    [[146.8,1.1],[220.0,1.1],[261.6,1.15],[329.6,1.18],[440.0,1.22]].forEach(([f,s])=>
+      note(f,s,2.8,0.32,'triangle',0.05,0.7)
+    );
+    // Phase 4: Brass swell fanfare 1.8s
+    [[110,1.8],[165,1.92],[220,2.04],[330,2.16],[440,2.28],[550,2.4]].forEach(([f,s])=>
+      note(f,s,3.0,0.30,'sawtooth',0.09,0.9)
+    );
+    // Phase 5: Crown bells cascade 2.5s — shimmer of victory
+    [880,1108.7,1318.5,1479.9,1760,2093,2637].forEach((f,i)=>
+      note(f,2.5+i*0.09,2.2-i*0.08,0.20-i*0.015,'sine',0.01,0.5)
+    );
+    // Phase 6: CLIMAX — triumphant D major chord 3.1s
+    [[146.8,3.1],[293.7,3.1],[369.9,3.14],[440.0,3.14],[587.3,3.18],[740.0,3.22]].forEach(([f,s])=>
+      note(f,s,2.6,0.38,'triangle',0.03,1.1)
+    );
+    // High shimmer sparkle 3.1s
+    [1318.5,1567.9,1760,2093,2349,2637].forEach((f,i)=>
+      note(f,3.1+i*0.05,2.5,0.15,'sine',0.01,0.9)
+    );
+    // Final echo bloom 4.0s
+    note(293.7,4.0,2.0,0.18,'triangle',0.06,0.9);
+    note(587.3,4.0,2.0,0.12,'sine',0.02,0.9);
+    note(1174.7,4.0,2.0,0.08,'sine',0.01,0.9);
+  }catch(e){}
+}
 
 function playIntro(){
   const overlay=document.getElementById('intro-overlay');
@@ -2376,6 +2657,15 @@ function playIntro(){
   setTimeout(()=>board.classList.add('board-lit'),allDone+300);
   // Auto end
   _introTimer=setTimeout(()=>endIntro(),7000);
+  // Trigger epic fanfare on first tap anywhere on intro overlay
+  _introFanfarePlayed=false;
+  const _onIntroTap=()=>{
+    overlay.removeEventListener('touchstart',_onIntroTap,true);
+    overlay.removeEventListener('click',_onIntroTap,true);
+    playIntroFanfare();
+  };
+  overlay.addEventListener('touchstart',_onIntroTap,{passive:true,capture:true});
+  overlay.addEventListener('click',_onIntroTap,{capture:true});
 }
 
 function endIntro(){
