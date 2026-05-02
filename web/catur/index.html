@@ -1061,7 +1061,7 @@ const PST={
 let gs=null,moveHistory=[],gameSnapshots=[],positionHist={};
 let selected=null,legalFromSel=[],lastMove=null,hintMove=null,flipped=false;
 let thinkTimer=null,bubbleTimer=null;
-let _analysisData=[],_replayIdx=-1,_replayTimer=null;
+let _analysisData=[],_replayIdx=-1,_replayTimer=null,_analysisReady=false,_analysisBuildId=0;
 
 // ═══════════════════════════════════════
 // FIREBASE INIT  (last — wrapped in try/catch so a failure never blocks the game)
@@ -1992,13 +1992,19 @@ function showGameOver(result){
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
   if(myWin||passWin){spawnVictoryConfetti();setTimeout(spawnVictoryConfetti,500);}
-  if(gameMode==='bot'||gameMode==='pass'){setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);}
+  if(gameMode==='bot'||gameMode==='pass'){
+    buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
+    setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);
+  }
 }
 function showAutoDraw(reason){
   document.getElementById('draw-reason').textContent=reason;
   document.getElementById('o-draw').classList.add('show');
   playSound('end');stopMusic();
-  if(gameMode==='bot'||gameMode==='pass'){setTimeout(()=>{closeOverlay('o-draw');showAnalysis();},3000);}
+  if(gameMode==='bot'||gameMode==='pass'){
+    buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
+    setTimeout(()=>{closeOverlay('o-draw');showAnalysis();},3000);
+  }
 }
 
 // ═══════════════════════════════════════
@@ -2045,50 +2051,72 @@ function showBotComment(type){
 const _AN_F='ABCDEFGH';
 function _anPcName(p){return PNAMES_ID[Math.abs(p)]||'?';}
 
+function _computeAnalysisEntry(state,move){
+  const bestMv=getBestMove(state,state.turn,2);
+  const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evaluate(state);
+  const evalActual=evaluate(applyMove(state,move));
+  const isW=state.turn==='w';
+  const loss=isW?(evalBest-evalActual):(evalActual-evalBest);
+  let rating,rc,re,comment;
+  if(loss<=-150){rating='Brilian!';rc='rate-brilliant';re='✨';const gain=Math.round(-loss/10)/10;comment='✨ Langkah BRILIAN! Keunggulan +'+(Math.abs(gain)).toFixed(1)+' poin di atas prediksi!';}
+  else if(loss<=0){rating='Sempurna';rc='rate-brilliant';re='✨';comment='Langkah terbaik di posisi ini!';}
+  else if(loss<50){rating='Bagus';rc='rate-great';re='👍';comment='Langkah bagus. Hampir sempurna.';}
+  else if(loss<150){rating='Tidak Akurat';rc='rate-inacc';re='😐';const lv=Math.round(loss/10)/10;comment='Kurang akurat. Kehilangan ~'+lv.toFixed(1)+' poin.';}
+  else if(loss<300){rating='Kesalahan';rc='rate-mistake';re='⚠️';const lv=Math.round(loss/10)/10;comment='⚠️ Kesalahan! Kehilangan ~'+lv.toFixed(1)+' poin nilai posisi.';}
+  else{rating='Blunder!';rc='rate-blunder';re='💀';const lv=Math.round(loss/10)/10;const pc=_anPcName(state.board[move.fr][move.fc]);comment='💀 BLUNDER! '+pc+' ke '+_AN_F[move.tc]+(8-move.tr)+' kehilangan ~'+lv.toFixed(1)+' poin!';if(bestMv){const bpc=_anPcName(state.board[bestMv.fr][bestMv.fc]);comment+=' Lebih baik: '+bpc+' '+_AN_F[bestMv.fc]+(8-bestMv.fr)+'→'+_AN_F[bestMv.tc]+(8-bestMv.tr);}}
+  return {state,move,rating,rc,re,comment,loss,evalAfter:evalActual};
+}
+
+/* Build analysis async — runs during the 3s game-over delay, yields between moves */
+function buildAnalysisDataAsync(snaps){
+  _analysisReady=false;
+  _analysisData=[];
+  const bid=++_analysisBuildId;
+  const total=snaps.length;
+  let i=0,brilliant=0,mistakes=0,blunders=0;
+  function step(){
+    if(bid!==_analysisBuildId)return; // superseded
+    if(i>=total){
+      document.getElementById('an-n0').textContent=brilliant;
+      document.getElementById('an-n1').textContent=mistakes;
+      document.getElementById('an-n2').textContent=blunders;
+      _analysisReady=true;
+      return;
+    }
+    const {state,move}=snaps[i++];
+    const entry=_computeAnalysisEntry(state,move);
+    if(entry.rc==='rate-brilliant')brilliant++;
+    else if(entry.rc==='rate-mistake')mistakes++;
+    else if(entry.rc==='rate-blunder')blunders++;
+    _analysisData.push(entry);
+    setTimeout(step,0);
+  }
+  setTimeout(step,80);
+}
+
+/* Sync fallback (depth=1) — used when user opens analysis mid-game or before async done */
 function buildAnalysisData(){
   _analysisData=[];
   let brilliant=0,mistakes=0,blunders=0;
-  gameSnapshots.forEach((snap)=>{
-    const {state,move}=snap;
-    const bestMv=getBestMove(state,state.turn,3);
+  gameSnapshots.forEach(({state,move})=>{
+    const bestMv=getBestMove(state,state.turn,1);
     const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evaluate(state);
     const evalActual=evaluate(applyMove(state,move));
     const isW=state.turn==='w';
     const loss=isW?(evalBest-evalActual):(evalActual-evalBest);
     let rating,rc,re,comment;
-    if(loss<=-150){
-      rating='Brilian!';rc='rate-brilliant';re='✨';brilliant++;
-      const gain=Math.round(-loss/10)/10;
-      comment='✨ Langkah BRILIAN! Keunggulan +'+(Math.abs(gain)).toFixed(1)+' poin di atas prediksi!';
-    } else if(loss<=0){
-      rating='Sempurna';rc='rate-brilliant';re='✨';brilliant++;
-      comment='Langkah terbaik di posisi ini!';
-    } else if(loss<50){
-      rating='Bagus';rc='rate-great';re='👍';
-      comment='Langkah bagus. Hampir sempurna.';
-    } else if(loss<150){
-      rating='Tidak Akurat';rc='rate-inacc';re='😐';
-      const lv=Math.round(loss/10)/10;
-      comment='Kurang akurat. Kehilangan ~'+lv.toFixed(1)+' poin.';
-    } else if(loss<300){
-      rating='Kesalahan';rc='rate-mistake';re='⚠️';mistakes++;
-      const lv=Math.round(loss/10)/10;
-      comment='⚠️ Kesalahan! Kehilangan ~'+lv.toFixed(1)+' poin nilai posisi.';
-    } else {
-      rating='Blunder!';rc='rate-blunder';re='💀';blunders++;
-      const lv=Math.round(loss/10)/10;
-      const pc=_anPcName(state.board[move.fr][move.fc]);
-      comment='💀 BLUNDER! '+pc+' ke '+_AN_F[move.tc]+(8-move.tr)+' kehilangan ~'+lv.toFixed(1)+' poin!';
-      if(bestMv){
-        const bpc=_anPcName(state.board[bestMv.fr][bestMv.fc]);
-        comment+=' Lebih baik: '+bpc+' '+_AN_F[bestMv.fc]+(8-bestMv.fr)+'→'+_AN_F[bestMv.tc]+(8-bestMv.tr);
-      }
-    }
+    if(loss<=-150){rating='Brilian!';rc='rate-brilliant';re='✨';brilliant++;const gain=Math.round(-loss/10)/10;comment='✨ Langkah BRILIAN! Keunggulan +'+(Math.abs(gain)).toFixed(1)+' poin di atas prediksi!';}
+    else if(loss<=0){rating='Sempurna';rc='rate-brilliant';re='✨';brilliant++;comment='Langkah terbaik di posisi ini!';}
+    else if(loss<50){rating='Bagus';rc='rate-great';re='👍';comment='Langkah bagus. Hampir sempurna.';}
+    else if(loss<150){rating='Tidak Akurat';rc='rate-inacc';re='😐';const lv=Math.round(loss/10)/10;comment='Kurang akurat. Kehilangan ~'+lv.toFixed(1)+' poin.';}
+    else if(loss<300){rating='Kesalahan';rc='rate-mistake';re='⚠️';mistakes++;const lv=Math.round(loss/10)/10;comment='⚠️ Kesalahan! Kehilangan ~'+lv.toFixed(1)+' poin nilai posisi.';}
+    else{rating='Blunder!';rc='rate-blunder';re='💀';blunders++;const lv=Math.round(loss/10)/10;const pc=_anPcName(state.board[move.fr][move.fc]);comment='💀 BLUNDER! '+pc+' ke '+_AN_F[move.tc]+(8-move.tr)+' kehilangan ~'+lv.toFixed(1)+' poin!';if(bestMv){const bpc=_anPcName(state.board[bestMv.fr][bestMv.fc]);comment+=' Lebih baik: '+bpc+' '+_AN_F[bestMv.fc]+(8-bestMv.fr)+'→'+_AN_F[bestMv.tc]+(8-bestMv.tr);}}
     _analysisData.push({state,move,rating,rc,re,comment,loss,evalAfter:evalActual});
   });
   document.getElementById('an-n0').textContent=brilliant;
   document.getElementById('an-n1').textContent=mistakes;
   document.getElementById('an-n2').textContent=blunders;
+  _analysisReady=true;
 }
 
 function renderAnalysisBoard(stateObj,lastMv,rc){
@@ -2186,7 +2214,9 @@ function showAnalysis(){
   if(_replayTimer){clearInterval(_replayTimer);_replayTimer=null;}
   const btn=document.getElementById('an-play-btn');
   if(btn)btn.textContent='▶ Play';
-  buildAnalysisData();
+  // If pre-computed during game-end delay → instant display
+  // Otherwise fall back to fast depth=1 sync build
+  if(!_analysisReady) buildAnalysisData();
   const list=document.getElementById('analysis-list');list.innerHTML='';
   _analysisData.forEach((d,i)=>{
     const pc=_anPcName(d.state.board[d.move.fr][d.move.fc]);
