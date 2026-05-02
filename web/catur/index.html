@@ -1179,7 +1179,7 @@ function renderBoard(){
     const pieceId=(pc==='w'?'w':'b')+''+['P','N','B','R','Q','K'][ap-1];
     const sq=sqs[getIdx(r,c)];if(!sq)continue;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 45 45');svg.className='piece-svg';
+    svg.setAttribute('viewBox','0 0 45 45');svg.setAttribute('class','piece-svg');
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     use.setAttribute('href','#'+pieceId);svg.appendChild(use);sq.appendChild(svg);
   }
@@ -1957,9 +1957,8 @@ function playIntro(){
       const pid=color+['','P','N','B','R','Q','K'][ap];
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
       svg.setAttribute('viewBox','0 0 45 45');
-      svg.className='intro-piece';
-      svg.style.animationDelay='0s';
-      svg.style.width='88%';svg.style.height='88%';
+      svg.setAttribute('class','intro-piece');
+      svg.style.cssText='width:88%;height:88%;animation-delay:0s';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
       use.setAttribute('href','#'+pid);
       svg.appendChild(use);sq.appendChild(svg);
