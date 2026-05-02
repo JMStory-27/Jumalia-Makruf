@@ -2084,6 +2084,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Show intro then home
   const params=new URLSearchParams(location.search);
   if(params.get('demo')){
+    const introEl=document.getElementById('intro-overlay');
+    if(introEl)introEl.style.display='none';
     showScreen('home');
     startVsBot(2);
   } else {
