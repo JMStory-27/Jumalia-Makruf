@@ -528,19 +528,12 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div class="sec-label">Tema Papan</div>
     <div id="theme-strip" class="theme-strip"></div>
     <div class="sep"></div>
-    <div class="sec-label">Suara & Narasi</div>
+    <div class="sec-label">Suara</div>
     <div class="set-row glass">
       <div><div class="set-label">Efek Suara</div></div>
       <div class="toggle-row">
         <div id="t-son" class="tgl" onclick="setSnd(true)">On</div>
         <div id="t-soff" class="tgl" onclick="setSnd(false)">Off</div>
-      </div>
-    </div>
-    <div class="set-row glass">
-      <div><div class="set-label">Narasi TTS</div><div class="set-desc">Komentator AI yang ngeselin</div></div>
-      <div class="toggle-row">
-        <div id="t-naron" class="tgl" onclick="setNarasi(true)">On</div>
-        <div id="t-naroff" class="tgl" onclick="setNarasi(false)">Off</div>
       </div>
     </div>
     <div class="set-row glass">
@@ -832,7 +825,6 @@ cfg.snd=cfg.snd!==false;
 cfg.color=cfg.color||'w';
 cfg.musicTrack=cfg.musicTrack??0;
 cfg.musicOn=cfg.musicOn!==false;
-cfg.narasi=cfg.narasi!==false;
 cfg.comment=cfg.comment!==false;
 function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
 
@@ -1104,12 +1096,11 @@ function getEventTheme(){
 }
 function checkNightMode(){const h=new Date().getHours();document.body.classList.toggle('night',h>=21||h<6);}
 function setSnd(v){cfg.snd=v;saveCfg();updateSettingsUI()}
-function setNarasi(v){cfg.narasi=v;saveCfg();updateSettingsUI()}
 function setComment(v){cfg.comment=v;saveCfg();updateSettingsUI()}
 function setColor(v){cfg.color=v;saveCfg();updateSettingsUI()}
 function setMusicTrack(i){cfg.musicTrack=i;saveCfg();updateSettingsUI();if(cfg.musicOn)playMusicTrack(i)}
 function updateSettingsUI(){
-  [['t-son',cfg.snd],['t-soff',!cfg.snd],['t-naron',cfg.narasi],['t-naroff',!cfg.narasi],['t-comon',cfg.comment],['t-comoff',!cfg.comment],['t-putih',cfg.color==='w'],['t-hitam',cfg.color==='b'],['t-alt',cfg.color==='alt']].forEach(([id,on])=>document.getElementById(id)?.classList.toggle('on',on));
+  [['t-son',cfg.snd],['t-soff',!cfg.snd],['t-comon',cfg.comment],['t-comoff',!cfg.comment],['t-putih',cfg.color==='w'],['t-hitam',cfg.color==='b'],['t-alt',cfg.color==='alt']].forEach(([id,on])=>document.getElementById(id)?.classList.toggle('on',on));
   for(let i=0;i<5;i++)document.getElementById('t-m'+i)?.classList.toggle('on',cfg.musicTrack===i);
 }
 
@@ -1290,7 +1281,6 @@ function executeMove(mv){
   // Board glow on move
   const bsw=document.getElementById('board-shadow-wrap');
   if(bsw){bsw.classList.remove('move-flash');void bsw.offsetWidth;bsw.classList.add('move-flash');}
-  if(cfg.narasi)narrateMove(prevGS,mv);
   if(gameMode==='bot'&&cfg.comment){
     const loss=Math.abs(evaluate(prevGS)-evaluate(gs));
     if(loss>250)setTimeout(()=>showBotComment('blunder'),400);
@@ -1784,31 +1774,6 @@ function cancelVoiceNote(){clearInterval(voiceCD);if(mediaRec?.state==='recordin
 function playVoice(b64){try{new Audio('data:audio/webm;base64,'+b64).play();}catch(e){}}
 
 // ═══════════════════════════════════════
-// TTS NARRATION
-// ═══════════════════════════════════════
-const PRFX=["Oke jadi...","Hmm,","Welp,","Sebenernya sih,","*nguap* ...","Gitu deh,","Btw,","Sip,","Jadi gini..."];
-const SUFX=["Biasa aja sih.","Oke lah.","Gitu gitu.","Keren banget~ (tidak).","Whatever deh.","Ya gitu.","Okeyy.","Noted."];
-function narrateMove(prevGS,mv){
-  if(!cfg.narasi||!window.speechSynthesis)return;
-  const F='ABCDEFGH',pn=PNAMES_ID[abs(prevGS.board[mv.fr][mv.fc])];
-  const dari=F[mv.fc]+(8-mv.fr),ke=F[mv.tc]+(8-mv.tr);
-  const capped=abs(prevGS.board[mv.tr][mv.tc])>0;
-  const pfx=PRFX[Math.floor(Math.random()*PRFX.length)];
-  const sfx=SUFX[Math.floor(Math.random()*SUFX.length)];
-  let txt=`${pfx} ${pn} dari ${dari} ke ${ke}`;
-  if(capped)txt+=` makan buah lawan`;
-  if(mv.castle)txt=`${pfx} Rokade! Lumayan strategis sih`;
-  if(isInCheck(gs,gs.turn))txt+=`. Eh ngomong-ngomong, SKAK ya`;
-  txt+=`. ${sfx}`;
-  const utt=new SpeechSynthesisUtterance(txt);
-  utt.lang='id-ID';utt.rate=1.1;utt.pitch=1.05;
-  const voices=speechSynthesis.getVoices();
-  const v=voices.find(x=>x.lang.startsWith('id'))||voices.find(x=>x.lang.startsWith('en'));
-  if(v)utt.voice=v;
-  speechSynthesis.cancel();speechSynthesis.speak(utt);
-}
-
-// ═══════════════════════════════════════
 // MUSIC (Web Audio)
 // ═══════════════════════════════════════
 let aCtx=null,musicPlaying=false,musicInterval=null;
@@ -2093,7 +2058,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   setInterval(checkNightMode,60000);
   document.getElementById('btn-emoji-game').style.display='none';
   document.getElementById('btn-voice').style.display='none';
-  if(window.speechSynthesis){speechSynthesis.getVoices();speechSynthesis.addEventListener('voiceschanged',()=>speechSynthesis.getVoices());}
 });
 window.addEventListener('resize',()=>{
   if(gs&&document.getElementById('s-game').style.display!=='none')initBoardDOM(),renderBoard();
