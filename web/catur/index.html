@@ -319,9 +319,11 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 
 /* ── CAPTURE FLY ANIMATION ── */
 .cap-fly-clone{position:fixed;pointer-events:none;z-index:9998;transform-origin:center;will-change:transform,opacity}
-@keyframes capFlyOff{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:var(--fly-end) rotate(var(--fly-rot)) scale(.2)}}
+@keyframes capFlyOff{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}8%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1.35)}100%{opacity:0;transform:var(--fly-end) rotate(var(--fly-rot)) scale(.05)}}
 .cap-burst-p{position:fixed;pointer-events:none;z-index:9997;border-radius:50%}
 @keyframes burstOut{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0)}}
+.cap-sq-flash{animation:sqFlash .35s ease-out forwards}
+@keyframes sqFlash{0%{box-shadow:inset 0 0 0 4px #fff,0 0 20px 6px rgba(255,220,50,.9)}100%{box-shadow:none}}
 
 /* ── BOARD ENHANCEMENTS ── */
 .board-shadow-wrap{position:relative}
@@ -1922,62 +1924,66 @@ function skipIntro(){endIntro();}
 function spawnCapFly(mv,board){
   try{
     const grid=document.getElementById('board-grid');if(!grid)return;
-    // Get screen square for capture target
     const getIdx=(r,c)=>flipped?(7-r)*8+(7-c):r*8+c;
-    const tIdx=getIdx(mv.tr,mv.tc);
-    const sIdx=getIdx(mv.fr,mv.fc);
     const sqs=grid.querySelectorAll('.sq');
-    const tSq=sqs[tIdx];const sSq=sqs[sIdx];
+    const tSq=sqs[getIdx(mv.tr,mv.tc)];
+    const sSq=sqs[getIdx(mv.fr,mv.fc)];
     if(!tSq)return;
     const tRect=tSq.getBoundingClientRect();
     const cx=tRect.left+tRect.width/2;
     const cy=tRect.top+tRect.height/2;
-    // Determine fly direction
-    let dx=0,dy=0;
+    // Fix en-passant: captured pawn is at [mv.fr][mv.tc], not [mv.tr][mv.tc]
+    const cap=mv.ep?board[mv.fr][mv.tc]:board[mv.tr][mv.tc];
+    if(!cap)return;
+    const capColor=cap>0?'w':'b';
+    const pid=capColor+''+['P','N','B','R','Q','K'][Math.abs(cap)-1];
+    // Fly direction: away from attacker, scaled to reach screen edge
+    let dx=0,dy=-280;
     if(sSq){
       const sRect=sSq.getBoundingClientRect();
       const rawDx=tRect.left-sRect.left;
       const rawDy=tRect.top-sRect.top;
       const len=Math.sqrt(rawDx*rawDx+rawDy*rawDy)||1;
-      const strength=180+Math.random()*80;
-      dx=(rawDx/len)*strength;
-      dy=(rawDy/len)*strength+(Math.random()<.5?-60:40);
-    }else{
-      const ang=Math.random()*Math.PI*2;
-      dx=Math.cos(ang)*180;dy=Math.sin(ang)*180-80;
+      const nx=rawDx/len,ny=rawDy/len;
+      const vw=window.innerWidth,vh=window.innerHeight;
+      const toEdgeX=nx>0?(vw-cx)/nx:nx<0?-cx/nx:Infinity;
+      const toEdgeY=ny>0?(vh-cy)/ny:ny<0?-cy/ny:Infinity;
+      const dist=Math.min(toEdgeX,toEdgeY)+80;
+      dx=nx*dist;dy=ny*dist;
     }
-    // Get captured piece type
-    const cap=board[mv.tr][mv.tc];
-    if(!cap)return;
-    const color=cap>0?'w':'b';
-    const pid=color+''+['P','N','B','R','Q','K'][Math.abs(cap)-1];
+    // Flash target square
+    tSq.classList.add('cap-sq-flash');
+    setTimeout(()=>tSq.classList.remove('cap-sq-flash'),400);
     // Create flying clone
+    const sz=tRect.width*.92;
     const clone=document.createElement('div');
     clone.className='cap-fly-clone';
-    const sz=tRect.width*.88;
-    const rot=-180+Math.random()*360;
+    const rot=-300+Math.random()*600;
     clone.style.cssText=`left:${tRect.left+(tRect.width-sz)/2}px;top:${tRect.top+(tRect.height-sz)/2}px;width:${sz}px;height:${sz}px;--fly-end:translate(${dx}px,${dy}px);--fly-rot:${rot}deg`;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('viewBox','0 0 45 45');
-    svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))';
+    svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 8px 24px rgba(0,0,0,.9))';
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
     document.body.appendChild(clone);
-    clone.style.animation='capFlyOff .65s cubic-bezier(.22,1,.36,1) forwards';
-    setTimeout(()=>clone.remove(),700);
-    // Particle burst
-    const colors=['#d4af37','#f5e6aa','#fff','rgba(212,175,55,.8)'];
-    for(let i=0;i<10;i++){
+    clone.style.animation='capFlyOff .72s cubic-bezier(.22,1,.36,1) forwards';
+    setTimeout(()=>clone.remove(),820);
+    // Particle burst — color by piece side
+    const isWhite=capColor==='w';
+    const pColors=isWhite
+      ?['#fff','#f5e6aa','#d4af37','#ffe680','#fffde0']
+      :['#c0392b','#8b0000','#ff6b6b','#e74c3c','#ff9999'];
+    for(let i=0;i<20;i++){
       const p=document.createElement('div');
       p.className='cap-burst-p';
-      const ang=(i/10)*Math.PI*2+Math.random()*.5;
-      const dist=30+Math.random()*70;
-      const bx=Math.cos(ang)*dist;const by=Math.sin(ang)*dist;
-      const psz=2+Math.random()*5;
-      const col=colors[Math.floor(Math.random()*colors.length)];
-      p.style.cssText=`left:${cx-psz/2}px;top:${cy-psz/2}px;width:${psz}px;height:${psz}px;background:${col};--bx:${bx}px;--by:${by}px;animation:burstOut .55s ease-out forwards;animation-delay:${Math.random()*.08}s`;
+      const ang=(i/20)*Math.PI*2+Math.random()*.4;
+      const dist=50+Math.random()*110;
+      const bx=Math.cos(ang)*dist,by=Math.sin(ang)*dist;
+      const psz=3+Math.random()*7;
+      const col=pColors[Math.floor(Math.random()*pColors.length)];
+      p.style.cssText=`left:${cx-psz/2}px;top:${cy-psz/2}px;width:${psz}px;height:${psz}px;background:${col};--bx:${bx}px;--by:${by}px;animation:burstOut .65s ease-out forwards;animation-delay:${Math.random()*.07}s`;
       document.body.appendChild(p);
-      setTimeout(()=>p.remove(),700);
+      setTimeout(()=>p.remove(),800);
     }
   }catch(e){/* ignore */}
 }
