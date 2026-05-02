@@ -562,7 +562,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div class="sep"></div>
     <div class="sec-label">Preferensi Warna Default</div>
     <div class="color-row">
-      <div id="t-putih2" class="col-btn" onclick="setColor('w');document.getElementById('t-putih').classList.toggle('on',true);document.getElementById('t-hitam').classList.toggle('on',false);document.getElementById('t-alt').classList.toggle('on',false)">⬜ Putih</div>
+      <div id="t-putih2" class="col-btn" onclick="setColor('w')">⬜ Putih</div>
       <div id="t-hitam2" class="col-btn" onclick="setColor('b')">⬛ Hitam</div>
       <div id="t-alt2" class="col-btn" onclick="setColor('alt')">🎲 Acak</div>
     </div>
@@ -1234,9 +1234,6 @@ function setPlayerNames(topName,botName,topColor,botColor){
 let pendingPromo=null;
 function onSquareClick(r,c){
   if(!gs||gs.gameOver)return;
-  const dr=flipped?7-r:r,dc=flipped?7-c:c;
-  const pr=flipped?7-r:r,pc2=flipped?7-c:c;
-  const br=flipped?7-r:r,bc=flipped?7-c:c;
   if(gameMode==='online'&&gs.turn!==myColor)return;
   if(gameMode==='bot'&&gs.turn!==myColor)return;
   const clickR=flipped?7-r:r,clickC=flipped?7-c:c;
@@ -1544,7 +1541,8 @@ function startHorde(){
 }
 function restartSameMode(){
   ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
-  if(gameMode==='bot')startVsBot(botLevel);
+  if(isHordeMode)startHorde();
+  else if(gameMode==='bot')startVsBot(botLevel);
   else if(gameMode==='pass')startPassPlay();
   else quitToHome();
 }
