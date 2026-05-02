@@ -482,24 +482,26 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — horse head facing left (ref: skakmat image) -->
+<!-- WHITE KNIGHT — classic Staunton two-path horse profile -->
 <g id="wN">
   <rect fill="#fff" stroke="#404040" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <!-- Silhouette: crown→mane→neck→base→throat→snout→nose→forehead→ear→crown -->
   <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13,37
-       C 12,33 10,29 9,26
-       C 8,23 8,20 10,18
-       C 11,16 13,14 15,13
-       C 15,10 15,6 16,4
-       C 17,3 19,4 19,6
-       C 21,5 24,5 27,7
-       C 31,9 35,14 36,21
-       C 37,28 35,34 33,37 Z"/>
-  <circle fill="#404040" cx="29" cy="12" r="2"/>
-  <path fill="none" stroke="#404040" stroke-width="1.3" stroke-linecap="round"
-    d="M 9,24 C 8,22 9,21 11,22"/>
+    d="M 22,10
+       C 31,10 37,17 37,39
+       L 14,39
+       C 14,32 12,29 11,28
+       C 9,26 8,23 8,21
+       C 8,18 10,16 13,15
+       C 14,13 15,11 15,9
+       C 15,7 16,5 16,4
+       C 17,3 19,4 20,7
+       C 21,7 22,8 22,10 Z"/>
+  <!-- Eye -->
+  <circle fill="#404040" cx="29" cy="18" r="2"/>
+  <!-- Nostril -->
   <path fill="none" stroke="#404040" stroke-width="1.2" stroke-linecap="round"
-    d="M 19,6 C 18,4 20,3 21,5 M 22,5 C 23,3 25,4 24,6"/>
+    d="M 8,22 C 7,20 9,19 10,21"/>
 </g>
 <!-- WHITE PAWN — round head + smooth waist + round base -->
 <g id="wP">
@@ -544,24 +546,26 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — horse head facing left (ref: skakmat image) -->
+<!-- BLACK KNIGHT — classic Staunton two-path horse profile -->
 <g id="bN">
   <rect fill="#111" stroke="#ccc" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <!-- Silhouette: crown→mane→neck→base→throat→snout→nose→forehead→ear→crown -->
   <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13,37
-       C 12,33 10,29 9,26
-       C 8,23 8,20 10,18
-       C 11,16 13,14 15,13
-       C 15,10 15,6 16,4
-       C 17,3 19,4 19,6
-       C 21,5 24,5 27,7
-       C 31,9 35,14 36,21
-       C 37,28 35,34 33,37 Z"/>
-  <circle fill="#ccc" cx="29" cy="12" r="2"/>
-  <path fill="none" stroke="#ccc" stroke-width="1.3" stroke-linecap="round"
-    d="M 9,24 C 8,22 9,21 11,22"/>
+    d="M 22,10
+       C 31,10 37,17 37,39
+       L 14,39
+       C 14,32 12,29 11,28
+       C 9,26 8,23 8,21
+       C 8,18 10,16 13,15
+       C 14,13 15,11 15,9
+       C 15,7 16,5 16,4
+       C 17,3 19,4 20,7
+       C 21,7 22,8 22,10 Z"/>
+  <!-- Eye -->
+  <circle fill="#ccc" cx="29" cy="18" r="2"/>
+  <!-- Nostril -->
   <path fill="none" stroke="#ccc" stroke-width="1.2" stroke-linecap="round"
-    d="M 19,6 C 18,4 20,3 21,5 M 22,5 C 23,3 25,4 24,6"/>
+    d="M 8,22 C 7,20 9,19 10,21"/>
 </g>
 <!-- BLACK PAWN — round head + smooth waist + round base -->
 <g id="bP">
@@ -2932,5 +2936,7 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').then(()=>{}).catch(()=>{});
 }
 </script>
+<!-- Watermark -->
+<div style="position:fixed;bottom:7px;left:0;right:0;text-align:center;font-size:11px;font-family:'Segoe UI',sans-serif;color:rgba(240,217,181,0.55);letter-spacing:1.5px;pointer-events:none;z-index:9999;user-select:none">Catur By LawrenZ</div>
 </body>
 </html>
