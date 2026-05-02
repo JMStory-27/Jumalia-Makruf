@@ -1584,6 +1584,7 @@ function col(p){return p>0?'w':p<0?'b':null}
 function ab(p){return p<0?-p:p}
 function inB(r,c){return r>=0&&r<8&&c>=0&&c<8}
 function cloneGS(s){return{board:s.board.map(r=>r.slice()),turn:s.turn,castling:{...s.castling},ep:s.ep?[...s.ep]:null,halfMove:s.halfMove,fullMove:s.fullMove,captured:{w:[...s.captured.w],b:[...s.captured.b]},gameOver:s.gameOver,result:s.result};}
+function toFEN(s){const PC=['','P','N','B','R','Q','K'];let fen='';for(let r=0;r<8;r++){let e=0;for(let c=0;c<8;c++){const p=s.board[r][c];if(!p){e++;}else{if(e){fen+=e;e=0;}const ch=PC[Math.abs(p)];fen+=p>0?ch:ch.toLowerCase();}}if(e)fen+=e;if(r<7)fen+='/';}fen+=' '+(s.turn||'w');let cs='';if(s.castling){if(s.castling.wK)cs+='K';if(s.castling.wQ)cs+='Q';if(s.castling.bK)cs+='k';if(s.castling.bQ)cs+='q';}fen+=' '+(cs||'-');if(s.ep){fen+=' '+'abcdefgh'[s.ep[1]]+(8-s.ep[0]);}else{fen+=' -';}fen+=' '+(s.halfMove||0)+' '+(s.fullMove||1);return fen;}
 function pseudoMoves(s,r,c){
   const b=s.board,p=b[r][c];if(!p)return[];
   const pc=col(p),ap=ab(p),mv=[];
@@ -1816,6 +1817,24 @@ let _magnusWorkerURL=null;
 try{_magnusWorkerURL=URL.createObjectURL(new Blob([_MAGNUS_CODE],{type:'application/javascript'}));}catch(e){console.warn('Worker blob failed:',e.message);}
 let _hintWorker=null,_hintTimer=null;
 
+// ── Stockfish loader (lazy, via blob URL to avoid CORS) ──────────────────────
+let _sfURL=null,_sfLoading=false;
+async function _loadSF(){
+  if(_sfURL)return _sfURL;
+  if(_sfLoading)return null;
+  _sfLoading=true;
+  try{
+    const r=await fetch('https://cdn.jsdelivr.net/npm/stockfish@11.0.0/stockfish.js');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const code=await r.text();
+    const blob=new Blob([code],{type:'application/javascript'});
+    _sfURL=URL.createObjectURL(blob);
+    _sfLoading=false;
+    return _sfURL;
+  }catch(e){_sfLoading=false;return null;}
+}
+// Preload in background
+_loadSF();
 
 function showHint(){
   if(!gs||gs.gameOver)return;
@@ -1824,60 +1843,98 @@ function showHint(){
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   hintMove=null;selected=null;legalFromSel=[];
-  const HINT_MAX_DEPTH=6;
-  // Show computing state on button
   const hintBtn=document.getElementById('btn-hint');
   const hintLabel=hintBtn?hintBtn.querySelector('span:last-child'):null;
-  const origLabelText=hintLabel?hintLabel.textContent:'Petunjuk';
-  if(hintLabel)hintLabel.textContent='Hitung...';
+  const origLabel=hintLabel?hintLabel.textContent:'Petunjuk';
+  if(hintLabel)hintLabel.textContent='Analisis...';
   hintBtn?.classList.add('hint-active');
-  toast('💡 Analisis mendalam sedang berjalan...');
-  if(!_magnusWorkerURL){
-    // Fallback: main-thread depth-3
-    const mv=getBestMove(gs,c,3);
-    if(mv){hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};selected=[hintMove.fr,hintMove.fc];legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);renderBoard();}
-    if(hintLabel)hintLabel.textContent=origLabelText;
-    return;
+  const fen=toFEN(gs);
+  const snapGS=cloneGS(gs);
+  const snapTurn=c;
+
+  function applyMove(moveStr){
+    if(!moveStr||moveStr.length<4||moveStr==='(none)')return false;
+    const fc=moveStr.charCodeAt(0)-97;
+    const fr=8-parseInt(moveStr[1]);
+    const tc=moveStr.charCodeAt(2)-97;
+    const tr=8-parseInt(moveStr[3]);
+    if(fr<0||fr>7||fc<0||fc>7||tr<0||tr>7||tc<0||tc>7)return false;
+    hintMove={fr,fc,tr,tc};
+    selected=[fr,fc];
+    legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===fr&&m.fc===fc);
+    renderBoard();
+    return true;
   }
-  try{
-    const snapGS=cloneGS(gs);
-    _hintWorker=new Worker(_magnusWorkerURL);
-    _hintWorker.onmessage=(e)=>{
-      const data=e.data;
-      if(!data||!data.move)return;
-      const mv=data.move;
-      // Update hint with better move from each completed depth
-      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-      selected=[hintMove.fr,hintMove.fc];
-      legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
-      if(hintLabel)hintLabel.textContent='D'+data.depth+'/'+HINT_MAX_DEPTH+'✓';
-      renderBoard();
-      // Fully done at max depth
-      if(data.depth>=HINT_MAX_DEPTH){
-        if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-        if(hintLabel)hintLabel.textContent=origLabelText;
-        toast('💡 Langkah terbaik ditemukan! (kedalaman '+HINT_MAX_DEPTH+')');
-      }
-    };
-    _hintWorker.onerror=()=>{
-      if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-      if(hintLabel)hintLabel.textContent=origLabelText;
-    };
-    _hintWorker.postMessage({gs:snapGS,color:c,depth:HINT_MAX_DEPTH});
-  }catch(err){
-    if(hintLabel)hintLabel.textContent=origLabelText;
-  }
-  _hintTimer=setTimeout(()=>{
-    _hintTimer=null;
-    if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-    // Keep last hint visible but clean up button after 15s
-    if(hintLabel)hintLabel.textContent=origLabelText;
-    if(!hintMove){
-      selected=null;legalFromSel=[];
-      hintBtn?.classList.remove('hint-active');
-      renderBoard();
+
+  function useMagnusFallback(){
+    if(!_magnusWorkerURL){
+      const mv=getBestMove(snapGS,snapTurn,3);
+      if(mv){hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};selected=[hintMove.fr,hintMove.fc];legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);renderBoard();}
+      if(hintLabel)hintLabel.textContent=origLabel;
+      toast('💡 Langkah terbaik ditemukan!');
+      return;
     }
-  },15000);
+    try{
+      const w=new Worker(_magnusWorkerURL);
+      _hintWorker=w;
+      const MD=6;
+      w.onmessage=(e)=>{
+        const d=e.data;if(!d||!d.move)return;
+        const mv=d.move;
+        hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+        selected=[hintMove.fr,hintMove.fc];
+        legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===mv.fr&&m.fc===mv.fc);
+        if(hintLabel)hintLabel.textContent='D'+d.depth+'/'+MD+'✓';
+        renderBoard();
+        if(d.depth>=MD){if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;toast('💡 Engine Magnus: langkah terbaik D'+MD+'!');}
+      };
+      w.onerror=()=>{if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
+      w.postMessage({gs:snapGS,color:snapTurn,depth:MD});
+    }catch(e){if(hintLabel)hintLabel.textContent=origLabel;}
+  }
+
+  (async()=>{
+    const sfURL=await _loadSF();
+    if(!sfURL){toast('⚡ Engine Magnus menganalisis (offline)...');useMagnusFallback();return;}
+    try{
+      const sf=new Worker(sfURL);
+      _hintWorker=sf;
+      let bestDepth=0,uciReady=false;
+      sf.onmessage=(e)=>{
+        const msg=typeof e.data==='string'?e.data:String(e.data);
+        if(msg==='uciok'){sf.postMessage('isready');}
+        else if(msg==='readyok'){
+          uciReady=true;
+          sf.postMessage('setoption name MultiPV value 1');
+          sf.postMessage('position fen '+fen);
+          sf.postMessage('go depth 20');
+          toast('🤖 Stockfish depth-20 menganalisis...');
+        }
+        else if(uciReady&&msg.startsWith('info')&&msg.includes(' pv ')){
+          const dm=msg.match(/\bdepth (\d+)/);
+          const pm=msg.match(/ pv ([a-h][1-8][a-h][1-8][qrbn]?)/);
+          if(dm&&pm){const d=parseInt(dm[1]);if(d>bestDepth){bestDepth=d;applyMove(pm[1]);if(hintLabel)hintLabel.textContent='SF D'+d+'✓';}}
+        }
+        else if(msg.startsWith('bestmove')){
+          const bm=msg.split(' ')[1];
+          applyMove(bm);
+          sf.terminate();_hintWorker=null;
+          if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
+          if(hintLabel)hintLabel.textContent=origLabel;
+          toast('🤖 Stockfish: best move ditemukan! (D'+bestDepth+')');
+        }
+      };
+      sf.onerror=()=>{sf.terminate();_hintWorker=null;toast('⚡ Stockfish gagal, pakai Magnus...');useMagnusFallback();};
+      sf.postMessage('uci');
+    }catch(e){toast('⚡ Pakai engine Magnus...');useMagnusFallback();}
+
+    _hintTimer=setTimeout(()=>{
+      _hintTimer=null;
+      if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+      if(hintLabel)hintLabel.textContent=origLabel;
+      if(!hintMove){selected=null;legalFromSel=[];hintBtn?.classList.remove('hint-active');renderBoard();}
+    },25000);
+  })();
 }
 
 // ═══════════════════════════════════════
