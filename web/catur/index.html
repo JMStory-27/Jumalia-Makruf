@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>♟ Chess Royal</title>
 <style>
-:root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#d4a96a;--sq-d:#7a3c1a;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
+:root{--gold:#d4af37;--gold-l:#f5e6aa;--gold-d:#8b6914;--gold-glow:rgba(212,175,55,.35);--bg:#08080f;--bg2:#0d0d1a;--card:rgba(10,8,28,.93);--card-b:rgba(212,175,55,.22);--txt:#f5e6aa;--txt2:rgba(245,230,170,.62);--sq-l:#ebbd76;--sq-d:#692a0a;--rad:14px;--safe:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior:none}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px}
@@ -168,19 +168,16 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #board-grid{display:grid;grid-template-columns:repeat(8,1fr);position:relative;border-radius:2px;overflow:hidden}
 .sq{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
 .sq.light{background:var(--sq-l)}.sq.dark{background:var(--sq-d)}
-.sq.sel{box-shadow:inset 0 0 0 3px var(--gold),inset 0 0 20px rgba(212,175,55,.35)}
-.sq.legal-move::after{content:'';position:absolute;width:32%;height:32%;border-radius:50%;background:rgba(0,0,0,.35);pointer-events:none;z-index:2}
-.sq.legal-cap::after{content:'';position:absolute;inset:3px;border-radius:50%;border:3px solid rgba(0,0,0,.35);pointer-events:none;z-index:2}
-.sq.last-from,.sq.last-to{background:rgba(212,175,55,.28) !important}
-.sq.check-sq{background:rgba(220,50,50,.65) !important;animation:checkFlash 1s ease-in-out infinite alternate}
-@keyframes checkFlash{from{background:rgba(220,50,50,.45) !important}to{background:rgba(255,80,80,.8) !important}}
-.sq.hint-from{background:rgba(212,175,55,.6) !important;animation:hintFromPulse .9s ease-in-out infinite alternate}
-@keyframes hintFromPulse{from{background:rgba(212,175,55,.45) !important}to{background:rgba(255,220,60,.8) !important}}
-.sq.hint-to{background:rgba(40,200,100,.25) !important}
-.sq.hint-to::after{content:'';position:absolute;width:55%;height:55%;border-radius:50%;background:rgba(40,210,100,.72);animation:hintToPulse .9s ease-in-out infinite alternate;pointer-events:none}
-@keyframes hintToPulse{from{transform:scale(.78);opacity:.65}to{transform:scale(1);opacity:1}}
+.sq.sel{box-shadow:inset 0 0 0 3px var(--gold),inset 0 0 26px rgba(212,175,55,.65),0 0 12px rgba(212,175,55,.35)}
+.sq.legal-move::after{content:'';position:absolute;width:37%;height:37%;border-radius:50%;background:rgba(0,0,0,.65);box-shadow:0 0 0 2px rgba(255,255,255,.22);pointer-events:none;z-index:2}
+.sq.legal-cap::after{content:'';position:absolute;inset:3px;border-radius:50%;border:4px solid rgba(0,0,0,.65);pointer-events:none;z-index:2}
+.sq.last-from,.sq.last-to{background:rgba(212,175,55,.48) !important}
+.sq.check-sq{background:rgba(220,40,40,.8) !important;animation:checkFlash 1s ease-in-out infinite alternate}
+@keyframes checkFlash{from{background:rgba(200,30,30,.6) !important}to{background:rgba(255,70,70,.95) !important}}
+.sq.hint-from{background:rgba(255,215,30,.68) !important}
+.sq.hint-to{background:rgba(28,222,95,.82) !important;box-shadow:inset 0 0 0 3px rgba(55,255,125,1),inset 0 0 16px rgba(40,255,110,.55) !important}
 #btn-hint.hint-active{color:var(--gold) !important;border-color:var(--gold) !important}
-.piece-svg{width:88%;height:88%;pointer-events:none;z-index:1;transition:transform .1s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.piece-svg{width:88%;height:88%;pointer-events:none;z-index:1;transition:transform .1s;filter:drop-shadow(0 3px 7px rgba(0,0,0,.7))}
 .sq:hover:not(.sel) .piece-svg{transform:scale(1.08) translateY(-2px);filter:drop-shadow(0 4px 10px rgba(0,0,0,.7))}
 .piece-svg.captured{animation:capFly .35s ease-out forwards}
 @keyframes capFly{to{transform:scale(0) rotate(90deg);opacity:0}}
@@ -293,7 +290,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #voice-timer{font-size:20px;font-weight:700;color:var(--gold)}
 
 /* ── BOARD THEMES ── */
-#board-grid.t-classic{--sq-l:#d4a96a;--sq-d:#7a3c1a}
+#board-grid.t-classic{--sq-l:#ebbd76;--sq-d:#692a0a}
 #board-grid.t-oak{--sq-l:#e0be90;--sq-d:#8b5228}
 #board-grid.t-walnut{--sq-l:#d4b082;--sq-d:#5c2d0e}
 #board-grid.t-ebony{--sq-l:#eae0cc;--sq-d:#2d1a0a}
@@ -867,7 +864,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 // BOARD THEMES  (declared first — before Firebase so they always exist)
 // ═══════════════════════════════════════
 const THEMES=[
-  {id:'classic',name:'Klasik',l:'#d4a96a',d:'#7a3c1a'},
+  {id:'classic',name:'Klasik',l:'#ebbd76',d:'#692a0a'},
   {id:'oak',name:'Oak',l:'#e0be90',d:'#8b5228'},
   {id:'walnut',name:'Walnut',l:'#d4b082',d:'#5c2d0e'},
   {id:'ebony',name:'Ebony',l:'#eae0cc',d:'#2d1a0a'},
@@ -1208,11 +1205,9 @@ function renderBoard(){
     sqs[getIdx(lastMove.tr,lastMove.tc)]?.classList.add('last-to');
   }
   // Hint
-  document.getElementById('hint-svg')?.remove();
   if(hintMove){
     sqs[getIdx(hintMove.fr,hintMove.fc)]?.classList.add('hint-from');
     sqs[getIdx(hintMove.tr,hintMove.tc)]?.classList.add('hint-to');
-    requestAnimationFrame(drawHintArrow);
   }
   // Selected
   if(selected!==null){
@@ -1501,42 +1496,6 @@ let _magnusWorkerURL=null;
 try{_magnusWorkerURL=URL.createObjectURL(new Blob([_MAGNUS_CODE],{type:'application/javascript'}));}catch(e){console.warn('Worker blob failed:',e.message);}
 let _hintWorker=null,_hintTimer=null;
 
-function drawHintArrow(){
-  const grid=document.getElementById('board-grid');if(!grid||!hintMove)return;
-  document.getElementById('hint-svg')?.remove();
-  const sz=grid.children[0]?.offsetWidth||40;
-  const fR=flipped?7-hintMove.fr:hintMove.fr,fC=flipped?7-hintMove.fc:hintMove.fc;
-  const tR=flipped?7-hintMove.tr:hintMove.tr,tC=flipped?7-hintMove.tc:hintMove.tc;
-  const x1=fC*sz+sz/2,y1=fR*sz+sz/2,x2=tC*sz+sz/2,y2=tR*sz+sz/2;
-  const len=Math.sqrt((x2-x1)**2+(y2-y1)**2)||1;
-  const ux=(x2-x1)/len,uy=(y2-y1)/len;
-  const ax1=x1+ux*sz*0.42,ay1=y1+uy*sz*0.42;
-  const ax2=x2-ux*sz*0.30,ay2=y2-uy*sz*0.30;
-  const W=sz*8;
-  const ns='http://www.w3.org/2000/svg';
-  const svg=document.createElementNS(ns,'svg');
-  svg.id='hint-svg';svg.setAttribute('width',W);svg.setAttribute('height',W);
-  svg.setAttribute('viewBox','0 0 '+W+' '+W);
-  svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:6;overflow:visible';
-  const defs=document.createElementNS(ns,'defs');
-  const mk=document.createElementNS(ns,'marker');
-  mk.setAttribute('id','harrow');mk.setAttribute('viewBox','0 0 10 10');
-  mk.setAttribute('refX','9');mk.setAttribute('refY','5');
-  mk.setAttribute('markerWidth','5');mk.setAttribute('markerHeight','5');
-  mk.setAttribute('orient','auto');
-  const mp=document.createElementNS(ns,'path');
-  mp.setAttribute('d','M0,0 L10,5 L0,10 Z');mp.setAttribute('fill','rgba(40,210,100,.95)');
-  mk.appendChild(mp);defs.appendChild(mk);svg.appendChild(defs);
-  const line=document.createElementNS(ns,'line');
-  line.setAttribute('x1',ax1);line.setAttribute('y1',ay1);
-  line.setAttribute('x2',ax2);line.setAttribute('y2',ay2);
-  line.setAttribute('stroke','rgba(40,210,100,.82)');
-  line.setAttribute('stroke-width',sz*0.19);
-  line.setAttribute('stroke-linecap','round');
-  line.setAttribute('marker-end','url(#harrow)');
-  svg.appendChild(line);
-  grid.appendChild(svg);
-}
 
 function showHint(){
   if(!gs||gs.gameOver)return;
@@ -1548,6 +1507,9 @@ function showHint(){
   const quick=getBestMove(gs,c,1);
   if(!quick){toast('Tidak ada langkah tersedia');return;}
   hintMove={fr:quick.fr,fc:quick.fc,tr:quick.tr,tc:quick.tc};
+  // Auto-select piece — user just taps the bright green destination to move
+  selected=[hintMove.fr,hintMove.fc];
+  legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
   document.getElementById('btn-hint')?.classList.add('hint-active');
   renderBoard();
   // Async upgrade to depth-4 via Web Worker (non-blocking)
@@ -1559,6 +1521,8 @@ function showHint(){
         const mv=e.data;
         if(mv&&hintMove){
           hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+          selected=[hintMove.fr,hintMove.fc];
+          legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
           renderBoard();
         }
         _hintWorker=null;
@@ -1569,9 +1533,9 @@ function showHint(){
   }catch(e){/*ignore*/}
   _hintTimer=setTimeout(()=>{
     hintMove=null;_hintTimer=null;
+    selected=null;legalFromSel=[];
     if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
     document.getElementById('btn-hint')?.classList.remove('hint-active');
-    document.getElementById('hint-svg')?.remove();
     renderBoard();
   },9000);
 }
