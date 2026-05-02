@@ -76,6 +76,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .lvl-card{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:var(--rad);border:1px solid var(--card-b);background:var(--card);cursor:pointer;transition:all .2s}
 .lvl-card:hover{border-color:rgba(212,175,55,.5);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.4)}
 .lvl-card:active{transform:scale(.98)}
+.lvl-card.selected{border-color:var(--gold);background:rgba(212,175,55,.12);box-shadow:0 0 20px rgba(212,175,55,.2)}
 .lvl-icon{font-size:28px}
 .lvl-info{flex:1}
 .lvl-name{font-size:16px;font-weight:700;color:var(--txt)}
@@ -331,7 +332,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <span class="btn-label">2 Pemain (Giliran)</span>
         <span class="btn-arrow">›</span>
       </button>
-      <button class="btn-main" onclick="showCreateRoom()">
+      <button class="btn-main" onclick="showOnlineChoice()">
         <span class="btn-icon">🌐</span>
         <span class="btn-label">Main Online</span>
         <span class="btn-arrow">›</span>
@@ -362,36 +363,74 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   </div>
   <div class="level-inner">
     <div class="level-cards">
-      <div class="lvl-card glass" onclick="startVsBot(1)">
+      <div id="lvl-1" class="lvl-card glass" onclick="selectLevel(1)">
         <div class="lvl-icon">🟢</div>
         <div class="lvl-info">
           <div class="lvl-name">Mudah</div>
           <div class="lvl-desc">Cocok untuk pemula, bot tidak terlalu agresif</div>
         </div>
-        <span style="color:var(--txt2)">›</span>
+        <span id="lvl-1-check" style="color:var(--txt2);font-size:20px">›</span>
       </div>
-      <div class="lvl-card glass" onclick="startVsBot(2)">
+      <div id="lvl-2" class="lvl-card glass" onclick="selectLevel(2)">
         <div class="lvl-icon">🟡</div>
         <div class="lvl-info">
           <div class="lvl-name">Sedang</div>
           <div class="lvl-desc">Tantangan seimbang untuk pemain menengah</div>
         </div>
-        <span style="color:var(--txt2)">›</span>
+        <span id="lvl-2-check" style="color:var(--txt2);font-size:20px">›</span>
       </div>
-      <div class="lvl-card glass" onclick="startVsBot(3)">
+      <div id="lvl-3" class="lvl-card glass" onclick="selectLevel(3)">
         <div class="lvl-icon">🔴</div>
         <div class="lvl-info">
           <div class="lvl-name">Sulit</div>
           <div class="lvl-desc">Bot bermain dengan analisis mendalam</div>
         </div>
-        <span style="color:var(--txt2)">›</span>
+        <span id="lvl-3-check" style="color:var(--txt2);font-size:20px">›</span>
       </div>
     </div>
     <div class="sec-label">Pilih Warna Bidak</div>
     <div class="color-row">
-      <div id="t-putih" class="col-btn" onclick="setColor('w')">⬜ Putih</div>
+      <div id="t-putih" class="col-btn on" onclick="setColor('w')">⬜ Putih</div>
       <div id="t-hitam" class="col-btn" onclick="setColor('b')">⬛ Hitam</div>
       <div id="t-alt" class="col-btn" onclick="setColor('alt')">🎲 Acak</div>
+    </div>
+    <div id="lvl-hint" style="text-align:center;font-size:12px;color:var(--txt2);margin-top:12px;opacity:.7">Pilih tingkat kesulitan di atas</div>
+    <button id="btn-mulai-bot" class="ov-btn gold" onclick="mulaiVsBot()" style="margin-top:14px;display:none;font-size:15px;padding:15px">▶ Mulai Bermain</button>
+  </div>
+</div>
+
+<!-- ══ ONLINE CHOICE SCREEN ══ -->
+<div id="s-online" class="screen">
+  <div class="scr-header">
+    <div class="back-btn" onclick="backHome()">←</div>
+    <div class="scr-title">Main Online</div>
+  </div>
+  <div class="online-inner">
+    <div class="glass" style="padding:18px;margin-bottom:12px;text-align:center">
+      <div style="font-size:40px;margin-bottom:8px">🌐</div>
+      <div style="font-size:15px;font-weight:700;color:var(--txt);margin-bottom:4px">Pilih Mode Online</div>
+      <div style="font-size:12px;color:var(--txt2);line-height:1.5">Buat room baru atau masukkan kode dari temanmu</div>
+    </div>
+    <button class="ov-btn gold" onclick="showCreateRoom()" style="margin-bottom:10px;padding:16px;font-size:15px">
+      ➕ Buat Room Baru
+    </button>
+    <button class="ov-btn" onclick="showJoinRoom()" style="padding:16px;font-size:15px">
+      🔗 Gabung Room (Punya Kode)
+    </button>
+    <p style="font-size:11px;color:var(--txt2);text-align:center;margin-top:16px;line-height:1.6">
+      Bagikan kode room ke temanmu.<br>Permainan dimulai otomatis saat lawan masuk.
+    </p>
+  </div>
+</div>
+
+<!-- ══ PASS-AND-PLAY OVERLAY ══ -->
+<div id="o-pass-device" class="overlay">
+  <div class="overlay-sheet glass centered" style="text-align:center">
+    <div id="pass-device-icon" class="ov-icon">📱</div>
+    <div id="pass-device-title" class="ov-title" style="text-align:center;font-size:22px">Giliranmu!</div>
+    <div id="pass-device-sub" class="ov-sub" style="text-align:center">Serahkan HP ke Pemain 2</div>
+    <div class="ov-btns" style="margin-top:12px">
+      <button class="ov-btn gold" onclick="dismissPassOverlay()" style="font-size:15px;padding:15px">▶ Siap! Mulai Giliran</button>
     </div>
   </div>
 </div>
@@ -471,7 +510,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ CREATE ROOM SCREEN ══ -->
 <div id="s-create" class="screen">
   <div class="scr-header">
-    <div class="back-btn" onclick="cancelRoom();backHome()">←</div>
+    <div class="back-btn" onclick="cancelRoom();showOnlineChoice()">←</div>
     <div class="scr-title">Buat Room Online</div>
   </div>
   <div class="online-inner">
@@ -481,7 +520,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div id="create-status" class="online-status">⏳ Memuat...</div>
     </div>
     <button class="ov-btn gold" style="margin-bottom:8px" onclick="copyRoomCode()">📋 Salin Kode</button>
-    <button class="ov-btn" onclick="cancelRoom();backHome()">❌ Batalkan</button>
+    <button class="ov-btn" onclick="cancelRoom();showOnlineChoice()">❌ Batalkan</button>
     <p style="font-size:12px;color:var(--txt2);text-align:center;margin-top:14px;line-height:1.6">
       Bagikan kode ini ke temanmu.<br>Bot akan memulai permainan secara otomatis saat teman masuk.
     </p>
@@ -491,7 +530,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ JOIN ROOM SCREEN ══ -->
 <div id="s-join" class="screen">
   <div class="scr-header">
-    <div class="back-btn" onclick="backHome()">←</div>
+    <div class="back-btn" onclick="showOnlineChoice()">←</div>
     <div class="scr-title">Gabung Room</div>
   </div>
   <div class="online-inner">
@@ -711,6 +750,7 @@ function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
 
 let gameMode=null,botLevel=1,myColor='w',roomCode=null,roomRef=null,roomListener=null;
 let isHordeMode=false;
+let selectedLevel=null;
 
 // ═══════════════════════════════════════
 // CHESS ENGINE CONSTANTS  (declared before Firebase)
@@ -893,13 +933,50 @@ function showScreen(id){
 }
 function backHome(){cancelRoom();stopMusic();showScreen('home')}
 function showSettings(){buildThemeStrip();updateSettingsUI();showScreen('settings')}
-function showLevel(){updateSettingsUI();showScreen('level')}
+function showLevel(){
+  selectedLevel=null;
+  updateSettingsUI();
+  // Reset level cards
+  [1,2,3].forEach(n=>{
+    const card=document.getElementById('lvl-'+n);
+    const check=document.getElementById('lvl-'+n+'-check');
+    if(card)card.classList.remove('selected');
+    if(check){check.textContent='›';check.style.color='var(--txt2)';}
+  });
+  const btn=document.getElementById('btn-mulai-bot');
+  const hint=document.getElementById('lvl-hint');
+  if(btn)btn.style.display='none';
+  if(hint)hint.style.display='block';
+  showScreen('level');
+}
+function selectLevel(n){
+  selectedLevel=n;
+  [1,2,3].forEach(i=>{
+    const card=document.getElementById('lvl-'+i);
+    const check=document.getElementById('lvl-'+i+'-check');
+    if(card)card.classList.toggle('selected',i===n);
+    if(check){
+      if(i===n){check.textContent='✓';check.style.color='var(--gold)';}
+      else{check.textContent='›';check.style.color='var(--txt2)';}
+    }
+  });
+  const btn=document.getElementById('btn-mulai-bot');
+  const hint=document.getElementById('lvl-hint');
+  if(btn)btn.style.display='block';
+  if(hint)hint.style.display='none';
+}
+function mulaiVsBot(){
+  if(!selectedLevel){toast('Pilih tingkat kesulitan dulu!');return;}
+  startVsBot(selectedLevel);
+}
+function showOnlineChoice(){showScreen('online')}
 function showCreateRoom(){showScreen('create');createRoom()}
 function showJoinRoom(){document.getElementById('join-input').value='';document.getElementById('join-status').textContent='';showScreen('join')}
 function showGameMenu(){document.getElementById('o-menu').classList.add('show')}
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
-function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();showScreen('home');}
+function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();showScreen('home');}
+function dismissPassOverlay(){document.getElementById('o-pass-device').classList.remove('show');}
 
 // ═══════════════════════════════════════
 // SETTINGS
@@ -1135,6 +1212,17 @@ function executeMove(mv){
   }
   if(isInCheck(gs,gs.turn)){playSound('check');if(gameMode==='bot')setTimeout(()=>showBotComment('check'),200);}
   renderBoard();
+  // Pass-and-play: show device handoff overlay
+  if(gameMode==='pass'&&!gs.gameOver){
+    const isW=gs.turn==='w';
+    const icon=document.getElementById('pass-device-icon');
+    const title=document.getElementById('pass-device-title');
+    const sub=document.getElementById('pass-device-sub');
+    if(icon)icon.textContent=isW?'⬜':'⬛';
+    if(title)title.textContent=isW?'Giliran Pemain 1!':'Giliran Pemain 2!';
+    if(sub)sub.textContent=isW?'Serahkan HP ke Pemain 1 (Putih)':'Serahkan HP ke Pemain 2 (Hitam)';
+    setTimeout(()=>document.getElementById('o-pass-device').classList.add('show'),300);
+  }
   if(gameMode==='online'&&roomRef){
     roomRef.update({state:serGS(gs),lastMove:mv||null});
   }
@@ -1309,17 +1397,19 @@ function showHint(){
 // GAME MODES
 // ═══════════════════════════════════════
 function startVsBot(level){
-  gameMode='bot';botLevel=level;isHordeMode=false;
-  myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
-  flipped=myColor==='b';
-  gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
-  initBoardDOM();renderBoard();
-  const ln=['','Mudah','Sedang','Sulit'][level];
-  const topC=myColor==='w'?'b':'w';
-  setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
-  showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
-  setTimeout(()=>{if(cfg.comment)showBotComment('intro')},1200);
-  if(myColor==='b')setTimeout(doBotMove,700);
+  try{
+    gameMode='bot';botLevel=level;isHordeMode=false;
+    myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
+    flipped=myColor==='b';
+    gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
+    initBoardDOM();renderBoard();
+    const ln=['','Mudah','Sedang','Sulit'][level];
+    const topC=myColor==='w'?'b':'w';
+    setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
+    showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+    setTimeout(()=>{if(cfg.comment)showBotComment('intro')},1200);
+    if(myColor==='b')setTimeout(doBotMove,700);
+  }catch(e){toast('Error: '+e.message);console.error(e);}
 }
 function doBotMove(){
   if(!gs||gs.gameOver||gs.turn===myColor)return;
@@ -1328,19 +1418,31 @@ function doBotMove(){
   if(mv)executeMove(mv);
 }
 function startPassPlay(){
-  gameMode='pass';myColor='w';flipped=false;isHordeMode=false;
-  gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
-  initBoardDOM();renderBoard();
-  setPlayerNames('Pemain 2 (Hitam)','Pemain 1 (Putih)','b','w');
-  showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+  try{
+    gameMode='pass';myColor='w';flipped=false;isHordeMode=false;
+    gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
+    initBoardDOM();renderBoard();
+    setPlayerNames('Pemain 2 (Hitam)','Pemain 1 (Putih)','b','w');
+    showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+    // Show initial pass overlay
+    const icon=document.getElementById('pass-device-icon');
+    const title=document.getElementById('pass-device-title');
+    const sub=document.getElementById('pass-device-sub');
+    if(icon)icon.textContent='⬜';
+    if(title)title.textContent='Pemain 1 Mulai!';
+    if(sub)sub.textContent='Pemain 1 (Putih) bermain duluan';
+    setTimeout(()=>document.getElementById('o-pass-device').classList.add('show'),400);
+  }catch(e){toast('Error: '+e.message);console.error(e);}
 }
 function startHorde(){
-  gameMode='bot';botLevel=2;isHordeMode=true;myColor='w';flipped=false;
-  gs=newGS(true);moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
-  initBoardDOM();renderBoard();
-  setPlayerNames('Bot (Hitam — Normal)','Kamu (Putih — 32 Pion!)','b','w');
-  showScreen('game');if(cfg.musicOn)playMusicTrack(1);
-  toast('⚔️ Mode Horde! 32 pion vs buah normal');
+  try{
+    gameMode='bot';botLevel=2;isHordeMode=true;myColor='w';flipped=false;
+    gs=newGS(true);moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
+    initBoardDOM();renderBoard();
+    setPlayerNames('Bot (Hitam — Normal)','Kamu (Putih — 32 Pion!)','b','w');
+    showScreen('game');if(cfg.musicOn)playMusicTrack(1);
+    setTimeout(()=>toast('⚔️ Mode Horde! 32 pion vs buah normal'),300);
+  }catch(e){toast('Error: '+e.message);console.error(e);}
 }
 function restartSameMode(){
   ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
