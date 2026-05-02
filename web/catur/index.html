@@ -381,6 +381,50 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 /* ── CAPTURE CAPFLY override ── */
 .piece-svg.captured{animation:capFly .25s ease-in forwards}
 @keyframes capFly{to{transform:scale(0) rotate(120deg);opacity:0}}
+
+/* ══════════════════════════════════════════════
+   PIECE SLIDE & LANDING ANIMATIONS
+═══════════════════════════════════════════════ */
+/* Land ripple: ring expands from where piece lands */
+.land-ripple{position:fixed;pointer-events:none;z-index:9996;border-radius:50%;border:2.5px solid rgba(212,175,55,.7);animation:landRipple .34s ease-out forwards}
+@keyframes landRipple{0%{transform:scale(.25);opacity:.85}100%{transform:scale(1.7);opacity:0}}
+
+/* Selected piece lifts up with golden glow */
+.sq.sel .piece-svg{
+  transform:scale(1.18) translateY(-6px) !important;
+  filter:drop-shadow(0 12px 22px rgba(0,0,0,.9)) drop-shadow(0 0 10px rgba(212,175,55,.5)) !important;
+  transition:transform .13s cubic-bezier(.34,1.56,.64,1),filter .13s ease !important;
+}
+
+/* Legal move dots / capture rings pop in */
+@keyframes legalPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.sq.legal-move::after{animation:legalPop .16s cubic-bezier(.34,1.56,.64,1) both}
+.sq.legal-cap::after{animation:legalPop .16s cubic-bezier(.34,1.56,.64,1) both}
+
+/* King shakes when in check */
+@keyframes kingShake{
+  0%{transform:translateX(0) rotate(0)}
+  14%{transform:translateX(-7px) rotate(-5deg) scale(1.08)}
+  28%{transform:translateX(7px) rotate(5deg) scale(1.08)}
+  42%{transform:translateX(-6px) rotate(-4deg)}
+  56%{transform:translateX(6px) rotate(4deg)}
+  70%{transform:translateX(-3px) rotate(-1deg)}
+  84%{transform:translateX(3px)}
+  100%{transform:translateX(0) rotate(0)}
+}
+.sq.check-sq .piece-svg{animation:kingShake .52s cubic-bezier(.36,.07,.19,.97) forwards !important}
+
+/* Last-move destination flashes bright gold on landing */
+.sq.last-to::before{content:'';position:absolute;inset:0;z-index:0;background:rgba(255,255,255,.42);animation:lastLand .5s ease-out forwards;pointer-events:none}
+@keyframes lastLand{0%{opacity:.85}100%{opacity:0}}
+
+/* Victory confetti particles */
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}100%{transform:translateY(var(--cy)) rotate(var(--cr)) scale(.5);opacity:0}}
+.confetti-p{position:fixed;pointer-events:none;z-index:9999;animation:confettiFall var(--cd) cubic-bezier(.25,.46,.45,.94) forwards}
+
+/* Promotion sparkle burst */
+@keyframes promoSpark{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--px),var(--py)) scale(0);opacity:0}}
+.promo-spark{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;animation:promoSpark .5s ease-out forwards}
 </style>
 </head>
 <body>
@@ -1346,7 +1390,7 @@ function showPromo(templateMv){
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     const pid=(promoColor==='w'?'w':'b')+''+['P','N','B','R','Q','K'][pp-1];
     use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
-    sq.onclick=()=>{closeOverlay('o-promo');playSound('promote');const mv={...templateMv,promo:actualPp};executeMove(mv);};
+    sq.onclick=()=>{closeOverlay('o-promo');playSound('promote');const grid=document.getElementById('board-grid');const getIdx=(r,c)=>flipped?(7-r)*8+(7-c):r*8+c;spawnPromoSparkle(grid?.querySelectorAll('.sq')[getIdx(templateMv.tr,templateMv.tc)]);const mv={...templateMv,promo:actualPp};executeMove(mv);};
     wrap.appendChild(sq);
   });
   document.getElementById('o-promo').classList.add('show');
@@ -1357,6 +1401,9 @@ function executeMove(mv){
   gameSnapshots.push({state:prevGS,move:mv});
   moveHistory.push(gs);
   const cap=gs.board[mv.tr][mv.tc]||mv.ep;
+  const movedPiece=gs.board[mv.fr][mv.fc]; // save for slide animation
+  const castleRookSrc=mv.castle?{wK:{r:7,c:7},wQ:{r:7,c:0},bK:{r:0,c:7},bQ:{r:0,c:0}}[mv.castle]:null;
+  const castleRookDst=mv.castle?{wK:{r:7,c:5},wQ:{r:7,c:3},bK:{r:0,c:5},bQ:{r:0,c:3}}[mv.castle]:null;
   // Spawn capture fly animation BEFORE applying move
   if(cap)spawnCapFly(mv,gs.board);
   gs=applyMove(gs,mv);
@@ -1366,16 +1413,17 @@ function executeMove(mv){
   const bsw=document.getElementById('board-shadow-wrap');
   if(bsw){bsw.classList.remove('move-flash');void bsw.offsetWidth;bsw.classList.add('move-flash');}
   const draw=checkAutoDraw(gs);
-  if(draw.is){gs.gameOver=true;renderBoard();setTimeout(()=>showAutoDraw(draw.reason),400);return;}
+  if(draw.is){gs.gameOver=true;renderBoard();animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);setTimeout(()=>showAutoDraw(draw.reason),400);return;}
   const legal=legalMoves(gs,gs.turn);
   if(!legal.length){
     gs.gameOver=true;
     if(isInCheck(gs,gs.turn)){gs.result=gs.turn==='w'?'b':'w';}
     else{gs.result='draw';}
-    renderBoard();setTimeout(()=>showGameOver(gs.result),500);return;
+    renderBoard();animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);setTimeout(()=>showGameOver(gs.result),500);return;
   }
   if(isInCheck(gs,gs.turn)){playSound('check');}
   renderBoard();
+  animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);
   // Pass-and-play: show device handoff overlay
   if(gameMode==='pass'&&!gs.gameOver){
     const isW=gs.turn==='w';
@@ -1633,6 +1681,7 @@ function restartSameMode(){
 // ═══════════════════════════════════════
 function showGameOver(result){
   const myWin=result===myColor,isDraw=result==='draw';
+  const passWin=gameMode==='pass'&&!isDraw;
   let icon,title,sub;
   if(isDraw){icon='🤝';title='SERI';sub='Permainan berakhir imbang (Stalemate)';}
   else if(gameMode==='pass'){icon='🏆';title=(result==='w'?'PUTIH':'HITAM')+' MENANG!';sub='Permainan selesai!';}
@@ -1643,6 +1692,7 @@ function showGameOver(result){
   document.getElementById('go-sub').textContent=sub;
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
+  if(myWin||passWin){spawnVictoryConfetti();setTimeout(spawnVictoryConfetti,500);}
   if(gameMode==='bot'||gameMode==='pass'){setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);}
 }
 function showAutoDraw(reason){
@@ -2240,6 +2290,117 @@ function endIntro(){
   setTimeout(()=>{overlay.style.display='none';},850);
 }
 function skipIntro(){endIntro();}
+
+// ═══════════════════════════════════════
+// PIECE SLIDE + LAND RIPPLE ANIMATIONS
+// ═══════════════════════════════════════
+function animatePieceSlide(mv,piece,rookSrc,rookDst){
+  const MS=165;
+  function slideOne(frR,frC,toR,toC,pc,ap,delay){
+    try{
+      const grid=document.getElementById('board-grid');if(!grid||!pc)return;
+      const getIdx=(r,c)=>flipped?(7-r)*8+(7-c):r*8+c;
+      const sqs=grid.querySelectorAll('.sq');
+      const fSq=sqs[getIdx(frR,frC)],tSq=sqs[getIdx(toR,toC)];
+      if(!fSq||!tSq)return;
+      const fR=fSq.getBoundingClientRect(),tR=tSq.getBoundingClientRect();
+      const pid=(pc>0?'w':'b')+['P','N','B','R','Q','K'][ap-1];
+      const sz=fR.width*0.88;
+      const clone=document.createElement('div');
+      clone.style.cssText=`position:fixed;pointer-events:none;z-index:9999;width:${sz}px;height:${sz}px;`+
+        `left:${fR.left+(fR.width-sz)/2}px;top:${fR.top+(fR.height-sz)/2}px;`+
+        `will-change:transform;transition:transform ${MS}ms cubic-bezier(.33,.87,.44,.99)`;
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('viewBox','0 0 45 45');
+      svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.92))';
+      const use=document.createElementNS('http://www.w3.org/2000/svg','use');
+      use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
+      document.body.appendChild(clone);
+      // Hide dest piece so clone lands cleanly
+      const destSvg=tSq.querySelector('.piece-svg');
+      if(destSvg)destSvg.style.opacity='0';
+      void clone.offsetWidth;
+      clone.style.transform=`translate(${tR.left-fR.left}px,${tR.top-fR.top}px)`;
+      setTimeout(()=>{
+        clone.remove();
+        if(destSvg)destSvg.style.opacity='';
+        spawnLandRipple(tSq);
+      },MS+delay+15);
+    }catch(e){}
+  }
+  if(!piece)return;
+  const ap=Math.abs(piece);
+  slideOne(mv.fr,mv.fc,mv.tr,mv.tc,piece,ap,0);
+  // Castle: also slide the rook
+  if(rookSrc&&rookDst){
+    const rookPc=piece>0?4:-4; // R or -R
+    setTimeout(()=>slideOne(rookSrc.r,rookSrc.c,rookDst.r,rookDst.c,rookPc,4,0),30);
+  }
+}
+
+function spawnLandRipple(sq){
+  try{
+    const rect=sq.getBoundingClientRect();
+    const sz=rect.width*1.7;
+    const el=document.createElement('div');
+    el.className='land-ripple';
+    el.style.cssText=`width:${sz}px;height:${sz}px;`+
+      `left:${rect.left+(rect.width-sz)/2}px;top:${rect.top+(rect.height-sz)/2}px`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),400);
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════
+// VICTORY CONFETTI
+// ═══════════════════════════════════════
+function spawnVictoryConfetti(){
+  try{
+    const colors=['#d4af37','#fff','#f87171','#4ade80','#60a5fa','#f59e0b','#e879f9','#fbbf24'];
+    for(let i=0;i<72;i++){
+      const el=document.createElement('div');
+      el.className='confetti-p';
+      const cx=10+Math.random()*80; // % across screen
+      const cy=120+Math.random()*280; // px fall
+      const cr=-360+Math.random()*720; // rotation
+      const cd=(0.7+Math.random()*0.9)+'s';
+      const sz=5+Math.random()*8;
+      const col=colors[Math.floor(Math.random()*colors.length)];
+      const startY=-20-Math.random()*60;
+      el.style.cssText=`left:${cx}vw;top:${startY}px;width:${sz}px;height:${sz}px;`+
+        `background:${col};border-radius:${Math.random()>.5?'50%':'2px'};`+
+        `--cy:${cy}px;--cr:${cr}deg;--cd:${cd};`+
+        `animation-delay:${Math.random()*.6}s`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),2000);
+    }
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════
+// PROMOTION SPARKLE
+// ═══════════════════════════════════════
+function spawnPromoSparkle(sq){
+  try{
+    if(!sq)return;
+    const rect=sq.getBoundingClientRect();
+    const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+    const cols=['#d4af37','#fff','#fde68a','#fbbf24','#fffde0'];
+    for(let i=0;i<28;i++){
+      const el=document.createElement('div');
+      el.className='promo-spark';
+      const ang=(i/28)*Math.PI*2+Math.random()*.3;
+      const dist=40+Math.random()*90;
+      const sz=4+Math.random()*7;
+      el.style.cssText=`left:${cx-sz/2}px;top:${cy-sz/2}px;width:${sz}px;height:${sz}px;`+
+        `background:${cols[Math.floor(Math.random()*cols.length)]};`+
+        `--px:${Math.cos(ang)*dist}px;--py:${Math.sin(ang)*dist}px;`+
+        `animation-delay:${Math.random()*.1}s`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),650);
+    }
+  }catch(e){}
+}
 
 // ═══════════════════════════════════════
 // CAPTURE FLY ANIMATION
