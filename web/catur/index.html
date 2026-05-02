@@ -1439,43 +1439,14 @@ function showHint(){
   if(!gs||gs.gameOver)return;
   const c=gameMode==='online'?myColor:gs.turn;
   if(gs.turn!==c){toast('Bukan giliranmu!');return;}
-  const btn=document.getElementById('btn-hint');
-  // Terminate any previous analysis, then start fresh (unlimited)
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-  if(btn)btn.classList.add('hint-thinking');
-  toast('🧠 Magnus sedang berpikir...');
-  const snapGS=JSON.parse(JSON.stringify(gs));
-  if(_magnusWorkerURL){
-    _hintWorker=new Worker(_magnusWorkerURL);
-    _hintWorker.onmessage=function(e){
-      if(btn)btn.classList.remove('hint-thinking');
-      _hintWorker=null;
-      const mv=e.data;if(!mv){toast('Tidak ada langkah');return;}
-      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-      const F='ABCDEFGH',pn=PNAMES_ID[abs(gs.board[mv.fr][mv.fc])];
-      toast(`⚡ Magnus: ${pn} ${F[mv.fc]}${8-mv.fr} → ${F[mv.tc]}${8-mv.tr}`);
-      renderBoard();setTimeout(()=>{hintMove=null;renderBoard();},7000);
-    };
-    _hintWorker.onerror=function(){
-      if(btn)btn.classList.remove('hint-thinking');_hintWorker=null;
-      const mv=getBestMove(snapGS,c,3);if(!mv){toast('Tidak ada langkah');return;}
-      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-      const F='ABCDEFGH',pn=PNAMES_ID[abs(gs.board[mv.fr][mv.fc])];
-      toast(`💡 ${pn} ${F[mv.fc]}${8-mv.fr} → ${F[mv.tc]}${8-mv.tr}`);
-      renderBoard();setTimeout(()=>{hintMove=null;renderBoard();},4500);
-    };
-    _hintWorker.postMessage({gs:snapGS,color:c,depth:5});
-  }else{
-    // Fallback: run on main thread at depth 4 if blob URL not supported
-    setTimeout(()=>{
-      if(btn)btn.classList.remove('hint-thinking');
-      const mv=getBestMove(snapGS,c,4);if(!mv){toast('Tidak ada langkah');return;}
-      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-      const F='ABCDEFGH',pn=PNAMES_ID[abs(gs.board[mv.fr][mv.fc])];
-      toast(`💡 ${pn} ${F[mv.fc]}${8-mv.fr} → ${F[mv.tc]}${8-mv.tr}`);
-      renderBoard();setTimeout(()=>{hintMove=null;renderBoard();},6000);
-    },50);
-  }
+  const mv=getBestMove(gs,c,2);
+  if(!mv){toast('Tidak ada langkah tersedia');return;}
+  hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+  const F='ABCDEFGH',pn=PNAMES_ID[abs(gs.board[mv.fr][mv.fc])];
+  toast(`💡 ${pn} ${F[mv.fc]}${8-mv.fr} → ${F[mv.tc]}${8-mv.tr}`);
+  renderBoard();
+  setTimeout(()=>{hintMove=null;renderBoard();},6000);
 }
 
 // ═══════════════════════════════════════
