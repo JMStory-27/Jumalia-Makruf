@@ -174,9 +174,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .sq.last-from,.sq.last-to{background:rgba(212,175,55,.28) !important}
 .sq.check-sq{background:rgba(220,50,50,.65) !important;animation:checkFlash 1s ease-in-out infinite alternate}
 @keyframes checkFlash{from{background:rgba(220,50,50,.45) !important}to{background:rgba(255,80,80,.8) !important}}
-.sq.hint-sq{box-shadow:inset 0 0 0 3px rgba(100,200,255,.8),inset 0 0 15px rgba(100,200,255,.3)}
-@keyframes hint-pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(212,175,55,.7)}50%{opacity:.65;box-shadow:0 0 0 8px rgba(212,175,55,0)}}
-#btn-hint.hint-thinking{animation:hint-pulse .7s ease-in-out infinite;pointer-events:auto}
+.sq.hint-from{background:rgba(212,175,55,.6) !important;animation:hintFromPulse .9s ease-in-out infinite alternate}
+@keyframes hintFromPulse{from{background:rgba(212,175,55,.45) !important}to{background:rgba(255,220,60,.8) !important}}
+.sq.hint-to{background:rgba(40,200,100,.25) !important}
+.sq.hint-to::after{content:'';position:absolute;width:55%;height:55%;border-radius:50%;background:rgba(40,210,100,.72);animation:hintToPulse .9s ease-in-out infinite alternate;pointer-events:none}
+@keyframes hintToPulse{from{transform:scale(.78);opacity:.65}to{transform:scale(1);opacity:1}}
+#btn-hint.hint-active{color:var(--gold) !important;border-color:var(--gold) !important}
 .piece-svg{width:88%;height:88%;pointer-events:none;z-index:1;transition:transform .1s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .sq:hover:not(.sel) .piece-svg{transform:scale(1.08) translateY(-2px);filter:drop-shadow(0 4px 10px rgba(0,0,0,.7))}
 .piece-svg.captured{animation:capFly .35s ease-out forwards}
@@ -1193,9 +1196,11 @@ function renderBoard(){
     sqs[getIdx(lastMove.tr,lastMove.tc)]?.classList.add('last-to');
   }
   // Hint
+  document.getElementById('hint-svg')?.remove();
   if(hintMove){
-    sqs[getIdx(hintMove.fr,hintMove.fc)]?.classList.add('hint-sq');
-    sqs[getIdx(hintMove.tr,hintMove.tc)]?.classList.add('hint-sq');
+    sqs[getIdx(hintMove.fr,hintMove.fc)]?.classList.add('hint-from');
+    sqs[getIdx(hintMove.tr,hintMove.tc)]?.classList.add('hint-to');
+    requestAnimationFrame(drawHintArrow);
   }
   // Selected
   if(selected!==null){
@@ -1482,20 +1487,61 @@ self.onmessage=function(e){const{gs,color,depth}=e.data;self.postMessage(getBest
 
 let _magnusWorkerURL=null;
 try{_magnusWorkerURL=URL.createObjectURL(new Blob([_MAGNUS_CODE],{type:'application/javascript'}));}catch(e){console.warn('Worker blob failed:',e.message);}
-let _hintWorker=null;
+let _hintWorker=null,_hintTimer=null;
+
+function drawHintArrow(){
+  const grid=document.getElementById('board-grid');if(!grid||!hintMove)return;
+  document.getElementById('hint-svg')?.remove();
+  const sz=grid.children[0]?.offsetWidth||40;
+  const fR=flipped?7-hintMove.fr:hintMove.fr,fC=flipped?7-hintMove.fc:hintMove.fc;
+  const tR=flipped?7-hintMove.tr:hintMove.tr,tC=flipped?7-hintMove.tc:hintMove.tc;
+  const x1=fC*sz+sz/2,y1=fR*sz+sz/2,x2=tC*sz+sz/2,y2=tR*sz+sz/2;
+  const len=Math.sqrt((x2-x1)**2+(y2-y1)**2)||1;
+  const ux=(x2-x1)/len,uy=(y2-y1)/len;
+  const ax1=x1+ux*sz*0.42,ay1=y1+uy*sz*0.42;
+  const ax2=x2-ux*sz*0.30,ay2=y2-uy*sz*0.30;
+  const W=sz*8;
+  const ns='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(ns,'svg');
+  svg.id='hint-svg';svg.setAttribute('width',W);svg.setAttribute('height',W);
+  svg.setAttribute('viewBox','0 0 '+W+' '+W);
+  svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:6;overflow:visible';
+  const defs=document.createElementNS(ns,'defs');
+  const mk=document.createElementNS(ns,'marker');
+  mk.setAttribute('id','harrow');mk.setAttribute('viewBox','0 0 10 10');
+  mk.setAttribute('refX','9');mk.setAttribute('refY','5');
+  mk.setAttribute('markerWidth','5');mk.setAttribute('markerHeight','5');
+  mk.setAttribute('orient','auto');
+  const mp=document.createElementNS(ns,'path');
+  mp.setAttribute('d','M0,0 L10,5 L0,10 Z');mp.setAttribute('fill','rgba(40,210,100,.95)');
+  mk.appendChild(mp);defs.appendChild(mk);svg.appendChild(defs);
+  const line=document.createElementNS(ns,'line');
+  line.setAttribute('x1',ax1);line.setAttribute('y1',ay1);
+  line.setAttribute('x2',ax2);line.setAttribute('y2',ay2);
+  line.setAttribute('stroke','rgba(40,210,100,.82)');
+  line.setAttribute('stroke-width',sz*0.19);
+  line.setAttribute('stroke-linecap','round');
+  line.setAttribute('marker-end','url(#harrow)');
+  svg.appendChild(line);
+  grid.appendChild(svg);
+}
 
 function showHint(){
   if(!gs||gs.gameOver)return;
   const c=gameMode==='online'?myColor:gs.turn;
   if(gs.turn!==c){toast('Bukan giliranmu!');return;}
-  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   const mv=getBestMove(gs,c,2);
   if(!mv){toast('Tidak ada langkah tersedia');return;}
   hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-  const F='ABCDEFGH',pn=PNAMES_ID[abs(gs.board[mv.fr][mv.fc])];
-  toast(`💡 ${pn} ${F[mv.fc]}${8-mv.fr} → ${F[mv.tc]}${8-mv.tr}`);
+  document.getElementById('btn-hint')?.classList.add('hint-active');
   renderBoard();
-  setTimeout(()=>{hintMove=null;renderBoard();},6000);
+  _hintTimer=setTimeout(()=>{
+    hintMove=null;_hintTimer=null;
+    document.getElementById('btn-hint')?.classList.remove('hint-active');
+    document.getElementById('hint-svg')?.remove();
+    renderBoard();
+  },6000);
 }
 
 // ═══════════════════════════════════════
