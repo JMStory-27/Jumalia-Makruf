@@ -286,6 +286,73 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 @keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 .anim-in{animation:slideUp .25s ease-out}
 @keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+
+/* ── INTRO OVERLAY ── */
+#intro-overlay{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#03020f 0%,#06040f 50%,#020208 100%);overflow:hidden;transition:opacity .8s ease}
+#intro-overlay.fade-out{opacity:0;pointer-events:none}
+.intro-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.intro-title-wrap{position:relative;z-index:2;text-align:center}
+.intro-crown{font-size:58px;display:block;animation:introCrown .8s .2s cubic-bezier(.22,1,.36,1) forwards;opacity:0;filter:drop-shadow(0 0 24px rgba(212,175,55,.8)) drop-shadow(0 0 60px rgba(212,175,55,.4));margin-bottom:6px}
+@keyframes introCrown{from{opacity:0;transform:scale(.3) translateY(-20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.intro-title{font-size:38px;font-weight:900;letter-spacing:5px;text-transform:uppercase;background:linear-gradient(90deg,#6b4f12,#d4af37 25%,#f5e6aa 50%,#d4af37 75%,#6b4f12);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:introTitleIn .7s .6s ease-out forwards,shimmerGold 4s 1.3s linear infinite;opacity:0}
+@keyframes introTitleIn{from{opacity:0;transform:translateY(16px) skewX(-3deg)}to{opacity:1;transform:translateY(0) skewX(0)}}
+@keyframes shimmerGold{0%{background-position:0% center}100%{background-position:300% center}}
+.intro-tagline{font-size:11px;letter-spacing:4px;color:rgba(212,175,55,.55);text-transform:uppercase;animation:introFade .8s 1.1s ease-out forwards;opacity:0;margin-top:4px}
+@keyframes introFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#intro-board-wrap{position:relative;animation:introBoardIn .7s 1.3s cubic-bezier(.22,1,.36,1) forwards;opacity:0;transform:scale(.82) translateY(20px)}
+@keyframes introBoardIn{to{opacity:1;transform:scale(1) translateY(0)}}
+#intro-board{display:grid;grid-template-columns:repeat(8,1fr);border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px rgba(212,175,55,.15),0 24px 80px rgba(0,0,0,.85)}
+#intro-board.board-lit{box-shadow:0 0 0 2px var(--gold),0 0 50px rgba(212,175,55,.4),0 24px 80px rgba(0,0,0,.85);transition:box-shadow .9s ease}
+.intro-sq{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.intro-sq.ilight{background:#f0d9b5}.intro-sq.idark{background:#b58863}
+.intro-sq.sq-flash{animation:sqFlash .25s ease-out}
+@keyframes sqFlash{0%{filter:brightness(2)}100%{filter:brightness(1)}}
+.intro-piece{width:88%;height:88%;pointer-events:none;animation:pieceDrop .45s cubic-bezier(.22,1,.36,1) both;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
+@keyframes pieceDrop{0%{opacity:0;transform:translateY(-50px) scale(.4) rotate(-8deg)}65%{transform:translateY(5px) scale(1.1) rotate(1deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+.intro-skip{z-index:3;font-size:12px;color:rgba(212,175,55,.45);letter-spacing:1.5px;cursor:pointer;border:1px solid rgba(212,175,55,.18);padding:8px 22px;border-radius:99px;transition:all .35s;animation:introFade .8s 2s forwards;opacity:0;user-select:none}
+.intro-skip:hover{color:var(--gold);border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.06)}
+.intro-progress{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,transparent,#d4af37,#f5e6aa);animation:introProgress 7s linear forwards;width:0}
+@keyframes introProgress{from{width:0}to{width:100%}}
+/* Intro scanning line */
+.intro-scan{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(212,175,55,.04) 50%,transparent 100%);animation:scanDown 3s ease-in-out infinite;pointer-events:none}
+@keyframes scanDown{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+
+/* ── CAPTURE FLY ANIMATION ── */
+.cap-fly-clone{position:fixed;pointer-events:none;z-index:9998;transform-origin:center;will-change:transform,opacity}
+@keyframes capFlyOff{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:var(--fly-end) rotate(var(--fly-rot)) scale(.2)}}
+.cap-burst-p{position:fixed;pointer-events:none;z-index:9997;border-radius:50%}
+@keyframes burstOut{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0)}}
+
+/* ── BOARD ENHANCEMENTS ── */
+.board-shadow-wrap{position:relative}
+.board-corner-deco{position:absolute;width:14px;height:14px;border-color:var(--gold);border-style:solid;opacity:.55;pointer-events:none;z-index:5}
+.bcd-tl{top:-2px;left:-2px;border-width:2px 0 0 2px;border-radius:3px 0 0 0}
+.bcd-tr{top:-2px;right:-2px;border-width:2px 2px 0 0;border-radius:0 3px 0 0}
+.bcd-bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px;border-radius:0 0 0 3px}
+.bcd-br{bottom:-2px;right:-2px;border-width:0 2px 2px 0;border-radius:0 0 3px 0}
+.board-scanlines{position:absolute;inset:0;pointer-events:none;z-index:4;border-radius:2px;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px)}
+/* Board glow pulse after move */
+@keyframes boardMovePulse{0%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 40px rgba(212,175,55,.18),inset 0 0 0 1px rgba(212,175,55,.12)}40%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 80px rgba(212,175,55,.55),inset 0 0 0 2px rgba(212,175,55,.4)}100%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 40px rgba(212,175,55,.18),inset 0 0 0 1px rgba(212,175,55,.12)}}
+.board-shadow-wrap.move-flash{animation:boardMovePulse .7s ease-out forwards}
+
+/* ── ENHANCED TITLE SHIMMER ── */
+.game-title{background-size:300% !important;animation:shimmerGold 5s linear infinite}
+/* ── HOLOGRAPHIC BUTTON ── */
+.btn-main.primary::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);background-size:200%;animation:btnHolo 2.5s ease infinite}
+@keyframes btnHolo{0%{background-position:200% center}100%{background-position:-200% center}}
+/* ── ENHANCED SCREEN TRANSITION ── */
+.screen.active{animation:screenIn .3s cubic-bezier(.22,1,.36,1)}
+@keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* ── NEON SELECTED SQUARE ── */
+.sq.sel{box-shadow:inset 0 0 0 3px var(--gold),inset 0 0 18px rgba(212,175,55,.4),0 0 12px rgba(212,175,55,.25)}
+/* ── PIECE MOVE TRAIL ── */
+.piece-trail{position:fixed;pointer-events:none;z-index:9996;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.5),transparent);animation:trailFade .5s ease-out forwards}
+@keyframes trailFade{to{opacity:0;transform:scale(2)}}
+/* ── LEVEL CARD HOVER GLOW ── */
+.lvl-card:hover{border-color:rgba(212,175,55,.6);transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 20px rgba(212,175,55,.12)}
+/* ── CAPTURE CAPFLY override ── */
+.piece-svg.captured{animation:capFly .25s ease-in forwards}
+@keyframes capFly{to{transform:scale(0) rotate(120deg);opacity:0}}
 </style>
 </head>
 <body>
@@ -310,6 +377,22 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <g id="bP"><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.2,0-4,1.8-4,4,0,1.7,1,3.1,2.5,3.7-2.8,1-4.5,3-4.5,5.3H29c0-2.3-1.7-4.3-4.5-5.3,1.5-.6,2.5-2,2.5-3.7,0-2.2-1.8-4-4.5-4z"/><path fill="#1a0800" stroke="#f0d9b5" stroke-width="1.5" d="M15.5,25v2h14v-2H15.5zM14,28v3h17v-3H14zM12,32v3h21v-3H12z"/></g>
 </defs>
 </svg>
+
+<!-- ══ INTRO OVERLAY ══ -->
+<div id="intro-overlay">
+  <div class="intro-particles" id="intro-ptl"></div>
+  <div class="intro-scan"></div>
+  <div class="intro-progress"></div>
+  <div class="intro-title-wrap">
+    <span class="intro-crown">♛</span>
+    <div class="intro-title">Chess Royal</div>
+    <div class="intro-tagline">Game Catur Master Sejati</div>
+  </div>
+  <div id="intro-board-wrap">
+    <div id="intro-board"></div>
+  </div>
+  <div class="intro-skip" onclick="skipIntro()">⏭ Lewati</div>
+</div>
 
 <!-- ══ HOME SCREEN ══ -->
 <div id="s-home" class="screen">
@@ -570,7 +653,12 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 
   <!-- Board -->
   <div class="board-outer">
-    <div class="board-shadow-wrap">
+    <div class="board-shadow-wrap" id="board-shadow-wrap">
+      <div class="board-corner-deco bcd-tl"></div>
+      <div class="board-corner-deco bcd-tr"></div>
+      <div class="board-corner-deco bcd-bl"></div>
+      <div class="board-corner-deco bcd-br"></div>
+      <div class="board-scanlines"></div>
       <div class="board-coords-wrap">
         <div id="board-ranks" class="board-ranks"></div>
         <div style="display:flex;flex-direction:column">
@@ -926,10 +1014,14 @@ function getBestMove(s,c,depth){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>{
     s.classList.remove('active');
-    s.style.display='none'; // Override any inline display:flex
+    s.style.display='none';
   });
   const el=document.getElementById('s-'+id);
-  if(el){el.classList.add('active');el.style.display='flex';}
+  if(el){
+    el.style.display='flex';
+    void el.offsetWidth;
+    el.classList.add('active');
+  }
 }
 function backHome(){cancelRoom();stopMusic();showScreen('home')}
 function showSettings(){buildThemeStrip();updateSettingsUI();showScreen('settings')}
@@ -1037,6 +1129,7 @@ function initBoardDOM(){
     const sq=document.createElement('div');
     sq.className='sq '+((r+c)%2===0?'light':'dark');
     sq.dataset.r=r;sq.dataset.c=c;
+    sq.dataset.sq=`${r}-${c}`;
     sq.style.cssText=`width:${sqSize}px;height:${sqSize}px`;
     sq.addEventListener('click',()=>onSquareClick(+sq.dataset.r,+sq.dataset.c));
     grid.appendChild(sq);
@@ -1192,9 +1285,14 @@ function executeMove(mv){
   gameSnapshots.push({state:prevGS,move:mv});
   moveHistory.push(gs);
   const cap=gs.board[mv.tr][mv.tc]||mv.ep;
+  // Spawn capture fly animation BEFORE applying move
+  if(cap)spawnCapFly(mv,gs.board);
   gs=applyMove(gs,mv);
   lastMove=mv;selected=null;legalFromSel=[];
   playSound(cap?'capture':mv.castle?'castle':'move');
+  // Board glow on move
+  const bsw=document.getElementById('board-shadow-wrap');
+  if(bsw){bsw.classList.remove('move-flash');void bsw.offsetWidth;bsw.classList.add('move-flash');}
   if(cfg.narasi)narrateMove(prevGS,mv);
   if(gameMode==='bot'&&cfg.comment){
     const loss=Math.abs(evaluate(prevGS)-evaluate(gs));
@@ -1791,6 +1889,167 @@ function toast(msg){
 }
 
 // ═══════════════════════════════════════
+// INTRO ANIMATION
+// ═══════════════════════════════════════
+const INTRO_BOARD_LAYOUT=[
+  [-4,-2,-3,-5,-6,-3,-2,-4],
+  [-1,-1,-1,-1,-1,-1,-1,-1],
+  [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+  [1,1,1,1,1,1,1,1],
+  [4,2,3,5,6,3,2,4]
+];
+const INTRO_PIECE_IDS={1:'wP',2:'wN',3:'wB',4:'wR',5:'wQ',6:'wK'};
+let _introTimer=null;
+
+function playIntro(){
+  const overlay=document.getElementById('intro-overlay');
+  const board=document.getElementById('intro-board');
+  if(!overlay||!board)return;
+  // Build board squares
+  board.innerHTML='';
+  const sqPx=Math.floor(Math.min(window.innerWidth*.88,300)/8);
+  board.style.cssText=`width:${sqPx*8}px;height:${sqPx*8}px`;
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const sq=document.createElement('div');
+    sq.className='intro-sq '+((r+c)%2===0?'ilight':'idark');
+    sq.style.cssText=`width:${sqPx}px;height:${sqPx}px`;
+    sq.id=`isq-${r}-${c}`;
+    board.appendChild(sq);
+  }
+  // Intro particles
+  const ptl=document.getElementById('intro-ptl');
+  if(ptl){ptl.innerHTML='';
+    for(let i=0;i<60;i++){
+      const el=document.createElement('div');
+      const gold=Math.random()>.65;
+      const sz=.5+Math.random()*2.5;
+      el.style.cssText=`position:absolute;border-radius:50%;width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${gold?'rgba(212,175,55,.7)':'rgba(255,255,255,.55)'};animation:twinkle ${2+Math.random()*5}s ease-in-out infinite alternate;animation-delay:${Math.random()*4}s;opacity:${.2+Math.random()*.8}`;
+      ptl.appendChild(el);
+    }
+    // Gold dust rising
+    for(let i=0;i<15;i++){
+      const el=document.createElement('div');
+      const sz=2+Math.random()*4;
+      el.style.cssText=`position:absolute;border-radius:50%;width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${60+Math.random()*40}%;background:rgba(212,175,55,.6);animation:drift ${7+Math.random()*8}s ease-in-out infinite;animation-delay:${Math.random()*5}s;opacity:0;--dur2:${7+Math.random()*8}s;--vy:${-80-Math.random()*120}px;--vx:${-20+Math.random()*40}px`;
+      ptl.appendChild(el);
+    }
+  }
+  // Collect and order pieces: black first, white last
+  const blacks=[],whites=[];
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const p=INTRO_BOARD_LAYOUT[r][c];
+    if(p<0)blacks.push({r,c,p});
+    else if(p>0)whites.push({r,c,p});
+  }
+  // Shuffle within groups
+  const shuffle=arr=>{for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;};
+  const ordered=[...shuffle(blacks),...shuffle(whites)];
+  const totalDropTime=4200;
+  const gap=totalDropTime/ordered.length;
+  const startAt=1600; // after board slides in
+  ordered.forEach((item,i)=>{
+    setTimeout(()=>{
+      const sq=document.getElementById(`isq-${item.r}-${item.c}`);
+      if(!sq||sq.querySelector('svg'))return;
+      const ap=Math.abs(item.p);
+      const color=item.p>0?'w':'b';
+      const pid=color+['','P','N','B','R','Q','K'][ap];
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('viewBox','0 0 45 45');
+      svg.className='intro-piece';
+      svg.style.animationDelay='0s';
+      svg.style.width='88%';svg.style.height='88%';
+      const use=document.createElementNS('http://www.w3.org/2000/svg','use');
+      use.setAttribute('href','#'+pid);
+      svg.appendChild(use);sq.appendChild(svg);
+      sq.classList.add('sq-flash');
+      setTimeout(()=>sq.classList.remove('sq-flash'),260);
+    },startAt+i*gap);
+  });
+  // Board glow after all placed
+  const allDone=startAt+ordered.length*gap;
+  setTimeout(()=>board.classList.add('board-lit'),allDone+300);
+  // Auto end
+  _introTimer=setTimeout(()=>endIntro(),7000);
+}
+
+function endIntro(){
+  clearTimeout(_introTimer);
+  const overlay=document.getElementById('intro-overlay');
+  if(!overlay)return;
+  overlay.classList.add('fade-out');
+  setTimeout(()=>{overlay.style.display='none';},850);
+}
+function skipIntro(){endIntro();}
+
+// ═══════════════════════════════════════
+// CAPTURE FLY ANIMATION
+// ═══════════════════════════════════════
+function spawnCapFly(mv,board){
+  try{
+    const grid=document.getElementById('board-grid');if(!grid)return;
+    // Get screen square for capture target
+    const getIdx=(r,c)=>flipped?(7-r)*8+(7-c):r*8+c;
+    const tIdx=getIdx(mv.tr,mv.tc);
+    const sIdx=getIdx(mv.fr,mv.fc);
+    const sqs=grid.querySelectorAll('.sq');
+    const tSq=sqs[tIdx];const sSq=sqs[sIdx];
+    if(!tSq)return;
+    const tRect=tSq.getBoundingClientRect();
+    const cx=tRect.left+tRect.width/2;
+    const cy=tRect.top+tRect.height/2;
+    // Determine fly direction
+    let dx=0,dy=0;
+    if(sSq){
+      const sRect=sSq.getBoundingClientRect();
+      const rawDx=tRect.left-sRect.left;
+      const rawDy=tRect.top-sRect.top;
+      const len=Math.sqrt(rawDx*rawDx+rawDy*rawDy)||1;
+      const strength=180+Math.random()*80;
+      dx=(rawDx/len)*strength;
+      dy=(rawDy/len)*strength+(Math.random()<.5?-60:40);
+    }else{
+      const ang=Math.random()*Math.PI*2;
+      dx=Math.cos(ang)*180;dy=Math.sin(ang)*180-80;
+    }
+    // Get captured piece type
+    const cap=board[mv.tr][mv.tc];
+    if(!cap)return;
+    const color=cap>0?'w':'b';
+    const pid=color+''+['P','N','B','R','Q','K'][Math.abs(cap)-1];
+    // Create flying clone
+    const clone=document.createElement('div');
+    clone.className='cap-fly-clone';
+    const sz=tRect.width*.88;
+    const rot=-180+Math.random()*360;
+    clone.style.cssText=`left:${tRect.left+(tRect.width-sz)/2}px;top:${tRect.top+(tRect.height-sz)/2}px;width:${sz}px;height:${sz}px;--fly-end:translate(${dx}px,${dy}px);--fly-rot:${rot}deg`;
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 45 45');
+    svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))';
+    const use=document.createElementNS('http://www.w3.org/2000/svg','use');
+    use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
+    document.body.appendChild(clone);
+    clone.style.animation='capFlyOff .65s cubic-bezier(.22,1,.36,1) forwards';
+    setTimeout(()=>clone.remove(),700);
+    // Particle burst
+    const colors=['#d4af37','#f5e6aa','#fff','rgba(212,175,55,.8)'];
+    for(let i=0;i<10;i++){
+      const p=document.createElement('div');
+      p.className='cap-burst-p';
+      const ang=(i/10)*Math.PI*2+Math.random()*.5;
+      const dist=30+Math.random()*70;
+      const bx=Math.cos(ang)*dist;const by=Math.sin(ang)*dist;
+      const psz=2+Math.random()*5;
+      const col=colors[Math.floor(Math.random()*colors.length)];
+      p.style.cssText=`left:${cx-psz/2}px;top:${cy-psz/2}px;width:${psz}px;height:${psz}px;background:${col};--bx:${bx}px;--by:${by}px;animation:burstOut .55s ease-out forwards;animation-delay:${Math.random()*.08}s`;
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),700);
+    }
+  }catch(e){/* ignore */}
+}
+
+// ═══════════════════════════════════════
 // PARTICLES
 // ═══════════════════════════════════════
 function initParticles(){
@@ -1823,12 +2082,19 @@ function buildHomePreview(){
 // ═══════════════════════════════════════
 window.addEventListener('DOMContentLoaded',()=>{
   buildHomePreview();updateSettingsUI();applyBoardTheme();checkNightMode();initParticles();
-  showScreen('home'); // Ensure home screen is properly shown
+  // Show intro then home
+  const params=new URLSearchParams(location.search);
+  if(params.get('demo')){
+    showScreen('home');
+    startVsBot(2);
+  } else {
+    showScreen('home');
+    playIntro();
+  }
   setInterval(checkNightMode,60000);
   document.getElementById('btn-emoji-game').style.display='none';
   document.getElementById('btn-voice').style.display='none';
   if(window.speechSynthesis){speechSynthesis.getVoices();speechSynthesis.addEventListener('voiceschanged',()=>speechSynthesis.getVoices());}
-  if(new URLSearchParams(location.search).get('demo'))startVsBot(2);
 });
 window.addEventListener('resize',()=>{
   if(gs&&document.getElementById('s-game').style.display!=='none')initBoardDOM(),renderBoard();
