@@ -143,12 +143,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .match-card.opp-card .match-avatar-lg{border-color:rgba(100,180,255,.5)}
 .match-pname{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .match-country{font-size:12px;color:var(--txt2)}
-.match-rating{font-size:11px;color:var(--gold);font-weight:700;margin-top:1px;letter-spacing:.3px}
-.match-level-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;margin-top:3px;border:1px solid rgba(255,255,255,.15);color:var(--txt2)}
-.match-level-badge.easy{border-color:rgba(74,222,128,.4);color:#4ade80;background:rgba(74,222,128,.1)}
-.match-level-badge.mid{border-color:rgba(251,191,36,.4);color:#fbbf24;background:rgba(251,191,36,.08)}
-.match-level-badge.hard{border-color:rgba(248,113,113,.4);color:#f87171;background:rgba(248,113,113,.08)}
-.match-level-badge.god{border-color:rgba(167,139,250,.6);color:#a78bfa;background:rgba(167,139,250,.12)}
 .match-vs{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
 .match-vs-text{font-size:22px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(212,175,55,.5);animation:vsGlow 1.5s ease-in-out infinite}
 @keyframes vsGlow{0%,100%{text-shadow:0 0 10px rgba(212,175,55,.4)}50%{text-shadow:0 0 30px rgba(212,175,55,.8)}}
@@ -157,8 +151,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .match-bar-wrap{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:20px}
 .match-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-d),var(--gold),var(--gold-d));transition:width .4s ease;animation:barShimmer 1.5s linear infinite;background-size:200% 100%}
 @keyframes barShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.match-card .opp-shuffle{display:inline-block;animation:shuffleFlip .25s ease-in-out}
-@keyframes shuffleFlip{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
+.match-card .opp-shuffle{display:inline-block;animation:shuffleFlip .2s ease-out}
+@keyframes shuffleFlip{0%{opacity:0;transform:translateY(-10px) scale(.9)}60%{opacity:1;transform:translateY(2px) scale(1.02)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.match-avatar-lg span.av-flip{animation:avatarFlip .18s ease-in-out}
+@keyframes avatarFlip{0%{opacity:0;transform:scale(0.5) rotate(-15deg)}60%{transform:scale(1.15) rotate(5deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
+.match-card.found{animation:foundPulse .6s ease-out;border-color:var(--gold)!important;box-shadow:0 0 30px rgba(212,175,55,.5)!important}
+@keyframes foundPulse{0%{transform:scale(1)}30%{transform:scale(1.06)}60%{transform:scale(.97)}100%{transform:scale(1)}}
+.match-found-badge{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;opacity:0;animation:fadeInUp .4s .3s forwards}
+@keyframes fadeInUp{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
+.match-timer{font-size:26px;font-weight:900;color:var(--gold);text-shadow:0 0 16px rgba(212,175,55,.6);line-height:1;margin-top:2px}
+.match-country-row{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--txt2);justify-content:center;flex-wrap:nowrap}
+.match-country-name{font-size:10px;color:var(--txt2);max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .set-desc{font-size:11px;color:var(--txt2)}
 .toggle-row{display:flex;gap:6px}
 .tgl{padding:7px 14px;border-radius:8px;border:1px solid var(--card-b);background:transparent;color:var(--txt2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
@@ -519,7 +522,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ PARTICLES ══ -->
 <div id="ptl"></div>
 
-<!-- ══ SVG PIECE DEFS — CLASSIC STAUNTON v3 ══ -->
+<!-- ══ SVG PIECE DEFS — OUTLINE STYLE ══ -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <filter id="pshadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -528,156 +531,141 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 
 <!-- ═══ WHITE PIECES ═══ -->
 
-<!-- WHITE PAWN -->
-<g id="wP">
-  <ellipse cx="50" cy="84" rx="21" ry="5" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M38,80 L40,70 Q41,60 50,58 Q59,60 60,70 L62,80 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <ellipse cx="50" cy="60" rx="10" ry="5.5" fill="white" stroke="#222" stroke-width="2"/>
-  <circle cx="50" cy="45" r="15" fill="white" stroke="#222" stroke-width="2.2"/>
-</g>
-
-<!-- WHITE ROOK -->
-<g id="wR">
-  <ellipse cx="50" cy="84" rx="22" ry="5" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M30,80 L34,56 L66,56 L70,80 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <rect x="30" y="40" width="40" height="17" fill="white" stroke="#222" stroke-width="2.2"/>
-  <rect x="30" y="38" width="11" height="18" rx="1" fill="white" stroke="#222" stroke-width="2"/>
-  <rect x="45" y="38" width="10" height="18" rx="1" fill="white" stroke="#222" stroke-width="2"/>
-  <rect x="59" y="38" width="11" height="18" rx="1" fill="white" stroke="#222" stroke-width="2"/>
-  <rect x="41" y="43" width="4" height="13" fill="#e8e8e8"/>
-  <rect x="55" y="43" width="4" height="13" fill="#e8e8e8"/>
-  <line x1="42" y1="56" x2="42" y2="80" stroke="#ccc" stroke-width="1.2"/>
-  <line x1="58" y1="56" x2="58" y2="80" stroke="#ccc" stroke-width="1.2"/>
-</g>
-
-<!-- WHITE KNIGHT -->
-<g id="wN">
-  <ellipse cx="50" cy="84" rx="22" ry="5" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M34,80 L36,70 Q36,60 40,55 L46,80 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M40,56 Q35,48 36,38 Q37,27 46,21 Q55,17 63,22 Q70,28 68,40 Q66,50 60,56 Q54,62 45,62 Q41,62 39,59 Z" fill="white" stroke="#222" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M46,21 Q42,14 37,17 Q34,22 37,30 Q41,33 46,30" fill="white" stroke="#222" stroke-width="2"/>
-  <path d="M63,22 Q67,14 63,10 Q58,8 53,13 Q57,10 61,16" fill="white" stroke="#222" stroke-width="1.8"/>
-  <circle cx="58" cy="32" r="3.5" fill="#222"/>
-  <circle cx="58" cy="32" r="1.5" fill="white"/>
-  <circle cx="39" cy="25" r="2.5" fill="#ddd" stroke="#999" stroke-width="1"/>
-  <path d="M50,20 Q52,16 56,18" stroke="#999" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-</g>
-
-<!-- WHITE BISHOP -->
-<g id="wB">
-  <ellipse cx="50" cy="84" rx="21" ry="5" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M33,80 L37,63 L63,63 L67,80 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <ellipse cx="50" cy="62" rx="15" ry="5" fill="white" stroke="#222" stroke-width="2"/>
-  <path d="M38,62 Q40,50 44,42 Q48,35 50,30 Q52,35 56,42 Q60,50 62,62 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <circle cx="50" cy="23" r="9" fill="white" stroke="#222" stroke-width="2.2"/>
-  <circle cx="50" cy="23" r="2.5" fill="#222"/>
-  <line x1="44" y1="58" x2="57" y2="44" stroke="#bbb" stroke-width="1.8" stroke-linecap="round"/>
+<!-- WHITE KING -->
+<g id="wK">
+  <path d="M 20 85 Q 20 85 50 85 Q 80 85 80 85 L 75 75 L 25 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 75 L 35 50 L 65 50 L 68 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="48" rx="12" ry="9" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="35" rx="16" ry="14" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="48" y="18" width="4" height="20" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="42" y="24" width="16" height="4" fill="white" stroke="black" stroke-width="1.5"/>
 </g>
 
 <!-- WHITE QUEEN -->
 <g id="wQ">
-  <ellipse cx="50" cy="84" rx="24" ry="5" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M27,80 L31,57 L69,57 L73,80 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <ellipse cx="50" cy="56" rx="20" ry="5" fill="white" stroke="#222" stroke-width="2"/>
-  <path d="M32,56 Q35,44 50,40 Q65,44 68,56 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <line x1="50" y1="42" x2="50" y2="16" stroke="#222" stroke-width="2.2"/>
-  <line x1="41" y1="47" x2="31" y2="18" stroke="#222" stroke-width="2.2"/>
-  <line x1="59" y1="47" x2="69" y2="18" stroke="#222" stroke-width="2.2"/>
-  <line x1="35" y1="52" x2="21" y2="30" stroke="#222" stroke-width="2.2"/>
-  <line x1="65" y1="52" x2="79" y2="30" stroke="#222" stroke-width="2.2"/>
-  <circle cx="50" cy="13" r="5.5" fill="white" stroke="#222" stroke-width="2"/>
-  <circle cx="29" cy="16" r="5.5" fill="white" stroke="#222" stroke-width="2"/>
-  <circle cx="71" cy="16" r="5.5" fill="white" stroke="#222" stroke-width="2"/>
-  <circle cx="19" cy="28" r="5.5" fill="white" stroke="#222" stroke-width="2"/>
-  <circle cx="81" cy="28" r="5.5" fill="white" stroke="#222" stroke-width="2"/>
+  <path d="M 20 85 Q 50 85 80 85 L 75 75 L 25 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 30 75 L 34 52 L 66 52 L 70 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="50" rx="13" ry="10" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="34" rx="17" ry="15" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <polygon points="50,15 47,28 50,22 53,28" fill="white" stroke="black" stroke-width="1.5"/>
+  <polygon points="37,24 33,18 37,30" fill="white" stroke="black" stroke-width="1.5"/>
+  <polygon points="63,24 67,18 63,30" fill="white" stroke="black" stroke-width="1.5"/>
+  <circle cx="50" cy="15" r="2.5" fill="black"/>
+  <circle cx="37" cy="18" r="2" fill="black"/>
+  <circle cx="63" cy="18" r="2" fill="black"/>
 </g>
 
-<!-- WHITE KING -->
-<g id="wK">
-  <ellipse cx="50" cy="84" rx="24" ry="5" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M27,80 L31,57 L69,57 L73,80 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <ellipse cx="50" cy="56" rx="20" ry="5" fill="white" stroke="#222" stroke-width="2"/>
-  <path d="M32,56 Q35,44 50,40 Q65,44 68,56 Z" fill="white" stroke="#222" stroke-width="2.2"/>
-  <path d="M36,43 L40,30 L50,40 L60,30 L64,43 Z" fill="white" stroke="#222" stroke-width="2.2" stroke-linejoin="round"/>
-  <rect x="47" y="14" width="6" height="20" rx="1" fill="white" stroke="#222" stroke-width="2"/>
-  <rect x="40" y="20" width="20" height="6" rx="1" fill="white" stroke="#222" stroke-width="2"/>
+<!-- WHITE ROOK -->
+<g id="wR">
+  <path d="M 22 85 Q 50 85 78 85 L 73 74 L 27 74 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 74 L 32 55 L 68 55 L 68 74 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="32" y="35" width="10" height="20" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="42" y="30" width="8" height="25" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="50" y="30" width="8" height="25" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="58" y="35" width="10" height="20" fill="white" stroke="black" stroke-width="1.5"/>
+  <line x1="40" y1="55" x2="40" y2="74" stroke="black" stroke-width="1" opacity="0.4"/>
+  <line x1="60" y1="55" x2="60" y2="74" stroke="black" stroke-width="1" opacity="0.4"/>
+</g>
+
+<!-- WHITE BISHOP -->
+<g id="wB">
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 34 76 L 37 55 L 63 55 L 66 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 38 55 Q 50 38 62 55" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 48 38 L 50 20 L 52 38 Z" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="52" rx="13" ry="6" fill="none" stroke="black" stroke-width="1" opacity="0.5"/>
+</g>
+
+<!-- WHITE KNIGHT -->
+<g id="wN">
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 76 Q 34 66 35 55 Q 36 50 42 48 L 42 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 42 48 Q 47 42 52 38 Q 58 36 62 42 Q 64 52 62 62 Q 59 70 50 74 Q 44 76 42 73" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 62 42 Q 72 38 80 42 Q 82 46 80 54 Q 77 60 68 62 Q 62 60 62 52" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 50 38 Q 46 28 48 18 Q 52 20 52 38" fill="white" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 56 36 Q 60 26 64 16 Q 62 22 60 38" fill="white" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="64" cy="48" r="2.5" fill="black"/>
+  <circle cx="72" cy="52" r="1.5" fill="black" opacity="0.7"/>
+  <path d="M 51 36 Q 53 30 55 36" stroke="black" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.5"/>
+</g>
+
+<!-- WHITE PAWN -->
+<g id="wP">
+  <path d="M 26 85 Q 50 85 74 85 L 71 78 L 29 78 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 78 L 39 60 L 61 60 L 64 78 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="58" rx="11" ry="8" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="42" r="13" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="28" r="2.5" fill="black"/>
 </g>
 
 <!-- ═══ BLACK PIECES ═══ -->
 
-<!-- BLACK PAWN -->
-<g id="bP">
-  <ellipse cx="50" cy="84" rx="21" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M38,80 L40,70 Q41,60 50,58 Q59,60 60,70 L62,80 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <ellipse cx="50" cy="60" rx="10" ry="5.5" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <circle cx="50" cy="45" r="15" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-</g>
-
-<!-- BLACK ROOK -->
-<g id="bR">
-  <ellipse cx="50" cy="84" rx="22" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M30,80 L34,56 L66,56 L70,80 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <rect x="30" y="40" width="40" height="17" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <rect x="30" y="38" width="11" height="18" rx="1" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <rect x="45" y="38" width="10" height="18" rx="1" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <rect x="59" y="38" width="11" height="18" rx="1" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <rect x="41" y="43" width="4" height="13" fill="#2a2a2a"/>
-  <rect x="55" y="43" width="4" height="13" fill="#2a2a2a"/>
-  <line x1="42" y1="56" x2="42" y2="80" stroke="#555" stroke-width="1.2"/>
-  <line x1="58" y1="56" x2="58" y2="80" stroke="#555" stroke-width="1.2"/>
-</g>
-
-<!-- BLACK KNIGHT -->
-<g id="bN">
-  <ellipse cx="50" cy="84" rx="22" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M34,80 L36,70 Q36,60 40,55 L46,80 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M40,56 Q35,48 36,38 Q37,27 46,21 Q55,17 63,22 Q70,28 68,40 Q66,50 60,56 Q54,62 45,62 Q41,62 39,59 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8" stroke-linejoin="round"/>
-  <path d="M46,21 Q42,14 37,17 Q34,22 37,30 Q41,33 46,30" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <path d="M63,22 Q67,14 63,10 Q58,8 53,13 Q57,10 61,16" fill="#1c1c1c" stroke="#777" stroke-width="1.5"/>
-  <circle cx="58" cy="32" r="3.5" fill="white" stroke="#555" stroke-width="0.5"/>
-  <circle cx="58" cy="32" r="1.5" fill="#1c1c1c"/>
-  <circle cx="39" cy="25" r="2.5" fill="#444" stroke="#666" stroke-width="0.8"/>
-  <path d="M50,20 Q52,16 56,18" stroke="#666" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-</g>
-
-<!-- BLACK BISHOP -->
-<g id="bB">
-  <ellipse cx="50" cy="84" rx="21" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M33,80 L37,63 L63,63 L67,80 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <ellipse cx="50" cy="62" rx="15" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <path d="M38,62 Q40,50 44,42 Q48,35 50,30 Q52,35 56,42 Q60,50 62,62 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <circle cx="50" cy="23" r="9" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <circle cx="50" cy="23" r="2.5" fill="#aaa"/>
-  <line x1="44" y1="58" x2="57" y2="44" stroke="#666" stroke-width="1.8" stroke-linecap="round"/>
+<!-- BLACK KING -->
+<g id="bK">
+  <path d="M 20 85 Q 20 85 50 85 Q 80 85 80 85 L 75 75 L 25 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 75 L 35 50 L 65 50 L 68 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="48" rx="12" ry="9" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="35" rx="16" ry="14" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="48" y="18" width="4" height="20" fill="black" stroke="white" stroke-width="1.5"/>
+  <rect x="42" y="24" width="16" height="4" fill="black" stroke="white" stroke-width="1.5"/>
+  <rect x="48" y="18" width="4" height="20" fill="white" opacity="0.35"/>
+  <rect x="42" y="24" width="16" height="4" fill="white" opacity="0.35"/>
 </g>
 
 <!-- BLACK QUEEN -->
 <g id="bQ">
-  <ellipse cx="50" cy="84" rx="24" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M27,80 L31,57 L69,57 L73,80 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <ellipse cx="50" cy="56" rx="20" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <path d="M32,56 Q35,44 50,40 Q65,44 68,56 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <line x1="50" y1="42" x2="50" y2="16" stroke="#777" stroke-width="1.8"/>
-  <line x1="41" y1="47" x2="31" y2="18" stroke="#777" stroke-width="1.8"/>
-  <line x1="59" y1="47" x2="69" y2="18" stroke="#777" stroke-width="1.8"/>
-  <line x1="35" y1="52" x2="21" y2="30" stroke="#777" stroke-width="1.8"/>
-  <line x1="65" y1="52" x2="79" y2="30" stroke="#777" stroke-width="1.8"/>
-  <circle cx="50" cy="13" r="5.5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <circle cx="29" cy="16" r="5.5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <circle cx="71" cy="16" r="5.5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <circle cx="19" cy="28" r="5.5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <circle cx="81" cy="28" r="5.5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
+  <path d="M 20 85 Q 50 85 80 85 L 75 75 L 25 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 30 75 L 34 52 L 66 52 L 70 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="50" rx="13" ry="10" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="34" rx="17" ry="15" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <polygon points="50,15 47,28 50,22 53,28" fill="black" stroke="white" stroke-width="1.5"/>
+  <polygon points="37,24 33,18 37,30" fill="black" stroke="white" stroke-width="1.5"/>
+  <polygon points="63,24 67,18 63,30" fill="black" stroke="white" stroke-width="1.5"/>
+  <circle cx="50" cy="15" r="2.5" fill="white"/>
+  <circle cx="37" cy="18" r="2" fill="white"/>
+  <circle cx="63" cy="18" r="2" fill="white"/>
 </g>
 
-<!-- BLACK KING -->
-<g id="bK">
-  <ellipse cx="50" cy="84" rx="24" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M27,80 L31,57 L69,57 L73,80 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <ellipse cx="50" cy="56" rx="20" ry="5" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <path d="M32,56 Q35,44 50,40 Q65,44 68,56 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8"/>
-  <path d="M36,43 L40,30 L50,40 L60,30 L64,43 Z" fill="#1c1c1c" stroke="#777" stroke-width="1.8" stroke-linejoin="round"/>
-  <rect x="47" y="14" width="6" height="20" rx="1" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
-  <rect x="40" y="20" width="20" height="6" rx="1" fill="#1c1c1c" stroke="#777" stroke-width="1.6"/>
+<!-- BLACK ROOK -->
+<g id="bR">
+  <path d="M 22 85 Q 50 85 78 85 L 73 74 L 27 74 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 74 L 32 55 L 68 55 L 68 74 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="32" y="35" width="10" height="20" fill="black" stroke="black" stroke-width="1.5"/>
+  <rect x="42" y="30" width="8" height="25" fill="black" stroke="black" stroke-width="1.5"/>
+  <rect x="50" y="30" width="8" height="25" fill="black" stroke="black" stroke-width="1.5"/>
+  <rect x="58" y="35" width="10" height="20" fill="black" stroke="black" stroke-width="1.5"/>
+  <line x1="40" y1="55" x2="40" y2="74" stroke="white" stroke-width="1" opacity="0.3"/>
+  <line x1="60" y1="55" x2="60" y2="74" stroke="white" stroke-width="1" opacity="0.3"/>
+</g>
+
+<!-- BLACK BISHOP -->
+<g id="bB">
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 34 76 L 37 55 L 63 55 L 66 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 38 55 Q 50 38 62 55" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 48 38 L 50 20 L 52 38 Z" fill="black" stroke="black" stroke-width="1.5" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="52" rx="13" ry="6" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+</g>
+
+<!-- BLACK KNIGHT -->
+<g id="bN">
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 76 Q 34 66 35 55 Q 36 50 42 48 L 42 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 42 48 Q 47 42 52 38 Q 58 36 62 42 Q 64 52 62 62 Q 59 70 50 74 Q 44 76 42 73" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 62 42 Q 72 38 80 42 Q 82 46 80 54 Q 77 60 68 62 Q 62 60 62 52" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 50 38 Q 46 28 48 18 Q 52 20 52 38" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path d="M 56 36 Q 60 26 64 16 Q 62 22 60 38" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <circle cx="64" cy="48" r="2.5" fill="white"/>
+  <circle cx="72" cy="52" r="1.5" fill="white" opacity="0.7"/>
+</g>
+
+<!-- BLACK PAWN -->
+<g id="bP">
+  <path d="M 26 85 Q 50 85 74 85 L 71 78 L 29 78 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 78 L 39 60 L 61 60 L 64 78 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="58" rx="11" ry="8" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="42" r="13" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="28" r="2.5" fill="white"/>
 </g>
 
 </defs>
@@ -835,30 +823,33 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ MATCHMAKING SCREEN ══ -->
 <div id="s-match" class="screen">
   <div class="match-inner">
-    <div class="match-title">🔍 Mencari Lawan</div>
+    <div class="match-title">🎮 Mencari Lawan</div>
     <div class="match-online-badge">🟢 <span id="match-online-count">12,847</span> pemain online</div>
     <div class="match-cards-row">
       <div class="match-card me-card">
         <div class="match-avatar-lg" id="match-my-av"><span id="match-my-av-inner">♟</span></div>
         <div class="match-pname" id="match-my-name">Kamu</div>
-        <div class="match-country" id="match-my-country">🇮🇩</div>
-        <div class="match-rating" id="match-my-rating">★ 1200</div>
+        <div class="match-country-row">
+          <span id="match-my-country">🇮🇩</span>
+          <span class="match-country-name" id="match-my-country-name">Indonesia</span>
+        </div>
       </div>
       <div class="match-vs">
         <div class="match-vs-text">VS</div>
         <div class="match-timer" id="match-timer-lbl">10</div>
       </div>
       <div class="match-card opp-card">
-        <div class="match-avatar-lg" id="match-opp-av-wrap"><span id="match-opp-av">❓</span></div>
-        <div class="match-pname opp-shuffle" id="match-opp-name">Mencari...</div>
-        <div class="match-country" id="match-opp-country">🌐</div>
-        <div class="match-rating" id="match-opp-rating" style="color:var(--txt2)">★ ---</div>
-        <div class="match-level-badge" id="match-opp-level" style="display:none">???</div>
+        <div class="match-avatar-lg"><span id="match-opp-av">❓</span></div>
+        <div class="match-pname" id="match-opp-name">Mencari...</div>
+        <div class="match-country-row">
+          <span id="match-opp-country">🌐</span>
+          <span class="match-country-name" id="match-opp-country-name">...</span>
+        </div>
       </div>
     </div>
-    <div class="match-status" id="match-status">Menganalisa pemain di sekitarmu...</div>
+    <div class="match-status" id="match-status">🔍 Scanning pemain di sekitarmu...</div>
     <div class="match-bar-wrap"><div class="match-bar-fill" id="match-bar" style="width:0%"></div></div>
-    <button class="ov-btn" style="max-width:200px" onclick="cancelMatchmaking()">❌ Batalkan</button>
+    <button class="ov-btn" style="max-width:200px;margin-top:4px" onclick="cancelMatchmaking()">❌ Batalkan</button>
   </div>
 </div>
 
@@ -1247,17 +1238,23 @@ function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
 // PROFILE SYSTEM
 // ═══════════════════════════════════════
 const PROFILE_AVATARS=[
-  '♟','👑','🐯','🦁','🐉','🔥','⚡','🌙','💀','🎯','🚀','🦅','⚔️','🎸','🌟',
-  '🧠','😎','🦊','🐺','🦈','🎭','💎','🏆','⚡','🌊','🦋','🎪','🥷','🤖','👻',
-  '🌈','🍀','🦉','🦚','🦜','🎲','🃏','🎮','👾','🏹','🗡️','🛡️','🔮','💫','🌸',
-  '🦄','🐸','🤡','🎯','💥','🌺','🍁','🌙','☀️','🌟','⭐','🌴','🦝','🦔','🐧',
+  '♟','👑','🐯','🦁','🐉','🔥','⚡','🌙','💀','🎯',
+  '🚀','🦅','⚔️','🎸','🌟','🦊','🐺','🐼','🦋','🌸',
+  '🍀','🎭','🧊','🌊','🌈','💎','🔮','🎪','🦄','🐸',
+  '🎲','🧲','🕶️','🪄','🌺','🦋','🐝','🍄','🌙','🎯',
+  '👾','🤖','👹','👺','🦸','🧙','🐲','🏴‍☠️','🃏','🎖️',
 ];
 const COUNTRIES=[
-  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
+  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇮🇩',name:'Jawa Barat'},{flag:'🇮🇩',name:'Jawa Tengah'},
+  {flag:'🇮🇩',name:'Jawa Timur'},{flag:'🇮🇩',name:'Sumatra Utara'},{flag:'🇮🇩',name:'Kalimantan'},
+  {flag:'🇮🇩',name:'Sulawesi'},{flag:'🇮🇩',name:'Bali'},{flag:'🇮🇩',name:'Papua'},
+  {flag:'🇮🇩',name:'Aceh'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
   {flag:'🇵🇭',name:'Filipina'},{flag:'🇻🇳',name:'Vietnam'},{flag:'🇹🇭',name:'Thailand'},
-  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇺🇸',name:'Amerika'},
-  {flag:'🇬🇧',name:'Inggris'},{flag:'🇸🇦',name:'Arab Saudi'},{flag:'🇦🇪',name:'UAE'},
-  {flag:'🇦🇺',name:'Australia'},{flag:'🇮🇳',name:'India'},{flag:'🇨🇳',name:'Tiongkok'},
+  {flag:'🇧🇳',name:'Brunei'},{flag:'🇲🇲',name:'Myanmar'},{flag:'🇰🇭',name:'Kamboja'},
+  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇨🇳',name:'Tiongkok'},
+  {flag:'🇺🇸',name:'Amerika'},{flag:'🇬🇧',name:'Inggris'},{flag:'🇦🇺',name:'Australia'},
+  {flag:'🇸🇦',name:'Arab Saudi'},{flag:'🇦🇪',name:'UAE'},{flag:'🇮🇳',name:'India'},
+  {flag:'🇧🇷',name:'Brasil'},{flag:'🇷🇺',name:'Rusia'},{flag:'🇹🇷',name:'Turki'},
 ];
 let userProfile=JSON.parse(localStorage.getItem('chess_profile')||'{}');
 userProfile.name=userProfile.name||'Pemain';
@@ -1542,7 +1539,7 @@ function showScreen(id){
     el.classList.add('active');
   }
 }
-function backHome(){clearInterval(matchInterval);matchInterval=null;clearTimeout(fakeHumanChatTimer);fakeHumanChatTimer=null;cancelRoom();stopMusic();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home')}
+function backHome(){clearInterval(matchInterval);matchInterval=null;clearInterval(matchFastInterval);matchFastInterval=null;clearTimeout(fakeHumanChatTimer);fakeHumanChatTimer=null;cancelRoom();stopMusic();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home')}
 function showSettings(){buildThemeStrip();updateSettingsUI();showScreen('settings')}
 function showLevel(){
   selectedLevel=null;
@@ -1763,60 +1760,36 @@ const RANDOM_NAMES=[
   'JuliaBoss','KartikaPRO','LailaMaster','MelisaRuler','NurHaliza77','OktaElite',
   'PermataKing','QueenRaisa','RahayuSuperior','SintaSlayer','TikaLegend',
   'UlfaVipers','ViolaFury','WidyaGhost','XiomaTitan','YuliaPremium','ZaskiaGG',
-  // batch 2 - nama gaming populer Indonesia
-  'AngkasaBlue','BoyKing99','CaturID','DodoGantenk','EkaNaga','FaridElang',
-  'Gerry_Chess','HeroKnight77','IchsanPRO','JayaGaming','KevinSlayer','LeoFire',
-  'MayaQueen','NandaWin','OpiGG','PajarMaster','QilaAce','RioLegend88',
-  'SyahrulBoss','TaufanX','UcokPro','VirgiDragon','WilliamID','XabiElite',
-  'YusufTitan','ZarqawiGG','AdiKnight','BamboDragon','CeriaOP','DaryBeast',
-  'EmanGod','FajrSniper','GunawanFire','HafidPintar','InggitPRO','JundulRocket',
-  'KhoirulMaster','LintangVipers','MaulanaNinja','NadhifElang','OttoQueen',
-  'PahlawanID','RachmatKing','SantiSlayer','TantoBoss','UtamaGG','VannyAce',
-  'WahidLegend','YolandaElite','ZiyadTitan','AbimanyuFury','BarunaGhost',
-  // batch 3 - nama unik game
-  'Pr4bu_Chess','R3zaK1ng','S4tr1aDark','T0p1kPRO','U1yss3s','V1rusSlayer',
-  'W4njiRocket','X_Adit_X','Yy_Budi_yY','Zz_CaturZz','xXDimasXx','AhmadBeast99',
-  'BayuGodMode','CaturMaster2k','DarkNight_ID','ElangBiru77','FarhanLegacy',
-  'GigihKnight','HidayahPRO','ImanOP88','JohnIDN','KabayangGG','LorenzoID',
-  'MasAcong','NagaDragon','OceanVipers','PilotWin','QuickBlade','RumputID',
-  'SinarMagic','TheTitan_ID','UltimateKing','VenomElite','WolfIDN','XstreamPRO',
-  'YoungLion','ZeroDark30','AbadiBoss','BalapCatur','CandraWin77','DajjalX',
-  // batch 4 - nama cewek gaming Indonesia  
-  'AnggunPRO','ButterFlyID','CantikWin','DivaCatur','ElinElite','FionaGaming',
-  'GraciaKnight','HalimahOP','IndriLegend','JessicaID','KiranaPintar','LindaGG',
-  'MeutiaQueen','NurulBoss','OctaviaSlayer','PutriAce','RaniMaster','SariaDragon',
-  'TitisVipers','UmiNinja','VanessaFire','WulandariRocket','XenaGod','YulianaElite',
-  'ZulfaKing','AisyahPRO','BiancaChess','CahayaGG','DesiLegend','ErikaWin',
-  'FitriaOP','GinaElite','HerlinaTitan','IlhamiGhost','JulietPremium','KanyaAce',
-  // batch 5 - username game style
-  'noob_killer_idn','pro_gamer_77','chess_master_id','dark_knight_idn','fire_blade99',
-  'shadow_queen_id','thunder_king77','venom_beast_id','wolf_slayer88','xXlegendXx',
-  'zerocool_id','alpha_player','beta_tester99','gamma_force_id','delta_king77',
-  'epsilon_pro','zeta_master_id','eta_warrior','theta_sniper','iota_gamer_id',
+  'AbimanyuGG','BramantaX','CristoferOP','DamarKnight','EgaPintar','FalconID',
+  'GatotLegend','HaikalFire','IndraSlayer','JulianBoss','KhanRuler','LeoBeast',
+  'MahendraMvp','NafisElite','OmarGod','PrasetioKing','RizalHawk','SatrioRocket',
+  'TambunanAce','UrbanVipers','ValentinoPro','WidodoGhost','XaviChess','YusufTitan',
+  'ZulkifliMaster','AldianoOP','BennyGG','ChristoferGamer','DinoPremium','EkawanFast',
+  'FurqonWizard','HarunNinja','IskandarFury','JeffryGlory','KhoirulDragon','LazuardiElang',
+  'MuhaiminPro','NugrohoSniper','OktoriansyahBoss','PurwantoRajawali','QairunKing',
+  'RivaldoSuperior','SeptianMagic','TrionoLegend','UsmanVipers','VedioGamer',
+  'WibawaMvp','XyloCepat','YudhistiraChess','ZahranAce','AnindyaQueen','BulanDragon',
+  'CahayaFire','DindaGhost','EkaWizard','FiraNinja','GraceKnight','HestiBeast',
+  'IntanRuler','JessicaElite','KenishaOP','LindaGod','MiataPremium','NabilaFury',
+  'OviaSniper','PinaRocket','QoriahMaster','RiskaHawk','SofiaTitan','TitaGG',
 ];
 const RANDOM_COUNTRIES=[
-  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
-  {flag:'🇵🇭',name:'Filipina'},{flag:'🇸🇦',name:'Arab Saudi'},{flag:'🇦🇪',name:'UAE'},
-  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇺🇸',name:'Amerika'},
-  {flag:'🇮🇳',name:'India'},
+  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇮🇩',name:'Jawa Barat'},{flag:'🇮🇩',name:'Jawa Timur'},
+  {flag:'🇮🇩',name:'Sumatra'},{flag:'🇮🇩',name:'Kalimantan'},{flag:'🇮🇩',name:'Sulawesi'},
+  {flag:'🇮🇩',name:'Bali'},{flag:'🇮🇩',name:'Papua'},{flag:'🇮🇩',name:'Aceh'},
+  {flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},{flag:'🇵🇭',name:'Filipina'},
+  {flag:'🇻🇳',name:'Vietnam'},{flag:'🇹🇭',name:'Thailand'},{flag:'🇧🇳',name:'Brunei'},
+  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇸🇦',name:'Arab Saudi'},
+  {flag:'🇦🇪',name:'UAE'},{flag:'🇺🇸',name:'Amerika'},{flag:'🇮🇳',name:'India'},
+  {flag:'🇦🇺',name:'Australia'},{flag:'🇬🇧',name:'Inggris'},{flag:'🇹🇷',name:'Turki'},
 ];
 const MATCH_STATUSES=[
-  'Menghubungkan ke server matchmaking...','Menganalisa rating pemain...','Memindai 10.000+ pemain aktif...',
-  'Menyocokkan skill level...','Menemukan kandidat lawan...','Memverifikasi koneksi lawan...',
-  'Rating hampir cocok...','Sinkronisasi profil lawan...','Hampir ketemu nih...','Lawan ditemukan! Mempersiapkan...',
+  '🔍 Scanning pemain di sekitarmu...','📊 Menganalisa rating dan skill...','🎯 Menyocokkan level yang tepat...',
+  '🌐 Menemukan kandidat lawan...','⚡ Memverifikasi koneksi lawan...','🔥 Hampir ketemu nih...',
+  '✅ Lawan ditemukan! Mempersiapkan arena...',
 ];
-let matchTimer=null,matchInterval=null,fakeHumanChatTimer=null;
-let fakeOpponentProfile={name:'Bot',avatar:'♟',country:{flag:'🇮🇩',name:'Indonesia'},rating:1200};
-let _fakeMatchDiff=null;
-
-function _genFakeRating(diff){
-  const myR=userProfile.rating||1200;
-  if(diff.level===1&&diff.label==='Pemula')return 600+Math.floor(Math.random()*200);
-  if(diff.level===1)return 800+Math.floor(Math.random()*250);
-  if(diff.level===2)return 1100+Math.floor(Math.random()*300);
-  if(diff.label==='Sulit')return 1500+Math.floor(Math.random()*300);
-  return 1900+Math.floor(Math.random()*400);
-}
+let matchTimer=null,matchInterval=null,matchFastInterval=null,fakeHumanChatTimer=null;
+let fakeOpponentProfile={name:'Bot',avatar:'♟',country:{flag:'🇮🇩',name:'Indonesia'}};
 
 function showMatchmaking(){
   showScreen('match');
@@ -1824,9 +1797,7 @@ function showMatchmaking(){
   const myAvEl=document.getElementById('match-my-av-inner');
   const myNmEl=document.getElementById('match-my-name');
   const myCnEl=document.getElementById('match-my-country');
-  const myRtEl=document.getElementById('match-my-rating');
-  const myRating=userProfile.rating||(Math.floor(950+Math.random()*500));
-  userProfile.rating=myRating;
+  const myCnName=document.getElementById('match-my-country-name');
   if(myAvEl){
     if(userProfile.photoUrl){
       document.getElementById('match-my-av').innerHTML=`<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
@@ -1834,109 +1805,107 @@ function showMatchmaking(){
   }
   if(myNmEl)myNmEl.textContent=userProfile.name;
   if(myCnEl)myCnEl.textContent=userProfile.country.flag;
-  if(myRtEl)myRtEl.textContent='★ '+myRating.toLocaleString('id-ID');
+  if(myCnName)myCnName.textContent=userProfile.country.name;
 
-  // Animate online count with fluctuation
+  // Animate online count
   let oc=Math.floor(10000+Math.random()*8000);
   document.getElementById('match-online-count').textContent=oc.toLocaleString('id-ID');
-  const ocEl=document.getElementById('match-online-count');
-  const ocInterval=setInterval(()=>{oc+=Math.floor(Math.random()*30)-10;if(ocEl)ocEl.textContent=Math.max(9800,oc).toLocaleString('id-ID');},1500);
-  setTimeout(()=>clearInterval(ocInterval),11000);
 
   // Reset opponent side
-  document.getElementById('match-opp-av').textContent='❓';
-  document.getElementById('match-opp-name').textContent='Mencari...';
-  document.getElementById('match-opp-country').textContent='🌐';
-  document.getElementById('match-opp-rating').textContent='★ ---';
-  document.getElementById('match-opp-rating').style.color='var(--txt2)';
-  const lvlBadge=document.getElementById('match-opp-level');
-  if(lvlBadge){lvlBadge.style.display='none';lvlBadge.className='match-level-badge';}
-  document.getElementById('match-bar').style.width='0%';
-  document.getElementById('match-status').textContent=MATCH_STATUSES[0];
+  const oppAv=document.getElementById('match-opp-av');
+  const oppNm=document.getElementById('match-opp-name');
+  const oppCn=document.getElementById('match-opp-country');
+  const oppCnName=document.getElementById('match-opp-country-name');
+  const timerEl=document.getElementById('match-timer-lbl');
+  const barEl=document.getElementById('match-bar');
+  const statusEl=document.getElementById('match-status');
+  if(oppAv)oppAv.textContent='❓';
+  if(oppNm)oppNm.textContent='Mencari...';
+  if(oppCn)oppCn.textContent='🌐';
+  if(oppCnName)oppCnName.textContent='...';
+  if(barEl)barEl.style.width='0%';
+  if(statusEl)statusEl.textContent=MATCH_STATUSES[0];
+  if(timerEl)timerEl.textContent='10';
+  // Remove found class if leftover
+  document.getElementById('s-match')?.querySelector('.match-card.opp-card')?.classList.remove('found');
 
   let elapsed=0;
   const TOTAL=10;
   let statusIdx=0;
+  let fastTick=0;
   clearInterval(matchInterval);
-  _fakeMatchDiff=pickMatchDifficulty();
-  const finalRating=_genFakeRating(_fakeMatchDiff);
-  let currentShuffleRating=Math.floor(400+Math.random()*1800);
+  clearInterval(matchFastInterval);matchFastInterval=null;
 
+  // Phase 1: rapid gacha shuffle every 250ms for first 6 seconds
+  let lastRName=RANDOM_NAMES[0],lastRAv=PROFILE_AVATARS[0],lastRCn=RANDOM_COUNTRIES[0];
+  function doShuffle(){
+    lastRName=RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
+    lastRAv=PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
+    lastRCn=RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
+    if(oppNm){oppNm.textContent=lastRName;oppNm.classList.remove('opp-shuffle');void oppNm.offsetWidth;oppNm.classList.add('opp-shuffle');}
+    if(oppAv){oppAv.classList.remove('av-flip');void oppAv.offsetWidth;oppAv.classList.add('av-flip');setTimeout(()=>{oppAv.textContent=lastRAv;},80);}
+    if(oppCn)oppCn.textContent=lastRCn.flag;
+    if(oppCnName)oppCnName.textContent=lastRCn.name;
+  }
+
+  // Fast shuffle interval (every 250ms)
+  matchFastInterval=setInterval(()=>{
+    fastTick++;
+    doShuffle();
+    if(fastTick>=24){clearInterval(matchFastInterval);matchFastInterval=null;} // stop at 6s
+  },250);
+
+  // Second interval every 1s for progress bar + status + countdown
   matchInterval=setInterval(()=>{
     elapsed++;
     const pct=Math.min(100,Math.round((elapsed/TOTAL)*100));
-    document.getElementById('match-bar').style.width=pct+'%';
-    document.getElementById('match-timer-lbl').textContent=Math.max(0,TOTAL-elapsed);
+    if(barEl)barEl.style.width=pct+'%';
+    if(timerEl)timerEl.textContent=Math.max(0,TOTAL-elapsed);
 
-    // Shuffle opponent profile — stop shuffling at last 2 seconds
-    const rName=elapsed<9?RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)]:RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
-    const rAv=elapsed<9?PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)]:PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
-    const rCn=elapsed<9?RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)]:RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
-    const oppNm=document.getElementById('match-opp-name');
-    const oppAv=document.getElementById('match-opp-av');
-    const oppCn=document.getElementById('match-opp-country');
-    const oppRt=document.getElementById('match-opp-rating');
-    if(oppNm){oppNm.textContent=rName;oppNm.classList.remove('opp-shuffle');void oppNm.offsetWidth;oppNm.classList.add('opp-shuffle');}
-    if(oppAv)oppAv.textContent=rAv;
-    if(oppCn)oppCn.textContent=rCn.flag;
-    // Shuffle rating converging to final
-    if(elapsed<9){
-      currentShuffleRating=Math.floor(400+Math.random()*1800);
-      if(oppRt)oppRt.textContent='★ '+currentShuffleRating.toLocaleString('id-ID');
-    } else {
-      if(oppRt){oppRt.textContent='★ '+finalRating.toLocaleString('id-ID');oppRt.style.color='var(--gold)';}
-    }
-
-    // Status messages
-    const sIdx=Math.min(elapsed,MATCH_STATUSES.length-1);
-    document.getElementById('match-status').textContent=MATCH_STATUSES[sIdx];
+    if(elapsed===2)statusIdx=1;
+    else if(elapsed===4)statusIdx=2;
+    else if(elapsed===6)statusIdx=3;
+    else if(elapsed===7)statusIdx=4;
+    else if(elapsed===8)statusIdx=5;
+    else if(elapsed===9)statusIdx=6;
+    if(statusEl)statusEl.textContent=MATCH_STATUSES[statusIdx];
 
     if(elapsed>=TOTAL){
       clearInterval(matchInterval);matchInterval=null;
-      // Lock final opponent
-      const finalName=RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
-      const finalAv=PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
-      const finalCn=RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
-      fakeOpponentProfile={name:finalName,avatar:finalAv,country:finalCn,rating:finalRating};
-      if(oppNm)oppNm.textContent=finalName;
-      if(oppAv)oppAv.textContent=finalAv;
-      if(oppCn)oppCn.textContent=finalCn.flag;
-      // Show skill badge
-      const badge=document.getElementById('match-opp-level');
-      if(badge){
-        badge.style.display='inline-block';
-        const d=_fakeMatchDiff;
-        if(d.label==='Pemula'){badge.textContent='⭐ Pemula';badge.className='match-level-badge easy';}
-        else if(d.label==='Mudah'){badge.textContent='⭐⭐ Mudah';badge.className='match-level-badge easy';}
-        else if(d.label==='Menengah'){badge.textContent='⭐⭐⭐ Menengah';badge.className='match-level-badge mid';}
-        else if(d.label==='Sulit'){badge.textContent='💀 Sulit';badge.className='match-level-badge hard';}
-        else{badge.textContent='☠️ Dewa';badge.className='match-level-badge god';}
-      }
-      setTimeout(()=>startFakeHumanGame(),600);
+      clearInterval(matchFastInterval);matchFastInterval=null;
+      // Final freeze — lock in the opponent
+      fakeOpponentProfile={name:lastRName,avatar:lastRAv,country:lastRCn};
+      // Reveal animation
+      const oppCard=document.getElementById('s-match')?.querySelector('.match-card.opp-card');
+      if(oppCard)oppCard.classList.add('found');
+      if(oppAv){oppAv.classList.remove('av-flip');oppAv.textContent=lastRAv;}
+      if(oppNm){oppNm.classList.remove('opp-shuffle');oppNm.textContent=lastRName;}
+      if(oppCn)oppCn.textContent=lastRCn.flag;
+      if(oppCnName)oppCnName.textContent=lastRCn.name;
+      if(statusEl)statusEl.textContent='🎮 Lawan ditemukan: '+lastRName+'!';
+      setTimeout(()=>startFakeHumanGame(),800);
     }
   },1000);
 }
 
 function cancelMatchmaking(){
   clearInterval(matchInterval);matchInterval=null;
+  clearInterval(matchFastInterval);matchFastInterval=null;
   backHome();
 }
 
-// Difficulty distribution: ~10% pemula, ~20% mudah, ~25% menengah, ~30% sulit, ~15% dewa
-// This means the user loses majority of games on hard/dewa (70-80% chance loss on those)
+// Difficulty distribution: 15% ultra-easy, 30% easy, 25% medium, 20% hard, 10% ultra-hard
 function pickMatchDifficulty(){
   const r=Math.random();
-  if(r<.10)return{level:1,label:'Pemula',winPct:95};
-  if(r<.30)return{level:1,label:'Mudah',winPct:82};
-  if(r<.55)return{level:2,label:'Menengah',winPct:60};
-  if(r<.85)return{level:3,label:'Sulit',winPct:25};
-  return{level:3,label:'Dewa',winPct:8};
+  if(r<.15)return{level:1,label:'Pemula',winPct:92};
+  if(r<.45)return{level:1,label:'Mudah',winPct:80};
+  if(r<.70)return{level:2,label:'Menengah',winPct:65};
+  if(r<.90)return{level:3,label:'Sulit',winPct:45};
+  return{level:3,label:'Dewa',winPct:28};
 }
 
 function startFakeHumanGame(){
-  // Use the difficulty already picked during matchmaking, or pick fresh
-  const diff=_fakeMatchDiff||pickMatchDifficulty();
-  _fakeMatchDiff=null;
+  const diff=pickMatchDifficulty();
   clearTimeout(thinkTimer);thinkTimer=null;
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
@@ -1953,99 +1922,90 @@ function startFakeHumanGame(){
   chatMsgsEl=document.getElementById('chat-msgs');chatRenderedKeys={};
   // Start fake human bot chat
   startFakeHumanChat();
-  if(myColor==='b')setTimeout(doBotMove,800+Math.random()*1500);
-  const oppInfo=fakeOpponentProfile.name+' '+fakeOpponentProfile.country.flag+' (★'+fakeOpponentProfile.rating+') — '+diff.label;
-  setTimeout(()=>toast('🎮 Lawan ditemukan: '+oppInfo),200);
+  if(myColor==='b')setTimeout(doBotMove,800+Math.random()*1200);
+  setTimeout(()=>toast('🎮 Lawan ditemukan: '+fakeOpponentProfile.name+' ('+fakeOpponentProfile.country.flag+')'),200);
 }
 
 // ═══════════════════════════════════════
 // FAKE HUMAN BOT CHAT (Gen-Z Indonesia)
 // ═══════════════════════════════════════
 const GENZ_CHAT=[
-  'halo bro siap nih','gas gas gas','jangan underestimate gua ya wkwk','kita lihat siapa yang menang',
-  'gua udah warm up nih','skill issue kalo kalah','ayo tunjukkin yang terbaik','gl hf bro',
-  'wkwkwk tenang aja','gua lagi on fire nih','jangan baper kalau gua menang ya',
-  'chill aja bro ini cuma game','nice move sih','anjay bisa juga','wah pintar juga kamu',
-  'gg ez','hampir aja tuh','sabar sabar...','gua comeback nih tunggu','ayo siapa takut',
-  'ih ngeri juga lu','gua udah tau strateginya','jangan senang dulu','masih panjang permainannya',
-  'lagi mikir nih sebentar','mantap jiwa','respect bro move-mu solid','nah gitu dong',
-  'duh salah langkah gua','ya ampun','aduh','untung masih bisa defend','ini susah juga',
-  'gua masih bisa comeback tenang','wkwk seru juga nih','ayo gas terus','ngeri lu bro',
+  'halo bro siap nih 👋','gas gas gas 🔥','jangan underestimate gua ya wkwk','kita lihat siapa yang menang 👑',
+  'gua udah warm up nih','skill issue kalo kalah 💀','ayo tunjukkin yang terbaik','gl hf bro 🤝',
+  'wkwkwk tenang aja','gua lagi on fire nih 🔥','jangan baper kalau gua menang ya',
+  'chill aja bro ini cuma game','nice move sih','anjay bisa juga 😤','wah pintar juga kamu',
+  'gg ez 😂','hampir aja tuh','sabar sabar...','gua comeback nih tunggu','ayo siapa takut 💪',
+  'ih ngeri juga lu','gua udah tau strateginya 😏','jangan senang dulu','masih panjang permainannya',
+  'lagi mikir nih sebentar 🤔','mantap jiwa','respect bro move-mu solid','nah gitu dong',
+  'duh salah langkah gua 😭','ya ampun','aduh','untung masih bisa defend','ini susah juga',
+  'gua masih bisa comeback tenang 😌','wkwk seru juga nih','ayo gas terus ⚡','ngeri lu bro',
   'gua fokus dulu ya','hmm menarik','lu main lama juga?','good game so far',
-  'jangan kasih ampun ya','gua serius nih sekarang','semangat!','ayo dong jangan pelan-pelan',
-  'wah hampir kena tuh','bagus juga pertahananmu','gua excited nih','asik juga mainnya',
-  'kalau gua kalah gg aja ya','gua challenge lu fair and square','siap!','ini seru banget sih',
-  // extra chat batch
-  'bro lu nge-trap ya','gua ga ketipu kok hehe','position gua udah oke kayaknya',
-  'lu main cepet banget sih','hmm ini tricky juga','jangan ngegas lu','pelan pelan bro',
-  'gua masih control situasi kok','jangan underestimate gua','gua udah ngitung 3 move ke depan loh',
-  'sini dong main seru','strategy gua top kali ini','wkwkwk ketangkep juga tuh',
-  'ya elah...','ini gua yang salah hitung','duh ngantuk gua','fokus dulu ah',
-  'bro lu mainan ini dari kecil?','gua barusan mulai chess nih','lumayan seru ternyata',
-  'tactical nih gua','mau sacrifice nih','gua liat opening ini di youtube',
-  'wkwk ayo gas','tadi ngapain gua','udah ketebak strategi lu','nice try bro',
-  'gua comeback mode aktif','yakin lu mau kesana?','hm interesting choice',
-  'gua senyum2 sendiri nih','kalau menang gua screenshot','skill difference wkwk',
+  'jangan kasih ampun ya','gua serius nih sekarang 😤','semangat! 💪','ayo dong jangan pelan-pelan',
+  'wah hampir kena tuh 😱','bagus juga pertahananmu','gua excited nih','asik juga mainnya',
+  'kalau gua kalah gg aja ya','gua challenge lu fair and square','siap! 🫡','ini seru banget sih',
+  'bro lu pake strategi apa sih 😭','gua ga nyangka lu bisa gitu','okeh ini menarik banget',
+  'lo tau ga lu hampir bikin gua panik 😅','anjay strateginya rapi','gua sampe salut lho',
+  'gua tadi mau resign tapi nggak jadi wkwk','ini match terbaik gua hari ini jujur',
+  'lu main kayak grandmaster lah 🤯','wkwk lu bluffing ya? gua ga percaya',
+  'nggak nyangka bakal ketemu lawan sekelas ini 👀','oke fine, gua akui lu bagus',
+  'santai bro, gua juga masih belajar','gua udah latihan 3 jam buat ini lho 😤',
+  'yaelah lu jago banget sih 😭😭','gua mau cry fr fr','comeback time! tunggu aja',
+  'pfft gampang ini 😎','gua bakal push to the limit','jangan harap gua nyerah ya',
+  'gua kirain gua mau menang tapi...','oke ini udah kayak battle royal wkwk',
+  'harusnya gua pikir lebih lama tadi','next move gua dijamin ngagetin lu',
+  'lu sadar nggak posisi lu bahaya? 😏','gua udah trap lu dari tadi lho',
+  'ini catur atau perang sih? 😂','gua suka battle kayak gini, seru!',
+  'jujur gua deg-degan juga nih','lu main sambil dengerin musik ya? bagus juga',
+  'gaskeun! 🔥🔥🔥','no mercy dari gua!','lu underestimate gua kan? nanti nyesel',
+  'gua main pake feeling aja nih, doain ya 😂','semoga aja ini works...',
+  'bro honestly ini match yang paling challenging 🫡',
 ];
-const GENZ_EMOJI_CHAT=['😂','🔥','💀','🤯','😤','👑','💪','😎','🎯','🤝','gg','ez','wkwk','mantap','anjay','💅','🥶','🫡','😭','🧠','💯','🔱'];
-// Event-based reaction pools
-const GENZ_REACT_CAPTURE_MINE=['anjay lu makan bidak gua 😤','eh bisa juga lu','duh kena deh','ya ampun salah langkah gua','gua masih bisa recover kok','hmm oke noted','wkwk oke bagus tuh move','gua akui itu solid'];
-const GENZ_REACT_CAPTURE_OPP=['hehe gua makan dulu ya','makasih bidaknya 😎','nice exchange bro','strategic sacrifice kali gua','taken! wkwk','gua lagi hungry nih'];
-const GENZ_REACT_CHECK=['eh check ya? belum gg bro','santai bro gua keluar','wah hampir gg tuh','nice attack sih respect','gua blokir dulu','masih aman kok'];
-const GENZ_REACT_CHECKED=['CHECK! jaga raja lu','hati2 raja lu bahaya','gua attack terus nih','pressure on bro','wkwk kaget ga?'];
-const GENZ_REACT_MIDGAME=['posisi gua udah lumayan nih','ini endgame mode soon','lu mau trade ga?','gua lagi calculate nih','waktu buat serius'];
-
-let _lastFakeReactTime=0;
-function triggerFakeHumanReaction(type){
-  if(gameMode!=='match'||!gs||gs.gameOver)return;
-  const now=Date.now();
-  if(now-_lastFakeReactTime<4000)return; // cooldown 4 detik antar reaction
-  _lastFakeReactTime=now;
-  let pool;
-  if(type==='cap_mine')pool=GENZ_REACT_CAPTURE_MINE;
-  else if(type==='cap_opp')pool=GENZ_REACT_CAPTURE_OPP;
-  else if(type==='check_me')pool=GENZ_REACT_CHECK;
-  else if(type==='check_opp')pool=GENZ_REACT_CHECKED;
-  else if(type==='mid')pool=GENZ_REACT_MIDGAME;
-  else return;
-  // Only react some % of the time so it doesn't feel scripted
-  const reactionChance=type==='check_me'||type==='check_opp'?0.75:0.45;
-  if(Math.random()>reactionChance)return;
-  const delay=1200+Math.random()*2500;
-  setTimeout(()=>{
-    if(gameMode!=='match'||!gs||gs.gameOver)return;
-    const msg=pool[Math.floor(Math.random()*pool.length)];
-    appendChatMsg(msg,'opp');
-    if(Math.random()<.3){const em=['😤','💀','🔥','😎','🤯'][Math.floor(Math.random()*5)];floatEmoji(em);playEmojiSound(em);}
-  },delay);
-}
+const GENZ_EMOJI_CHAT=['😂','🔥','💀','🤯','😤','👑','💪','😎','🎯','🤝','gg','ez','wkwk','mantap','anjay','gass','NGAKAK','woi','aduh','bestie','bro','anjir','gabut','receh','bet'];
 
 function startFakeHumanChat(){
   clearTimeout(fakeHumanChatTimer);
-  _lastFakeReactTime=0;
+  const greets=[
+    'halo bro siap nih 👋','gas gas gas 🔥','gl hf bro 🤝','ayo siapa takut 😤',
+    'kita lihat siapa yang menang 👑','siap tempur! 💪','gua udah ready dari tadi nih',
+    'akhirnya ketemu juga! ayo gas 🔥','udah lama gua nunggu match kayak gini',
+    'lawan yang worth it! mari kita mulai 🎯',
+  ];
+  const midGame=[
+    'wkwk lu mikir lama banget','gua lagi assess posisinya nih','seru nih match-nya',
+    'jangan menyerah dulu bro','gua juga lagi panas nih','masih bisa dibalik situasinya',
+    'ini yang gua suka dari catur, selalu unpredictable','lu jago juga ternyata',
+    'gua harus akui ini challenging','keep it up! gua respect lawan yang gigih',
+    'oke oke gua salah prediksi tadi','unexpectedly susah nih 😅','tetap fokus ya',
+  ];
   function scheduleNext(){
-    const delay=15000+Math.random()*35000; // 15-50 sec intervals (tighter than before)
+    const delay=15000+Math.random()*40000; // 15-55 sec intervals
     fakeHumanChatTimer=setTimeout(()=>{
       if(gameMode!=='match'||!gs||gs.gameOver)return;
-      // 65% text, 20% emoji/slang, 15% midgame comment
       const r=Math.random();
       let msg;
-      if(r<.65)msg=GENZ_CHAT[Math.floor(Math.random()*GENZ_CHAT.length)];
-      else if(r<.85)msg=GENZ_EMOJI_CHAT[Math.floor(Math.random()*GENZ_EMOJI_CHAT.length)];
-      else{msg=GENZ_REACT_MIDGAME[Math.floor(Math.random()*GENZ_REACT_MIDGAME.length)];}
+      if(r<.55)msg=GENZ_CHAT[Math.floor(Math.random()*GENZ_CHAT.length)];
+      else if(r<.75)msg=midGame[Math.floor(Math.random()*midGame.length)];
+      else msg=GENZ_EMOJI_CHAT[Math.floor(Math.random()*GENZ_EMOJI_CHAT.length)];
       appendChatMsg(msg,'opp');
       // Also float emoji sometimes
       if(Math.random()<.3){const em=EMOJI_SOUNDS.laugh[Math.floor(Math.random()*4)];floatEmoji(em);playEmojiSound(em);}
       scheduleNext();
     },delay);
   }
-  // First message after 4-9 seconds
+  // First greeting right away (2-4s)
   fakeHumanChatTimer=setTimeout(()=>{
     if(gameMode!=='match')return;
-    const greet=['halo bro siap nih 👋','gas gas gas 🔥','gl hf bro!','ayo siapa takut 😤','kita lihat siapa yang menang 👑','wkwk ayo main!','siap challenge lu','gua udah panas nih'];
-    appendChatMsg(greet[Math.floor(Math.random()*greet.length)],'opp');
-    scheduleNext();
-  },4000+Math.random()*5000);
+    appendChatMsg(greets[Math.floor(Math.random()*greets.length)],'opp');
+    // Second message shortly after if it was a short greeting
+    setTimeout(()=>{
+      if(gameMode!=='match'||!gs||gs.gameOver)return;
+      if(Math.random()<.5){
+        const follow=['jangan kasih ampun ya! 😤','gua challenge lu habis-habisan','ready? 3..2..1.. gas!'];
+        appendChatMsg(follow[Math.floor(Math.random()*follow.length)],'opp');
+      }
+      scheduleNext();
+    },4000+Math.random()*3000);
+  },2000+Math.random()*2000);
 }
 
 function setPlayerNames(topName,botName,topColor,botColor){
@@ -2142,7 +2102,9 @@ function showPromo(templateMv){
 }
 
 function executeMove(mv){
-  // Clear hint immediately when any move is made
+  // Invalidate any pending hint worker message (fixes race condition where
+  // a queued onmessage would fire after the move and re-draw hint squares)
+  _hintGen++;
   hintMove=null;
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
@@ -2175,19 +2137,6 @@ function executeMove(mv){
     renderBoard();animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);setTimeout(()=>showGameOver(gs.result),500);return;
   }
   if(isInCheck(gs,gs.turn)){playSound('check');}
-  // Fake human reactions for match mode
-  if(gameMode==='match'){
-    const moverIsMe=gs.turn!==myColor; // turn flipped after applyMove, so gs.turn is now opponent's perspective
-    if(cap){
-      // Who captured whom?
-      const capturerWasMe=(col(movedPiece)===myColor);
-      triggerFakeHumanReaction(capturerWasMe?'cap_mine':'cap_opp');
-    }
-    if(isInCheck(gs,gs.turn)){
-      const checkedIsMe=(gs.turn===myColor);
-      triggerFakeHumanReaction(checkedIsMe?'check_me':'check_opp');
-    }
-  }
   renderBoard();
   animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);
   // Pass-and-play: show device handoff overlay
@@ -2473,7 +2422,7 @@ self.onmessage=function(e){const{gs,color,depth}=e.data;getBestMove(gs,color,dep
 
 let _magnusWorkerURL=null;
 try{_magnusWorkerURL=URL.createObjectURL(new Blob([_MAGNUS_CODE],{type:'application/javascript'}));}catch(e){console.warn('Worker blob failed:',e.message);}
-let _hintWorker=null,_hintTimer=null;
+let _hintWorker=null,_hintTimer=null,_hintGen=0;
 
 // ── Stockfish loader (lazy, via blob URL to avoid CORS) ──────────────────────
 let _sfURL=null,_sfLoading=false;
@@ -2498,6 +2447,8 @@ function showHint(){
   if(!gs||gs.gameOver)return;
   const c=gameMode==='online'?myColor:gs.turn;
   if(gs.turn!==c){toast('Bukan giliranmu!');return;}
+  // Increment generation — any pending worker from a previous hint becomes stale
+  const myGen=++_hintGen;
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   hintMove=null;selected=null;legalFromSel=[];
@@ -2506,51 +2457,52 @@ function showHint(){
   const origLabel=hintLabel?hintLabel.textContent:'Petunjuk';
   hintBtn?.classList.add('hint-active');
 
-  // ── INSTANT: depth-1 on main thread (< 5ms) ──────────────────────────────
-  // Hint is LOCKED immediately at D1 — no background worker override so the
-  // highlighted squares never shift to a different move mid-display.
+  // ── INSTANT: depth-1 on main thread (< 5ms) ────────────────────────────────
   const quickMv=getBestMove(gs,c,1);
   if(quickMv){
     hintMove={fr:quickMv.fr,fc:quickMv.fc,tr:quickMv.tr,tc:quickMv.tc};
-    if(hintLabel)hintLabel.textContent=origLabel;
+    if(hintLabel)hintLabel.textContent='💡';
     renderBoard();
-    toast('💡 Petunjuk: kuning = dari, hijau = ke');
-    // Locked — return here so D6 worker never starts and can never override the display
-    return;
+    toast('💡 Petunjuk: kotak kuning = dari → ke');
   }
 
-  // ── FALLBACK: D1 gave nothing (very rare) — use D6 worker ─────────────────
-  if(!_magnusWorkerURL){if(hintLabel)hintLabel.textContent=origLabel;hintBtn?.classList.remove('hint-active');return;}
+  // ── BACKGROUND: Magnus worker deepens to D6 ────────────────────────────────
+  // D6 silently refines hintMove in memory but does NOT re-render or change
+  // the visible squares — this prevents the "hint jumping to different piece" bug
+  if(!_magnusWorkerURL){if(hintLabel)hintLabel.textContent=origLabel;return;}
   const snapGS=cloneGS(gs);
   const MD=6;
   try{
     const w=new Worker(_magnusWorkerURL);
     _hintWorker=w;
     w.onmessage=(e)=>{
-      // Guard: ignore stale messages from a worker that was already terminated
-      // (prevents hint squares reappearing after the player has already moved)
-      if(_hintWorker!==w)return;
+      // Generation guard: if the user moved or requested a new hint, discard this result
+      if(_hintGen!==myGen)return;
       const d=e.data;if(!d||!d.move)return;
       if(d.depth>=MD){
-        const mv=d.move;
-        hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+        // Silently update hintMove so auto-execute uses the deeper move,
+        // but do NOT call renderBoard() — keeps the visual squares locked to D1
+        hintMove={fr:d.move.fr,fc:d.move.fc,tr:d.move.tr,tc:d.move.tc};
         if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
         if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
         if(hintLabel)hintLabel.textContent=origLabel;
-        renderBoard();
-        toast('💡 Petunjuk siap!');
       }
     };
-    w.onerror=()=>{if(_hintWorker===w){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
+    w.onerror=()=>{
+      if(_hintGen!==myGen)return;
+      if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+      if(hintLabel)hintLabel.textContent=origLabel;
+    };
     w.postMessage({gs:snapGS,color:c,depth:MD});
   }catch(e){if(hintLabel)hintLabel.textContent=origLabel;}
 
   _hintTimer=setTimeout(()=>{
+    if(_hintGen!==myGen)return;
     _hintTimer=null;
     if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
     if(hintLabel)hintLabel.textContent=origLabel;
     if(!hintMove){selected=null;legalFromSel=[];hintBtn?.classList.remove('hint-active');renderBoard();}
-  },10000);
+  },20000);
 }
 
 // ═══════════════════════════════════════
