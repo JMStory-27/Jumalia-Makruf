@@ -143,6 +143,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .match-card.opp-card .match-avatar-lg{border-color:rgba(100,180,255,.5)}
 .match-pname{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .match-country{font-size:12px;color:var(--txt2)}
+.match-rating{font-size:11px;color:var(--gold);font-weight:700;margin-top:1px;letter-spacing:.3px}
+.match-level-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;margin-top:3px;border:1px solid rgba(255,255,255,.15);color:var(--txt2)}
+.match-level-badge.easy{border-color:rgba(74,222,128,.4);color:#4ade80;background:rgba(74,222,128,.1)}
+.match-level-badge.mid{border-color:rgba(251,191,36,.4);color:#fbbf24;background:rgba(251,191,36,.08)}
+.match-level-badge.hard{border-color:rgba(248,113,113,.4);color:#f87171;background:rgba(248,113,113,.08)}
+.match-level-badge.god{border-color:rgba(167,139,250,.6);color:#a78bfa;background:rgba(167,139,250,.12)}
 .match-vs{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
 .match-vs-text{font-size:22px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(212,175,55,.5);animation:vsGlow 1.5s ease-in-out infinite}
 @keyframes vsGlow{0%,100%{text-shadow:0 0 10px rgba(212,175,55,.4)}50%{text-shadow:0 0 30px rgba(212,175,55,.8)}}
@@ -822,15 +828,18 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <div class="match-avatar-lg" id="match-my-av"><span id="match-my-av-inner">♟</span></div>
         <div class="match-pname" id="match-my-name">Kamu</div>
         <div class="match-country" id="match-my-country">🇮🇩</div>
+        <div class="match-rating" id="match-my-rating">★ 1200</div>
       </div>
       <div class="match-vs">
         <div class="match-vs-text">VS</div>
         <div class="match-timer" id="match-timer-lbl">10</div>
       </div>
       <div class="match-card opp-card">
-        <div class="match-avatar-lg"><span id="match-opp-av">❓</span></div>
+        <div class="match-avatar-lg" id="match-opp-av-wrap"><span id="match-opp-av">❓</span></div>
         <div class="match-pname opp-shuffle" id="match-opp-name">Mencari...</div>
         <div class="match-country" id="match-opp-country">🌐</div>
+        <div class="match-rating" id="match-opp-rating" style="color:var(--txt2)">★ ---</div>
+        <div class="match-level-badge" id="match-opp-level" style="display:none">???</div>
       </div>
     </div>
     <div class="match-status" id="match-status">Menganalisa pemain di sekitarmu...</div>
@@ -1223,7 +1232,12 @@ function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
 // ═══════════════════════════════════════
 // PROFILE SYSTEM
 // ═══════════════════════════════════════
-const PROFILE_AVATARS=['♟','👑','🐯','🦁','🐉','🔥','⚡','🌙','💀','🎯','🚀','🦅','⚔️','🎸','🌟'];
+const PROFILE_AVATARS=[
+  '♟','👑','🐯','🦁','🐉','🔥','⚡','🌙','💀','🎯','🚀','🦅','⚔️','🎸','🌟',
+  '🧠','😎','🦊','🐺','🦈','🎭','💎','🏆','⚡','🌊','🦋','🎪','🥷','🤖','👻',
+  '🌈','🍀','🦉','🦚','🦜','🎲','🃏','🎮','👾','🏹','🗡️','🛡️','🔮','💫','🌸',
+  '🦄','🐸','🤡','🎯','💥','🌺','🍁','🌙','☀️','🌟','⭐','🌴','🦝','🦔','🐧',
+];
 const COUNTRIES=[
   {flag:'🇮🇩',name:'Indonesia'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
   {flag:'🇵🇭',name:'Filipina'},{flag:'🇻🇳',name:'Vietnam'},{flag:'🇹🇭',name:'Thailand'},
@@ -1735,6 +1749,36 @@ const RANDOM_NAMES=[
   'JuliaBoss','KartikaPRO','LailaMaster','MelisaRuler','NurHaliza77','OktaElite',
   'PermataKing','QueenRaisa','RahayuSuperior','SintaSlayer','TikaLegend',
   'UlfaVipers','ViolaFury','WidyaGhost','XiomaTitan','YuliaPremium','ZaskiaGG',
+  // batch 2 - nama gaming populer Indonesia
+  'AngkasaBlue','BoyKing99','CaturID','DodoGantenk','EkaNaga','FaridElang',
+  'Gerry_Chess','HeroKnight77','IchsanPRO','JayaGaming','KevinSlayer','LeoFire',
+  'MayaQueen','NandaWin','OpiGG','PajarMaster','QilaAce','RioLegend88',
+  'SyahrulBoss','TaufanX','UcokPro','VirgiDragon','WilliamID','XabiElite',
+  'YusufTitan','ZarqawiGG','AdiKnight','BamboDragon','CeriaOP','DaryBeast',
+  'EmanGod','FajrSniper','GunawanFire','HafidPintar','InggitPRO','JundulRocket',
+  'KhoirulMaster','LintangVipers','MaulanaNinja','NadhifElang','OttoQueen',
+  'PahlawanID','RachmatKing','SantiSlayer','TantoBoss','UtamaGG','VannyAce',
+  'WahidLegend','YolandaElite','ZiyadTitan','AbimanyuFury','BarunaGhost',
+  // batch 3 - nama unik game
+  'Pr4bu_Chess','R3zaK1ng','S4tr1aDark','T0p1kPRO','U1yss3s','V1rusSlayer',
+  'W4njiRocket','X_Adit_X','Yy_Budi_yY','Zz_CaturZz','xXDimasXx','AhmadBeast99',
+  'BayuGodMode','CaturMaster2k','DarkNight_ID','ElangBiru77','FarhanLegacy',
+  'GigihKnight','HidayahPRO','ImanOP88','JohnIDN','KabayangGG','LorenzoID',
+  'MasAcong','NagaDragon','OceanVipers','PilotWin','QuickBlade','RumputID',
+  'SinarMagic','TheTitan_ID','UltimateKing','VenomElite','WolfIDN','XstreamPRO',
+  'YoungLion','ZeroDark30','AbadiBoss','BalapCatur','CandraWin77','DajjalX',
+  // batch 4 - nama cewek gaming Indonesia  
+  'AnggunPRO','ButterFlyID','CantikWin','DivaCatur','ElinElite','FionaGaming',
+  'GraciaKnight','HalimahOP','IndriLegend','JessicaID','KiranaPintar','LindaGG',
+  'MeutiaQueen','NurulBoss','OctaviaSlayer','PutriAce','RaniMaster','SariaDragon',
+  'TitisVipers','UmiNinja','VanessaFire','WulandariRocket','XenaGod','YulianaElite',
+  'ZulfaKing','AisyahPRO','BiancaChess','CahayaGG','DesiLegend','ErikaWin',
+  'FitriaOP','GinaElite','HerlinaTitan','IlhamiGhost','JulietPremium','KanyaAce',
+  // batch 5 - username game style
+  'noob_killer_idn','pro_gamer_77','chess_master_id','dark_knight_idn','fire_blade99',
+  'shadow_queen_id','thunder_king77','venom_beast_id','wolf_slayer88','xXlegendXx',
+  'zerocool_id','alpha_player','beta_tester99','gamma_force_id','delta_king77',
+  'epsilon_pro','zeta_master_id','eta_warrior','theta_sniper','iota_gamer_id',
 ];
 const RANDOM_COUNTRIES=[
   {flag:'🇮🇩',name:'Indonesia'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
@@ -1743,11 +1787,22 @@ const RANDOM_COUNTRIES=[
   {flag:'🇮🇳',name:'India'},
 ];
 const MATCH_STATUSES=[
-  'Menganalisa rating pemain...','Menyocokkan skill level...','Menemukan kandidat lawan...',
-  'Memverifikasi koneksi lawan...','Hampir ketemu nih...','Lawan ditemukan! Mempersiapkan...',
+  'Menghubungkan ke server matchmaking...','Menganalisa rating pemain...','Memindai 10.000+ pemain aktif...',
+  'Menyocokkan skill level...','Menemukan kandidat lawan...','Memverifikasi koneksi lawan...',
+  'Rating hampir cocok...','Sinkronisasi profil lawan...','Hampir ketemu nih...','Lawan ditemukan! Mempersiapkan...',
 ];
 let matchTimer=null,matchInterval=null,fakeHumanChatTimer=null;
-let fakeOpponentProfile={name:'Bot',avatar:'♟',country:{flag:'🇮🇩',name:'Indonesia'}};
+let fakeOpponentProfile={name:'Bot',avatar:'♟',country:{flag:'🇮🇩',name:'Indonesia'},rating:1200};
+let _fakeMatchDiff=null;
+
+function _genFakeRating(diff){
+  const myR=userProfile.rating||1200;
+  if(diff.level===1&&diff.label==='Pemula')return 600+Math.floor(Math.random()*200);
+  if(diff.level===1)return 800+Math.floor(Math.random()*250);
+  if(diff.level===2)return 1100+Math.floor(Math.random()*300);
+  if(diff.label==='Sulit')return 1500+Math.floor(Math.random()*300);
+  return 1900+Math.floor(Math.random()*400);
+}
 
 function showMatchmaking(){
   showScreen('match');
@@ -1755,6 +1810,9 @@ function showMatchmaking(){
   const myAvEl=document.getElementById('match-my-av-inner');
   const myNmEl=document.getElementById('match-my-name');
   const myCnEl=document.getElementById('match-my-country');
+  const myRtEl=document.getElementById('match-my-rating');
+  const myRating=userProfile.rating||(Math.floor(950+Math.random()*500));
+  userProfile.rating=myRating;
   if(myAvEl){
     if(userProfile.photoUrl){
       document.getElementById('match-my-av').innerHTML=`<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
@@ -1762,15 +1820,23 @@ function showMatchmaking(){
   }
   if(myNmEl)myNmEl.textContent=userProfile.name;
   if(myCnEl)myCnEl.textContent=userProfile.country.flag;
+  if(myRtEl)myRtEl.textContent='★ '+myRating.toLocaleString('id-ID');
 
-  // Animate online count
-  let oc=Math.floor(10000+Math.random()*5000);
+  // Animate online count with fluctuation
+  let oc=Math.floor(10000+Math.random()*8000);
   document.getElementById('match-online-count').textContent=oc.toLocaleString('id-ID');
+  const ocEl=document.getElementById('match-online-count');
+  const ocInterval=setInterval(()=>{oc+=Math.floor(Math.random()*30)-10;if(ocEl)ocEl.textContent=Math.max(9800,oc).toLocaleString('id-ID');},1500);
+  setTimeout(()=>clearInterval(ocInterval),11000);
 
   // Reset opponent side
   document.getElementById('match-opp-av').textContent='❓';
   document.getElementById('match-opp-name').textContent='Mencari...';
   document.getElementById('match-opp-country').textContent='🌐';
+  document.getElementById('match-opp-rating').textContent='★ ---';
+  document.getElementById('match-opp-rating').style.color='var(--txt2)';
+  const lvlBadge=document.getElementById('match-opp-level');
+  if(lvlBadge){lvlBadge.style.display='none';lvlBadge.className='match-level-badge';}
   document.getElementById('match-bar').style.width='0%';
   document.getElementById('match-status').textContent=MATCH_STATUSES[0];
 
@@ -1778,6 +1844,9 @@ function showMatchmaking(){
   const TOTAL=10;
   let statusIdx=0;
   clearInterval(matchInterval);
+  _fakeMatchDiff=pickMatchDifficulty();
+  const finalRating=_genFakeRating(_fakeMatchDiff);
+  let currentShuffleRating=Math.floor(400+Math.random()*1800);
 
   matchInterval=setInterval(()=>{
     elapsed++;
@@ -1785,30 +1854,51 @@ function showMatchmaking(){
     document.getElementById('match-bar').style.width=pct+'%';
     document.getElementById('match-timer-lbl').textContent=Math.max(0,TOTAL-elapsed);
 
-    // Shuffle opponent profile
-    const rName=RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
-    const rAv=PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
-    const rCn=RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
+    // Shuffle opponent profile — stop shuffling at last 2 seconds
+    const rName=elapsed<9?RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)]:RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
+    const rAv=elapsed<9?PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)]:PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
+    const rCn=elapsed<9?RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)]:RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
     const oppNm=document.getElementById('match-opp-name');
     const oppAv=document.getElementById('match-opp-av');
     const oppCn=document.getElementById('match-opp-country');
+    const oppRt=document.getElementById('match-opp-rating');
     if(oppNm){oppNm.textContent=rName;oppNm.classList.remove('opp-shuffle');void oppNm.offsetWidth;oppNm.classList.add('opp-shuffle');}
     if(oppAv)oppAv.textContent=rAv;
     if(oppCn)oppCn.textContent=rCn.flag;
+    // Shuffle rating converging to final
+    if(elapsed<9){
+      currentShuffleRating=Math.floor(400+Math.random()*1800);
+      if(oppRt)oppRt.textContent='★ '+currentShuffleRating.toLocaleString('id-ID');
+    } else {
+      if(oppRt){oppRt.textContent='★ '+finalRating.toLocaleString('id-ID');oppRt.style.color='var(--gold)';}
+    }
 
     // Status messages
-    if(elapsed===2)statusIdx=1;
-    else if(elapsed===4)statusIdx=2;
-    else if(elapsed===6)statusIdx=3;
-    else if(elapsed===8)statusIdx=4;
-    else if(elapsed===9)statusIdx=5;
-    document.getElementById('match-status').textContent=MATCH_STATUSES[statusIdx];
+    const sIdx=Math.min(elapsed,MATCH_STATUSES.length-1);
+    document.getElementById('match-status').textContent=MATCH_STATUSES[sIdx];
 
     if(elapsed>=TOTAL){
       clearInterval(matchInterval);matchInterval=null;
-      // Pick final opponent — freeze the last shuffled one
-      fakeOpponentProfile={name:rName,avatar:rAv,country:rCn};
-      setTimeout(()=>startFakeHumanGame(),400);
+      // Lock final opponent
+      const finalName=RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
+      const finalAv=PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
+      const finalCn=RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
+      fakeOpponentProfile={name:finalName,avatar:finalAv,country:finalCn,rating:finalRating};
+      if(oppNm)oppNm.textContent=finalName;
+      if(oppAv)oppAv.textContent=finalAv;
+      if(oppCn)oppCn.textContent=finalCn.flag;
+      // Show skill badge
+      const badge=document.getElementById('match-opp-level');
+      if(badge){
+        badge.style.display='inline-block';
+        const d=_fakeMatchDiff;
+        if(d.label==='Pemula'){badge.textContent='⭐ Pemula';badge.className='match-level-badge easy';}
+        else if(d.label==='Mudah'){badge.textContent='⭐⭐ Mudah';badge.className='match-level-badge easy';}
+        else if(d.label==='Menengah'){badge.textContent='⭐⭐⭐ Menengah';badge.className='match-level-badge mid';}
+        else if(d.label==='Sulit'){badge.textContent='💀 Sulit';badge.className='match-level-badge hard';}
+        else{badge.textContent='☠️ Dewa';badge.className='match-level-badge god';}
+      }
+      setTimeout(()=>startFakeHumanGame(),600);
     }
   },1000);
 }
@@ -1818,18 +1908,21 @@ function cancelMatchmaking(){
   backHome();
 }
 
-// Difficulty distribution: 15% ultra-easy, 30% easy, 25% medium, 20% hard, 10% ultra-hard
+// Difficulty distribution: ~10% pemula, ~20% mudah, ~25% menengah, ~30% sulit, ~15% dewa
+// This means the user loses majority of games on hard/dewa (70-80% chance loss on those)
 function pickMatchDifficulty(){
   const r=Math.random();
-  if(r<.15)return{level:1,label:'Pemula',winPct:92};
-  if(r<.45)return{level:1,label:'Mudah',winPct:80};
-  if(r<.70)return{level:2,label:'Menengah',winPct:65};
-  if(r<.90)return{level:3,label:'Sulit',winPct:45};
-  return{level:3,label:'Dewa',winPct:28};
+  if(r<.10)return{level:1,label:'Pemula',winPct:95};
+  if(r<.30)return{level:1,label:'Mudah',winPct:82};
+  if(r<.55)return{level:2,label:'Menengah',winPct:60};
+  if(r<.85)return{level:3,label:'Sulit',winPct:25};
+  return{level:3,label:'Dewa',winPct:8};
 }
 
 function startFakeHumanGame(){
-  const diff=pickMatchDifficulty();
+  // Use the difficulty already picked during matchmaking, or pick fresh
+  const diff=_fakeMatchDiff||pickMatchDifficulty();
+  _fakeMatchDiff=null;
   clearTimeout(thinkTimer);thinkTimer=null;
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
@@ -1846,8 +1939,9 @@ function startFakeHumanGame(){
   chatMsgsEl=document.getElementById('chat-msgs');chatRenderedKeys={};
   // Start fake human bot chat
   startFakeHumanChat();
-  if(myColor==='b')setTimeout(doBotMove,800+Math.random()*1200);
-  setTimeout(()=>toast('🎮 Lawan ditemukan: '+fakeOpponentProfile.name+' ('+fakeOpponentProfile.country.flag+')'),200);
+  if(myColor==='b')setTimeout(doBotMove,800+Math.random()*1500);
+  const oppInfo=fakeOpponentProfile.name+' '+fakeOpponentProfile.country.flag+' (★'+fakeOpponentProfile.rating+') — '+diff.label;
+  setTimeout(()=>toast('🎮 Lawan ditemukan: '+oppInfo),200);
 }
 
 // ═══════════════════════════════════════
@@ -1867,33 +1961,77 @@ const GENZ_CHAT=[
   'jangan kasih ampun ya','gua serius nih sekarang','semangat!','ayo dong jangan pelan-pelan',
   'wah hampir kena tuh','bagus juga pertahananmu','gua excited nih','asik juga mainnya',
   'kalau gua kalah gg aja ya','gua challenge lu fair and square','siap!','ini seru banget sih',
+  // extra chat batch
+  'bro lu nge-trap ya','gua ga ketipu kok hehe','position gua udah oke kayaknya',
+  'lu main cepet banget sih','hmm ini tricky juga','jangan ngegas lu','pelan pelan bro',
+  'gua masih control situasi kok','jangan underestimate gua','gua udah ngitung 3 move ke depan loh',
+  'sini dong main seru','strategy gua top kali ini','wkwkwk ketangkep juga tuh',
+  'ya elah...','ini gua yang salah hitung','duh ngantuk gua','fokus dulu ah',
+  'bro lu mainan ini dari kecil?','gua barusan mulai chess nih','lumayan seru ternyata',
+  'tactical nih gua','mau sacrifice nih','gua liat opening ini di youtube',
+  'wkwk ayo gas','tadi ngapain gua','udah ketebak strategi lu','nice try bro',
+  'gua comeback mode aktif','yakin lu mau kesana?','hm interesting choice',
+  'gua senyum2 sendiri nih','kalau menang gua screenshot','skill difference wkwk',
 ];
-const GENZ_EMOJI_CHAT=['😂','🔥','💀','🤯','😤','👑','💪','😎','🎯','🤝','gg','ez','wkwk','mantap','anjay'];
+const GENZ_EMOJI_CHAT=['😂','🔥','💀','🤯','😤','👑','💪','😎','🎯','🤝','gg','ez','wkwk','mantap','anjay','💅','🥶','🫡','😭','🧠','💯','🔱'];
+// Event-based reaction pools
+const GENZ_REACT_CAPTURE_MINE=['anjay lu makan bidak gua 😤','eh bisa juga lu','duh kena deh','ya ampun salah langkah gua','gua masih bisa recover kok','hmm oke noted','wkwk oke bagus tuh move','gua akui itu solid'];
+const GENZ_REACT_CAPTURE_OPP=['hehe gua makan dulu ya','makasih bidaknya 😎','nice exchange bro','strategic sacrifice kali gua','taken! wkwk','gua lagi hungry nih'];
+const GENZ_REACT_CHECK=['eh check ya? belum gg bro','santai bro gua keluar','wah hampir gg tuh','nice attack sih respect','gua blokir dulu','masih aman kok'];
+const GENZ_REACT_CHECKED=['CHECK! jaga raja lu','hati2 raja lu bahaya','gua attack terus nih','pressure on bro','wkwk kaget ga?'];
+const GENZ_REACT_MIDGAME=['posisi gua udah lumayan nih','ini endgame mode soon','lu mau trade ga?','gua lagi calculate nih','waktu buat serius'];
+
+let _lastFakeReactTime=0;
+function triggerFakeHumanReaction(type){
+  if(gameMode!=='match'||!gs||gs.gameOver)return;
+  const now=Date.now();
+  if(now-_lastFakeReactTime<4000)return; // cooldown 4 detik antar reaction
+  _lastFakeReactTime=now;
+  let pool;
+  if(type==='cap_mine')pool=GENZ_REACT_CAPTURE_MINE;
+  else if(type==='cap_opp')pool=GENZ_REACT_CAPTURE_OPP;
+  else if(type==='check_me')pool=GENZ_REACT_CHECK;
+  else if(type==='check_opp')pool=GENZ_REACT_CHECKED;
+  else if(type==='mid')pool=GENZ_REACT_MIDGAME;
+  else return;
+  // Only react some % of the time so it doesn't feel scripted
+  const reactionChance=type==='check_me'||type==='check_opp'?0.75:0.45;
+  if(Math.random()>reactionChance)return;
+  const delay=1200+Math.random()*2500;
+  setTimeout(()=>{
+    if(gameMode!=='match'||!gs||gs.gameOver)return;
+    const msg=pool[Math.floor(Math.random()*pool.length)];
+    appendChatMsg(msg,'opp');
+    if(Math.random()<.3){const em=['😤','💀','🔥','😎','🤯'][Math.floor(Math.random()*5)];floatEmoji(em);playEmojiSound(em);}
+  },delay);
+}
 
 function startFakeHumanChat(){
   clearTimeout(fakeHumanChatTimer);
+  _lastFakeReactTime=0;
   function scheduleNext(){
-    const delay=20000+Math.random()*50000; // 20-70 sec intervals
+    const delay=15000+Math.random()*35000; // 15-50 sec intervals (tighter than before)
     fakeHumanChatTimer=setTimeout(()=>{
       if(gameMode!=='match'||!gs||gs.gameOver)return;
-      // 70% text, 30% emoji/slang
+      // 65% text, 20% emoji/slang, 15% midgame comment
       const r=Math.random();
       let msg;
-      if(r<.7)msg=GENZ_CHAT[Math.floor(Math.random()*GENZ_CHAT.length)];
-      else msg=GENZ_EMOJI_CHAT[Math.floor(Math.random()*GENZ_EMOJI_CHAT.length)];
+      if(r<.65)msg=GENZ_CHAT[Math.floor(Math.random()*GENZ_CHAT.length)];
+      else if(r<.85)msg=GENZ_EMOJI_CHAT[Math.floor(Math.random()*GENZ_EMOJI_CHAT.length)];
+      else{msg=GENZ_REACT_MIDGAME[Math.floor(Math.random()*GENZ_REACT_MIDGAME.length)];}
       appendChatMsg(msg,'opp');
       // Also float emoji sometimes
-      if(Math.random()<.35){const em=EMOJI_SOUNDS.laugh[Math.floor(Math.random()*4)];floatEmoji(em);playEmojiSound(em);}
+      if(Math.random()<.3){const em=EMOJI_SOUNDS.laugh[Math.floor(Math.random()*4)];floatEmoji(em);playEmojiSound(em);}
       scheduleNext();
     },delay);
   }
-  // First message after 5-12 seconds
+  // First message after 4-9 seconds
   fakeHumanChatTimer=setTimeout(()=>{
     if(gameMode!=='match')return;
-    const greet=['halo bro siap nih 👋','gas gas gas 🔥','gl hf bro','ayo siapa takut 😤','kita lihat siapa yang menang 👑'];
+    const greet=['halo bro siap nih 👋','gas gas gas 🔥','gl hf bro!','ayo siapa takut 😤','kita lihat siapa yang menang 👑','wkwk ayo main!','siap challenge lu','gua udah panas nih'];
     appendChatMsg(greet[Math.floor(Math.random()*greet.length)],'opp');
     scheduleNext();
-  },5000+Math.random()*7000);
+  },4000+Math.random()*5000);
 }
 
 function setPlayerNames(topName,botName,topColor,botColor){
@@ -2023,6 +2161,19 @@ function executeMove(mv){
     renderBoard();animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);setTimeout(()=>showGameOver(gs.result),500);return;
   }
   if(isInCheck(gs,gs.turn)){playSound('check');}
+  // Fake human reactions for match mode
+  if(gameMode==='match'){
+    const moverIsMe=gs.turn!==myColor; // turn flipped after applyMove, so gs.turn is now opponent's perspective
+    if(cap){
+      // Who captured whom?
+      const capturerWasMe=(col(movedPiece)===myColor);
+      triggerFakeHumanReaction(capturerWasMe?'cap_mine':'cap_opp');
+    }
+    if(isInCheck(gs,gs.turn)){
+      const checkedIsMe=(gs.turn===myColor);
+      triggerFakeHumanReaction(checkedIsMe?'check_me':'check_opp');
+    }
+  }
   renderBoard();
   animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);
   // Pass-and-play: show device handoff overlay
