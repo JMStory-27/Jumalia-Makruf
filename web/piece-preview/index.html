@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Chess Pieces Preview</title>
+<style>
+body{margin:0;background:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;font-family:Arial,sans-serif;color:#f0d9b5}
+h1{color:#d4af37;margin-bottom:4px;font-size:22px}
+p{font-size:12px;opacity:.6;margin-bottom:16px}
+.board{display:grid;grid-template-columns:repeat(8,60px);border:3px solid #8b6914;box-shadow:0 8px 32px rgba(0,0,0,.8)}
+.sq{width:60px;height:60px;display:flex;align-items:center;justify-content:center}
+.sq svg{width:54px;height:54px;filter:drop-shadow(0 3px 7px rgba(0,0,0,.7))}
+.light{background:#f0d9b5}.dark{background:#b58863}
+.label{display:flex;gap:40px;margin-top:18px}
+.col{text-align:center}
+.col h3{font-size:13px;color:#d4af37;margin-bottom:8px}
+.pieces{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;background:rgba(255,255,255,.05);padding:10px;border-radius:8px}
+.piece-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.piece-wrap span{font-size:9px;opacity:.5}
+</style>
+</head>
+<body>
+<h1>♟ Desain Piece Baru — Chess Royal</h1>
+<p>Semua 12 piece (6 putih + 6 hitam) dari ChessPiecesLibrary.jsx</p>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- ═══ WHITE PIECES — from ChessPiecesLibrary.jsx (scaled 100→45) ═══ -->
+
+<!-- WHITE KING: Crown 5-point + cross on top -->
+<g id="wK">
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 13.5,34 Q 13.5,25 16,20 L 29,20 Q 31.5,25 31.5,34 Z"/>
+  <ellipse fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="20" rx="6.8" ry="5.4"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 16,20 L 19,11 L 20.5,16 L 22.5,7 L 24.5,16 L 26,11 L 29,20"/>
+  <line x1="22.5" y1="3.6" x2="22.5" y2="9.9" stroke="#404040" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="19.8" y1="6.3" x2="25.2" y2="6.3" stroke="#404040" stroke-width="1.5" stroke-linecap="round"/>
+  <circle fill="#404040" cx="22.5" cy="27" r="1.8" opacity="0.3"/>
+</g>
+
+<!-- WHITE QUEEN: Crown 8-point + decorative balls -->
+<g id="wQ">
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 12.6,34 Q 12.6,27 14.4,21.6 L 30.6,21.6 Q 32.4,27 32.4,34 Z"/>
+  <ellipse fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="21.6" rx="7.2" ry="4.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 14.4,21.6 L 16.2,9.9 L 18.4,14.4 L 20.2,8.1 L 22.5,14.4 L 24.8,8.1 L 26.6,14.4 L 28.8,9.9 L 30.6,21.6"/>
+  <circle fill="#404040" cx="16.2" cy="9.9" r="1.2" opacity="0.4"/>
+  <circle fill="#404040" cx="20.2" cy="8.1" r="1.2" opacity="0.4"/>
+  <circle fill="#404040" cx="22.5" cy="4.5" r="1.4" opacity="0.4"/>
+  <circle fill="#404040" cx="24.8" cy="8.1" r="1.2" opacity="0.4"/>
+  <circle fill="#404040" cx="28.8" cy="9.9" r="1.2" opacity="0.4"/>
+  <circle fill="#404040" cx="22.5" cy="28" r="1.6" opacity="0.3"/>
+</g>
+
+<!-- WHITE ROOK: Tower with battlements -->
+<g id="wR">
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 9,38 L 36,38 L 34,33 L 11,33 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 13.5,33 L 13.5,24.8 L 15.8,24.8 L 15.8,29.2 L 29.2,29.2 L 29.2,24.8 L 31.5,24.8 L 31.5,33 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 13.5,24.8 L 13.5,15.8 L 17.1,15.8 L 17.1,19 L 22.5,19 L 22.5,15.8 L 27.9,15.8 L 27.9,19 L 31.5,19 L 31.5,15.8 L 31.5,24.8"/>
+  <line x1="18" y1="24.8" x2="18" y2="33" stroke="#404040" stroke-width="1" opacity="0.3"/>
+  <line x1="27" y1="24.8" x2="27" y2="33" stroke="#404040" stroke-width="1" opacity="0.3"/>
+  <circle fill="#404040" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+</g>
+
+<!-- WHITE BISHOP: Dome + pointed spike + ring -->
+<g id="wB">
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 14.4,34 Q 14.4,29 15.8,24.8 Q 15.8,22.5 18,20.2 L 27,20.2 Q 29.2,22.5 29.2,24.8 Q 30.6,29 30.6,34 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 18,20.2 Q 22.5,13.5 27,20.2"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 21.6,13.5 L 22.5,5.4 L 23.4,13.5"/>
+  <line x1="22.5" y1="13.5" x2="22.5" y2="5.4" stroke="#404040" stroke-width="1" opacity="0.4"/>
+  <ellipse fill="none" stroke="#404040" stroke-width="0.8" cx="22.5" cy="22.5" rx="5.4" ry="2.7" opacity="0.3"/>
+  <circle fill="#404040" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+</g>
+
+<!-- WHITE KNIGHT: Horse head — neck+head+muzzle+2 ears+eye+nostril -->
+<g id="wN">
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15.8,34 Q 14.4,29 14.8,24.8 Q 15.3,22.5 18,21.6 L 18,34 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 18,21.6 Q 20.2,18.9 22.5,17.1 Q 24.8,15.8 26.1,18 Q 27,22.5 26.1,27 Q 24.8,30.6 21.6,32.4 Q 18.9,34 18,34"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 26.1,18 Q 31.5,15.8 35.1,17.1 Q 36,18.9 35.1,22.5 Q 33.8,27 29.2,29.2 Q 26.1,27 26.1,22.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
+    d="M 21.6,15.8 Q 20.2,11.2 21.6,8.1 Q 23.4,9 23.4,13.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
+    d="M 24.8,14.4 Q 26.1,9.9 27.9,7.2 Q 29.2,9 27.9,14.4"/>
+  <circle fill="#404040" cx="27.9" cy="20.2" r="1.5" opacity="0.7"/>
+  <circle fill="#404040" cx="31.5" cy="22.5" r="1" opacity="0.4"/>
+  <path fill="none" stroke="#404040" stroke-width="0.8" stroke-linecap="round"
+    d="M 18,22.5 Q 17.1,27 16.7,31.5" opacity="0.2"/>
+</g>
+
+<!-- WHITE PAWN: Round head + waist + base -->
+<g id="wP">
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 11.2,38 L 33.8,38 L 32.4,34.6 L 12.6,34.6 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15.8,34.6 Q 15.8,29.2 17.1,24.8 L 27.9,24.8 Q 29.2,29.2 29.2,34.6 Z"/>
+  <ellipse fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="24.8" rx="5.4" ry="3.6"/>
+  <circle fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="18" r="5.9"/>
+  <circle fill="#404040" cx="22.5" cy="30" r="1.1" opacity="0.2"/>
+  <circle fill="#404040" cx="22.5" cy="18" r="0.7" opacity="0.15"/>
+</g>
+
+<!-- ═══ BLACK PIECES — mirror of white with dark fill ═══ -->
+
+<!-- BLACK KING -->
+<g id="bK">
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 13.5,34 Q 13.5,25 16,20 L 29,20 Q 31.5,25 31.5,34 Z"/>
+  <ellipse fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="20" rx="6.8" ry="5.4"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 16,20 L 19,11 L 20.5,16 L 22.5,7 L 24.5,16 L 26,11 L 29,20"/>
+  <line x1="22.5" y1="3.6" x2="22.5" y2="9.9" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="19.8" y1="6.3" x2="25.2" y2="6.3" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+  <circle fill="#ccc" cx="22.5" cy="27" r="1.8" opacity="0.3"/>
+</g>
+
+<!-- BLACK QUEEN -->
+<g id="bQ">
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 12.6,34 Q 12.6,27 14.4,21.6 L 30.6,21.6 Q 32.4,27 32.4,34 Z"/>
+  <ellipse fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="21.6" rx="7.2" ry="4.5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 14.4,21.6 L 16.2,9.9 L 18.4,14.4 L 20.2,8.1 L 22.5,14.4 L 24.8,8.1 L 26.6,14.4 L 28.8,9.9 L 30.6,21.6"/>
+  <circle fill="#ccc" cx="16.2" cy="9.9" r="1.2" opacity="0.4"/>
+  <circle fill="#ccc" cx="20.2" cy="8.1" r="1.2" opacity="0.4"/>
+  <circle fill="#ccc" cx="22.5" cy="4.5" r="1.4" opacity="0.4"/>
+  <circle fill="#ccc" cx="24.8" cy="8.1" r="1.2" opacity="0.4"/>
+  <circle fill="#ccc" cx="28.8" cy="9.9" r="1.2" opacity="0.4"/>
+  <circle fill="#ccc" cx="22.5" cy="28" r="1.6" opacity="0.3"/>
+</g>
+
+<!-- BLACK ROOK -->
+<g id="bR">
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 9,38 L 36,38 L 34,33 L 11,33 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 13.5,33 L 13.5,24.8 L 15.8,24.8 L 15.8,29.2 L 29.2,29.2 L 29.2,24.8 L 31.5,24.8 L 31.5,33 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 13.5,24.8 L 13.5,15.8 L 17.1,15.8 L 17.1,19 L 22.5,19 L 22.5,15.8 L 27.9,15.8 L 27.9,19 L 31.5,19 L 31.5,15.8 L 31.5,24.8"/>
+  <line x1="18" y1="24.8" x2="18" y2="33" stroke="#ccc" stroke-width="1" opacity="0.3"/>
+  <line x1="27" y1="24.8" x2="27" y2="33" stroke="#ccc" stroke-width="1" opacity="0.3"/>
+  <circle fill="#ccc" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+</g>
+
+<!-- BLACK BISHOP -->
+<g id="bB">
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 14.4,34 Q 14.4,29 15.8,24.8 Q 15.8,22.5 18,20.2 L 27,20.2 Q 29.2,22.5 29.2,24.8 Q 30.6,29 30.6,34 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 18,20.2 Q 22.5,13.5 27,20.2"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 21.6,13.5 L 22.5,5.4 L 23.4,13.5"/>
+  <line x1="22.5" y1="13.5" x2="22.5" y2="5.4" stroke="#ccc" stroke-width="1" opacity="0.4"/>
+  <ellipse fill="none" stroke="#ccc" stroke-width="0.8" cx="22.5" cy="22.5" rx="5.4" ry="2.7" opacity="0.3"/>
+  <circle fill="#ccc" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+</g>
+
+<!-- BLACK KNIGHT -->
+<g id="bN">
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15.8,34 Q 14.4,29 14.8,24.8 Q 15.3,22.5 18,21.6 L 18,34 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 18,21.6 Q 20.2,18.9 22.5,17.1 Q 24.8,15.8 26.1,18 Q 27,22.5 26.1,27 Q 24.8,30.6 21.6,32.4 Q 18.9,34 18,34"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 26.1,18 Q 31.5,15.8 35.1,17.1 Q 36,18.9 35.1,22.5 Q 33.8,27 29.2,29.2 Q 26.1,27 26.1,22.5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
+    d="M 21.6,15.8 Q 20.2,11.2 21.6,8.1 Q 23.4,9 23.4,13.5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
+    d="M 24.8,14.4 Q 26.1,9.9 27.9,7.2 Q 29.2,9 27.9,14.4"/>
+  <circle fill="#ccc" cx="27.9" cy="20.2" r="1.5" opacity="0.7"/>
+  <circle fill="#ccc" cx="31.5" cy="22.5" r="1" opacity="0.4"/>
+  <path fill="none" stroke="#ccc" stroke-width="0.8" stroke-linecap="round"
+    d="M 18,22.5 Q 17.1,27 16.7,31.5" opacity="0.2"/>
+</g>
+
+<!-- BLACK PAWN -->
+<g id="bP">
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 11.2,38 L 33.8,38 L 32.4,34.6 L 12.6,34.6 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15.8,34.6 Q 15.8,29.2 17.1,24.8 L 27.9,24.8 Q 29.2,29.2 29.2,34.6 Z"/>
+  <ellipse fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="24.8" rx="5.4" ry="3.6"/>
+  <circle fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="18" r="5.9"/>
+  <circle fill="#ccc" cx="22.5" cy="30" r="1.1" opacity="0.2"/>
+  <circle fill="#ccc" cx="22.5" cy="18" r="0.7" opacity="0.15"/>
+</g>
+</defs>
+</svg>
+
+<div class="board">
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bR"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bN"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bB"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bQ"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bK"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bB"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bN"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bR"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#bP"/></svg></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq dark"></div>
+<div class="sq light"></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wP"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wR"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wN"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wB"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wQ"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wK"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wB"/></svg></div>
+<div class="sq dark"><svg viewBox="0 0 45 45"><use href="#wN"/></svg></div>
+<div class="sq light"><svg viewBox="0 0 45 45"><use href="#wR"/></svg></div>
+</div>
+
+<div class="label">
+  <div class="col">
+    <h3>⬜ Piece Putih</h3>
+    <div class="pieces">
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#b58863" rx="4"/><use href="#wK"/></svg><span>King</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#b58863" rx="4"/><use href="#wQ"/></svg><span>Queen</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#b58863" rx="4"/><use href="#wR"/></svg><span>Rook</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#b58863" rx="4"/><use href="#wB"/></svg><span>Bishop</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#b58863" rx="4"/><use href="#wN"/></svg><span>Knight</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#b58863" rx="4"/><use href="#wP"/></svg><span>Pawn</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <h3>⬛ Piece Hitam</h3>
+    <div class="pieces">
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#f0d9b5" rx="4"/><use href="#bK"/></svg><span>King</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#f0d9b5" rx="4"/><use href="#bQ"/></svg><span>Queen</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#f0d9b5" rx="4"/><use href="#bR"/></svg><span>Rook</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#f0d9b5" rx="4"/><use href="#bB"/></svg><span>Bishop</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#f0d9b5" rx="4"/><use href="#bN"/></svg><span>Knight</span></div>
+<div class="piece-wrap"><svg width="60" height="60" viewBox="0 0 45 45" style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))"><rect width="45" height="45" fill="#f0d9b5" rx="4"/><use href="#bP"/></svg><span>Pawn</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
