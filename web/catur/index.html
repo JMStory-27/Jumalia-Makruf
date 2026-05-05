@@ -2323,11 +2323,10 @@ function showHint(){
   const quickMv=getBestMove(gs,c,1);
   if(quickMv){
     hintMove={fr:quickMv.fr,fc:quickMv.fc,tr:quickMv.tr,tc:quickMv.tc};
-    selected=[hintMove.fr,hintMove.fc];
-    legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
+    // DO NOT set selected/legalFromSel — only highlight hint squares, no legal-move dots
     if(hintLabel)hintLabel.textContent='D1✓';
     renderBoard();
-    toast('💡 Petunjuk siap!');
+    toast('💡 Petunjuk: kotak kuning = dari → ke');
   }
 
   // ── BACKGROUND: Magnus worker deepens to D6 ────────────────────────────────
@@ -2341,8 +2340,7 @@ function showHint(){
       const d=e.data;if(!d||!d.move)return;
       const mv=d.move;
       hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-      selected=[hintMove.fr,hintMove.fc];
-      legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===mv.fr&&m.fc===mv.fc);
+      // DO NOT set selected/legalFromSel — hint only shows from/to highlight
       if(hintLabel)hintLabel.textContent='D'+d.depth+'/'+MD+'✓';
       renderBoard();
       if(d.depth>=MD){
