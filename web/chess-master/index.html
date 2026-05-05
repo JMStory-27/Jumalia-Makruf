@@ -548,6 +548,78 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 /* Promotion sparkle burst */
 @keyframes promoSpark{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--px),var(--py)) scale(0);opacity:0}}
 .promo-spark{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;animation:promoSpark .5s ease-out forwards}
+
+/* ── ELO & XP SYSTEM ── */
+.elo-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.4);font-size:12px;font-weight:700;color:var(--gold)}
+.xp-bar-wrap{width:100%;height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin-top:5px}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,#d4af37,#f5e6aa);border-radius:99px;transition:width .6s ease}
+.prof-stats-row{display:flex;gap:8px;margin:10px 0 4px}
+.prof-stat{flex:1;padding:8px 6px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--card-b);text-align:center}
+.prof-stat-val{font-size:17px;font-weight:900;color:var(--gold)}
+.prof-stat-lbl{font-size:9px;color:var(--txt2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+/* ── GAME OVER ELO/XP ── */
+.go-stats{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.go-stat-box{padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--card-b);text-align:center;min-width:76px}
+.go-stat-val{font-size:20px;font-weight:900;color:var(--gold)}
+.go-stat-lbl{font-size:10px;color:var(--txt2);margin-top:2px}
+.elo-change{font-size:15px;font-weight:800}.elo-change.pos{color:#4ade80}.elo-change.neg{color:#f87171}
+/* ── AI PERSONALITY ── */
+.personality-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+.pers-card{padding:12px 10px;border-radius:12px;border:1px solid var(--card-b);background:var(--card);cursor:pointer;text-align:center;transition:all .2s}
+.pers-card:hover{border-color:rgba(212,175,55,.4);transform:translateY(-2px)}
+.pers-card.selected{border-color:var(--gold);background:rgba(212,175,55,.12);box-shadow:0 0 14px rgba(212,175,55,.2)}
+.pers-icon{font-size:26px;display:block;margin-bottom:4px}
+.pers-name{font-size:13px;font-weight:700;color:var(--txt)}
+.pers-desc{font-size:10px;color:var(--txt2);margin-top:2px;line-height:1.4}
+/* ── GAME HISTORY SCREEN ── */
+#s-history{justify-content:flex-start}
+.hist-inner{width:100%;max-width:420px;padding-bottom:20px}
+.hist-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--card-b);background:var(--card);margin-bottom:8px;position:relative;overflow:hidden}
+.hist-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.hist-card.win::before{background:#4ade80}
+.hist-card.loss::before{background:#f87171}
+.hist-card.draw::before{background:#94a3b8}
+.hist-icon{font-size:26px;flex-shrink:0}
+.hist-info{flex:1;min-width:0}
+.hist-mode{font-size:11px;color:var(--txt2)}
+.hist-result{font-size:14px;font-weight:700;margin-top:1px}
+.hist-date{font-size:10px;color:var(--txt2);margin-top:2px}
+.hist-elo{text-align:right;font-size:13px;font-weight:700;flex-shrink:0;min-width:56px}
+.hist-empty{text-align:center;padding:40px 20px;color:var(--txt2);font-size:14px;line-height:2.2}
+.hist-summary{display:flex;gap:8px;margin-bottom:14px}
+.hist-sum-box{flex:1;padding:10px 6px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--card-b);text-align:center}
+.hist-sum-val{font-size:20px;font-weight:900;color:var(--gold)}
+.hist-sum-lbl{font-size:10px;color:var(--txt2);margin-top:2px}
+/* ── ANALYSIS TABS ── */
+.an-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.an-tab{flex:1;padding:9px 8px;font-size:12px;font-weight:700;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;text-align:center;letter-spacing:.3px;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit}
+.an-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.an-tab-panel{display:none;flex:1;overflow-y:auto;flex-direction:column;min-height:0}
+.an-tab-panel.active{display:flex}
+/* ── PUZZLE TAB ── */
+.puzzle-board-wrap{display:flex;justify-content:center;padding:6px 12px;flex-shrink:0}
+#pz-board{display:grid;grid-template-columns:repeat(8,1fr);border:2px solid rgba(212,175,55,.35);border-radius:3px;overflow:hidden}
+.pz-sq{aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.pz-sq.pzl{background:#f0d9b5}.pz-sq.pzd{background:#b58863}
+.pz-sq.pz-sel{box-shadow:inset 0 0 0 3px var(--gold) !important}
+.pz-sq.pz-legal::after{content:'';position:absolute;width:35%;height:35%;border-radius:50%;background:rgba(0,0,0,.6);pointer-events:none;z-index:2}
+.pz-sq.pz-lastfrom,.pz-sq.pz-lastto{background:rgba(212,175,55,.45) !important}
+.pz-feedback{min-height:36px;text-align:center;padding:5px 16px;font-size:13px;font-weight:700;flex-shrink:0}
+.pz-feedback.correct{color:#4ade80}.pz-feedback.wrong{color:#f87171}
+.pz-status-bar{font-size:11px;color:var(--txt2);text-align:center;padding:2px 16px 4px;flex-shrink:0}
+.pz-title-bar{padding:7px 16px 2px;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;text-align:center}
+.pz-nav-row{display:flex;gap:8px;padding:6px 16px 10px;flex-shrink:0;justify-content:center}
+.pz-nav-btn{padding:8px 18px;border-radius:10px;border:1px solid var(--card-b);background:var(--card);color:var(--txt2);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s}
+.pz-nav-btn:hover{border-color:rgba(212,175,55,.4);color:var(--gold)}
+/* ── 3D PIECE PICKUP ── */
+.sq.sel .piece-svg{
+  transform:perspective(280px) rotateX(24deg) scale(1.26) translateY(-13px) !important;
+  filter:drop-shadow(0 22px 34px rgba(0,0,0,.98)) drop-shadow(0 0 18px rgba(212,175,55,.7)) !important;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),filter .18s ease !important;
+}
+/* ── MOVEMENT TRAIL ── */
+.piece-trail{animation-duration:.45s !important}
+@keyframes trailFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
 </style>
 </head>
 <body>
@@ -728,6 +800,11 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <span class="btn-label">Tutorial Catur</span>
         <span class="btn-arrow">›</span>
       </button>
+      <button class="btn-main" onclick="showHistory()">
+        <span class="btn-icon">📜</span>
+        <span class="btn-label">Riwayat Permainan</span>
+        <span class="btn-arrow">›</span>
+      </button>
     </div>
     <div class="home-footer">
       <div class="ic-btn" onclick="showSettings()" title="Pengaturan">⚙️</div>
@@ -777,6 +854,29 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div id="t-putih" class="col-btn on" onclick="setColor('w')">⬜ Putih</div>
       <div id="t-hitam" class="col-btn" onclick="setColor('b')">⬛ Hitam</div>
       <div id="t-alt" class="col-btn" onclick="setColor('alt')">🎲 Acak</div>
+    </div>
+    <div class="sec-label" style="margin-top:16px">🤖 Kepribadian Bot</div>
+    <div class="personality-grid">
+      <div class="pers-card glass selected" id="pers-agresif" onclick="selectPersonality('agresif')">
+        <span class="pers-icon">⚔️</span>
+        <div class="pers-name">Agresif</div>
+        <div class="pers-desc">Selalu menyerang, mengincar skakmat</div>
+      </div>
+      <div class="pers-card glass" id="pers-defensif" onclick="selectPersonality('defensif')">
+        <span class="pers-icon">🛡️</span>
+        <div class="pers-name">Defensif</div>
+        <div class="pers-desc">Bermain solid, hindari risiko</div>
+      </div>
+      <div class="pers-card glass" id="pers-posisional" onclick="selectPersonality('posisional')">
+        <span class="pers-icon">♟</span>
+        <div class="pers-name">Posisional</div>
+        <div class="pers-desc">Kuasai pusat, langkah matang</div>
+      </div>
+      <div class="pers-card glass" id="pers-gila" onclick="selectPersonality('gila')">
+        <span class="pers-icon">🎲</span>
+        <div class="pers-name">Gila / Random</div>
+        <div class="pers-desc">50% acak — serba tak terduga!</div>
+      </div>
     </div>
     <div id="lvl-hint" style="text-align:center;font-size:12px;color:var(--txt2);margin-top:12px;opacity:.7">Pilih tingkat kesulitan di atas</div>
     <button id="btn-mulai-bot" class="ov-btn gold" onclick="mulaiVsBot()" style="margin-top:14px;display:none;font-size:15px;padding:15px">▶ Mulai Bermain</button>
@@ -896,6 +996,19 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <input type="file" id="prof-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)">
       </label>
       <button class="prof-save-btn" onclick="saveProfile()">💾 Simpan Profil</button>
+      <div class="prof-stats-row" id="prof-stats-row">
+        <div class="prof-stat"><div class="prof-stat-val" id="prof-elo-val">1200</div><div class="prof-stat-lbl">ELO</div></div>
+        <div class="prof-stat"><div class="prof-stat-val" id="prof-level-val">1</div><div class="prof-stat-lbl">Level</div></div>
+        <div class="prof-stat"><div class="prof-stat-val" id="prof-wins-val">0</div><div class="prof-stat-lbl">Menang</div></div>
+        <div class="prof-stat"><div class="prof-stat-val" id="prof-games-val">0</div><div class="prof-stat-lbl">Total</div></div>
+      </div>
+      <div style="padding:0 4px 4px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt2);margin-bottom:3px">
+          <span id="prof-badge-lbl">🌱 Pemula</span>
+          <span id="prof-xp-lbl">0 / 100 XP</span>
+        </div>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" id="prof-xp-bar" style="width:0%"></div></div>
+      </div>
     </div>
     <div class="sec-label">Tema Papan</div>
     <div id="theme-strip" class="theme-strip"></div>
@@ -952,6 +1065,18 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <button class="btn-tut" onclick="tutPrev()">← Sebelumnya</button>
       <button id="tut-next-btn" class="btn-tut next" onclick="tutNext()">Selanjutnya →</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ HISTORY SCREEN ══ -->
+<div id="s-history" class="screen">
+  <div class="scr-header">
+    <div class="back-btn" onclick="backHome()">←</div>
+    <div class="scr-title">Riwayat Permainan</div>
+  </div>
+  <div class="set-inner hist-inner">
+    <div class="hist-summary" id="hist-summary"></div>
+    <div id="hist-list"></div>
   </div>
 </div>
 
@@ -1124,6 +1249,13 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div id="go-icon" class="ov-icon"></div>
     <div id="go-title" class="ov-title" style="text-align:center;font-size:26px"></div>
     <div id="go-sub" class="ov-sub" style="text-align:center"></div>
+    <div id="go-stats" class="go-stats" style="display:none">
+      <div class="go-stat-box"><div id="go-elo-val" class="go-stat-val">1200</div><div class="go-stat-lbl">ELO Sekarang</div></div>
+      <div class="go-stat-box"><div id="go-elo-change" class="elo-change">+0</div><div class="go-stat-lbl">Perubahan ELO</div></div>
+      <div class="go-stat-box"><div id="go-xp-val" class="go-stat-val">+0</div><div class="go-stat-lbl">XP Dapat</div></div>
+    </div>
+    <div id="go-level-up" style="display:none;padding:6px 0;font-size:14px;font-weight:900;color:var(--gold);text-shadow:0 0 12px rgba(212,175,55,.7)">🎉 LEVEL UP! 🎉</div>
+    <div id="go-level-badge" style="font-size:12px;color:var(--txt2);margin-bottom:6px"></div>
     <div class="ov-btns">
       <button class="ov-btn gold" onclick="restartSameMode()">🔄 Main Lagi</button>
       <button class="ov-btn" onclick="showAnalysis()">📊 Analisis</button>
@@ -1165,32 +1297,63 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <div class="overlay-sheet glass" style="width:100%;max-width:460px;max-height:94vh;display:flex;flex-direction:column;padding:0;overflow:hidden;position:relative">
     <div style="padding:14px 16px 6px;flex-shrink:0">
       <div class="ov-close" onclick="closeAnalysis()">✕</div>
-      <div class="ov-title" style="margin-bottom:8px">📊 Replay Analisis</div>
-      <div class="analysis-grid">
-        <div class="an-stat glass"><div id="an-n0" class="an-num">0</div><div class="an-label">✨ Brilian</div></div>
-        <div class="an-stat glass"><div id="an-n1" class="an-num">0</div><div class="an-label">⚠️ Salah</div></div>
-        <div class="an-stat glass"><div id="an-n2" class="an-num">0</div><div class="an-label">💀 Blunder</div></div>
+      <div class="ov-title" style="margin-bottom:8px">📊 Analisis</div>
+    </div>
+    <div class="an-tabs">
+      <button class="an-tab active" id="an-tab-replay" onclick="switchAnalysisTab('replay')">♟ Replay</button>
+      <button class="an-tab" id="an-tab-puzzle" onclick="switchAnalysisTab('puzzle')">🧩 Taktik Harian</button>
+      <button class="an-tab" id="an-tab-history" onclick="switchAnalysisTab('anhistory')">📜 Riwayat</button>
+    </div>
+
+    <!-- REPLAY PANEL -->
+    <div id="an-panel-replay" class="an-tab-panel active" style="flex-direction:column">
+      <div style="padding:8px 16px 4px;flex-shrink:0">
+        <div class="analysis-grid">
+          <div class="an-stat glass"><div id="an-n0" class="an-num">0</div><div class="an-label">✨ Brilian</div></div>
+          <div class="an-stat glass"><div id="an-n1" class="an-num">0</div><div class="an-label">⚠️ Salah</div></div>
+          <div class="an-stat glass"><div id="an-n2" class="an-num">0</div><div class="an-label">💀 Blunder</div></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;padding:0 12px;flex-shrink:0">
+        <div id="an-board" class="an-replay-board" style="width:100%"></div>
+      </div>
+      <div style="padding:4px 16px 2px;flex-shrink:0">
+        <div class="an-eval-bar"><div id="an-eval-fill" class="an-eval-fill" style="width:50%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--txt2);margin-top:2px"><span>⬛ Hitam unggul</span><span>⬜ Putih unggul</span></div>
+      </div>
+      <div style="text-align:center;padding:4px 16px;flex-shrink:0;min-height:52px">
+        <div id="an-move-label" style="font-size:13px;font-weight:700;color:var(--gold)">Posisi Awal</div>
+        <div id="an-move-comment" style="font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4;min-height:14px"></div>
+      </div>
+      <div style="display:flex;gap:5px;justify-content:center;padding:4px 16px 8px;flex-shrink:0">
+        <button class="an-ctrl" onclick="replayGoto(-1)">⏮</button>
+        <button class="an-ctrl" onclick="replayPrev()">◀</button>
+        <button class="an-ctrl wide" id="an-play-btn" onclick="toggleReplayPlay()">▶ Play</button>
+        <button class="an-ctrl" onclick="replayNext()">▶</button>
+        <button class="an-ctrl" onclick="replayGoto(_analysisData.length-1)">⏭</button>
+      </div>
+      <div id="analysis-list" class="move-list" style="flex:1;overflow-y:auto;padding:4px 10px 14px"></div>
+    </div>
+
+    <!-- PUZZLE PANEL -->
+    <div id="an-panel-puzzle" class="an-tab-panel" style="flex-direction:column">
+      <div class="pz-title-bar" id="pz-title">🧩 Taktik Harian</div>
+      <div class="pz-status-bar" id="pz-status">Giliran Putih • Cari langkah terbaik!</div>
+      <div class="puzzle-board-wrap">
+        <div id="pz-board" style="width:min(260px,80vw)"></div>
+      </div>
+      <div class="pz-feedback" id="pz-feedback"></div>
+      <div class="pz-nav-row">
+        <button class="pz-nav-btn" onclick="pzHint()">💡 Petunjuk</button>
+        <button class="pz-nav-btn" onclick="pzNext()">Puzzle Berikut ›</button>
+        <button class="pz-nav-btn" onclick="pzReset()">↺ Ulang</button>
       </div>
     </div>
-    <div style="display:flex;justify-content:center;padding:0 12px;flex-shrink:0">
-      <div id="an-board" class="an-replay-board" style="width:100%"></div>
+
+    <!-- HISTORY IN ANALYSIS PANEL -->
+    <div id="an-panel-anhistory" class="an-tab-panel" style="flex-direction:column;overflow-y:auto;padding:10px">
+      <div id="an-hist-list" style="width:100%"></div>
     </div>
-    <div style="padding:4px 16px 2px;flex-shrink:0">
-      <div class="an-eval-bar"><div id="an-eval-fill" class="an-eval-fill" style="width:50%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--txt2);margin-top:2px"><span>⬛ Hitam unggul</span><span>⬜ Putih unggul</span></div>
-    </div>
-    <div style="text-align:center;padding:4px 16px;flex-shrink:0;min-height:52px">
-      <div id="an-move-label" style="font-size:13px;font-weight:700;color:var(--gold)">Posisi Awal</div>
-      <div id="an-move-comment" style="font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4;min-height:14px"></div>
-    </div>
-    <div style="display:flex;gap:5px;justify-content:center;padding:4px 16px 8px;flex-shrink:0">
-      <button class="an-ctrl" onclick="replayGoto(-1)">⏮</button>
-      <button class="an-ctrl" onclick="replayPrev()">◀</button>
-      <button class="an-ctrl wide" id="an-play-btn" onclick="toggleReplayPlay()">▶ Play</button>
-      <button class="an-ctrl" onclick="replayNext()">▶</button>
-      <button class="an-ctrl" onclick="replayGoto(_analysisData.length-1)">⏭</button>
-    </div>
-    <div id="analysis-list" class="move-list" style="flex:1;overflow-y:auto;padding:4px 10px 14px;max-height:none"></div>
   </div>
 </div>
 
@@ -1796,7 +1959,7 @@ function executeMove(mv){
     const botDelay=_currentOpp?(600+Math.random()*1400):(300+Math.random()*500);
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
-      const mv2=getBotMove(gs,gs.turn,botLevel);
+      const mv2=getBotMoveWithPersonality(gs,gs.turn,botLevel);
       if(mv2){
         executeMove(mv2);
         // Random match: natural human-like opponent chat (context-aware, not too frequent)
@@ -2203,7 +2366,7 @@ function startVsBot(level,oppProfile){
 }
 function doBotMove(){
   if(!gs||gs.gameOver||gs.turn===myColor)return;
-  const mv=getBotMove(gs,gs.turn,botLevel);
+  const mv=getBotMoveWithPersonality(gs,gs.turn,botLevel);
   if(mv)executeMove(mv);
 }
 
@@ -2290,12 +2453,17 @@ function showGameOver(result){
   document.getElementById('go-icon').textContent=icon;
   document.getElementById('go-title').textContent=title;
   document.getElementById('go-sub').textContent=sub;
+  // ELO & XP update (bot/random match only)
+  if(gameMode==='bot'){
+    const r=isDraw?'draw':myWin?'win':'loss';
+    try{updateAfterGame(r);}catch(e){}
+  }
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
   if(myWin||passWin){spawnVictoryConfetti();setTimeout(spawnVictoryConfetti,500);}
   if(gameMode==='bot'||gameMode==='pass'){
     buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
-    setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);
+    setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},5000);
   }
 }
 function showAutoDraw(reason){
@@ -3037,6 +3205,7 @@ function animatePieceSlide(mv,piece,rookSrc,rookDst){
       const fSq=sqs[getIdx(frR,frC)],tSq=sqs[getIdx(toR,toC)];
       if(!fSq||!tSq)return;
       const fR=fSq.getBoundingClientRect(),tR=tSq.getBoundingClientRect();
+      spawnMoveTrail(fR,tR);
       const pid=(pc>0?'w':'b')+['P','N','B','R','Q','K'][ap-1];
       const sz=fR.width*0.88;
       const clone=document.createElement('div');
@@ -3932,6 +4101,305 @@ function _clearChat(){
 function closeChatPanels(){closeChat();closeEmojiPicker();}
 
 // ═══════════════════════════════════════
+// ELO & XP SYSTEM (#1, #10)
+// ═══════════════════════════════════════
+const LEVEL_THRESHOLDS=[0,100,250,450,700,1000,1400,1850,2350,2900,3500,4200];
+const LEVEL_BADGES=['🌱 Pemula','♟ Pion','⚔️ Kavaleri','🏰 Benteng','♝ Gajah','♛ Ratu','👑 Raja','💫 Maestro','🌟 Grandmaster','🔱 Legendaris','💎 Elite','👾 Dewa Catur'];
+const BOT_ELO=[0,800,1100,1450];
+function getPlayerData(){try{return JSON.parse(localStorage.getItem('catur_player_data')||'{}');}catch{return {};}}
+function savePlayerData(d){localStorage.setItem('catur_player_data',JSON.stringify(d));}
+function initPlayerData(){
+  const d=getPlayerData();
+  if(!d.elo)d.elo=1200;if(!d.xp)d.xp=0;if(!d.games)d.games=0;
+  if(!d.wins)d.wins=0;if(!d.losses)d.losses=0;if(!d.draws)d.draws=0;
+  savePlayerData(d);return d;
+}
+function getLevel(xp){
+  let lv=1;
+  for(let i=1;i<LEVEL_THRESHOLDS.length;i++){if(xp>=LEVEL_THRESHOLDS[i])lv=i+1;else break;}
+  return Math.min(lv,LEVEL_BADGES.length);
+}
+function getLevelBadge(lv){return LEVEL_BADGES[Math.min(lv-1,LEVEL_BADGES.length-1)];}
+function getXpProgress(xp){
+  const lv=getLevel(xp);
+  const cur=LEVEL_THRESHOLDS[lv-1]||0;
+  const nxt=LEVEL_THRESHOLDS[Math.min(lv,LEVEL_THRESHOLDS.length-1)]||(xp+1000);
+  return {cur,nxt,xp,pct:Math.min(100,Math.round((xp-cur)/(nxt-cur)*100))};
+}
+function calcEloChange(myElo,oppElo,result){
+  const K=32,E=1/(1+Math.pow(10,(oppElo-myElo)/400));
+  const S=result==='win'?1:result==='draw'?0.5:0;
+  return Math.round(K*(S-E));
+}
+function updateAfterGame(result){
+  const d=initPlayerData();
+  const oldLv=getLevel(d.xp);
+  const oppElo=BOT_ELO[botLevel]||1000;
+  const eloChange=calcEloChange(d.elo,oppElo,result);
+  d.elo=Math.max(100,d.elo+eloChange);
+  const xpGain=result==='win'?(40+botLevel*15):result==='draw'?20:10;
+  d.xp+=xpGain;d.games++;
+  if(result==='win')d.wins++;else if(result==='loss')d.losses++;else d.draws++;
+  const newLv=getLevel(d.xp);
+  savePlayerData(d);
+  saveGameHistory({date:Date.now(),mode:gameMode,botLv:botLevel,result,eloChange,elo:d.elo});
+  // Update game over overlay
+  const statsEl=document.getElementById('go-stats');if(statsEl)statsEl.style.display='flex';
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('go-elo-val',d.elo);
+  const eChEl=document.getElementById('go-elo-change');
+  if(eChEl){eChEl.textContent=(eloChange>=0?'+':'')+eloChange;eChEl.className='elo-change '+(eloChange>=0?'pos':'neg');}
+  el('go-xp-val','+'+xpGain+' XP');
+  const lvUpEl=document.getElementById('go-level-up');if(lvUpEl)lvUpEl.style.display=newLv>oldLv?'block':'none';
+  const lvBadgeEl=document.getElementById('go-level-badge');if(lvBadgeEl)lvBadgeEl.textContent=getLevelBadge(newLv)+' — Level '+newLv;
+  updateProfileStats();
+}
+function updateProfileStats(){
+  const d=initPlayerData();
+  const lv=getLevel(d.xp);
+  const {cur,nxt,xp,pct}=getXpProgress(d.xp);
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('prof-elo-val',d.elo);el('prof-level-val',lv);
+  el('prof-wins-val',d.wins||0);el('prof-games-val',d.games||0);
+  el('prof-badge-lbl',getLevelBadge(lv));el('prof-xp-lbl',(xp-cur)+' / '+(nxt-cur)+' XP');
+  const bar=document.getElementById('prof-xp-bar');if(bar)bar.style.width=pct+'%';
+}
+
+// ═══════════════════════════════════════
+// AI PERSONALITY (#18)
+// ═══════════════════════════════════════
+let botPersonality='agresif';
+function selectPersonality(p){
+  botPersonality=p;
+  ['agresif','defensif','posisional','gila'].forEach(id=>{
+    const e=document.getElementById('pers-'+id);if(e)e.classList.toggle('selected',id===p);
+  });
+}
+function getBotMoveWithPersonality(s,c,level){
+  const moves=legalMoves(s,c);if(!moves.length)return null;
+  const rnd=()=>moves[Math.floor(Math.random()*moves.length)];
+  if(botPersonality==='gila'&&Math.random()<0.55)return rnd();
+  if(botPersonality==='agresif'){
+    const caps=moves.filter(m=>s.board[m.tr][m.tc]!==0);
+    if(caps.length&&Math.random()<0.72)return getBestMove(s,c,Math.min(level,2));
+  }
+  if(botPersonality==='posisional'){
+    const ctr=moves.filter(m=>m.tr>=3&&m.tr<=4&&m.tc>=3&&m.tc<=4);
+    if(ctr.length&&Math.random()<0.55)return ctr[Math.floor(Math.random()*ctr.length)];
+  }
+  return getBotMove(s,c,level);
+}
+
+// ═══════════════════════════════════════
+// MOVEMENT TRAIL (#35)
+// ═══════════════════════════════════════
+function spawnMoveTrail(fromRect,toRect){
+  try{
+    const steps=7;
+    const fx=fromRect.left+fromRect.width/2,fy=fromRect.top+fromRect.height/2;
+    const tx=toRect.left+toRect.width/2,ty=toRect.top+toRect.height/2;
+    for(let i=1;i<=steps;i++){
+      const t=i/(steps+1);
+      const x=fx+(tx-fx)*t,y=fy+(ty-fy)*t;
+      const delay=i*20;
+      setTimeout(()=>{
+        const p=document.createElement('div');
+        const sz=5+Math.random()*6;
+        p.style.cssText=`position:fixed;left:${x-sz/2}px;top:${y-sz/2}px;width:${sz}px;height:${sz}px;`+
+          `border-radius:50%;pointer-events:none;z-index:9998;`+
+          `background:rgba(212,175,55,${0.55+Math.random()*0.4});`+
+          `box-shadow:0 0 6px rgba(212,175,55,.6);`+
+          `animation:trailFade .42s ease-out forwards;`;
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),500);
+      },delay);
+    }
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════
+// GAME HISTORY (#81)
+// ═══════════════════════════════════════
+function saveGameHistory(entry){
+  try{let h=JSON.parse(localStorage.getItem('catur_game_hist')||'[]');h.unshift(entry);if(h.length>50)h=h.slice(0,50);localStorage.setItem('catur_game_hist',JSON.stringify(h));}catch(e){}
+}
+function getGameHistory(){try{return JSON.parse(localStorage.getItem('catur_game_hist')||'[]');}catch{return [];}}
+function showHistory(){showScreen('history');renderHistoryScreen();}
+function renderHistoryScreen(){
+  const hist=getGameHistory(),d=initPlayerData();
+  const sumEl=document.getElementById('hist-summary');
+  if(sumEl)sumEl.innerHTML=`
+    <div class="hist-sum-box"><div class="hist-sum-val">${d.elo||1200}</div><div class="hist-sum-lbl">ELO</div></div>
+    <div class="hist-sum-box"><div class="hist-sum-val">${d.wins||0}</div><div class="hist-sum-lbl">Menang</div></div>
+    <div class="hist-sum-box"><div class="hist-sum-val">${d.losses||0}</div><div class="hist-sum-lbl">Kalah</div></div>
+    <div class="hist-sum-box"><div class="hist-sum-val">${d.draws||0}</div><div class="hist-sum-lbl">Seri</div></div>`;
+  const listEl=document.getElementById('hist-list');if(!listEl)return;
+  if(!hist.length){listEl.innerHTML='<div class="hist-empty">📭 Belum ada riwayat permainan.<br>Mulai bermain dan riwayatmu<br>akan muncul di sini!</div>';return;}
+  const modeNames={bot:'🤖 Vs Bot',pass:'👥 Pass & Play',random:'🎲 Random',online:'🌐 Online'};
+  const lvNames=['','Mudah','Sedang','Sulit'];
+  listEl.innerHTML=hist.map(g=>{
+    const res=g.result==='win'?'🏆 MENANG':g.result==='loss'?'😞 KALAH':'🤝 SERI';
+    const cls=g.result==='win'?'win':g.result==='loss'?'loss':'draw';
+    const icon=g.result==='win'?'🏆':g.result==='loss'?'💔':'🤝';
+    const eloStr=g.eloChange!=null?(g.eloChange>=0?'<span style="color:#4ade80">+'+g.eloChange+'</span>':'<span style="color:#f87171">'+g.eloChange+'</span>'):'';
+    const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'';
+    const botLbl=g.botLv?` — ${lvNames[g.botLv]||''}`:''
+    return `<div class="hist-card ${cls}">
+      <div class="hist-icon">${icon}</div>
+      <div class="hist-info"><div class="hist-mode">${modeNames[g.mode]||g.mode||'Catur'}${botLbl}</div><div class="hist-result">${res}</div><div class="hist-date">${dt}</div></div>
+      <div class="hist-elo">${eloStr}<div style="font-size:10px;color:var(--txt2);margin-top:2px">${g.elo?'ELO '+g.elo:''}</div></div>
+    </div>`;
+  }).join('');
+}
+function renderHistoryInAnalysis(){
+  const hist=getGameHistory().slice(0,20);
+  const listEl=document.getElementById('an-hist-list');if(!listEl)return;
+  if(!hist.length){listEl.innerHTML='<div class="hist-empty" style="padding:30px 10px;font-size:13px">📭 Belum ada riwayat</div>';return;}
+  const modeNames={bot:'🤖 Bot',pass:'👥 P&P',random:'🎲 Random',online:'🌐 Online'};
+  const d=initPlayerData();
+  listEl.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px">
+    <div class="prof-stat"><div class="prof-stat-val">${d.elo||1200}</div><div class="prof-stat-lbl">ELO</div></div>
+    <div class="prof-stat"><div class="prof-stat-val">${d.wins||0}W/${d.losses||0}L/${d.draws||0}D</div><div class="prof-stat-lbl">Statistik</div></div>
+  </div>`+hist.map(g=>{
+    const cls=g.result==='win'?'win':g.result==='loss'?'loss':'draw';
+    const icon=g.result==='win'?'🏆':g.result==='loss'?'💔':'🤝';
+    const res=g.result==='win'?'Menang':g.result==='loss'?'Kalah':'Seri';
+    const eloStr=g.eloChange!=null?(g.eloChange>=0?'+'+g.eloChange:String(g.eloChange)):'';
+    const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'}):'';
+    return `<div class="hist-card ${cls}" style="margin-bottom:6px">
+      <div class="hist-icon" style="font-size:22px">${icon}</div>
+      <div class="hist-info"><div class="hist-mode" style="font-size:10px">${modeNames[g.mode]||g.mode}</div><div class="hist-result" style="font-size:13px">${res}</div></div>
+      <div class="hist-elo" style="font-size:12px">${eloStr?`<span style="${g.eloChange>=0?'color:#4ade80':'color:#f87171'}">${eloStr}</span>`:''}<div style="font-size:9px;color:var(--txt2)">${dt}</div></div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+// ANALYSIS TABS
+// ═══════════════════════════════════════
+function switchAnalysisTab(tab){
+  ['replay','puzzle','anhistory'].forEach(t=>{
+    const panel=document.getElementById('an-panel-'+t);
+    const tabId='an-tab-'+(t==='anhistory'?'history':t);
+    const tabBtn=document.getElementById(tabId);
+    if(panel)panel.classList.toggle('active',t===tab);
+    if(tabBtn)tabBtn.classList.toggle('active',t===tab);
+  });
+  if(tab==='puzzle')initDailyPuzzle();
+  if(tab==='anhistory')renderHistoryInAnalysis();
+}
+
+// ═══════════════════════════════════════
+// DAILY TACTICS PUZZLE (#49)
+// ═══════════════════════════════════════
+const DAILY_PUZZLES=[
+  {id:0,title:'🏰 Skak Mat Belakang',desc:'Putih jalan — skak mat dalam 1 langkah!',turn:'w',
+   board:[[0,0,0,0,0,0,0,-6],[0,0,0,0,0,-1,-1,-1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,5,6,0]],
+   solution:[{fr:7,fc:5,tr:0,tc:5}],hint:'Ratu langsung ke baris terakhir!'},
+  {id:1,title:'🗼 Menara Pemungkas',desc:'Putih jalan — Benteng memberikan skak mat!',turn:'w',
+   board:[[0,0,0,0,0,0,0,-6],[0,0,0,0,0,0,-1,-1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[4,0,6,0,0,0,0,0]],
+   solution:[{fr:7,fc:0,tr:0,tc:0}],hint:'Benteng ke pojok — raja terjebak!'},
+  {id:2,title:'♞ Garpu Kuda!',desc:'Putih jalan — serang Raja dan Benteng sekaligus!',turn:'w',
+   board:[[0,0,0,0,0,0,0,0],[0,0,0,0,0,-6,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,-4,0,0,0,0,0],[0,0,0,2,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,6,0]],
+   solution:[{fr:5,fc:3,tr:3,tc:4}],hint:'Kuda ke e5 — menyerang Raja dan Benteng!'},
+  {id:3,title:'👑 Ratu Menghabisi',desc:'Putih jalan — skak mat dengan Ratu!',turn:'w',
+   board:[[-6,0,0,0,0,0,0,0],[-1,-1,0,0,0,0,0,0],[0,0,5,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,6,0,0,0]],
+   solution:[{fr:2,fc:2,tr:1,tc:1}],hint:'Ratu menangkap pion b7 — skak mat!'},
+  {id:4,title:'⚡ Ratu Menyambar',desc:'Putih jalan — skak mat dari jauh!',turn:'w',
+   board:[[-6,0,0,0,0,0,0,0],[-1,-1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,6,5]],
+   solution:[{fr:7,fc:7,tr:0,tc:7}],hint:'Ratu ke h8 — raja hitam terjebak di pojok!'},
+  {id:5,title:'🔥 Kilat Horisontal',desc:'Putih jalan — Ratu menyapu lewat baris!',turn:'w',
+   board:[[0,0,0,0,0,0,0,-6],[5,0,0,0,0,0,0,-1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,6,0]],
+   solution:[{fr:1,fc:0,tr:1,tc:7}],hint:'Ratu menyapu ke h7 — skak mat diagonal!'},
+  {id:6,title:'💎 Ratu Pengakhir',desc:'Putih jalan — langkah terakhir yang elegan!',turn:'w',
+   board:[[0,0,0,0,0,0,-6,0],[0,0,0,0,0,-1,-1,-1],[0,0,0,0,0,0,0,5],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,6,0]],
+   solution:[{fr:2,fc:7,tr:1,tc:6}],hint:'Ratu menangkap g7 — skak mat sempurna!'}
+];
+let pzState={board:null,turn:'w',sel:null,solved:false,puzzleIdx:0,solution:null};
+function getTodayPuzzleIdx(){return new Date().getDay();}
+function initDailyPuzzle(){
+  const idx=pzState.puzzleIdx!==undefined?pzState.puzzleIdx:getTodayPuzzleIdx();
+  const pz=DAILY_PUZZLES[idx%DAILY_PUZZLES.length];
+  pzState={board:pz.board.map(r=>[...r]),turn:pz.turn,sel:null,solved:false,puzzleIdx:idx,solution:pz.solution};
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('pz-title',pz.title);el('pz-status',pz.desc);
+  const fb=document.getElementById('pz-feedback');if(fb){fb.textContent='';fb.className='pz-feedback';}
+  renderPuzzleBoard();
+}
+function pzNext(){pzState.puzzleIdx=(pzState.puzzleIdx+1)%DAILY_PUZZLES.length;initDailyPuzzle();}
+function pzReset(){initDailyPuzzle();}
+function pzHint(){
+  if(pzState.solved)return;
+  const pz=DAILY_PUZZLES[pzState.puzzleIdx%DAILY_PUZZLES.length];
+  const sol=pz.solution[0];
+  const boardEl=document.getElementById('pz-board');if(!boardEl)return;
+  const sqs=boardEl.querySelectorAll('.pz-sq');
+  sqs.forEach(sq=>sq.classList.remove('pz-lastfrom','pz-lastto'));
+  sqs[sol.fr*8+sol.fc]?.classList.add('pz-lastfrom');
+  sqs[sol.tr*8+sol.tc]?.classList.add('pz-lastto');
+  const fb=document.getElementById('pz-feedback');if(fb){fb.textContent='💡 '+pz.hint;fb.className='pz-feedback';}
+}
+function renderPuzzleBoard(){
+  const boardEl=document.getElementById('pz-board');if(!boardEl)return;
+  boardEl.innerHTML='';
+  const b=pzState.board;
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const sq=document.createElement('div');
+      sq.className='pz-sq '+((r+c)%2===0?'pzl':'pzd');
+      sq.dataset.r=r;sq.dataset.c=c;
+      const pc=b[r][c];
+      if(pc!==0){
+        const isW=pc>0;
+        const pId=(isW?'w':'b')+['P','N','B','R','Q','K'][Math.abs(pc)-1];
+        sq.innerHTML=`<svg viewBox="0 0 45 45" style="width:85%;height:85%"><use href="#${pId}"/></svg>`;
+      }
+      if(pzState.sel&&pzState.sel[0]===r&&pzState.sel[1]===c)sq.classList.add('pz-sel');
+      sq.onclick=()=>pzClick(r,c);
+      boardEl.appendChild(sq);
+    }
+  }
+}
+function pzClick(r,c){
+  if(pzState.solved)return;
+  const b=pzState.board,turn=pzState.turn,pc=b[r][c];
+  if(pzState.sel===null){
+    if(pc!==0&&((turn==='w'&&pc>0)||(turn==='b'&&pc<0))){
+      pzState.sel=[r,c];renderPuzzleBoard();
+      const boardEl=document.getElementById('pz-board');
+      boardEl?.querySelectorAll('.pz-sq')[r*8+c]?.classList.add('pz-sel');
+    }
+    return;
+  }
+  const [fr,fc]=pzState.sel;
+  if(fr===r&&fc===c){pzState.sel=null;renderPuzzleBoard();return;}
+  // Can also click another own piece to reselect
+  if(pc!==0&&((turn==='w'&&pc>0)||(turn==='b'&&pc<0))){
+    pzState.sel=[r,c];renderPuzzleBoard();
+    const boardEl=document.getElementById('pz-board');
+    boardEl?.querySelectorAll('.pz-sq')[r*8+c]?.classList.add('pz-sel');
+    return;
+  }
+  const sol=DAILY_PUZZLES[pzState.puzzleIdx%DAILY_PUZZLES.length].solution[0];
+  const isCorrect=(fr===sol.fr&&fc===sol.fc&&r===sol.tr&&c===sol.tc);
+  pzState.sel=null;
+  if(isCorrect){
+    pzState.board[r][c]=pzState.board[fr][fc];pzState.board[fr][fc]=0;
+    pzState.solved=true;renderPuzzleBoard();
+    const boardEl=document.getElementById('pz-board');
+    if(boardEl){boardEl.querySelectorAll('.pz-sq')[fr*8+fc]?.classList.add('pz-lastfrom');boardEl.querySelectorAll('.pz-sq')[r*8+c]?.classList.add('pz-lastto');}
+    const fb=document.getElementById('pz-feedback');if(fb){fb.textContent='✅ Benar! Langkah sempurna! 🎉';fb.className='pz-feedback correct';}
+    try{spawnVictoryConfetti&&setTimeout(spawnVictoryConfetti,200);}catch(e){}
+  } else {
+    renderPuzzleBoard();
+    const fb=document.getElementById('pz-feedback');
+    if(fb){fb.textContent='❌ Coba lagi! Bukan itu langkahnya.';fb.className='pz-feedback wrong';setTimeout(()=>{if(fb.className.includes('wrong'))fb.className='pz-feedback';},2000);}
+    const boardEl=document.getElementById('pz-board');
+    if(boardEl){boardEl.style.border='2px solid #f87171';setTimeout(()=>{boardEl.style.border='2px solid rgba(212,175,55,.35)';},600);}
+  }
+}
+
+// ═══════════════════════════════════════
 // HOME PREVIEW
 // ═══════════════════════════════════════
 function buildHomePreview(){
@@ -3946,6 +4414,8 @@ function buildHomePreview(){
 // ═══════════════════════════════════════
 window.addEventListener('DOMContentLoaded',()=>{
   buildHomePreview();updateSettingsUI();applyBoardTheme();checkNightMode();initParticles();
+  initPlayerData();updateProfileStats();
+  pzState.puzzleIdx=getTodayPuzzleIdx();
   // Show intro then home
   const params=new URLSearchParams(location.search);
   if(params.get('demo')){
