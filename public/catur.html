@@ -286,18 +286,37 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #bot-bubble{position:fixed;bottom:calc(140px + var(--safe));left:50%;transform:translateX(-50%) translateY(10px);max-width:280px;padding:10px 16px;border-radius:16px;border:1px solid var(--card-b);background:rgba(10,8,28,.96);font-size:12px;color:var(--txt2);text-align:center;z-index:150;opacity:0;transition:all .3s;pointer-events:none;backdrop-filter:blur(12px)}
 #bot-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-#emoji-panel{position:fixed;bottom:calc(80px + var(--safe));left:50%;transform:translateX(-50%);background:rgba(10,8,28,.96);border:1px solid var(--card-b);border-radius:16px;padding:10px;display:none;gap:8px;z-index:150;backdrop-filter:blur(12px);flex-wrap:wrap;max-width:280px;justify-content:center}
+#emoji-panel{position:fixed;bottom:calc(80px + var(--safe));left:50%;transform:translateX(-50%);background:rgba(10,8,28,.97);border:1px solid var(--card-b);border-radius:18px;padding:12px 10px;display:none;gap:4px;z-index:150;backdrop-filter:blur(16px);flex-wrap:wrap;max-width:320px;justify-content:center;max-height:260px;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.7)}
 #emoji-panel.show{display:flex}
-.emoji-btn{font-size:28px;cursor:pointer;transition:transform .2s;padding:4px}
-.emoji-btn:hover{transform:scale(1.3)}
-.emoji-fly{position:fixed;font-size:40px;animation:emojiUp 2s ease-out forwards;pointer-events:none;z-index:500}
-@keyframes emojiUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-200px) scale(1.5);opacity:0}}
+.emoji-btn{font-size:26px;cursor:pointer;transition:transform .15s,filter .15s;padding:3px 2px;border-radius:8px;line-height:1.2}
+.emoji-btn:hover,.emoji-btn:active{transform:scale(1.35);filter:drop-shadow(0 0 8px rgba(212,175,55,.8))}
+.emoji-fly{position:fixed;font-size:48px;animation:emojiUp 2.2s ease-out forwards;pointer-events:none;z-index:500}
+@keyframes emojiUp{0%{transform:translateY(0) scale(.8) rotate(-10deg);opacity:1}30%{transform:translateY(-60px) scale(1.3) rotate(8deg);opacity:1}100%{transform:translateY(-220px) scale(1.6) rotate(-5deg);opacity:0}}
+.emoji-cat-lbl{width:100%;font-size:10px;color:var(--txt2);text-align:left;padding:4px 2px 2px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,.15);margin-top:4px}
 
 #voice-wave{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:6px;background:rgba(10,8,28,.96);padding:20px 30px;border-radius:20px;border:1px solid var(--card-b);z-index:160}
 #voice-wave.show{display:flex}
 .rec-pulse{animation:recBlink .8s ease-in-out infinite}
 @keyframes recBlink{0%,100%{color:var(--txt2)}50%{color:#f87171}}
 #voice-timer{font-size:20px;font-weight:700;color:var(--gold)}
+
+/* ── CHAT PANEL ── */
+#chat-panel{position:fixed;bottom:0;left:0;right:0;height:52%;background:rgba(8,6,22,.97);border-top:1px solid var(--card-b);z-index:180;display:none;flex-direction:column;backdrop-filter:blur(20px);border-radius:20px 20px 0 0;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+#chat-panel.show{display:flex}
+#chat-msgs{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin}
+.chat-msg{max-width:78%;padding:7px 12px;border-radius:14px;font-size:13px;line-height:1.45;word-break:break-word;animation:msgIn .2s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.me{align-self:flex-end;background:linear-gradient(135deg,#8b6914,#d4af37);color:#1a0800;border-bottom-right-radius:4px}
+.chat-msg.opp{align-self:flex-start;background:rgba(255,255,255,.1);color:var(--txt);border:1px solid var(--card-b);border-bottom-left-radius:4px}
+.chat-msg.system{align-self:center;background:transparent;color:var(--txt2);font-size:11px;font-style:italic}
+.chat-input-row{display:flex;gap:8px;padding:8px 12px calc(8px + var(--safe));border-top:1px solid rgba(212,175,55,.15)}
+#chat-input{flex:1;background:rgba(255,255,255,.08);border:1px solid var(--card-b);border-radius:22px;padding:9px 14px;font-size:14px;color:var(--txt);outline:none}
+#chat-input::placeholder{color:var(--txt2)}
+.chat-send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#8b6914,#d4af37);border:none;color:#1a0800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;border-bottom:1px solid rgba(212,175,55,.15)}
+.chat-hdr-title{font-size:14px;font-weight:700;color:var(--txt)}
+.chat-close{font-size:20px;cursor:pointer;color:var(--txt2);padding:4px}
+#btn-chat-game{display:none}
 
 /* ── BOARD THEMES ── */
 #board-grid.t-classic{--sq-l:#f0d9b5;--sq-d:#b58863}
@@ -842,6 +861,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div id="game-mode-lbl" class="game-mode-badge">Catur</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
+      <div id="btn-chat-game" class="ic-btn" style="display:none" onclick="toggleChatPanel()">💬</div>
       <div id="btn-emoji-game" class="ic-btn" style="display:none" onclick="toggleEmojiPanel()">😄</div>
       <div id="btn-voice" class="ic-btn" style="display:none" onclick="toggleVoiceNote()">🎙️</div>
       <div id="btn-music-game" class="ic-btn" onclick="toggleMusic()">🎵</div>
@@ -1009,16 +1029,28 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <button id="m-toggle" onclick="toggleMusic()">⏸</button>
 </div>
 
-<!-- ══ EMOJI PANEL ══ -->
+<!-- ══ EMOJI PANEL (100 emojis) ══ -->
 <div id="emoji-panel">
-  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span>
-  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span>
-  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span>
-  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span>
-  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
-  <span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span>
-  <span class="emoji-btn" onclick="sendEmoji('👏')">👏</span>
-  <span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span>
+  <div class="emoji-cat-lbl" style="border-top:none;margin-top:0">🏆 Kemenangan</div>
+  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span><span class="emoji-btn" onclick="sendEmoji('🏆')">🏆</span><span class="emoji-btn" onclick="sendEmoji('🥇')">🥇</span><span class="emoji-btn" onclick="sendEmoji('🎖️')">🎖️</span><span class="emoji-btn" onclick="sendEmoji('🏅')">🏅</span><span class="emoji-btn" onclick="sendEmoji('💪')">💪</span><span class="emoji-btn" onclick="sendEmoji('🦁')">🦁</span><span class="emoji-btn" onclick="sendEmoji('🐯')">🐯</span><span class="emoji-btn" onclick="sendEmoji('🦅')">🦅</span><span class="emoji-btn" onclick="sendEmoji('⚔️')">⚔️</span>
+  <div class="emoji-cat-lbl">😂 Ketawa</div>
+  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span><span class="emoji-btn" onclick="sendEmoji('🤣')">🤣</span><span class="emoji-btn" onclick="sendEmoji('😆')">😆</span><span class="emoji-btn" onclick="sendEmoji('😄')">😄</span><span class="emoji-btn" onclick="sendEmoji('😁')">😁</span><span class="emoji-btn" onclick="sendEmoji('🤭')">🤭</span><span class="emoji-btn" onclick="sendEmoji('😝')">😝</span><span class="emoji-btn" onclick="sendEmoji('😜')">😜</span><span class="emoji-btn" onclick="sendEmoji('🤪')">🤪</span><span class="emoji-btn" onclick="sendEmoji('🫡')">🫡</span>
+  <div class="emoji-cat-lbl">🔥 Api & Ledakan</div>
+  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span><span class="emoji-btn" onclick="sendEmoji('💥')">💥</span><span class="emoji-btn" onclick="sendEmoji('⚡')">⚡</span><span class="emoji-btn" onclick="sendEmoji('🌋')">🌋</span><span class="emoji-btn" onclick="sendEmoji('🧨')">🧨</span><span class="emoji-btn" onclick="sendEmoji('💣')">💣</span><span class="emoji-btn" onclick="sendEmoji('🎆')">🎆</span><span class="emoji-btn" onclick="sendEmoji('🎇')">🎇</span><span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span><span class="emoji-btn" onclick="sendEmoji('🎳')">🎳</span>
+  <div class="emoji-cat-lbl">💀 Gelap</div>
+  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span><span class="emoji-btn" onclick="sendEmoji('☠️')">☠️</span><span class="emoji-btn" onclick="sendEmoji('👻')">👻</span><span class="emoji-btn" onclick="sendEmoji('🦇')">🦇</span><span class="emoji-btn" onclick="sendEmoji('🌑')">🌑</span><span class="emoji-btn" onclick="sendEmoji('🌚')">🌚</span><span class="emoji-btn" onclick="sendEmoji('🖤')">🖤</span><span class="emoji-btn" onclick="sendEmoji('⚰️')">⚰️</span><span class="emoji-btn" onclick="sendEmoji('🕷️')">🕷️</span><span class="emoji-btn" onclick="sendEmoji('👁️')">👁️</span>
+  <div class="emoji-cat-lbl">😭 Nangis</div>
+  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span><span class="emoji-btn" onclick="sendEmoji('😢')">😢</span><span class="emoji-btn" onclick="sendEmoji('😥')">😥</span><span class="emoji-btn" onclick="sendEmoji('😰')">😰</span><span class="emoji-btn" onclick="sendEmoji('😓')">😓</span><span class="emoji-btn" onclick="sendEmoji('💧')">💧</span><span class="emoji-btn" onclick="sendEmoji('😞')">😞</span><span class="emoji-btn" onclick="sendEmoji('😔')">😔</span><span class="emoji-btn" onclick="sendEmoji('💔')">💔</span><span class="emoji-btn" onclick="sendEmoji('🥺')">🥺</span>
+  <div class="emoji-cat-lbl">❤️ Cinta</div>
+  <span class="emoji-btn" onclick="sendEmoji('❤️')">❤️</span><span class="emoji-btn" onclick="sendEmoji('💕')">💕</span><span class="emoji-btn" onclick="sendEmoji('💖')">💖</span><span class="emoji-btn" onclick="sendEmoji('💗')">💗</span><span class="emoji-btn" onclick="sendEmoji('💝')">💝</span><span class="emoji-btn" onclick="sendEmoji('🌹')">🌹</span><span class="emoji-btn" onclick="sendEmoji('💐')">💐</span><span class="emoji-btn" onclick="sendEmoji('🥰')">🥰</span><span class="emoji-btn" onclick="sendEmoji('😍')">😍</span><span class="emoji-btn" onclick="sendEmoji('🤩')">🤩</span>
+  <div class="emoji-cat-lbl">😱 Kaget</div>
+  <span class="emoji-btn" onclick="sendEmoji('😱')">😱</span><span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span><span class="emoji-btn" onclick="sendEmoji('😲')">😲</span><span class="emoji-btn" onclick="sendEmoji('😮')">😮</span><span class="emoji-btn" onclick="sendEmoji('😵')">😵</span><span class="emoji-btn" onclick="sendEmoji('💫')">💫</span><span class="emoji-btn" onclick="sendEmoji('🌀')">🌀</span><span class="emoji-btn" onclick="sendEmoji('🔮')">🔮</span><span class="emoji-btn" onclick="sendEmoji('🫠')">🫠</span><span class="emoji-btn" onclick="sendEmoji('🤔')">🤔</span>
+  <div class="emoji-cat-lbl">😎 Keren</div>
+  <span class="emoji-btn" onclick="sendEmoji('😎')">😎</span><span class="emoji-btn" onclick="sendEmoji('🤙')">🤙</span><span class="emoji-btn" onclick="sendEmoji('🤘')">🤘</span><span class="emoji-btn" onclick="sendEmoji('🤞')">🤞</span><span class="emoji-btn" onclick="sendEmoji('✌️')">✌️</span><span class="emoji-btn" onclick="sendEmoji('🕶️')">🕶️</span><span class="emoji-btn" onclick="sendEmoji('🪩')">🪩</span><span class="emoji-btn" onclick="sendEmoji('🎸')">🎸</span><span class="emoji-btn" onclick="sendEmoji('🏄')">🏄</span><span class="emoji-btn" onclick="sendEmoji('🦄')">🦄</span>
+  <div class="emoji-cat-lbl">😡 Marah</div>
+  <span class="emoji-btn" onclick="sendEmoji('😤')">😤</span><span class="emoji-btn" onclick="sendEmoji('😡')">😡</span><span class="emoji-btn" onclick="sendEmoji('🤬')">🤬</span><span class="emoji-btn" onclick="sendEmoji('👊')">👊</span><span class="emoji-btn" onclick="sendEmoji('💢')">💢</span><span class="emoji-btn" onclick="sendEmoji('👿')">👿</span><span class="emoji-btn" onclick="sendEmoji('🐉')">🐉</span><span class="emoji-btn" onclick="sendEmoji('🗡️')">🗡️</span><span class="emoji-btn" onclick="sendEmoji('🔴')">🔴</span><span class="emoji-btn" onclick="sendEmoji('🥊')">🥊</span>
+  <div class="emoji-cat-lbl">🎉 Pesta</div>
+  <span class="emoji-btn" onclick="sendEmoji('🎉')">🎉</span><span class="emoji-btn" onclick="sendEmoji('🎊')">🎊</span><span class="emoji-btn" onclick="sendEmoji('🥳')">🥳</span><span class="emoji-btn" onclick="sendEmoji('🎈')">🎈</span><span class="emoji-btn" onclick="sendEmoji('🎂')">🎂</span><span class="emoji-btn" onclick="sendEmoji('🍾')">🍾</span><span class="emoji-btn" onclick="sendEmoji('🎁')">🎁</span><span class="emoji-btn" onclick="sendEmoji('👏')">👏</span><span class="emoji-btn" onclick="sendEmoji('🪅')">🪅</span><span class="emoji-btn" onclick="sendEmoji('🎪')">🎪</span>
 </div>
 
 <!-- ══ VOICE WAVE ══ -->
@@ -1027,6 +1059,19 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <div id="voice-timer" style="font-size:20px;font-weight:700;color:var(--gold)">3</div>
   <div style="font-size:12px;color:var(--txt2)">Rekaman...</div>
   <button class="ov-btn danger" style="margin-top:8px;padding:8px 20px" onclick="cancelVoiceNote()">❌ Batal</button>
+</div>
+
+<!-- ══ CHAT PANEL ══ -->
+<div id="chat-panel">
+  <div class="chat-hdr">
+    <div class="chat-hdr-title">💬 Chat Lawan</div>
+    <div class="chat-close" onclick="toggleChatPanel()">✕</div>
+  </div>
+  <div id="chat-msgs"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ketik pesan..." maxlength="150" onkeydown="if(event.key==='Enter')sendChatMsg()">
+    <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>
+  </div>
 </div>
 
 <!-- ══ FIREBASE ══ -->
@@ -1268,7 +1313,7 @@ function showScreen(id){
     el.classList.add('active');
   }
 }
-function backHome(){cancelRoom();stopMusic();showScreen('home')}
+function backHome(){cancelRoom();stopMusic();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home')}
 function showSettings(){buildThemeStrip();updateSettingsUI();showScreen('settings')}
 function showLevel(){
   selectedLevel=null;
@@ -1312,7 +1357,7 @@ function showJoinRoom(){document.getElementById('join-input').value='';document.
 function showGameMenu(){document.getElementById('o-menu').classList.add('show')}
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
-function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();showScreen('home');}
+function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home');}
 function dismissPassOverlay(){document.getElementById('o-pass-device').classList.remove('show');}
 
 // ═══════════════════════════════════════
@@ -2344,16 +2389,26 @@ function startOnlineGame(myCol){
   initBoardDOM();
   setPlayerNames(myCol==='b'?'Lawan (Putih)':'Lawan (Hitam)',myCol==='w'?'Kamu (Putih)':'Kamu (Hitam)',myCol==='b'?'w':'b',myCol);
   showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+  document.getElementById('btn-chat-game').style.display='flex';
   document.getElementById('btn-emoji-game').style.display='flex';
   document.getElementById('btn-voice').style.display='flex';
+  chatMsgsEl=document.getElementById('chat-msgs');
+  chatRenderedKeys={};
   if(roomListener)roomRef.off('value',roomListener);
   roomListener=roomRef.on('value',snap=>{
     if(!snap.exists())return;
     const data=snap.val();
     if(data.state){gs=desGS(data.state);lastMove=data.lastMove||null;renderBoard();}
-    if(data.emoji&&data.emoji.by!==myColor)floatEmoji(data.emoji.e);
+    if(data.emoji&&data.emoji.by!==myColor){floatEmoji(data.emoji.e);playEmojiSound(data.emoji.e);}
     if(data.voice&&data.voice.by!==myColor&&data.voice.data)playVoice(data.voice.data);
     if(data.resign&&data.resign.by!==myColor){gs={...gs,gameOver:true,result:myColor};showGameOver(myColor);}
+    if(data.chat){
+      Object.entries(data.chat).forEach(([k,msg])=>{
+        if(chatRenderedKeys[k])return;
+        chatRenderedKeys[k]=true;
+        appendChatMsg(msg.txt,msg.by===myColor?'me':'opp');
+      });
+    }
   });
 }
 function cancelRoom(){if(roomRef){if(roomListener)roomRef.off('value',roomListener);if(gameMode!=='online')roomRef.remove();roomRef=null;roomListener=null;}roomCode=null;gameMode=null;}
@@ -2361,19 +2416,107 @@ function serGS(s){return{board:s.board.map(r=>r.join(',')).join('|'),turn:s.turn
 function desGS(d){return{board:d.board.split('|').map(r=>r.split(',').map(Number)),turn:d.turn,castling:d.castling,ep:d.ep||null,halfMove:d.halfMove,fullMove:d.fullMove,captured:{w:d.captured.w?d.captured.w.split(',').filter(Boolean).map(Number):[],b:d.captured.b?d.captured.b.split(',').filter(Boolean).map(Number):[]},gameOver:d.gameOver||false,result:d.result||null}}
 
 // ═══════════════════════════════════════
+// EMOJI SOUND ENGINE
+// ═══════════════════════════════════════
+const EMOJI_SOUNDS={
+  victory:['👑','🏆','🥇','🎖️','🏅','💪','🦁','🐯','🦅','⚔️'],
+  laugh:  ['😂','🤣','😆','😄','😁','🤭','😝','😜','🤪','🫡'],
+  fire:   ['🔥','💥','⚡','🌋','🧨','💣','🎆','🎇','🎯','🎳'],
+  skull:  ['💀','☠️','👻','🦇','🌑','🌚','🖤','⚰️','🕷️','👁️'],
+  sad:    ['😭','😢','😥','😰','😓','💧','😞','😔','💔','🥺'],
+  heart:  ['❤️','💕','💖','💗','💝','🌹','💐','🥰','😍','🤩'],
+  shock:  ['😱','🤯','😲','😮','😵','💫','🌀','🔮','🫠','🤔'],
+  cool:   ['😎','🤙','🤘','🤞','✌️','🕶️','🪩','🎸','🏄','🦄'],
+  angry:  ['😤','😡','🤬','👊','💢','👿','🐉','🗡️','🔴','🥊'],
+  party:  ['🎉','🎊','🥳','🎈','🎂','🍾','🎁','👏','🪅','🎪']
+};
+function getEmojiSound(e){
+  for(const[type,arr]of Object.entries(EMOJI_SOUNDS)){if(arr.includes(e))return type;}
+  return 'party';
+}
+function playEmojiSound(e){
+  try{
+    const ac=getACtx();if(!ac)return;
+    const t=ac.currentTime;
+    const type=getEmojiSound(e);
+    const play=(freq,wave,vol,start,dur,detune=0)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.type=wave;o.frequency.value=freq;if(detune)o.detune.value=detune;
+      g.gain.setValueAtTime(0,t+start);g.gain.linearRampToValueAtTime(vol,t+start+.03);
+      g.gain.exponentialRampToValueAtTime(.001,t+start+dur);
+      o.start(t+start);o.stop(t+start+dur+.05);
+    };
+    const noise=(vol,start,dur)=>{
+      const buf=ac.createBuffer(1,ac.sampleRate*.2,ac.sampleRate);
+      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      const src=ac.createBufferSource(),g=ac.createGain(),f=ac.createBiquadFilter();
+      src.buffer=buf;src.connect(f);f.connect(g);g.connect(ac.destination);
+      f.type='bandpass';f.frequency.value=type==='fire'?800:300;
+      g.gain.setValueAtTime(vol,t+start);g.gain.exponentialRampToValueAtTime(.001,t+start+dur);
+      src.start(t+start);src.stop(t+start+dur);
+    };
+    if(type==='victory'){play(523,`triangle`,.12,0,.2);play(659,`triangle`,.12,.15,.2);play(784,`triangle`,.15,.3,.4);}
+    else if(type==='laugh'){[0,.1,.2].forEach((s,i)=>play([880,1047,1319][i],'sine',.08,s,.15));}
+    else if(type==='fire'){noise(.3,0,.08);noise(.2,.05,.1);play(120,'sawtooth',.06,0,.2);}
+    else if(type==='skull'){play(82,'sawtooth',.15,0,.3);play(65,'square',.1,.2,.4);}
+    else if(type==='sad'){play(392,'triangle',.1,0,.25);play(349,'triangle',.1,.2,.25);play(293,'triangle',.08,.4,.35);}
+    else if(type==='heart'){[0,.12,.24].forEach((s,i)=>play([523,659,784][i],'sine',.07,s,.3,i*12));}
+    else if(type==='shock'){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(1800,t+.3);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.start(t);o.stop(t+.5);}
+    else if(type==='cool'){[0,.1,.2,.3].forEach((s,i)=>play([330,392,494,587][i],'triangle',.07,s,.25));}
+    else if(type==='angry'){play(150,'sawtooth',.15,0,.05);noise(.4,0,.08);play(100,'square',.12,.05,.15);}
+    else{noise(.15,0,.06);play(880,'triangle',.1,.05,.2);play(1046,'triangle',.08,.15,.2);}
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════
 // EMOJI CHAT
 // ═══════════════════════════════════════
-function toggleEmojiPanel(){document.getElementById('emoji-panel').classList.toggle('show')}
+function toggleEmojiPanel(){
+  document.getElementById('chat-panel').classList.remove('show');
+  document.getElementById('emoji-panel').classList.toggle('show');
+}
 function sendEmoji(e){
   document.getElementById('emoji-panel').classList.remove('show');
   floatEmoji(e);
+  playEmojiSound(e);
   if(gameMode==='online'&&roomRef)roomRef.child('emoji').set({e,t:Date.now(),by:myColor});
-  else toast(e+' Emoji!');
 }
 function floatEmoji(e){
   const el=document.createElement('div');el.className='emoji-fly';el.textContent=e;
-  el.style.cssText=`left:${20+Math.random()*60}%;bottom:${15+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
-  document.body.appendChild(el);setTimeout(()=>el.remove(),2100);
+  el.style.cssText=`left:${15+Math.random()*70}%;bottom:${18+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),2400);
+}
+
+// ═══════════════════════════════════════
+// CHAT PANEL
+// ═══════════════════════════════════════
+let chatMsgsEl=null,chatRenderedKeys={};
+function toggleChatPanel(){
+  document.getElementById('emoji-panel').classList.remove('show');
+  const p=document.getElementById('chat-panel');
+  p.classList.toggle('show');
+  if(p.classList.contains('show'))setTimeout(()=>{const i=document.getElementById('chat-input');i&&i.focus();chatMsgsEl&&(chatMsgsEl.scrollTop=chatMsgsEl.scrollHeight);},100);
+}
+function appendChatMsg(txt,side){
+  if(!chatMsgsEl)chatMsgsEl=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.className='chat-msg '+side;d.textContent=txt;
+  chatMsgsEl.appendChild(d);chatMsgsEl.scrollTop=chatMsgsEl.scrollHeight;
+  const p=document.getElementById('chat-panel');
+  if(side==='opp'&&!p.classList.contains('show')){
+    const btn=document.getElementById('btn-chat-game');
+    if(btn){btn.style.animation='recBlink .5s 3';setTimeout(()=>btn.style.animation='',1600);}
+  }
+}
+function sendChatMsg(){
+  const inp=document.getElementById('chat-input');
+  const txt=(inp?.value||'').trim();
+  if(!txt)return;
+  inp.value='';
+  appendChatMsg(txt,'me');
+  if(gameMode==='online'&&roomRef){
+    roomRef.child('chat').push({txt,by:myColor,t:Date.now()});
+  }
 }
 
 // ═══════════════════════════════════════
@@ -2967,6 +3110,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     playIntro();
   }
   setInterval(checkNightMode,60000);
+  document.getElementById('btn-chat-game').style.display='none';
   document.getElementById('btn-emoji-game').style.display='none';
   document.getElementById('btn-voice').style.display='none';
 });
