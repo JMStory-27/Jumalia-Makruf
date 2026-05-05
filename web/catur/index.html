@@ -2492,26 +2492,31 @@ function showHint(){
   const origLabel=hintLabel?hintLabel.textContent:'Petunjuk';
   hintBtn?.classList.add('hint-active');
 
-  // ── INSTANT: depth-1 on main thread (< 5ms) ────────────────────────────────
+  // ── INSTANT: depth-1 on main thread (< 5ms) ──────────────────────────────
+  // Hint is LOCKED immediately at D1 — no background worker override so the
+  // highlighted squares never shift to a different move mid-display.
   const quickMv=getBestMove(gs,c,1);
   if(quickMv){
     hintMove={fr:quickMv.fr,fc:quickMv.fc,tr:quickMv.tr,tc:quickMv.tc};
-    // DO NOT set selected/legalFromSel — only highlight hint squares, no legal-move dots
-    if(hintLabel)hintLabel.textContent='D1✓';
+    if(hintLabel)hintLabel.textContent=origLabel;
     renderBoard();
-    toast('💡 Petunjuk: kotak kuning = dari → ke');
+    toast('💡 Petunjuk: kuning = dari, hijau = ke');
+    // Locked — return here so D6 worker never starts and can never override the display
+    return;
   }
 
-  // ── BACKGROUND: Magnus worker deepens to D6 ────────────────────────────────
-  if(!_magnusWorkerURL){if(hintLabel)hintLabel.textContent=origLabel;return;}
+  // ── FALLBACK: D1 gave nothing (very rare) — use D6 worker ─────────────────
+  if(!_magnusWorkerURL){if(hintLabel)hintLabel.textContent=origLabel;hintBtn?.classList.remove('hint-active');return;}
   const snapGS=cloneGS(gs);
   const MD=6;
   try{
     const w=new Worker(_magnusWorkerURL);
     _hintWorker=w;
     w.onmessage=(e)=>{
+      // Guard: ignore stale messages from a worker that was already terminated
+      // (prevents hint squares reappearing after the player has already moved)
+      if(_hintWorker!==w)return;
       const d=e.data;if(!d||!d.move)return;
-      // Only update the visual hint when fully done (final depth) — no mid-search flickering
       if(d.depth>=MD){
         const mv=d.move;
         hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
@@ -2519,11 +2524,10 @@ function showHint(){
         if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
         if(hintLabel)hintLabel.textContent=origLabel;
         renderBoard();
-        toast('💡 Petunjuk terbaik siap! (analisis dalam)');
+        toast('💡 Petunjuk siap!');
       }
-      // Intermediate depths: silently track but don't update the board
     };
-    w.onerror=()=>{if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
+    w.onerror=()=>{if(_hintWorker===w){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
     w.postMessage({gs:snapGS,color:c,depth:MD});
   }catch(e){if(hintLabel)hintLabel.textContent=origLabel;}
 
@@ -2532,7 +2536,7 @@ function showHint(){
     if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
     if(hintLabel)hintLabel.textContent=origLabel;
     if(!hintMove){selected=null;legalFromSel=[];hintBtn?.classList.remove('hint-active');renderBoard();}
-  },20000);
+  },10000);
 }
 
 // ═══════════════════════════════════════
