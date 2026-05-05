@@ -1945,6 +1945,19 @@ function onSquareClick(r,c){
       executeMove(mv);return;
     }
   }
+  // If hint is active and user clicks the hint-from piece → auto-execute the hint move
+  if(hintMove&&clickR===hintMove.fr&&clickC===hintMove.fc){
+    // Find the exact legal move matching hintMove (handles promotions etc.)
+    const legal=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc&&m.tr===hintMove.tr&&m.tc===hintMove.tc);
+    const mv=legal[0];
+    if(mv){
+      if(mv.promo!==null&&mv.promo!==undefined&&abs(mv.promo)!==abs(gs.board[mv.fr][mv.fc])){
+        showPromo(mv);return;
+      }
+      executeMove(mv);return;
+    }
+  }
+
   // Select piece — use cached legal moves
   const p=gs.board[clickR][clickC];
   if(p&&col(p)===gs.turn){
