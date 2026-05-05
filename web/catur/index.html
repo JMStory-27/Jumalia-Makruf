@@ -103,65 +103,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .set-section{margin-bottom:16px}
 .set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:6px}
 .set-label{font-size:14px;font-weight:600;color:var(--txt)}
-
-/* ── PROFILE SECTION ── */
-.profile-preview-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(212,175,55,.1),rgba(212,175,55,.04));border:1px solid rgba(212,175,55,.3);margin-bottom:14px;position:relative}
-.profile-big-avatar{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid var(--gold);background:rgba(212,175,55,.15);overflow:hidden;flex-shrink:0;cursor:pointer;position:relative}
-.profile-big-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.profile-big-avatar .av-edit{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;font-size:18px;border-radius:50%}
-.profile-big-avatar:hover .av-edit{display:flex}
-.profile-info-edit{flex:1;min-width:0}
-.profile-name-display{font-size:16px;font-weight:700;color:var(--txt);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.profile-country-display{font-size:13px;color:var(--txt2)}
-.profile-edit-hint{font-size:11px;color:var(--gold);margin-top:4px;opacity:.8}
-.profile-input{width:100%;background:rgba(255,255,255,.07);border:1px solid var(--card-b);border-radius:10px;padding:9px 12px;font-size:14px;color:var(--txt);outline:none;margin-bottom:8px}
-.profile-input:focus{border-color:rgba(212,175,55,.5)}
-.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
-.av-opt{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid var(--card-b);background:rgba(255,255,255,.05);cursor:pointer;transition:all .15s}
-.av-opt:hover{border-color:var(--gold);transform:scale(1.1)}
-.av-opt.selected{border-color:var(--gold);background:rgba(212,175,55,.2);box-shadow:0 0 10px rgba(212,175,55,.4)}
-.country-grid{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.cn-opt{padding:6px 10px;border-radius:8px;border:1px solid var(--card-b);background:rgba(255,255,255,.04);cursor:pointer;font-size:13px;transition:all .15s}
-.cn-opt:hover{border-color:rgba(212,175,55,.4)}
-.cn-opt.selected{border-color:var(--gold);background:rgba(212,175,55,.12);color:var(--gold)}
-.upload-av-btn{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;border:1px dashed rgba(212,175,55,.4);background:transparent;color:var(--gold);font-size:13px;cursor:pointer;width:100%;justify-content:center;margin-top:4px}
-.upload-av-btn:hover{background:rgba(212,175,55,.08)}
-
-/* ── MATCHMAKING SCREEN ── */
-#s-match{justify-content:center;background:var(--bg);z-index:15}
-.match-inner{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;padding:20px 16px}
-.match-title{font-size:14px;font-weight:700;letter-spacing:1.5px;color:var(--txt2);text-transform:uppercase;margin-bottom:6px}
-.match-online-badge{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:999px;padding:4px 14px;font-size:12px;color:#4ade80;font-weight:600;margin-bottom:24px;animation:pulseBadge 2s ease-in-out infinite}
-@keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.3)}50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}}
-.match-cards-row{display:flex;align-items:center;gap:14px;width:100%;margin-bottom:20px}
-.match-card{flex:1;padding:16px 12px;border-radius:16px;border:1px solid var(--card-b);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;backdrop-filter:blur(12px)}
-.match-card.me-card{border-color:rgba(212,175,55,.35)}
-.match-card.opp-card{border-color:rgba(100,180,255,.25)}
-.match-avatar-lg{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;border:2px solid var(--card-b);background:rgba(255,255,255,.07);overflow:hidden;position:relative}
-.match-avatar-lg img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.match-card.me-card .match-avatar-lg{border-color:var(--gold);box-shadow:0 0 16px rgba(212,175,55,.35)}
-.match-card.opp-card .match-avatar-lg{border-color:rgba(100,180,255,.5)}
-.match-pname{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.match-country{font-size:12px;color:var(--txt2)}
-.match-vs{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
-.match-vs-text{font-size:22px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(212,175,55,.5);animation:vsGlow 1.5s ease-in-out infinite}
-@keyframes vsGlow{0%,100%{text-shadow:0 0 10px rgba(212,175,55,.4)}50%{text-shadow:0 0 30px rgba(212,175,55,.8)}}
-.match-timer{font-size:11px;color:var(--txt2)}
-.match-status{font-size:13px;color:var(--txt2);text-align:center;margin-bottom:14px;min-height:20px}
-.match-bar-wrap{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:20px}
-.match-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-d),var(--gold),var(--gold-d));transition:width .4s ease;animation:barShimmer 1.5s linear infinite;background-size:200% 100%}
-@keyframes barShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.match-card .opp-shuffle{display:inline-block;animation:shuffleFlip .2s ease-out}
-@keyframes shuffleFlip{0%{opacity:0;transform:translateY(-10px) scale(.9)}60%{opacity:1;transform:translateY(2px) scale(1.02)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.match-avatar-lg span.av-flip{animation:avatarFlip .18s ease-in-out}
-@keyframes avatarFlip{0%{opacity:0;transform:scale(0.5) rotate(-15deg)}60%{transform:scale(1.15) rotate(5deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
-.match-card.found{animation:foundPulse .6s ease-out;border-color:var(--gold)!important;box-shadow:0 0 30px rgba(212,175,55,.5)!important}
-@keyframes foundPulse{0%{transform:scale(1)}30%{transform:scale(1.06)}60%{transform:scale(.97)}100%{transform:scale(1)}}
-.match-found-badge{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;opacity:0;animation:fadeInUp .4s .3s forwards}
-@keyframes fadeInUp{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
-.match-timer{font-size:26px;font-weight:900;color:var(--gold);text-shadow:0 0 16px rgba(212,175,55,.6);line-height:1;margin-top:2px}
-.match-country-row{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--txt2);justify-content:center;flex-wrap:nowrap}
-.match-country-name{font-size:10px;color:var(--txt2);max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .set-desc{font-size:11px;color:var(--txt2)}
 .toggle-row{display:flex;gap:6px}
 .tgl{padding:7px 14px;border-radius:8px;border:1px solid var(--card-b);background:transparent;color:var(--txt2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
@@ -345,37 +286,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #bot-bubble{position:fixed;bottom:calc(140px + var(--safe));left:50%;transform:translateX(-50%) translateY(10px);max-width:280px;padding:10px 16px;border-radius:16px;border:1px solid var(--card-b);background:rgba(10,8,28,.96);font-size:12px;color:var(--txt2);text-align:center;z-index:150;opacity:0;transition:all .3s;pointer-events:none;backdrop-filter:blur(12px)}
 #bot-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-#emoji-panel{position:fixed;bottom:calc(80px + var(--safe));left:50%;transform:translateX(-50%);background:rgba(10,8,28,.97);border:1px solid var(--card-b);border-radius:18px;padding:12px 10px;display:none;gap:4px;z-index:150;backdrop-filter:blur(16px);flex-wrap:wrap;max-width:320px;justify-content:center;max-height:260px;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.7)}
+#emoji-panel{position:fixed;bottom:calc(80px + var(--safe));left:50%;transform:translateX(-50%);background:rgba(10,8,28,.96);border:1px solid var(--card-b);border-radius:16px;padding:10px;display:none;gap:8px;z-index:150;backdrop-filter:blur(12px);flex-wrap:wrap;max-width:280px;justify-content:center}
 #emoji-panel.show{display:flex}
-.emoji-btn{font-size:26px;cursor:pointer;transition:transform .15s,filter .15s;padding:3px 2px;border-radius:8px;line-height:1.2}
-.emoji-btn:hover,.emoji-btn:active{transform:scale(1.35);filter:drop-shadow(0 0 8px rgba(212,175,55,.8))}
-.emoji-fly{position:fixed;font-size:48px;animation:emojiUp 2.2s ease-out forwards;pointer-events:none;z-index:500}
-@keyframes emojiUp{0%{transform:translateY(0) scale(.8) rotate(-10deg);opacity:1}30%{transform:translateY(-60px) scale(1.3) rotate(8deg);opacity:1}100%{transform:translateY(-220px) scale(1.6) rotate(-5deg);opacity:0}}
-.emoji-cat-lbl{width:100%;font-size:10px;color:var(--txt2);text-align:left;padding:4px 2px 2px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,.15);margin-top:4px}
+.emoji-btn{font-size:28px;cursor:pointer;transition:transform .2s;padding:4px}
+.emoji-btn:hover{transform:scale(1.3)}
+.emoji-fly{position:fixed;font-size:40px;animation:emojiUp 2s ease-out forwards;pointer-events:none;z-index:500}
+@keyframes emojiUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-200px) scale(1.5);opacity:0}}
 
 #voice-wave{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:6px;background:rgba(10,8,28,.96);padding:20px 30px;border-radius:20px;border:1px solid var(--card-b);z-index:160}
 #voice-wave.show{display:flex}
 .rec-pulse{animation:recBlink .8s ease-in-out infinite}
 @keyframes recBlink{0%,100%{color:var(--txt2)}50%{color:#f87171}}
 #voice-timer{font-size:20px;font-weight:700;color:var(--gold)}
-
-/* ── CHAT PANEL ── */
-#chat-panel{position:fixed;bottom:0;left:0;right:0;height:52%;background:rgba(8,6,22,.97);border-top:1px solid var(--card-b);z-index:180;display:none;flex-direction:column;backdrop-filter:blur(20px);border-radius:20px 20px 0 0;transition:transform .3s cubic-bezier(.22,1,.36,1)}
-#chat-panel.show{display:flex}
-#chat-msgs{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin}
-.chat-msg{max-width:78%;padding:7px 12px;border-radius:14px;font-size:13px;line-height:1.45;word-break:break-word;animation:msgIn .2s ease-out}
-@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.chat-msg.me{align-self:flex-end;background:linear-gradient(135deg,#8b6914,#d4af37);color:#1a0800;border-bottom-right-radius:4px}
-.chat-msg.opp{align-self:flex-start;background:rgba(255,255,255,.1);color:var(--txt);border:1px solid var(--card-b);border-bottom-left-radius:4px}
-.chat-msg.system{align-self:center;background:transparent;color:var(--txt2);font-size:11px;font-style:italic}
-.chat-input-row{display:flex;gap:8px;padding:8px 12px calc(8px + var(--safe));border-top:1px solid rgba(212,175,55,.15)}
-#chat-input{flex:1;background:rgba(255,255,255,.08);border:1px solid var(--card-b);border-radius:22px;padding:9px 14px;font-size:14px;color:var(--txt);outline:none}
-#chat-input::placeholder{color:var(--txt2)}
-.chat-send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#8b6914,#d4af37);border:none;color:#1a0800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.chat-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;border-bottom:1px solid rgba(212,175,55,.15)}
-.chat-hdr-title{font-size:14px;font-weight:700;color:var(--txt)}
-.chat-close{font-size:20px;cursor:pointer;color:var(--txt2);padding:4px}
-#btn-chat-game{display:none}
 
 /* ── BOARD THEMES ── */
 #board-grid.t-classic{--sq-l:#f0d9b5;--sq-d:#b58863}
@@ -388,6 +310,65 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #board-grid.t-night{--sq-l:#4a486a;--sq-d:#1a1832}
 #board-grid.t-marble{--sq-l:#e8dcd4;--sq-d:#8a7060}
 #board-grid.t-merdeka{--sq-l:#f5f5f5;--sq-d:#cc0001}
+
+/* ── MATCHMAKING SCREEN ── */
+#s-matchmaking{justify-content:flex-start;padding-top:0}
+.mm-inner{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;padding:20px 4px 20px;gap:16px}
+.mm-title{font-size:22px;font-weight:800;color:var(--gold);text-align:center;letter-spacing:1px}
+.mm-subtitle{font-size:13px;color:var(--txt2);text-align:center}
+.mm-vs-row{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;margin:8px 0}
+.mm-player-box{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--rad);border:1px solid var(--card-b);background:var(--card);min-width:0;max-width:160px;position:relative;overflow:hidden}
+.mm-player-box.me{border-color:rgba(212,175,55,.45)}
+.mm-player-box.enemy{animation:mmEnmFlick .12s ease-in-out}
+@keyframes mmEnmFlick{0%{opacity:0;transform:translateY(-6px)}100%{opacity:1;transform:translateY(0)}}
+.mm-avatar-wrap{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;border:2px solid var(--card-b);background:rgba(0,0,0,.3);position:relative;flex-shrink:0}
+.mm-avatar-wrap.me-av{border-color:var(--gold);box-shadow:0 0 14px rgba(212,175,55,.35)}
+.mm-avatar-wrap.en-av{border-color:rgba(255,100,100,.5);box-shadow:0 0 14px rgba(255,80,80,.2)}
+.mm-player-box .mm-av-img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.mm-name{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mm-country{font-size:11px;color:var(--txt2);text-align:center}
+.mm-rating{font-size:11px;color:var(--gold);font-weight:700}
+.mm-vs-badge{font-size:28px;font-weight:900;color:var(--txt2);flex-shrink:0;letter-spacing:-1px}
+.mm-progress-wrap{width:100%;max-width:340px;background:rgba(255,255,255,.06);border-radius:99px;height:6px;overflow:hidden;position:relative}
+.mm-progress-bar{height:100%;background:linear-gradient(90deg,#d4af37,#f5e6aa,#d4af37);background-size:200%;border-radius:99px;animation:mmProgShimmer 1.5s linear infinite;width:0;transition:width .25s ease}
+@keyframes mmProgShimmer{0%{background-position:0% center}100%{background-position:200% center}}
+.mm-searching-anim{display:flex;gap:5px;align-items:center;justify-content:center}
+.mm-dot{width:9px;height:9px;border-radius:50%;background:var(--gold);opacity:.3;animation:mmDotPulse 1.2s ease-in-out infinite}
+.mm-dot:nth-child(2){animation-delay:.2s}
+.mm-dot:nth-child(3){animation-delay:.4s}
+@keyframes mmDotPulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+.mm-found-badge{display:none;font-size:13px;font-weight:700;color:#4ade80;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.35);border-radius:99px;padding:6px 18px;text-align:center}
+.mm-found-badge.show{display:block}
+.mm-online-count{font-size:12px;color:var(--txt2);text-align:center;opacity:.7}
+.mm-cancel-btn{margin-top:4px;padding:11px 28px;border-radius:99px;border:1px solid rgba(248,113,113,.4);background:transparent;color:#f87171;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.mm-cancel-btn:hover{background:rgba(248,113,113,.08)}
+.mm-spin-ring{position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold);border-right-color:rgba(212,175,55,.4);animation:spin360 1s linear infinite}
+@keyframes spin360{to{transform:rotate(360deg)}}
+
+/* ── PROFILE SETTINGS ── */
+.profile-card{padding:16px;border-radius:var(--rad);border:1px solid var(--card-b);background:var(--card);display:flex;flex-direction:column;gap:14px;margin-bottom:14px}
+.prof-top{display:flex;align-items:center;gap:14px}
+.prof-main-avatar{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:38px;cursor:pointer;position:relative;flex-shrink:0;overflow:hidden}
+.prof-main-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.prof-main-avatar .edit-badge{position:absolute;bottom:0;right:0;background:var(--gold);color:#1a0800;font-size:10px;font-weight:700;padding:2px 5px;border-radius:6px}
+.prof-main-info{flex:1;display:flex;flex-direction:column;gap:6px}
+.prof-name-input{background:rgba(255,255,255,.06);border:1px solid var(--card-b);border-radius:8px;padding:8px 12px;color:var(--txt);font-size:14px;font-weight:700;width:100%;outline:none}
+.prof-name-input:focus{border-color:var(--gold)}
+.prof-country-select{background:rgba(255,255,255,.06);border:1px solid var(--card-b);border-radius:8px;padding:7px 12px;color:var(--txt);font-size:13px;width:100%;outline:none;cursor:pointer}
+.prof-country-select option{background:#0d0d1a;color:var(--txt)}
+.avatar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:2px}
+.av-opt{width:44px;height:44px;border-radius:50%;border:2px solid transparent;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all .18s}
+.av-opt:hover{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.08)}
+.av-opt.selected{border-color:var(--gold);background:rgba(212,175,55,.15);box-shadow:0 0 10px rgba(212,175,55,.3)}
+.prof-upload-btn{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;border:1px dashed var(--card-b);background:transparent;color:var(--txt2);font-size:12px;cursor:pointer;transition:all .2s;width:100%;justify-content:center}
+.prof-upload-btn:hover{border-color:rgba(212,175,55,.5);color:var(--gold)}
+.prof-save-btn{width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,#a07010,#d4af37);border:none;color:#1a0800;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.prof-save-btn:hover{filter:brightness(1.08)}
+
+/* ── OPPONENT CHAT BUBBLE (random match) ── */
+#online-chat-bubble{position:fixed;top:calc(60px + var(--safe));right:14px;max-width:220px;padding:8px 14px;border-radius:14px 14px 4px 14px;border:1px solid rgba(255,100,100,.3);background:rgba(20,10,30,.96);font-size:12px;color:#ff9999;text-align:left;z-index:150;opacity:0;transition:all .3s;pointer-events:none;backdrop-filter:blur(12px);line-height:1.5}
+#online-chat-bubble.show{opacity:1}
+#online-chat-bubble .chat-name{font-size:10px;font-weight:700;color:rgba(255,150,150,.7);margin-bottom:3px}
 
 /* ── NIGHT MODE ── */
 body.night{--bg:#050509;--bg2:#080811}
@@ -522,152 +503,118 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ PARTICLES ══ -->
 <div id="ptl"></div>
 
-<!-- ══ SVG PIECE DEFS — OUTLINE STYLE ══ -->
+<!-- ══ SVG PIECE DEFS ══ -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<filter id="pshadow" x="-50%" y="-50%" width="200%" height="200%">
-  <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.5"/>
-</filter>
-
-<!-- ═══ WHITE PIECES ═══ -->
-
 <!-- WHITE KING -->
 <g id="wK">
-  <path d="M 20 85 Q 20 85 50 85 Q 80 85 80 85 L 75 75 L 25 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 32 75 L 35 50 L 65 50 L 68 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="48" rx="12" ry="9" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="35" rx="16" ry="14" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <rect x="48" y="18" width="4" height="20" fill="white" stroke="black" stroke-width="1.5"/>
-  <rect x="42" y="24" width="16" height="4" fill="white" stroke="black" stroke-width="1.5"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25c0,0,4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3c-3,6,6,10.5,6,10.5V37z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/>
 </g>
-
 <!-- WHITE QUEEN -->
 <g id="wQ">
-  <path d="M 20 85 Q 50 85 80 85 L 75 75 L 25 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 30 75 L 34 52 L 66 52 L 70 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="50" rx="13" ry="10" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="34" rx="17" ry="15" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <polygon points="50,15 47,28 50,22 53,28" fill="white" stroke="black" stroke-width="1.5"/>
-  <polygon points="37,24 33,18 37,30" fill="white" stroke="black" stroke-width="1.5"/>
-  <polygon points="63,24 67,18 63,30" fill="white" stroke="black" stroke-width="1.5"/>
-  <circle cx="50" cy="15" r="2.5" fill="black"/>
-  <circle cx="37" cy="18" r="2" fill="black"/>
-  <circle cx="63" cy="18" r="2" fill="black"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-0.3-14.1L22.5,24.5l-7-13.6L14,25L6.5,13.5L9,26z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4c1,1.5,1,1,1,3.5c-1.5,1-1,2.5-1,2.5c-1.5,1.5,2.5,2.5,2.5,2.5c4,1,14,1,18,0c0,0,4-1,2.5-2.5c0,0,0.5-1.5-1-2.5c0-2.5,0-2,1-3.5c1-2,2.5-2,2.5-4c-8.5-1.5-18.5-1.5-27,0z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" d="M11.5,30c3.5-1,18.5-1,22,0M12,33.5c3.5-1,17.5-1,21,0M11.5,37c3.5-1,18-1,22,0"/>
+  <circle fill="#404040" cx="6" cy="12" r="2"/>
+  <circle fill="#404040" cx="14" cy="9" r="2"/>
+  <circle fill="#404040" cx="22.5" cy="8" r="2"/>
+  <circle fill="#404040" cx="31" cy="9" r="2"/>
+  <circle fill="#404040" cx="39" cy="12" r="2"/>
 </g>
-
 <!-- WHITE ROOK -->
 <g id="wR">
-  <path d="M 22 85 Q 50 85 78 85 L 73 74 L 27 74 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 32 74 L 32 55 L 68 55 L 68 74 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <rect x="32" y="35" width="10" height="20" fill="white" stroke="black" stroke-width="1.5"/>
-  <rect x="42" y="30" width="8" height="25" fill="white" stroke="black" stroke-width="1.5"/>
-  <rect x="50" y="30" width="8" height="25" fill="white" stroke="black" stroke-width="1.5"/>
-  <rect x="58" y="35" width="10" height="20" fill="white" stroke="black" stroke-width="1.5"/>
-  <line x1="40" y1="55" x2="40" y2="74" stroke="black" stroke-width="1" opacity="0.4"/>
-  <line x1="60" y1="55" x2="60" y2="74" stroke="black" stroke-width="1" opacity="0.4"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
 </g>
-
-<!-- WHITE BISHOP -->
+<!-- WHITE BISHOP — wide rounded body + prominent cross -->
 <g id="wB">
-  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 34 76 L 37 55 L 63 55 L 66 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 38 55 Q 50 38 62 55" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <path d="M 48 38 L 50 20 L 52 38 Z" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="52" rx="13" ry="6" fill="none" stroke="black" stroke-width="1" opacity="0.5"/>
+  <rect fill="#fff" stroke="#404040" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 11,37 C 11,34 15,32 22.5,32 C 30,32 34,34 34,37"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15,32 C 10,28 9,22 10,17 C 11,12 15,8 22.5,7 C 30,8 34,12 35,17 C 36,22 35,28 30,32 Z"/>
+  <circle fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="7" r="3.2"/>
+  <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
+  <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-
-<!-- WHITE KNIGHT -->
+<!-- WHITE KNIGHT — cburnett two-path design -->
 <g id="wN">
-  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 36 76 Q 34 66 35 55 Q 36 50 42 48 L 42 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 42 48 Q 47 42 52 38 Q 58 36 62 42 Q 64 52 62 62 Q 59 70 50 74 Q 44 76 42 73" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <path d="M 62 42 Q 72 38 80 42 Q 82 46 80 54 Q 77 60 68 62 Q 62 60 62 52" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <path d="M 50 38 Q 46 28 48 18 Q 52 20 52 38" fill="white" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M 56 36 Q 60 26 64 16 Q 62 22 60 38" fill="white" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="64" cy="48" r="2.5" fill="black"/>
-  <circle cx="72" cy="52" r="1.5" fill="black" opacity="0.7"/>
-  <path d="M 51 36 Q 53 30 55 36" stroke="black" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.5"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round"
+    d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
+       C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
+       C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
+       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
+  <circle fill="#404040" cx="33" cy="24" r="1.85"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
 </g>
-
-<!-- WHITE PAWN -->
+<!-- WHITE PAWN — round head + smooth waist + round base -->
 <g id="wP">
-  <path d="M 26 85 Q 50 85 74 85 L 71 78 L 29 78 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 36 78 L 39 60 L 61 60 L 64 78 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="58" rx="11" ry="8" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <circle cx="50" cy="42" r="13" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <circle cx="50" cy="28" r="2.5" fill="black"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.5,0-4.5,2-4.5,4.5c0,1.8,1,3.3,2.5,4.1C17.5,18.8,16,21,16,23.5H29c0-2.5-1.5-4.7-4.5-5.9c1.5-0.8,2.5-2.3,2.5-4.1C27,11,25,9,22.5,9z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M15.5,23.5 C14.5,25.5 13,28 13,30 H32 C32,28 30.5,25.5 29.5,23.5 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M13,30 C13,27 17.5,25 22.5,25 C27.5,25 32,27 32,30 H13Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c0-4,5-6.5,11-6.5S33,33,33,37v2H11.5V37z"/>
 </g>
-
-<!-- ═══ BLACK PIECES ═══ -->
 
 <!-- BLACK KING -->
 <g id="bK">
-  <path d="M 20 85 Q 20 85 50 85 Q 80 85 80 85 L 75 75 L 25 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 32 75 L 35 50 L 65 50 L 68 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="48" rx="12" ry="9" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="35" rx="16" ry="14" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <rect x="48" y="18" width="4" height="20" fill="black" stroke="white" stroke-width="1.5"/>
-  <rect x="42" y="24" width="16" height="4" fill="black" stroke="white" stroke-width="1.5"/>
-  <rect x="48" y="18" width="4" height="20" fill="white" opacity="0.35"/>
-  <rect x="42" y="24" width="16" height="4" fill="white" opacity="0.35"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" d="M22.5,11.6V6M20,8h5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,25c0,0,4.5-7.5,3-10.5c0,0-1-2.5-3-2.5s-3,2.5-3,2.5c-1.5,3,3,10.5,3,10.5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c5.5,3.5,15.5,3.5,21,0V30s9-4.5,6-10.5c-4-6.5-13.5-3.5-16,3V25v-2.5c-2.5-6.5-12-9.5-16-3c-3,6,6,10.5,6,10.5V37z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" d="M11.5,30c5.5-3,15.5-3,21,0M11.5,33.5c5.5-2,15.5-2,21,0M11.5,37c5.5-2,15.5-2,21,0"/>
 </g>
-
 <!-- BLACK QUEEN -->
 <g id="bQ">
-  <path d="M 20 85 Q 50 85 80 85 L 75 75 L 25 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 30 75 L 34 52 L 66 52 L 70 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="50" rx="13" ry="10" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="34" rx="17" ry="15" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <polygon points="50,15 47,28 50,22 53,28" fill="black" stroke="white" stroke-width="1.5"/>
-  <polygon points="37,24 33,18 37,30" fill="black" stroke="white" stroke-width="1.5"/>
-  <polygon points="63,24 67,18 63,30" fill="black" stroke="white" stroke-width="1.5"/>
-  <circle cx="50" cy="15" r="2.5" fill="white"/>
-  <circle cx="37" cy="18" r="2" fill="white"/>
-  <circle cx="63" cy="18" r="2" fill="white"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c8.5-1.5,21-1.5,27,0l2.5-12.5-7.5,11.5-0.3-14.1L22.5,24.5l-7-13.6L14,25L6.5,13.5L9,26z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,26c0,2,1.5,2,2.5,4c1,1.5,1,1,1,3.5c-1.5,1-1,2.5-1,2.5c-1.5,1.5,2.5,2.5,2.5,2.5c4,1,14,1,18,0c0,0,4-1,2.5-2.5c0,0,0.5-1.5-1-2.5c0-2.5,0-2,1-3.5c1-2,2.5-2,2.5-4c-8.5-1.5-18.5-1.5-27,0z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" d="M11.5,30c3.5-1,18.5-1,22,0M12,33.5c3.5-1,17.5-1,21,0M11.5,37c3.5-1,18-1,22,0"/>
+  <circle fill="#ccc" cx="6" cy="12" r="2"/>
+  <circle fill="#ccc" cx="14" cy="9" r="2"/>
+  <circle fill="#ccc" cx="22.5" cy="8" r="2"/>
+  <circle fill="#ccc" cx="31" cy="9" r="2"/>
+  <circle fill="#ccc" cx="39" cy="12" r="2"/>
 </g>
-
 <!-- BLACK ROOK -->
 <g id="bR">
-  <path d="M 22 85 Q 50 85 78 85 L 73 74 L 27 74 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 32 74 L 32 55 L 68 55 L 68 74 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <rect x="32" y="35" width="10" height="20" fill="black" stroke="black" stroke-width="1.5"/>
-  <rect x="42" y="30" width="8" height="25" fill="black" stroke="black" stroke-width="1.5"/>
-  <rect x="50" y="30" width="8" height="25" fill="black" stroke="black" stroke-width="1.5"/>
-  <rect x="58" y="35" width="10" height="20" fill="black" stroke="black" stroke-width="1.5"/>
-  <line x1="40" y1="55" x2="40" y2="74" stroke="white" stroke-width="1" opacity="0.3"/>
-  <line x1="60" y1="55" x2="60" y2="74" stroke="white" stroke-width="1" opacity="0.3"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9,39h27V36H9V39zM12,36V32h21v4H12zM11,14V9h4v2h5V9h5v2h5V9h4v5l-3,3H14L11,14z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" d="M14,17v15h17V17H14z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.2" d="M9,39h27M12,36h21M11,14h23"/>
 </g>
-
-<!-- BLACK BISHOP -->
+<!-- BLACK BISHOP — wide rounded body + prominent cross -->
 <g id="bB">
-  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 34 76 L 37 55 L 63 55 L 66 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 38 55 Q 50 38 62 55" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <path d="M 48 38 L 50 20 L 52 38 Z" fill="black" stroke="black" stroke-width="1.5" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="52" rx="13" ry="6" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+  <rect fill="#111" stroke="#ccc" stroke-width="1.5" rx="2" x="8" y="37" width="29" height="5"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 11,37 C 11,34 15,32 22.5,32 C 30,32 34,34 34,37"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 15,32 C 10,28 9,22 10,17 C 11,12 15,8 22.5,7 C 30,8 34,12 35,17 C 36,22 35,28 30,32 Z"/>
+  <circle fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="7" r="3.2"/>
+  <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
+  <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-
-<!-- BLACK KNIGHT -->
+<!-- BLACK KNIGHT — cburnett two-path design -->
 <g id="bN">
-  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 36 76 Q 34 66 35 55 Q 36 50 42 48 L 42 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 42 48 Q 47 42 52 38 Q 58 36 62 42 Q 64 52 62 62 Q 59 70 50 74 Q 44 76 42 73" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <path d="M 62 42 Q 72 38 80 42 Q 82 46 80 54 Q 77 60 68 62 Q 62 60 62 52" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
-  <path d="M 50 38 Q 46 28 48 18 Q 52 20 52 38" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-  <path d="M 56 36 Q 60 26 64 16 Q 62 22 60 38" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-  <circle cx="64" cy="48" r="2.5" fill="white"/>
-  <circle cx="72" cy="52" r="1.5" fill="white" opacity="0.7"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"
+    d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
+       C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
+       C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
+       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
+  <circle fill="#ccc" cx="33" cy="24" r="1.85"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
 </g>
-
-<!-- BLACK PAWN -->
+<!-- BLACK PAWN — round head + smooth waist + round base -->
 <g id="bP">
-  <path d="M 26 85 Q 50 85 74 85 L 71 78 L 29 78 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <path d="M 36 78 L 39 60 L 61 60 L 64 78 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <ellipse cx="50" cy="58" rx="11" ry="8" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <circle cx="50" cy="42" r="13" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
-  <circle cx="50" cy="28" r="2.5" fill="white"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M22.5,9c-2.5,0-4.5,2-4.5,4.5c0,1.8,1,3.3,2.5,4.1C17.5,18.8,16,21,16,23.5H29c0-2.5-1.5-4.7-4.5-5.9c1.5-0.8,2.5-2.3,2.5-4.1C27,11,25,9,22.5,9z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M15.5,23.5 C14.5,25.5 13,28 13,30 H32 C32,28 30.5,25.5 29.5,23.5 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M13,30 C13,27 17.5,25 22.5,25 C27.5,25 32,27 32,30 H13Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M11.5,37c0-4,5-6.5,11-6.5S33,33,33,37v2H11.5V37z"/>
 </g>
-
 </defs>
 </svg>
 
@@ -714,14 +661,14 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <span class="btn-label">Main Online</span>
         <span class="btn-arrow">›</span>
       </button>
-      <button class="btn-main" style="border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.05)" onclick="showMatchmaking()">
-        <span class="btn-icon">🎮</span>
-        <span class="btn-label" style="color:var(--txt)">Cari Lawan Random</span>
-        <span style="font-size:11px;color:#4ade80;font-weight:700;background:rgba(74,222,128,.15);border-radius:6px;padding:2px 7px">ONLINE</span>
-      </button>
       <button class="btn-main" onclick="startHorde()">
         <span class="btn-icon">⚔️</span>
         <span class="btn-label">Mode Horde</span>
+        <span class="btn-arrow">›</span>
+      </button>
+      <button class="btn-main" style="border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.06)" onclick="showMatchmaking()">
+        <span class="btn-icon">🎲</span>
+        <span class="btn-label">Cari Lawan Random</span>
         <span class="btn-arrow">›</span>
       </button>
       <button class="btn-main" onclick="showTutorial()">
@@ -821,35 +768,41 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 </div>
 
 <!-- ══ MATCHMAKING SCREEN ══ -->
-<div id="s-match" class="screen">
-  <div class="match-inner">
-    <div class="match-title">🎮 Mencari Lawan</div>
-    <div class="match-online-badge">🟢 <span id="match-online-count">12,847</span> pemain online</div>
-    <div class="match-cards-row">
-      <div class="match-card me-card">
-        <div class="match-avatar-lg" id="match-my-av"><span id="match-my-av-inner">♟</span></div>
-        <div class="match-pname" id="match-my-name">Kamu</div>
-        <div class="match-country-row">
-          <span id="match-my-country">🇮🇩</span>
-          <span class="match-country-name" id="match-my-country-name">Indonesia</span>
+<div id="s-matchmaking" class="screen">
+  <div class="scr-header">
+    <div class="back-btn" onclick="cancelMatchmaking()">←</div>
+    <div class="scr-title">Cari Lawan Random</div>
+  </div>
+  <div class="mm-inner anim-in">
+    <div class="mm-title" id="mm-title-txt">🎲 Mencari Lawan...</div>
+    <div class="mm-subtitle" id="mm-subtitle-txt">Sistem sedang mencocokkan pemain yang seimbang</div>
+    <div class="mm-vs-row">
+      <div class="mm-player-box me">
+        <div class="mm-avatar-wrap me-av" id="mm-me-av">
+          <span id="mm-me-av-inner">🎮</span>
         </div>
+        <div class="mm-name" id="mm-me-name">Kamu</div>
+        <div class="mm-country" id="mm-me-country">🇮🇩 Indonesia</div>
+        <div class="mm-rating" id="mm-me-rating">⭐ 1200</div>
       </div>
-      <div class="match-vs">
-        <div class="match-vs-text">VS</div>
-        <div class="match-timer" id="match-timer-lbl">10</div>
-      </div>
-      <div class="match-card opp-card">
-        <div class="match-avatar-lg"><span id="match-opp-av">❓</span></div>
-        <div class="match-pname" id="match-opp-name">Mencari...</div>
-        <div class="match-country-row">
-          <span id="match-opp-country">🌐</span>
-          <span class="match-country-name" id="match-opp-country-name">...</span>
+      <div class="mm-vs-badge">VS</div>
+      <div class="mm-player-box enemy" id="mm-enemy-box">
+        <div class="mm-avatar-wrap en-av" id="mm-en-av" style="position:relative">
+          <span id="mm-en-av-inner">❓</span>
+          <div class="mm-spin-ring"></div>
         </div>
+        <div class="mm-name" id="mm-en-name">Mencari...</div>
+        <div class="mm-country" id="mm-en-country">🌐 ???</div>
+        <div class="mm-rating" id="mm-en-rating">⭐ ???</div>
       </div>
     </div>
-    <div class="match-status" id="match-status">🔍 Scanning pemain di sekitarmu...</div>
-    <div class="match-bar-wrap"><div class="match-bar-fill" id="match-bar" style="width:0%"></div></div>
-    <button class="ov-btn" style="max-width:200px;margin-top:4px" onclick="cancelMatchmaking()">❌ Batalkan</button>
+    <div class="mm-progress-wrap"><div class="mm-progress-bar" id="mm-progbar"></div></div>
+    <div class="mm-searching-anim" id="mm-dots">
+      <div class="mm-dot"></div><div class="mm-dot"></div><div class="mm-dot"></div>
+    </div>
+    <div class="mm-found-badge" id="mm-found-badge">✅ Lawan Ditemukan! Memulai permainan...</div>
+    <div class="mm-online-count" id="mm-online-txt">🟢 <span id="mm-online-num">247</span> pemain online sekarang</div>
+    <button class="mm-cancel-btn" id="mm-cancel-btn" onclick="cancelMatchmaking()">✕ Batalkan</button>
   </div>
 </div>
 
@@ -860,31 +813,38 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div class="scr-title">Pengaturan</div>
   </div>
   <div class="set-inner">
-    <!-- PROFILE SECTION -->
-    <div class="sec-label">Profil Pemain</div>
-    <div class="profile-preview-card glass" onclick="toggleProfileEdit()">
-      <div class="profile-big-avatar" id="prof-av-preview">
-        <span id="prof-av-emoji">♟</span>
-        <img id="prof-av-img" src="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%">
-        <div class="av-edit">✏️</div>
+    <div class="sec-label">👤 Profil Pemain</div>
+    <div class="profile-card">
+      <div class="prof-top">
+        <div class="prof-main-avatar" id="prof-main-av" onclick="document.getElementById('prof-photo-input').click()">
+          <span id="prof-av-disp">🎮</span>
+          <div class="edit-badge">edit</div>
+        </div>
+        <div class="prof-main-info">
+          <input id="prof-name-input" class="prof-name-input" placeholder="Nama kamu..." maxlength="20" value="" />
+          <select id="prof-country-select" class="prof-country-select">
+            <option value="🇮🇩 Indonesia">🇮🇩 Indonesia</option>
+            <option value="🏝️ Bali">🏝️ Bali</option>
+            <option value="🌋 Jawa">🌋 Jawa</option>
+            <option value="🌴 Kalimantan">🌴 Kalimantan</option>
+            <option value="🏔️ Sumatera">🏔️ Sumatera</option>
+            <option value="🌊 Sulawesi">🌊 Sulawesi</option>
+            <option value="🦜 Papua">🦜 Papua</option>
+            <option value="🇲🇾 Malaysia">🇲🇾 Malaysia</option>
+            <option value="🇸🇬 Singapore">🇸🇬 Singapore</option>
+            <option value="🇯🇵 Japan">🇯🇵 Japan</option>
+            <option value="🇺🇸 USA">🇺🇸 USA</option>
+          </select>
+        </div>
       </div>
-      <div class="profile-info-edit">
-        <div class="profile-name-display" id="prof-name-display">Pemain</div>
-        <div class="profile-country-display" id="prof-country-display">🇮🇩 Indonesia</div>
-        <div class="profile-edit-hint">Ketuk untuk edit profil</div>
-      </div>
+      <div class="sec-label" style="margin:0 0 6px;font-size:11px">Pilih Avatar</div>
+      <div class="avatar-grid" id="prof-avatar-grid"></div>
+      <label class="prof-upload-btn">
+        📷 Upload Foto Sendiri
+        <input type="file" id="prof-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)">
+      </label>
+      <button class="prof-save-btn" onclick="saveProfile()">💾 Simpan Profil</button>
     </div>
-    <div id="profile-edit-panel" style="display:none">
-      <input id="prof-name-input" class="profile-input" placeholder="Nama kamu..." maxlength="20" oninput="updateProfilePreview()">
-      <div class="sec-label" style="margin-top:4px">Pilih Avatar</div>
-      <div class="avatar-grid" id="avatar-grid"></div>
-      <button class="upload-av-btn" onclick="document.getElementById('av-upload').click()">📷 Upload Foto Sendiri</button>
-      <input type="file" id="av-upload" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
-      <div class="sec-label" style="margin-top:4px">Negara</div>
-      <div class="country-grid" id="country-grid"></div>
-      <button class="ov-btn gold" style="margin-top:10px" onclick="saveProfile()">💾 Simpan Profil</button>
-    </div>
-    <div class="sep"></div>
     <div class="sec-label">Tema Papan</div>
     <div id="theme-strip" class="theme-strip"></div>
     <div class="sep"></div>
@@ -987,7 +947,6 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div id="game-mode-lbl" class="game-mode-badge">Catur</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
-      <div id="btn-chat-game" class="ic-btn" style="display:none" onclick="toggleChatPanel()">💬</div>
       <div id="btn-emoji-game" class="ic-btn" style="display:none" onclick="toggleEmojiPanel()">😄</div>
       <div id="btn-voice" class="ic-btn" style="display:none" onclick="toggleVoiceNote()">🎙️</div>
       <div id="btn-music-game" class="ic-btn" onclick="toggleMusic()">🎵</div>
@@ -1155,28 +1114,16 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <button id="m-toggle" onclick="toggleMusic()">⏸</button>
 </div>
 
-<!-- ══ EMOJI PANEL (100 emojis) ══ -->
+<!-- ══ EMOJI PANEL ══ -->
 <div id="emoji-panel">
-  <div class="emoji-cat-lbl" style="border-top:none;margin-top:0">🏆 Kemenangan</div>
-  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span><span class="emoji-btn" onclick="sendEmoji('🏆')">🏆</span><span class="emoji-btn" onclick="sendEmoji('🥇')">🥇</span><span class="emoji-btn" onclick="sendEmoji('🎖️')">🎖️</span><span class="emoji-btn" onclick="sendEmoji('🏅')">🏅</span><span class="emoji-btn" onclick="sendEmoji('💪')">💪</span><span class="emoji-btn" onclick="sendEmoji('🦁')">🦁</span><span class="emoji-btn" onclick="sendEmoji('🐯')">🐯</span><span class="emoji-btn" onclick="sendEmoji('🦅')">🦅</span><span class="emoji-btn" onclick="sendEmoji('⚔️')">⚔️</span>
-  <div class="emoji-cat-lbl">😂 Ketawa</div>
-  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span><span class="emoji-btn" onclick="sendEmoji('🤣')">🤣</span><span class="emoji-btn" onclick="sendEmoji('😆')">😆</span><span class="emoji-btn" onclick="sendEmoji('😄')">😄</span><span class="emoji-btn" onclick="sendEmoji('😁')">😁</span><span class="emoji-btn" onclick="sendEmoji('🤭')">🤭</span><span class="emoji-btn" onclick="sendEmoji('😝')">😝</span><span class="emoji-btn" onclick="sendEmoji('😜')">😜</span><span class="emoji-btn" onclick="sendEmoji('🤪')">🤪</span><span class="emoji-btn" onclick="sendEmoji('🫡')">🫡</span>
-  <div class="emoji-cat-lbl">🔥 Api & Ledakan</div>
-  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span><span class="emoji-btn" onclick="sendEmoji('💥')">💥</span><span class="emoji-btn" onclick="sendEmoji('⚡')">⚡</span><span class="emoji-btn" onclick="sendEmoji('🌋')">🌋</span><span class="emoji-btn" onclick="sendEmoji('🧨')">🧨</span><span class="emoji-btn" onclick="sendEmoji('💣')">💣</span><span class="emoji-btn" onclick="sendEmoji('🎆')">🎆</span><span class="emoji-btn" onclick="sendEmoji('🎇')">🎇</span><span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span><span class="emoji-btn" onclick="sendEmoji('🎳')">🎳</span>
-  <div class="emoji-cat-lbl">💀 Gelap</div>
-  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span><span class="emoji-btn" onclick="sendEmoji('☠️')">☠️</span><span class="emoji-btn" onclick="sendEmoji('👻')">👻</span><span class="emoji-btn" onclick="sendEmoji('🦇')">🦇</span><span class="emoji-btn" onclick="sendEmoji('🌑')">🌑</span><span class="emoji-btn" onclick="sendEmoji('🌚')">🌚</span><span class="emoji-btn" onclick="sendEmoji('🖤')">🖤</span><span class="emoji-btn" onclick="sendEmoji('⚰️')">⚰️</span><span class="emoji-btn" onclick="sendEmoji('🕷️')">🕷️</span><span class="emoji-btn" onclick="sendEmoji('👁️')">👁️</span>
-  <div class="emoji-cat-lbl">😭 Nangis</div>
-  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span><span class="emoji-btn" onclick="sendEmoji('😢')">😢</span><span class="emoji-btn" onclick="sendEmoji('😥')">😥</span><span class="emoji-btn" onclick="sendEmoji('😰')">😰</span><span class="emoji-btn" onclick="sendEmoji('😓')">😓</span><span class="emoji-btn" onclick="sendEmoji('💧')">💧</span><span class="emoji-btn" onclick="sendEmoji('😞')">😞</span><span class="emoji-btn" onclick="sendEmoji('😔')">😔</span><span class="emoji-btn" onclick="sendEmoji('💔')">💔</span><span class="emoji-btn" onclick="sendEmoji('🥺')">🥺</span>
-  <div class="emoji-cat-lbl">❤️ Cinta</div>
-  <span class="emoji-btn" onclick="sendEmoji('❤️')">❤️</span><span class="emoji-btn" onclick="sendEmoji('💕')">💕</span><span class="emoji-btn" onclick="sendEmoji('💖')">💖</span><span class="emoji-btn" onclick="sendEmoji('💗')">💗</span><span class="emoji-btn" onclick="sendEmoji('💝')">💝</span><span class="emoji-btn" onclick="sendEmoji('🌹')">🌹</span><span class="emoji-btn" onclick="sendEmoji('💐')">💐</span><span class="emoji-btn" onclick="sendEmoji('🥰')">🥰</span><span class="emoji-btn" onclick="sendEmoji('😍')">😍</span><span class="emoji-btn" onclick="sendEmoji('🤩')">🤩</span>
-  <div class="emoji-cat-lbl">😱 Kaget</div>
-  <span class="emoji-btn" onclick="sendEmoji('😱')">😱</span><span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span><span class="emoji-btn" onclick="sendEmoji('😲')">😲</span><span class="emoji-btn" onclick="sendEmoji('😮')">😮</span><span class="emoji-btn" onclick="sendEmoji('😵')">😵</span><span class="emoji-btn" onclick="sendEmoji('💫')">💫</span><span class="emoji-btn" onclick="sendEmoji('🌀')">🌀</span><span class="emoji-btn" onclick="sendEmoji('🔮')">🔮</span><span class="emoji-btn" onclick="sendEmoji('🫠')">🫠</span><span class="emoji-btn" onclick="sendEmoji('🤔')">🤔</span>
-  <div class="emoji-cat-lbl">😎 Keren</div>
-  <span class="emoji-btn" onclick="sendEmoji('😎')">😎</span><span class="emoji-btn" onclick="sendEmoji('🤙')">🤙</span><span class="emoji-btn" onclick="sendEmoji('🤘')">🤘</span><span class="emoji-btn" onclick="sendEmoji('🤞')">🤞</span><span class="emoji-btn" onclick="sendEmoji('✌️')">✌️</span><span class="emoji-btn" onclick="sendEmoji('🕶️')">🕶️</span><span class="emoji-btn" onclick="sendEmoji('🪩')">🪩</span><span class="emoji-btn" onclick="sendEmoji('🎸')">🎸</span><span class="emoji-btn" onclick="sendEmoji('🏄')">🏄</span><span class="emoji-btn" onclick="sendEmoji('🦄')">🦄</span>
-  <div class="emoji-cat-lbl">😡 Marah</div>
-  <span class="emoji-btn" onclick="sendEmoji('😤')">😤</span><span class="emoji-btn" onclick="sendEmoji('😡')">😡</span><span class="emoji-btn" onclick="sendEmoji('🤬')">🤬</span><span class="emoji-btn" onclick="sendEmoji('👊')">👊</span><span class="emoji-btn" onclick="sendEmoji('💢')">💢</span><span class="emoji-btn" onclick="sendEmoji('👿')">👿</span><span class="emoji-btn" onclick="sendEmoji('🐉')">🐉</span><span class="emoji-btn" onclick="sendEmoji('🗡️')">🗡️</span><span class="emoji-btn" onclick="sendEmoji('🔴')">🔴</span><span class="emoji-btn" onclick="sendEmoji('🥊')">🥊</span>
-  <div class="emoji-cat-lbl">🎉 Pesta</div>
-  <span class="emoji-btn" onclick="sendEmoji('🎉')">🎉</span><span class="emoji-btn" onclick="sendEmoji('🎊')">🎊</span><span class="emoji-btn" onclick="sendEmoji('🥳')">🥳</span><span class="emoji-btn" onclick="sendEmoji('🎈')">🎈</span><span class="emoji-btn" onclick="sendEmoji('🎂')">🎂</span><span class="emoji-btn" onclick="sendEmoji('🍾')">🍾</span><span class="emoji-btn" onclick="sendEmoji('🎁')">🎁</span><span class="emoji-btn" onclick="sendEmoji('👏')">👏</span><span class="emoji-btn" onclick="sendEmoji('🪅')">🪅</span><span class="emoji-btn" onclick="sendEmoji('🎪')">🎪</span>
+  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span>
+  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span>
+  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span>
+  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span>
+  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
+  <span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span>
+  <span class="emoji-btn" onclick="sendEmoji('👏')">👏</span>
+  <span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span>
 </div>
 
 <!-- ══ VOICE WAVE ══ -->
@@ -1187,17 +1134,10 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <button class="ov-btn danger" style="margin-top:8px;padding:8px 20px" onclick="cancelVoiceNote()">❌ Batal</button>
 </div>
 
-<!-- ══ CHAT PANEL ══ -->
-<div id="chat-panel">
-  <div class="chat-hdr">
-    <div class="chat-hdr-title">💬 Chat Lawan</div>
-    <div class="chat-close" onclick="toggleChatPanel()">✕</div>
-  </div>
-  <div id="chat-msgs"></div>
-  <div class="chat-input-row">
-    <input id="chat-input" type="text" placeholder="Ketik pesan..." maxlength="150" onkeydown="if(event.key==='Enter')sendChatMsg()">
-    <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>
-  </div>
+<!-- ══ ONLINE OPPONENT CHAT BUBBLE ══ -->
+<div id="online-chat-bubble">
+  <div class="chat-name" id="online-chat-name">Lawan</div>
+  <span id="online-chat-msg"></span>
 </div>
 
 <!-- ══ FIREBASE ══ -->
@@ -1233,106 +1173,6 @@ cfg.musicTrack=cfg.musicTrack??0;
 cfg.musicOn=cfg.musicOn!==false;
 cfg.comment=false;
 function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
-
-// ═══════════════════════════════════════
-// PROFILE SYSTEM
-// ═══════════════════════════════════════
-const PROFILE_AVATARS=[
-  '♟','👑','🐯','🦁','🐉','🔥','⚡','🌙','💀','🎯',
-  '🚀','🦅','⚔️','🎸','🌟','🦊','🐺','🐼','🦋','🌸',
-  '🍀','🎭','🧊','🌊','🌈','💎','🔮','🎪','🦄','🐸',
-  '🎲','🧲','🕶️','🪄','🌺','🦋','🐝','🍄','🌙','🎯',
-  '👾','🤖','👹','👺','🦸','🧙','🐲','🏴‍☠️','🃏','🎖️',
-];
-const COUNTRIES=[
-  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇮🇩',name:'Jawa Barat'},{flag:'🇮🇩',name:'Jawa Tengah'},
-  {flag:'🇮🇩',name:'Jawa Timur'},{flag:'🇮🇩',name:'Sumatra Utara'},{flag:'🇮🇩',name:'Kalimantan'},
-  {flag:'🇮🇩',name:'Sulawesi'},{flag:'🇮🇩',name:'Bali'},{flag:'🇮🇩',name:'Papua'},
-  {flag:'🇮🇩',name:'Aceh'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
-  {flag:'🇵🇭',name:'Filipina'},{flag:'🇻🇳',name:'Vietnam'},{flag:'🇹🇭',name:'Thailand'},
-  {flag:'🇧🇳',name:'Brunei'},{flag:'🇲🇲',name:'Myanmar'},{flag:'🇰🇭',name:'Kamboja'},
-  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇨🇳',name:'Tiongkok'},
-  {flag:'🇺🇸',name:'Amerika'},{flag:'🇬🇧',name:'Inggris'},{flag:'🇦🇺',name:'Australia'},
-  {flag:'🇸🇦',name:'Arab Saudi'},{flag:'🇦🇪',name:'UAE'},{flag:'🇮🇳',name:'India'},
-  {flag:'🇧🇷',name:'Brasil'},{flag:'🇷🇺',name:'Rusia'},{flag:'🇹🇷',name:'Turki'},
-];
-let userProfile=JSON.parse(localStorage.getItem('chess_profile')||'{}');
-userProfile.name=userProfile.name||'Pemain';
-userProfile.avatar=userProfile.avatar||'♟';
-userProfile.country=userProfile.country||{flag:'🇮🇩',name:'Indonesia'};
-userProfile.photoUrl=userProfile.photoUrl||'';
-function saveProfile(){
-  const inp=document.getElementById('prof-name-input');
-  const nm=(inp?.value||'').trim();
-  if(nm)userProfile.name=nm.slice(0,20);
-  localStorage.setItem('chess_profile',JSON.stringify(userProfile));
-  refreshProfileUI();
-  document.getElementById('profile-edit-panel').style.display='none';
-  toast('✅ Profil disimpan!');
-}
-function refreshProfileUI(){
-  const emoji=document.getElementById('prof-av-emoji');
-  const img=document.getElementById('prof-av-img');
-  const nd=document.getElementById('prof-name-display');
-  const cd=document.getElementById('prof-country-display');
-  if(userProfile.photoUrl){
-    if(img){img.src=userProfile.photoUrl;img.style.display='block';}
-    if(emoji)emoji.style.display='none';
-  } else {
-    if(img)img.style.display='none';
-    if(emoji){emoji.style.display='';emoji.textContent=userProfile.avatar;}
-  }
-  if(nd)nd.textContent=userProfile.name;
-  if(cd)cd.textContent=userProfile.country.flag+' '+userProfile.country.name;
-}
-function toggleProfileEdit(){
-  const panel=document.getElementById('profile-edit-panel');
-  const isOpen=panel.style.display==='block';
-  panel.style.display=isOpen?'none':'block';
-  if(!isOpen){
-    const inp=document.getElementById('prof-name-input');
-    if(inp)inp.value=userProfile.name;
-    buildAvatarGrid();
-    buildCountryGrid();
-  }
-}
-function updateProfilePreview(){
-  const inp=document.getElementById('prof-name-input');
-  if(inp&&inp.value.trim())document.getElementById('prof-name-display').textContent=inp.value.trim();
-}
-function buildAvatarGrid(){
-  const grid=document.getElementById('avatar-grid');if(!grid)return;
-  grid.innerHTML='';
-  PROFILE_AVATARS.forEach(av=>{
-    const d=document.createElement('div');d.className='av-opt'+(userProfile.avatar===av&&!userProfile.photoUrl?' selected':'');
-    d.textContent=av;d.onclick=()=>{userProfile.avatar=av;userProfile.photoUrl='';grid.querySelectorAll('.av-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');const img=document.getElementById('prof-av-img');if(img)img.style.display='none';const em=document.getElementById('prof-av-emoji');if(em){em.style.display='';em.textContent=av;}};
-    grid.appendChild(d);
-  });
-}
-function buildCountryGrid(){
-  const grid=document.getElementById('country-grid');if(!grid)return;
-  grid.innerHTML='';
-  COUNTRIES.forEach(cn=>{
-    const d=document.createElement('div');d.className='cn-opt'+(userProfile.country.flag===cn.flag?' selected':'');
-    d.textContent=cn.flag+' '+cn.name;d.onclick=()=>{userProfile.country=cn;grid.querySelectorAll('.cn-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');document.getElementById('prof-country-display').textContent=cn.flag+' '+cn.name;};
-    grid.appendChild(d);
-  });
-}
-function handleAvatarUpload(e){
-  const file=e.target.files?.[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    userProfile.photoUrl=ev.target.result;
-    const img=document.getElementById('prof-av-img');if(img){img.src=ev.target.result;img.style.display='block';}
-    const em=document.getElementById('prof-av-emoji');if(em)em.style.display='none';
-    toast('📷 Foto diupload!');
-  };
-  reader.readAsDataURL(file);
-}
-function getMyAvatarEl(){
-  if(userProfile.photoUrl)return `<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`;
-  return userProfile.avatar;
-}
 
 let gameMode=null,botLevel=1,myColor='w',roomCode=null,roomRef=null,roomListener=null;
 let isHordeMode=false;
@@ -1539,8 +1379,8 @@ function showScreen(id){
     el.classList.add('active');
   }
 }
-function backHome(){clearInterval(matchInterval);matchInterval=null;clearInterval(matchFastInterval);matchFastInterval=null;clearTimeout(fakeHumanChatTimer);fakeHumanChatTimer=null;cancelRoom();stopMusic();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home')}
-function showSettings(){buildThemeStrip();updateSettingsUI();showScreen('settings')}
+function backHome(){cancelRoom();stopMusic();showScreen('home')}
+function showSettings(){buildThemeStrip();updateSettingsUI();buildProfileUI();showScreen('settings')}
 function showLevel(){
   selectedLevel=null;
   updateSettingsUI();
@@ -1583,7 +1423,7 @@ function showJoinRoom(){document.getElementById('join-input').value='';document.
 function showGameMenu(){document.getElementById('o-menu').classList.add('show')}
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
-function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));clearInterval(matchInterval);matchInterval=null;clearTimeout(fakeHumanChatTimer);fakeHumanChatTimer=null;stopMusic();cancelRoom();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home');}
+function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();_stopOppChat();showScreen('home');}
 function dismissPassOverlay(){document.getElementById('o-pass-device').classList.remove('show');}
 
 // ═══════════════════════════════════════
@@ -1626,7 +1466,6 @@ function setMusicTrack(i){cfg.musicTrack=i;saveCfg();updateSettingsUI();if(cfg.m
 function updateSettingsUI(){
   [['t-son',cfg.snd],['t-soff',!cfg.snd],['t-comon',cfg.comment],['t-comoff',!cfg.comment],['t-putih',cfg.color==='w'],['t-hitam',cfg.color==='b'],['t-alt',cfg.color==='alt']].forEach(([id,on])=>document.getElementById(id)?.classList.toggle('on',on));
   for(let i=0;i<5;i++)document.getElementById('t-m'+i)?.classList.toggle('on',cfg.musicTrack===i);
-  refreshProfileUI();
 }
 
 // ═══════════════════════════════════════
@@ -1695,7 +1534,7 @@ function renderBoard(){
     const pieceId=(pc==='w'?'w':'b')+''+['P','N','B','R','Q','K'][ap-1];
     const sq=sqs[getIdx(r,c)];if(!sq)continue;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('class','piece-svg');
+    svg.setAttribute('viewBox','0 0 45 45');svg.setAttribute('class','piece-svg');
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     use.setAttribute('href','#'+pieceId);svg.appendChild(use);sq.appendChild(svg);
   }
@@ -1736,301 +1575,12 @@ function updateCapturedDisplay(){
   });
 }
 
-// ═══════════════════════════════════════
-// MATCHMAKING SYSTEM
-// ═══════════════════════════════════════
-const RANDOM_NAMES=[
-  'xNovriansyah','RezaGanteng77','BayuSlayer','FarhanOP','AhmadSniper','DimasKing',
-  'RizkiMaster','HendraGG','AgusPro','YudiElite','IrfanBoss','HadiGenius',
-  'NandangCepat','SyaifulRajawali','BambangLegend','SuryadiMvp','WahyuRocket',
-  'KurniaMagic','EkoPintar','TokoGlory','RandiVipers','FaizalHawk','LukasKnight',
-  'ZulfanChess','RasyidRuler','GalihWizard','DeniQueen','SatriaDragon','PrabuGod',
-  'AldiFury','ReyfaldoX','ZidanPremium','NabilGhost','HilmanTitan','BimaElang',
-  'RafaldiPro','FirmanKing77','HafizRaja','AriqSniper','GinaldoCepat','TaufiqBoss',
-  'AsepGaming','CahyoMaster','DediPro123','ErwinElite','FaizdulRocket','GunturOP',
-  'HaryoNinja','IqbalFire','JafarWin','KarimChess','LuthfiGG','MuzakkirPRO',
-  'NurdinSlayer','OktaviansyahX','PanjiKing','QodriAce','RullyBeast','SoniFast',
-  'TeguhGod','UmarVipers','VenturaRajawali','WandaPro','XanderID','YantoLegend',
-  'ZakiMvp','AbdullahGG','BudiSuperior','CandraElang','DinnoRuler','EvanKnight',
-  'FahriWizard','GalihDragon','HerlambangFury','IkhsanX','JokoGhost','KenPremium',
-  'LioTitan','MarshaKing','NathanGaming','OscarBoss','PutuMaster','QaisarPintar',
-  'RakiElite','SamuelRocket','TomiMagic','UdinGlory','VandaVipers','WawanHawk',
-  'XenoBeast','YuniKnight','ZainulWizard','AfifahChess','BessiFire','CindyGG',
-  'DewiSniper','ErlinaNinja','FitraOP','GitaGod','HaniAce','IndahFast',
-  'JuliaBoss','KartikaPRO','LailaMaster','MelisaRuler','NurHaliza77','OktaElite',
-  'PermataKing','QueenRaisa','RahayuSuperior','SintaSlayer','TikaLegend',
-  'UlfaVipers','ViolaFury','WidyaGhost','XiomaTitan','YuliaPremium','ZaskiaGG',
-  'AbimanyuGG','BramantaX','CristoferOP','DamarKnight','EgaPintar','FalconID',
-  'GatotLegend','HaikalFire','IndraSlayer','JulianBoss','KhanRuler','LeoBeast',
-  'MahendraMvp','NafisElite','OmarGod','PrasetioKing','RizalHawk','SatrioRocket',
-  'TambunanAce','UrbanVipers','ValentinoPro','WidodoGhost','XaviChess','YusufTitan',
-  'ZulkifliMaster','AldianoOP','BennyGG','ChristoferGamer','DinoPremium','EkawanFast',
-  'FurqonWizard','HarunNinja','IskandarFury','JeffryGlory','KhoirulDragon','LazuardiElang',
-  'MuhaiminPro','NugrohoSniper','OktoriansyahBoss','PurwantoRajawali','QairunKing',
-  'RivaldoSuperior','SeptianMagic','TrionoLegend','UsmanVipers','VedioGamer',
-  'WibawaMvp','XyloCepat','YudhistiraChess','ZahranAce','AnindyaQueen','BulanDragon',
-  'CahayaFire','DindaGhost','EkaWizard','FiraNinja','GraceKnight','HestiBeast',
-  'IntanRuler','JessicaElite','KenishaOP','LindaGod','MiataPremium','NabilaFury',
-  'OviaSniper','PinaRocket','QoriahMaster','RiskaHawk','SofiaTitan','TitaGG',
-];
-const RANDOM_COUNTRIES=[
-  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇮🇩',name:'Jawa Barat'},{flag:'🇮🇩',name:'Jawa Timur'},
-  {flag:'🇮🇩',name:'Sumatra'},{flag:'🇮🇩',name:'Kalimantan'},{flag:'🇮🇩',name:'Sulawesi'},
-  {flag:'🇮🇩',name:'Bali'},{flag:'🇮🇩',name:'Papua'},{flag:'🇮🇩',name:'Aceh'},
-  {flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},{flag:'🇵🇭',name:'Filipina'},
-  {flag:'🇻🇳',name:'Vietnam'},{flag:'🇹🇭',name:'Thailand'},{flag:'🇧🇳',name:'Brunei'},
-  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇸🇦',name:'Arab Saudi'},
-  {flag:'🇦🇪',name:'UAE'},{flag:'🇺🇸',name:'Amerika'},{flag:'🇮🇳',name:'India'},
-  {flag:'🇦🇺',name:'Australia'},{flag:'🇬🇧',name:'Inggris'},{flag:'🇹🇷',name:'Turki'},
-];
-const MATCH_STATUSES=[
-  '🔍 Scanning pemain di sekitarmu...','📊 Menganalisa rating dan skill...','🎯 Menyocokkan level yang tepat...',
-  '🌐 Menemukan kandidat lawan...','⚡ Memverifikasi koneksi lawan...','🔥 Hampir ketemu nih...',
-  '✅ Lawan ditemukan! Mempersiapkan arena...',
-];
-let matchTimer=null,matchInterval=null,matchFastInterval=null,fakeHumanChatTimer=null;
-let fakeOpponentProfile={name:'Bot',avatar:'♟',country:{flag:'🇮🇩',name:'Indonesia'}};
-
-function showMatchmaking(){
-  showScreen('match');
-  // Fill user side
-  const myAvEl=document.getElementById('match-my-av-inner');
-  const myNmEl=document.getElementById('match-my-name');
-  const myCnEl=document.getElementById('match-my-country');
-  const myCnName=document.getElementById('match-my-country-name');
-  if(myAvEl){
-    if(userProfile.photoUrl){
-      document.getElementById('match-my-av').innerHTML=`<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-    } else myAvEl.textContent=userProfile.avatar;
-  }
-  if(myNmEl)myNmEl.textContent=userProfile.name;
-  if(myCnEl)myCnEl.textContent=userProfile.country.flag;
-  if(myCnName)myCnName.textContent=userProfile.country.name;
-
-  // Animate online count
-  let oc=Math.floor(10000+Math.random()*8000);
-  document.getElementById('match-online-count').textContent=oc.toLocaleString('id-ID');
-
-  // Reset opponent side
-  const oppAv=document.getElementById('match-opp-av');
-  const oppNm=document.getElementById('match-opp-name');
-  const oppCn=document.getElementById('match-opp-country');
-  const oppCnName=document.getElementById('match-opp-country-name');
-  const timerEl=document.getElementById('match-timer-lbl');
-  const barEl=document.getElementById('match-bar');
-  const statusEl=document.getElementById('match-status');
-  if(oppAv)oppAv.textContent='❓';
-  if(oppNm)oppNm.textContent='Mencari...';
-  if(oppCn)oppCn.textContent='🌐';
-  if(oppCnName)oppCnName.textContent='...';
-  if(barEl)barEl.style.width='0%';
-  if(statusEl)statusEl.textContent=MATCH_STATUSES[0];
-  if(timerEl)timerEl.textContent='10';
-  // Remove found class if leftover
-  document.getElementById('s-match')?.querySelector('.match-card.opp-card')?.classList.remove('found');
-
-  let elapsed=0;
-  const TOTAL=10;
-  let statusIdx=0;
-  let fastTick=0;
-  clearInterval(matchInterval);
-  clearInterval(matchFastInterval);matchFastInterval=null;
-
-  // Phase 1: rapid gacha shuffle every 250ms for first 6 seconds
-  let lastRName=RANDOM_NAMES[0],lastRAv=PROFILE_AVATARS[0],lastRCn=RANDOM_COUNTRIES[0];
-  function doShuffle(){
-    lastRName=RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
-    lastRAv=PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
-    lastRCn=RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
-    if(oppNm){oppNm.textContent=lastRName;oppNm.classList.remove('opp-shuffle');void oppNm.offsetWidth;oppNm.classList.add('opp-shuffle');}
-    if(oppAv){oppAv.classList.remove('av-flip');void oppAv.offsetWidth;oppAv.classList.add('av-flip');setTimeout(()=>{oppAv.textContent=lastRAv;},80);}
-    if(oppCn)oppCn.textContent=lastRCn.flag;
-    if(oppCnName)oppCnName.textContent=lastRCn.name;
-  }
-
-  // Fast shuffle interval (every 250ms)
-  matchFastInterval=setInterval(()=>{
-    fastTick++;
-    doShuffle();
-    if(fastTick>=24){clearInterval(matchFastInterval);matchFastInterval=null;} // stop at 6s
-  },250);
-
-  // Second interval every 1s for progress bar + status + countdown
-  matchInterval=setInterval(()=>{
-    elapsed++;
-    const pct=Math.min(100,Math.round((elapsed/TOTAL)*100));
-    if(barEl)barEl.style.width=pct+'%';
-    if(timerEl)timerEl.textContent=Math.max(0,TOTAL-elapsed);
-
-    if(elapsed===2)statusIdx=1;
-    else if(elapsed===4)statusIdx=2;
-    else if(elapsed===6)statusIdx=3;
-    else if(elapsed===7)statusIdx=4;
-    else if(elapsed===8)statusIdx=5;
-    else if(elapsed===9)statusIdx=6;
-    if(statusEl)statusEl.textContent=MATCH_STATUSES[statusIdx];
-
-    if(elapsed>=TOTAL){
-      clearInterval(matchInterval);matchInterval=null;
-      clearInterval(matchFastInterval);matchFastInterval=null;
-      // Final freeze — lock in the opponent
-      fakeOpponentProfile={name:lastRName,avatar:lastRAv,country:lastRCn};
-      // Reveal animation
-      const oppCard=document.getElementById('s-match')?.querySelector('.match-card.opp-card');
-      if(oppCard)oppCard.classList.add('found');
-      if(oppAv){oppAv.classList.remove('av-flip');oppAv.textContent=lastRAv;}
-      if(oppNm){oppNm.classList.remove('opp-shuffle');oppNm.textContent=lastRName;}
-      if(oppCn)oppCn.textContent=lastRCn.flag;
-      if(oppCnName)oppCnName.textContent=lastRCn.name;
-      if(statusEl)statusEl.textContent='🎮 Lawan ditemukan: '+lastRName+'!';
-      setTimeout(()=>startFakeHumanGame(),800);
-    }
-  },1000);
-}
-
-function cancelMatchmaking(){
-  clearInterval(matchInterval);matchInterval=null;
-  clearInterval(matchFastInterval);matchFastInterval=null;
-  backHome();
-}
-
-// Difficulty distribution: 15% ultra-easy, 30% easy, 25% medium, 20% hard, 10% ultra-hard
-function pickMatchDifficulty(){
-  const r=Math.random();
-  if(r<.15)return{level:1,label:'Pemula',winPct:92};
-  if(r<.45)return{level:1,label:'Mudah',winPct:80};
-  if(r<.70)return{level:2,label:'Menengah',winPct:65};
-  if(r<.90)return{level:3,label:'Sulit',winPct:45};
-  return{level:3,label:'Dewa',winPct:28};
-}
-
-function startFakeHumanGame(){
-  const diff=pickMatchDifficulty();
-  clearTimeout(thinkTimer);thinkTimer=null;
-  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
-  gameMode='match';botLevel=diff.level;isHordeMode=false;
-  myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
-  flipped=myColor==='b';
-  gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
-  initBoardDOM();renderBoard();
-  setPlayerNames(fakeOpponentProfile.name,userProfile.name,myColor==='w'?'b':'w',myColor);
-  showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
-  // Show emoji/chat buttons same as online
-  document.getElementById('btn-emoji-game').style.display='flex';
-  document.getElementById('btn-chat-game').style.display='flex';
-  chatMsgsEl=document.getElementById('chat-msgs');chatRenderedKeys={};
-  // Start fake human bot chat
-  startFakeHumanChat();
-  if(myColor==='b')setTimeout(doBotMove,800+Math.random()*1200);
-  setTimeout(()=>toast('🎮 Lawan ditemukan: '+fakeOpponentProfile.name+' ('+fakeOpponentProfile.country.flag+')'),200);
-}
-
-// ═══════════════════════════════════════
-// FAKE HUMAN BOT CHAT (Gen-Z Indonesia)
-// ═══════════════════════════════════════
-const GENZ_CHAT=[
-  'halo bro siap nih 👋','gas gas gas 🔥','jangan underestimate gua ya wkwk','kita lihat siapa yang menang 👑',
-  'gua udah warm up nih','skill issue kalo kalah 💀','ayo tunjukkin yang terbaik','gl hf bro 🤝',
-  'wkwkwk tenang aja','gua lagi on fire nih 🔥','jangan baper kalau gua menang ya',
-  'chill aja bro ini cuma game','nice move sih','anjay bisa juga 😤','wah pintar juga kamu',
-  'gg ez 😂','hampir aja tuh','sabar sabar...','gua comeback nih tunggu','ayo siapa takut 💪',
-  'ih ngeri juga lu','gua udah tau strateginya 😏','jangan senang dulu','masih panjang permainannya',
-  'lagi mikir nih sebentar 🤔','mantap jiwa','respect bro move-mu solid','nah gitu dong',
-  'duh salah langkah gua 😭','ya ampun','aduh','untung masih bisa defend','ini susah juga',
-  'gua masih bisa comeback tenang 😌','wkwk seru juga nih','ayo gas terus ⚡','ngeri lu bro',
-  'gua fokus dulu ya','hmm menarik','lu main lama juga?','good game so far',
-  'jangan kasih ampun ya','gua serius nih sekarang 😤','semangat! 💪','ayo dong jangan pelan-pelan',
-  'wah hampir kena tuh 😱','bagus juga pertahananmu','gua excited nih','asik juga mainnya',
-  'kalau gua kalah gg aja ya','gua challenge lu fair and square','siap! 🫡','ini seru banget sih',
-  'bro lu pake strategi apa sih 😭','gua ga nyangka lu bisa gitu','okeh ini menarik banget',
-  'lo tau ga lu hampir bikin gua panik 😅','anjay strateginya rapi','gua sampe salut lho',
-  'gua tadi mau resign tapi nggak jadi wkwk','ini match terbaik gua hari ini jujur',
-  'lu main kayak grandmaster lah 🤯','wkwk lu bluffing ya? gua ga percaya',
-  'nggak nyangka bakal ketemu lawan sekelas ini 👀','oke fine, gua akui lu bagus',
-  'santai bro, gua juga masih belajar','gua udah latihan 3 jam buat ini lho 😤',
-  'yaelah lu jago banget sih 😭😭','gua mau cry fr fr','comeback time! tunggu aja',
-  'pfft gampang ini 😎','gua bakal push to the limit','jangan harap gua nyerah ya',
-  'gua kirain gua mau menang tapi...','oke ini udah kayak battle royal wkwk',
-  'harusnya gua pikir lebih lama tadi','next move gua dijamin ngagetin lu',
-  'lu sadar nggak posisi lu bahaya? 😏','gua udah trap lu dari tadi lho',
-  'ini catur atau perang sih? 😂','gua suka battle kayak gini, seru!',
-  'jujur gua deg-degan juga nih','lu main sambil dengerin musik ya? bagus juga',
-  'gaskeun! 🔥🔥🔥','no mercy dari gua!','lu underestimate gua kan? nanti nyesel',
-  'gua main pake feeling aja nih, doain ya 😂','semoga aja ini works...',
-  'bro honestly ini match yang paling challenging 🫡',
-];
-const GENZ_EMOJI_CHAT=['😂','🔥','💀','🤯','😤','👑','💪','😎','🎯','🤝','gg','ez','wkwk','mantap','anjay','gass','NGAKAK','woi','aduh','bestie','bro','anjir','gabut','receh','bet'];
-
-function startFakeHumanChat(){
-  clearTimeout(fakeHumanChatTimer);
-  const greets=[
-    'halo bro siap nih 👋','gas gas gas 🔥','gl hf bro 🤝','ayo siapa takut 😤',
-    'kita lihat siapa yang menang 👑','siap tempur! 💪','gua udah ready dari tadi nih',
-    'akhirnya ketemu juga! ayo gas 🔥','udah lama gua nunggu match kayak gini',
-    'lawan yang worth it! mari kita mulai 🎯',
-  ];
-  const midGame=[
-    'wkwk lu mikir lama banget','gua lagi assess posisinya nih','seru nih match-nya',
-    'jangan menyerah dulu bro','gua juga lagi panas nih','masih bisa dibalik situasinya',
-    'ini yang gua suka dari catur, selalu unpredictable','lu jago juga ternyata',
-    'gua harus akui ini challenging','keep it up! gua respect lawan yang gigih',
-    'oke oke gua salah prediksi tadi','unexpectedly susah nih 😅','tetap fokus ya',
-  ];
-  function scheduleNext(){
-    const delay=15000+Math.random()*40000; // 15-55 sec intervals
-    fakeHumanChatTimer=setTimeout(()=>{
-      if(gameMode!=='match'||!gs||gs.gameOver)return;
-      const r=Math.random();
-      let msg;
-      if(r<.55)msg=GENZ_CHAT[Math.floor(Math.random()*GENZ_CHAT.length)];
-      else if(r<.75)msg=midGame[Math.floor(Math.random()*midGame.length)];
-      else msg=GENZ_EMOJI_CHAT[Math.floor(Math.random()*GENZ_EMOJI_CHAT.length)];
-      appendChatMsg(msg,'opp');
-      // Also float emoji sometimes
-      if(Math.random()<.3){const em=EMOJI_SOUNDS.laugh[Math.floor(Math.random()*4)];floatEmoji(em);playEmojiSound(em);}
-      scheduleNext();
-    },delay);
-  }
-  // First greeting right away (2-4s)
-  fakeHumanChatTimer=setTimeout(()=>{
-    if(gameMode!=='match')return;
-    appendChatMsg(greets[Math.floor(Math.random()*greets.length)],'opp');
-    // Second message shortly after if it was a short greeting
-    setTimeout(()=>{
-      if(gameMode!=='match'||!gs||gs.gameOver)return;
-      if(Math.random()<.5){
-        const follow=['jangan kasih ampun ya! 😤','gua challenge lu habis-habisan','ready? 3..2..1.. gas!'];
-        appendChatMsg(follow[Math.floor(Math.random()*follow.length)],'opp');
-      }
-      scheduleNext();
-    },4000+Math.random()*3000);
-  },2000+Math.random()*2000);
-}
-
 function setPlayerNames(topName,botName,topColor,botColor){
   const avTop=document.getElementById('av-top'),avBot=document.getElementById('av-bot');
   const nmTop=document.getElementById('name-top'),nmBot=document.getElementById('name-bot');
   if(nmTop)nmTop.textContent=topName;if(nmBot)nmBot.textContent=botName;
-  // Top (opponent)
-  if(avTop){
-    if(gameMode==='match'){
-      avTop.style.cssText='font-size:20px;position:relative';
-      avTop.textContent='';
-      if(fakeOpponentProfile){
-        const sp=document.createElement('span');sp.textContent=fakeOpponentProfile.avatar;avTop.appendChild(sp);
-      }
-    } else avTop.textContent=topColor==='b'?'♚':'♔';
-  }
-  // Bottom (me)
-  if(avBot){
-    if(userProfile.photoUrl){
-      avBot.innerHTML=`<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`;
-      avBot.style.position='relative';avBot.style.overflow='hidden';
-    } else {
-      avBot.textContent=userProfile.avatar;
-    }
-  }
+  if(avTop)avTop.textContent=topColor==='b'?'♚':'♔';
+  if(avBot)avBot.textContent=botColor==='b'?'♚':'♔';
 }
 
 // ═══════════════════════════════════════
@@ -2045,7 +1595,7 @@ function _getLegal(s,c){
 function onSquareClick(r,c){
   if(!gs||gs.gameOver)return;
   if(gameMode==='online'&&gs.turn!==myColor)return;
-  if((gameMode==='bot'||gameMode==='match')&&gs.turn!==myColor)return;
+  if(gameMode==='bot'&&gs.turn!==myColor)return;
   const clickR=flipped?7-r:r,clickC=flipped?7-c:c;
   // Check if clicking on legal dest
   if(selected!==null){
@@ -2058,19 +1608,6 @@ function onSquareClick(r,c){
       executeMove(mv);return;
     }
   }
-  // If hint is active and user clicks the hint-from piece → auto-execute the hint move
-  if(hintMove&&clickR===hintMove.fr&&clickC===hintMove.fc){
-    // Find the exact legal move matching hintMove (handles promotions etc.)
-    const legal=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc&&m.tr===hintMove.tr&&m.tc===hintMove.tc);
-    const mv=legal[0];
-    if(mv){
-      if(mv.promo!==null&&mv.promo!==undefined&&abs(mv.promo)!==abs(gs.board[mv.fr][mv.fc])){
-        showPromo(mv);return;
-      }
-      executeMove(mv);return;
-    }
-  }
-
   // Select piece — use cached legal moves
   const p=gs.board[clickR][clickC];
   if(p&&col(p)===gs.turn){
@@ -2091,7 +1628,7 @@ function showPromo(templateMv){
     const actualPp=promoColor==='w'?pp:-pp;
     const sq=document.createElement('div');sq.className='promo-sq';
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 100 100');svg.style.cssText='width:52px;height:52px';
+    svg.setAttribute('viewBox','0 0 45 45');svg.style.cssText='width:52px;height:52px';
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     const pid=(promoColor==='w'?'w':'b')+''+['P','N','B','R','Q','K'][pp-1];
     use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
@@ -2102,16 +1639,6 @@ function showPromo(templateMv){
 }
 
 function executeMove(mv){
-  // Invalidate any pending hint worker message (fixes race condition where
-  // a queued onmessage would fire after the move and re-draw hint squares)
-  _hintGen++;
-  hintMove=null;
-  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
-  document.getElementById('btn-hint')?.classList.remove('hint-active');
-  const hintLbl=document.getElementById('btn-hint')?.querySelector('span:last-child');
-  if(hintLbl&&hintLbl.textContent!=='Petunjuk')hintLbl.textContent='Petunjuk';
-
   const prevGS=cloneGS(gs);
   gameSnapshots.push({state:prevGS,move:mv});
   moveHistory.push(gs);
@@ -2153,17 +1680,30 @@ function executeMove(mv){
   if(gameMode==='online'&&roomRef){
     roomRef.update({state:serGS(gs),lastMove:mv||null});
   }
-  if((gameMode==='bot'||gameMode==='match')&&gs.turn!==myColor&&!gs.gameOver){
+  if(gameMode==='bot'&&gs.turn!==myColor&&!gs.gameOver){
     clearTimeout(thinkTimer);
     const topCard=document.getElementById('p-top');topCard?.classList.add('thinking');
-    // Fake human "thinking" delay — longer for match mode to feel human
-    const thinkDelay=gameMode==='match'?600+Math.random()*1800:300+Math.random()*500;
+    const botDelay=_currentOpp?(600+Math.random()*1400):(300+Math.random()*500);
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
       const mv2=getBotMove(gs,gs.turn,botLevel);
-      if(mv2)executeMove(mv2);
+      if(mv2){
+        executeMove(mv2);
+        // Random match: trigger opponent chat based on move context
+        if(_oppChatActive&&_currentOpp){
+          const didCheck=isInCheck(gs,myColor);
+          const didCapture=!!gs.captured&&gs.captured[gs.turn==='w'?'b':'w'].length>mv.tc;
+          if(didCheck)setTimeout(()=>_showOppChat('check'),400);
+          else if(Math.random()<0.18)setTimeout(()=>_showOppChat('emote'),500);
+        }
+      }
       else{gs.gameOver=true;renderBoard();showGameOver(gs.turn==='w'?'b':'w');}
-    },thinkDelay);
+    },botDelay);
+  }
+  // Trigger opponent chat on player's good/blunder move in random match
+  if(_oppChatActive&&_currentOpp&&gs.turn!==myColor){
+    const inCheck=isInCheck(gs,gs.turn==='w'?'b':'w');
+    if(inCheck)setTimeout(()=>_showOppChat('blunder'),600);
   }
 }
 
@@ -2175,7 +1715,7 @@ function undoMove(){
   if(!moveHistory.length){toast('Tidak ada langkah untuk ditarik');return;}
   gs=moveHistory.pop();
   if(gameSnapshots.length)gameSnapshots.pop();
-  if((gameMode==='bot'||gameMode==='match')&&gs.turn!==myColor&&moveHistory.length){gs=moveHistory.pop();if(gameSnapshots.length)gameSnapshots.pop();}
+  if(gameMode==='bot'&&gs.turn!==myColor&&moveHistory.length){gs=moveHistory.pop();if(gameSnapshots.length)gameSnapshots.pop();}
   lastMove=null;selected=null;legalFromSel=[];hintMove=null;renderBoard();toast('Langkah ditarik ↩');
 }
 function confirmReset(){if(confirm('Ulangi permainan dari awal?'))restartSameMode()}
@@ -2422,7 +1962,7 @@ self.onmessage=function(e){const{gs,color,depth}=e.data;getBestMove(gs,color,dep
 
 let _magnusWorkerURL=null;
 try{_magnusWorkerURL=URL.createObjectURL(new Blob([_MAGNUS_CODE],{type:'application/javascript'}));}catch(e){console.warn('Worker blob failed:',e.message);}
-let _hintWorker=null,_hintTimer=null,_hintGen=0;
+let _hintWorker=null,_hintTimer=null;
 
 // ── Stockfish loader (lazy, via blob URL to avoid CORS) ──────────────────────
 let _sfURL=null,_sfLoading=false;
@@ -2447,8 +1987,6 @@ function showHint(){
   if(!gs||gs.gameOver)return;
   const c=gameMode==='online'?myColor:gs.turn;
   if(gs.turn!==c){toast('Bukan giliranmu!');return;}
-  // Increment generation — any pending worker from a previous hint becomes stale
-  const myGen=++_hintGen;
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   hintMove=null;selected=null;legalFromSel=[];
@@ -2461,14 +1999,14 @@ function showHint(){
   const quickMv=getBestMove(gs,c,1);
   if(quickMv){
     hintMove={fr:quickMv.fr,fc:quickMv.fc,tr:quickMv.tr,tc:quickMv.tc};
-    if(hintLabel)hintLabel.textContent='💡';
+    selected=[hintMove.fr,hintMove.fc];
+    legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===hintMove.fr&&m.fc===hintMove.fc);
+    if(hintLabel)hintLabel.textContent='D1✓';
     renderBoard();
-    toast('💡 Petunjuk: kotak kuning = dari → ke');
+    toast('💡 Petunjuk siap!');
   }
 
   // ── BACKGROUND: Magnus worker deepens to D6 ────────────────────────────────
-  // D6 silently refines hintMove in memory but does NOT re-render or change
-  // the visible squares — this prevents the "hint jumping to different piece" bug
   if(!_magnusWorkerURL){if(hintLabel)hintLabel.textContent=origLabel;return;}
   const snapGS=cloneGS(gs);
   const MD=6;
@@ -2476,28 +2014,25 @@ function showHint(){
     const w=new Worker(_magnusWorkerURL);
     _hintWorker=w;
     w.onmessage=(e)=>{
-      // Generation guard: if the user moved or requested a new hint, discard this result
-      if(_hintGen!==myGen)return;
       const d=e.data;if(!d||!d.move)return;
+      const mv=d.move;
+      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
+      selected=[hintMove.fr,hintMove.fc];
+      legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===mv.fr&&m.fc===mv.fc);
+      if(hintLabel)hintLabel.textContent='D'+d.depth+'/'+MD+'✓';
+      renderBoard();
       if(d.depth>=MD){
-        // Silently update hintMove so auto-execute uses the deeper move,
-        // but do NOT call renderBoard() — keeps the visual squares locked to D1
-        hintMove={fr:d.move.fr,fc:d.move.fc,tr:d.move.tr,tc:d.move.tc};
         if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
         if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
         if(hintLabel)hintLabel.textContent=origLabel;
+        toast('💡 Analisis selesai! (D'+MD+')');
       }
     };
-    w.onerror=()=>{
-      if(_hintGen!==myGen)return;
-      if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
-      if(hintLabel)hintLabel.textContent=origLabel;
-    };
+    w.onerror=()=>{if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
     w.postMessage({gs:snapGS,color:c,depth:MD});
   }catch(e){if(hintLabel)hintLabel.textContent=origLabel;}
 
   _hintTimer=setTimeout(()=>{
-    if(_hintGen!==myGen)return;
     _hintTimer=null;
     if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
     if(hintLabel)hintLabel.textContent=origLabel;
@@ -2508,19 +2043,40 @@ function showHint(){
 // ═══════════════════════════════════════
 // GAME MODES
 // ═══════════════════════════════════════
-function startVsBot(level){
+function startVsBot(level,oppProfile){
   clearTimeout(thinkTimer);thinkTimer=null;
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
+  _stopOppChat();
   try{
     gameMode='bot';botLevel=level;isHordeMode=false;
     myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
     flipped=myColor==='b';
     gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
     initBoardDOM();renderBoard();
-    const ln=['','Mudah','Sedang','Sulit'][level];
     const topC=myColor==='w'?'b':'w';
-    setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
+    if(oppProfile){
+      // Random match mode — show real user profile vs opponent
+      const myName=userProfile.name||'Kamu';
+      const myDisp=myColor==='w'?myName+' ⬜':myName+' ⬛';
+      setPlayerNames(oppProfile.name,myDisp,topC,myColor);
+      // Set avatars
+      const avTop=document.getElementById('av-top');
+      const avBot=document.getElementById('av-bot');
+      if(avTop)avTop.textContent=oppProfile.avatar||'🤖';
+      if(avBot){
+        if(userProfile.photo){avBot.innerHTML=`<img src="${userProfile.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
+        else{avBot.textContent=userProfile.avatar||'🎮';}
+      }
+      // Show game mode badge
+      const badge=document.getElementById('game-mode-lbl');
+      if(badge)badge.textContent='🎲 Random Match';
+      // Start opponent chat
+      setTimeout(()=>_startOppChat(oppProfile),1200);
+    } else {
+      const ln=['','Mudah','Sedang','Sulit'][level];
+      setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
+    }
     showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
     if(myColor==='b')setTimeout(doBotMove,700);
   }catch(e){toast('Error: '+e.message);console.error(e);}
@@ -2591,7 +2147,7 @@ function startHorde(){
 function restartSameMode(){
   ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
   if(isHordeMode)startHorde();
-  else if(gameMode==='match')startFakeHumanGame();else if(gameMode==='bot')startVsBot(botLevel);
+  else if(gameMode==='bot')startVsBot(botLevel);
   else if(gameMode==='pass')startPassPlay();
   else quitToHome();
 }
@@ -2613,7 +2169,7 @@ function showGameOver(result){
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
   if(myWin||passWin){spawnVictoryConfetti();setTimeout(spawnVictoryConfetti,500);}
-  if(gameMode==='bot'||gameMode==='match'||gameMode==='pass'){
+  if(gameMode==='bot'||gameMode==='pass'){
     buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
     setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);
   }
@@ -2622,7 +2178,7 @@ function showAutoDraw(reason){
   document.getElementById('draw-reason').textContent=reason;
   document.getElementById('o-draw').classList.add('show');
   playSound('end');stopMusic();
-  if(gameMode==='bot'||gameMode==='match'||gameMode==='pass'){
+  if(gameMode==='bot'||gameMode==='pass'){
     buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
     setTimeout(()=>{closeOverlay('o-draw');showAnalysis();},3000);
   }
@@ -2764,7 +2320,7 @@ function renderAnalysisBoard(stateObj,lastMv,rc){
       const pc=(p>0?'w':'b');
       const pid=pc+['P','N','B','R','Q','K'][Math.abs(p)-1];
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('viewBox','0 0 45 45');
       svg.style.cssText='width:'+(sz*.86)+'px;height:'+(sz*.86)+'px;pointer-events:none';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
       use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
@@ -2887,7 +2443,7 @@ function buildTutStep(){
     if(t.moves.some(m=>m[0]===r&&m[1]===c))sq.classList.add('vm');
     if(t.from[0]===r&&t.from[1]===c){
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 100 100');svg.style.cssText=`width:${sz*.9}px;height:${sz*.9}px`;
+      svg.setAttribute('viewBox','0 0 45 45');svg.style.cssText=`width:${sz*.9}px;height:${sz*.9}px`;
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href','#w'+t.pc);svg.appendChild(use);sq.appendChild(svg);
     }
     board.appendChild(sq);
@@ -2935,26 +2491,16 @@ function startOnlineGame(myCol){
   initBoardDOM();
   setPlayerNames(myCol==='b'?'Lawan (Putih)':'Lawan (Hitam)',myCol==='w'?'Kamu (Putih)':'Kamu (Hitam)',myCol==='b'?'w':'b',myCol);
   showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
-  document.getElementById('btn-chat-game').style.display='flex';
   document.getElementById('btn-emoji-game').style.display='flex';
   document.getElementById('btn-voice').style.display='flex';
-  chatMsgsEl=document.getElementById('chat-msgs');
-  chatRenderedKeys={};
   if(roomListener)roomRef.off('value',roomListener);
   roomListener=roomRef.on('value',snap=>{
     if(!snap.exists())return;
     const data=snap.val();
     if(data.state){gs=desGS(data.state);lastMove=data.lastMove||null;renderBoard();}
-    if(data.emoji&&data.emoji.by!==myColor){floatEmoji(data.emoji.e);playEmojiSound(data.emoji.e);}
+    if(data.emoji&&data.emoji.by!==myColor)floatEmoji(data.emoji.e);
     if(data.voice&&data.voice.by!==myColor&&data.voice.data)playVoice(data.voice.data);
     if(data.resign&&data.resign.by!==myColor){gs={...gs,gameOver:true,result:myColor};showGameOver(myColor);}
-    if(data.chat){
-      Object.entries(data.chat).forEach(([k,msg])=>{
-        if(chatRenderedKeys[k])return;
-        chatRenderedKeys[k]=true;
-        appendChatMsg(msg.txt,msg.by===myColor?'me':'opp');
-      });
-    }
   });
 }
 function cancelRoom(){if(roomRef){if(roomListener)roomRef.off('value',roomListener);if(gameMode!=='online')roomRef.remove();roomRef=null;roomListener=null;}roomCode=null;gameMode=null;}
@@ -2962,107 +2508,19 @@ function serGS(s){return{board:s.board.map(r=>r.join(',')).join('|'),turn:s.turn
 function desGS(d){return{board:d.board.split('|').map(r=>r.split(',').map(Number)),turn:d.turn,castling:d.castling,ep:d.ep||null,halfMove:d.halfMove,fullMove:d.fullMove,captured:{w:d.captured.w?d.captured.w.split(',').filter(Boolean).map(Number):[],b:d.captured.b?d.captured.b.split(',').filter(Boolean).map(Number):[]},gameOver:d.gameOver||false,result:d.result||null}}
 
 // ═══════════════════════════════════════
-// EMOJI SOUND ENGINE
-// ═══════════════════════════════════════
-const EMOJI_SOUNDS={
-  victory:['👑','🏆','🥇','🎖️','🏅','💪','🦁','🐯','🦅','⚔️'],
-  laugh:  ['😂','🤣','😆','😄','😁','🤭','😝','😜','🤪','🫡'],
-  fire:   ['🔥','💥','⚡','🌋','🧨','💣','🎆','🎇','🎯','🎳'],
-  skull:  ['💀','☠️','👻','🦇','🌑','🌚','🖤','⚰️','🕷️','👁️'],
-  sad:    ['😭','😢','😥','😰','😓','💧','😞','😔','💔','🥺'],
-  heart:  ['❤️','💕','💖','💗','💝','🌹','💐','🥰','😍','🤩'],
-  shock:  ['😱','🤯','😲','😮','😵','💫','🌀','🔮','🫠','🤔'],
-  cool:   ['😎','🤙','🤘','🤞','✌️','🕶️','🪩','🎸','🏄','🦄'],
-  angry:  ['😤','😡','🤬','👊','💢','👿','🐉','🗡️','🔴','🥊'],
-  party:  ['🎉','🎊','🥳','🎈','🎂','🍾','🎁','👏','🪅','🎪']
-};
-function getEmojiSound(e){
-  for(const[type,arr]of Object.entries(EMOJI_SOUNDS)){if(arr.includes(e))return type;}
-  return 'party';
-}
-function playEmojiSound(e){
-  try{
-    const ac=getACtx();if(!ac)return;
-    const t=ac.currentTime;
-    const type=getEmojiSound(e);
-    const play=(freq,wave,vol,start,dur,detune=0)=>{
-      const o=ac.createOscillator(),g=ac.createGain();
-      o.connect(g);g.connect(ac.destination);
-      o.type=wave;o.frequency.value=freq;if(detune)o.detune.value=detune;
-      g.gain.setValueAtTime(0,t+start);g.gain.linearRampToValueAtTime(vol,t+start+.03);
-      g.gain.exponentialRampToValueAtTime(.001,t+start+dur);
-      o.start(t+start);o.stop(t+start+dur+.05);
-    };
-    const noise=(vol,start,dur)=>{
-      const buf=ac.createBuffer(1,ac.sampleRate*.2,ac.sampleRate);
-      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-      const src=ac.createBufferSource(),g=ac.createGain(),f=ac.createBiquadFilter();
-      src.buffer=buf;src.connect(f);f.connect(g);g.connect(ac.destination);
-      f.type='bandpass';f.frequency.value=type==='fire'?800:300;
-      g.gain.setValueAtTime(vol,t+start);g.gain.exponentialRampToValueAtTime(.001,t+start+dur);
-      src.start(t+start);src.stop(t+start+dur);
-    };
-    if(type==='victory'){play(523,`triangle`,.12,0,.2);play(659,`triangle`,.12,.15,.2);play(784,`triangle`,.15,.3,.4);}
-    else if(type==='laugh'){[0,.1,.2].forEach((s,i)=>play([880,1047,1319][i],'sine',.08,s,.15));}
-    else if(type==='fire'){noise(.3,0,.08);noise(.2,.05,.1);play(120,'sawtooth',.06,0,.2);}
-    else if(type==='skull'){play(82,'sawtooth',.15,0,.3);play(65,'square',.1,.2,.4);}
-    else if(type==='sad'){play(392,'triangle',.1,0,.25);play(349,'triangle',.1,.2,.25);play(293,'triangle',.08,.4,.35);}
-    else if(type==='heart'){[0,.12,.24].forEach((s,i)=>play([523,659,784][i],'sine',.07,s,.3,i*12));}
-    else if(type==='shock'){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(1800,t+.3);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.start(t);o.stop(t+.5);}
-    else if(type==='cool'){[0,.1,.2,.3].forEach((s,i)=>play([330,392,494,587][i],'triangle',.07,s,.25));}
-    else if(type==='angry'){play(150,'sawtooth',.15,0,.05);noise(.4,0,.08);play(100,'square',.12,.05,.15);}
-    else{noise(.15,0,.06);play(880,'triangle',.1,.05,.2);play(1046,'triangle',.08,.15,.2);}
-  }catch(e){}
-}
-
-// ═══════════════════════════════════════
 // EMOJI CHAT
 // ═══════════════════════════════════════
-function toggleEmojiPanel(){
-  document.getElementById('chat-panel').classList.remove('show');
-  document.getElementById('emoji-panel').classList.toggle('show');
-}
+function toggleEmojiPanel(){document.getElementById('emoji-panel').classList.toggle('show')}
 function sendEmoji(e){
   document.getElementById('emoji-panel').classList.remove('show');
   floatEmoji(e);
-  playEmojiSound(e);
   if(gameMode==='online'&&roomRef)roomRef.child('emoji').set({e,t:Date.now(),by:myColor});
+  else toast(e+' Emoji!');
 }
 function floatEmoji(e){
   const el=document.createElement('div');el.className='emoji-fly';el.textContent=e;
-  el.style.cssText=`left:${15+Math.random()*70}%;bottom:${18+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
-  document.body.appendChild(el);setTimeout(()=>el.remove(),2400);
-}
-
-// ═══════════════════════════════════════
-// CHAT PANEL
-// ═══════════════════════════════════════
-let chatMsgsEl=null,chatRenderedKeys={};
-function toggleChatPanel(){
-  document.getElementById('emoji-panel').classList.remove('show');
-  const p=document.getElementById('chat-panel');
-  p.classList.toggle('show');
-  if(p.classList.contains('show'))setTimeout(()=>{const i=document.getElementById('chat-input');i&&i.focus();chatMsgsEl&&(chatMsgsEl.scrollTop=chatMsgsEl.scrollHeight);},100);
-}
-function appendChatMsg(txt,side){
-  if(!chatMsgsEl)chatMsgsEl=document.getElementById('chat-msgs');
-  const d=document.createElement('div');d.className='chat-msg '+side;d.textContent=txt;
-  chatMsgsEl.appendChild(d);chatMsgsEl.scrollTop=chatMsgsEl.scrollHeight;
-  const p=document.getElementById('chat-panel');
-  if(side==='opp'&&!p.classList.contains('show')){
-    const btn=document.getElementById('btn-chat-game');
-    if(btn){btn.style.animation='recBlink .5s 3';setTimeout(()=>btn.style.animation='',1600);}
-  }
-}
-function sendChatMsg(){
-  const inp=document.getElementById('chat-input');
-  const txt=(inp?.value||'').trim();
-  if(!txt)return;
-  inp.value='';
-  appendChatMsg(txt,'me');
-  if(gameMode==='online'&&roomRef){
-    roomRef.child('chat').push({txt,by:myColor,t:Date.now()});
-  }
+  el.style.cssText=`left:${20+Math.random()*60}%;bottom:${15+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),2100);
 }
 
 // ═══════════════════════════════════════
@@ -3395,7 +2853,7 @@ function playIntro(){
       const color=item.p>0?'w':'b';
       const pid=color+['','P','N','B','R','Q','K'][ap];
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('viewBox','0 0 45 45');
       svg.setAttribute('class','intro-piece');
       svg.style.cssText='width:88%;height:88%;animation-delay:0s';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
@@ -3450,7 +2908,7 @@ function animatePieceSlide(mv,piece,rookSrc,rookDst){
         `left:${fR.left+(fR.width-sz)/2}px;top:${fR.top+(fR.height-sz)/2}px;`+
         `will-change:transform;transition:transform ${MS}ms cubic-bezier(.33,.87,.44,.99)`;
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('viewBox','0 0 45 45');
       svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.92))';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
       use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
@@ -3584,7 +3042,7 @@ function spawnCapFly(mv,board){
     const rot=-300+Math.random()*600;
     clone.style.cssText=`left:${tRect.left+(tRect.width-sz)/2}px;top:${tRect.top+(tRect.height-sz)/2}px;width:${sz}px;height:${sz}px;--fly-end:translate(${dx}px,${dy}px);--fly-rot:${rot}deg`;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 100 100');
+    svg.setAttribute('viewBox','0 0 45 45');
     svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 8px 24px rgba(0,0,0,.9))';
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
@@ -3630,6 +3088,266 @@ function initParticles(){
 }
 
 // ═══════════════════════════════════════
+// PROFILE SYSTEM
+// ═══════════════════════════════════════
+const AVATARS=['🎮','👾','🤖','🦸','🧙','🥷','⚔️','🏆','🎯','🎲',
+               '👦','👧','🧑‍💻','👩‍💻','🧑‍🎮','👩‍🎮','🧑‍🚀','👩‍🚀','🦊','🐉'];
+
+let userProfile=JSON.parse(localStorage.getItem('catur_profile')||'{}');
+userProfile.name=userProfile.name||'Pemain';
+userProfile.avatar=userProfile.avatar||'🎮';
+userProfile.country=userProfile.country||'🇮🇩 Indonesia';
+userProfile.photo=userProfile.photo||null;
+userProfile.rating=userProfile.rating||(1000+Math.floor(Math.random()*400));
+
+function saveProfile(){
+  const name=document.getElementById('prof-name-input').value.trim()||'Pemain';
+  const country=document.getElementById('prof-country-select').value;
+  userProfile.name=name;
+  userProfile.country=country;
+  localStorage.setItem('catur_profile',JSON.stringify(userProfile));
+  toast('✅ Profil disimpan!');
+}
+
+function handleProfilePhoto(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    userProfile.photo=e.target.result;
+    localStorage.setItem('catur_profile',JSON.stringify(userProfile));
+    renderProfileAvatar();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderProfileAvatar(){
+  const disp=document.getElementById('prof-av-disp');
+  const mainAv=document.getElementById('prof-main-av');
+  if(!disp||!mainAv)return;
+  if(userProfile.photo){
+    disp.innerHTML=`<img src="${userProfile.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    disp.textContent=userProfile.avatar||'🎮';
+  }
+}
+
+function buildProfileUI(){
+  const grid=document.getElementById('prof-avatar-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+  AVATARS.forEach(av=>{
+    const el=document.createElement('div');
+    el.className='av-opt'+(userProfile.avatar===av&&!userProfile.photo?' selected':'');
+    el.textContent=av;
+    el.onclick=()=>{
+      userProfile.avatar=av;
+      userProfile.photo=null;
+      grid.querySelectorAll('.av-opt').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      renderProfileAvatar();
+    };
+    grid.appendChild(el);
+  });
+  document.getElementById('prof-name-input').value=userProfile.name;
+  const sel=document.getElementById('prof-country-select');
+  [...sel.options].forEach(o=>o.selected=o.value===userProfile.country);
+  renderProfileAvatar();
+}
+
+// ═══════════════════════════════════════
+// RANDOM OPPONENT POOL
+// ═══════════════════════════════════════
+const RAND_OPPONENTS=[
+  {name:'XgamerID',avatar:'🧑‍💻',country:'🌋 Jawa',rating:1087},{name:'SiHitamManis',avatar:'🦊',country:'🏝️ Bali',rating:1145},
+  {name:'LaWrenZ27',avatar:'🎯',country:'🇮🇩 Indonesia',rating:1210},{name:'NabilaChess',avatar:'👧',country:'🌊 Sulawesi',rating:998},
+  {name:'BudiGamers',avatar:'👦',country:'🏔️ Sumatera',rating:1320},{name:'xXQueenSlayXx',avatar:'🏆',country:'🇲🇾 Malaysia',rating:1056},
+  {name:'Pion_Liar',avatar:'⚔️',country:'🇮🇩 Indonesia',rating:1175},{name:'GrandMasterSiku',avatar:'🧙',country:'🌋 Jawa',rating:1388},
+  {name:'AyamGoreng69',avatar:'🥷',country:'🌴 Kalimantan',rating:1033},{name:'SkakMat_Gue',avatar:'🤖',country:'🇸🇬 Singapore',rating:1290},
+  {name:'CaturBae',avatar:'👩‍💻',country:'🏝️ Bali',rating:1122},{name:'RexDragon',avatar:'🐉',country:'🇯🇵 Japan',rating:1444},
+  {name:'SantiKuceeng',avatar:'🦸',country:'🌊 Sulawesi',rating:970},{name:'ZeroBrain_Chess',avatar:'👾',country:'🇮🇩 Indonesia',rating:1005},
+  {name:'BossofBoard',avatar:'🎮',country:'🇺🇸 USA',rating:1500},{name:'PionGalau',avatar:'😭',country:'🌋 Jawa',rating:888},
+  {name:'Kakek_Catur',avatar:'🧙',country:'🏔️ Sumatera',rating:1260},{name:'MikuChessID',avatar:'👩‍🎮',country:'🇮🇩 Indonesia',rating:1188},
+];
+
+const HUMAN_CHAT_MSGS=[
+  {t:'intro',msgs:["hai juga! siap dihajar ya? 😏","wassaap! jgn nyesel kalau kalah ya bro 😂","yooo! gua udah lama tunggu lawannya 🥱","halo~ semangat ya! tapi gua gak bakal kasih ampun 💅","ayok main~ gua udah ngopi nih ready poll 🍵"]},
+  {t:'good_enemy',msgs:["wah oke juga nih langkah lu 👀","anjir lu mikir dari mana tuh 🤔","oke fine, gua akui bagus. TAPI SEKALI AJA","hm... menarik. tapi jgn ge-er dulu 😌","goks sih lu... tapi gua masih tenang kok 😎"]},
+  {t:'blunder',msgs:["BRO ITU APAAN 💀 ASTAGA","ngab ngab ngab... lu serius tuh? 😭😭","HAH?? gua kira lu jago, ternyata... 🫢","oof. gua sampe kasian anjir","WKWKWKWK sorry gua gak bisa nahan ketawa 😂","bro skill issue detected dong ini"]},
+  {t:'check',msgs:["SKAK! bangun dulu tidurnya 🙂","skaak~ jgn panik ya bestie 💀","raja lu udah kepepet nih, RUN KING RUN 🏃","skak bestie~ gimana rasanya? 😏"]},
+  {t:'think',msgs:["mikir dong cepetan, gua nunggu nih ☕","udah 5 menit bro... gua bisa kopi dulu gak? 😴","sloww banget sih, scroll tiktok dulu gua 🙄","jangan lama-lama dong, gua ada PR nih 💀","halow? masih hidup? 🤔"]},
+  {t:'losing',msgs:["eh eh jangan gini... gua masih bisa balik nih","wah lu beruntung. tapi ini belum selesai 😤","ok gua akui lu lumayan. LUMAYAN AJA 😌","oke ini challenge accepted. siap-siap gua gas 🔥"]},
+  {t:'winning',msgs:["udah mau kelar nih bestie~ 😏","gua rasa ini akhirnya... hehe","jangan menyerah ya~ canda ding, udah nyerah aja 💅","GG EZ~ just kidding masih ada sedikit effort sih 😂"]},
+  {t:'emote',msgs:["🗿","💀","WKWKWK","😭😭😭","🤌🤌","😤","🙂","bruh"]},
+];
+
+// ═══════════════════════════════════════
+// MATCHMAKING SYSTEM
+// ═══════════════════════════════════════
+let _mmTimer=null,_mmCycleTimer=null,_mmChatTimer=null,_mmActive=false;
+let _matchedOpponent=null;
+
+function showMatchmaking(){
+  buildProfileUI();
+  _mmActive=true;
+  _matchedOpponent=null;
+  showScreen('matchmaking');
+  _startMatchmakingAnimation();
+}
+
+function cancelMatchmaking(){
+  _mmActive=false;
+  clearTimeout(_mmTimer);clearTimeout(_mmCycleTimer);clearTimeout(_mmChatTimer);
+  _mmTimer=null;_mmCycleTimer=null;
+  backHome();
+}
+
+function _startMatchmakingAnimation(){
+  // Set my profile
+  const meAv=document.getElementById('mm-me-av-inner');
+  const meName=document.getElementById('mm-me-name');
+  const meCountry=document.getElementById('mm-me-country');
+  const meRating=document.getElementById('mm-me-rating');
+  if(meAv){
+    if(userProfile.photo)meAv.innerHTML=`<img src="${userProfile.photo}" class="mm-av-img">`;
+    else meAv.textContent=userProfile.avatar;
+  }
+  if(meName)meName.textContent=userProfile.name;
+  if(meCountry)meCountry.textContent=userProfile.country;
+  if(meRating)meRating.textContent='⭐ '+userProfile.rating;
+
+  // Reset state
+  const found=document.getElementById('mm-found-badge');
+  const dots=document.getElementById('mm-dots');
+  const progbar=document.getElementById('mm-progbar');
+  const titleTxt=document.getElementById('mm-title-txt');
+  const subtitleTxt=document.getElementById('mm-subtitle-txt');
+  const enName=document.getElementById('mm-en-name');
+  const enCountry=document.getElementById('mm-en-country');
+  const enRating=document.getElementById('mm-en-rating');
+  const enAv=document.getElementById('mm-en-av-inner');
+  if(found)found.classList.remove('show');
+  if(dots)dots.style.display='flex';
+  if(progbar)progbar.style.width='0%';
+  if(enName)enName.textContent='Mencari...';
+  if(enCountry)enCountry.textContent='🌐 ???';
+  if(enRating)enRating.textContent='⭐ ???';
+  if(enAv)enAv.textContent='❓';
+
+  // Random online count
+  const onlineNum=document.getElementById('mm-online-num');
+  if(onlineNum)onlineNum.textContent=200+Math.floor(Math.random()*300);
+
+  // Pick final opponent (chosen upfront)
+  const pool=[...RAND_OPPONENTS];
+  _matchedOpponent=pool[Math.floor(Math.random()*pool.length)];
+
+  // GACHA cycle: every 300ms cycle random opponent profiles (first 8s), then settle
+  let cycleCount=0;
+  const TOTAL_MS=10000;
+  const CYCLE_MS=280;
+  const SETTLE_AT=TOTAL_MS-1800;
+
+  function cycleShuffle(){
+    if(!_mmActive)return;
+    const rand=pool[Math.floor(Math.random()*pool.length)];
+    const box=document.getElementById('mm-enemy-box');
+    if(box){box.classList.remove('enemy');void box.offsetWidth;box.classList.add('enemy');}
+    if(enAv)enAv.textContent=rand.avatar;
+    if(enName)enName.textContent=rand.name;
+    if(enCountry)enCountry.textContent=rand.country;
+    if(enRating)enRating.textContent='⭐ '+rand.rating;
+    cycleCount++;
+    const elapsed=cycleCount*CYCLE_MS;
+    if(progbar)progbar.style.width=Math.min(100,Math.round(elapsed/TOTAL_MS*100))+'%';
+    if(elapsed<SETTLE_AT){
+      _mmCycleTimer=setTimeout(cycleShuffle,CYCLE_MS);
+    } else {
+      // Settle on matched opponent
+      if(enAv)enAv.textContent=_matchedOpponent.avatar;
+      if(enName)enName.textContent=_matchedOpponent.name;
+      if(enCountry)enCountry.textContent=_matchedOpponent.country;
+      if(enRating)enRating.textContent='⭐ '+_matchedOpponent.rating;
+      const box2=document.getElementById('mm-enemy-box');
+      if(box2){box2.classList.remove('enemy');void box2.offsetWidth;box2.classList.add('enemy');}
+      // Remove spinner from enemy
+      const ring=document.querySelector('#mm-en-av .mm-spin-ring');if(ring)ring.style.display='none';
+    }
+  }
+  _mmCycleTimer=setTimeout(cycleShuffle,CYCLE_MS);
+
+  // After 10s: found!
+  _mmTimer=setTimeout(()=>{
+    if(!_mmActive)return;
+    if(progbar)progbar.style.width='100%';
+    if(found)found.classList.add('show');
+    if(dots)dots.style.display='none';
+    if(titleTxt)titleTxt.textContent='🎉 Lawan Ditemukan!';
+    if(subtitleTxt)subtitleTxt.textContent='Memulai permainan dalam 2 detik...';
+    playSound('move');
+    setTimeout(()=>{
+      if(_mmActive)_startRandomMatch();
+    },2000);
+  },TOTAL_MS);
+}
+
+function _startRandomMatch(){
+  _mmActive=false;
+  clearTimeout(_mmTimer);clearTimeout(_mmCycleTimer);
+  const opp=_matchedOpponent||RAND_OPPONENTS[0];
+  // Pick random difficulty 1-2 (variable: mostly 1-2, makes bot lose 70-80%)
+  const diff=Math.random()<0.45?1:2;
+  startVsBot(diff,opp);
+}
+
+// ═══════════════════════════════════════
+// OPPONENT CHAT (Random Match)
+// ═══════════════════════════════════════
+let _oppChatTimer=null,_oppChatActive=false;
+let _currentOpp=null;
+
+function _showOppChat(type){
+  if(!_oppChatActive||!_currentOpp)return;
+  const group=HUMAN_CHAT_MSGS.find(g=>g.t===type)||HUMAN_CHAT_MSGS.find(g=>g.t==='emote');
+  if(!group)return;
+  const msg=group.msgs[Math.floor(Math.random()*group.msgs.length)];
+  const bubble=document.getElementById('online-chat-bubble');
+  const nameEl=document.getElementById('online-chat-name');
+  const msgEl=document.getElementById('online-chat-msg');
+  if(!bubble||!nameEl||!msgEl)return;
+  nameEl.textContent=_currentOpp.name;
+  msgEl.textContent=msg;
+  bubble.classList.add('show');
+  clearTimeout(_oppChatTimer);
+  _oppChatTimer=setTimeout(()=>bubble.classList.remove('show'),4500);
+}
+
+function _scheduleOppChat(){
+  if(!_oppChatActive)return;
+  const delay=8000+Math.random()*18000;
+  _oppChatTimer=setTimeout(()=>{
+    if(!_oppChatActive)return;
+    const types=['emote','emote','think','good_enemy'];
+    _showOppChat(types[Math.floor(Math.random()*types.length)]);
+    _scheduleOppChat();
+  },delay);
+}
+
+function _startOppChat(opp){
+  _currentOpp=opp;
+  _oppChatActive=true;
+  setTimeout(()=>_showOppChat('intro'),1500);
+  _scheduleOppChat();
+}
+
+function _stopOppChat(){
+  _oppChatActive=false;
+  clearTimeout(_oppChatTimer);
+  const bubble=document.getElementById('online-chat-bubble');
+  if(bubble)bubble.classList.remove('show');
+  _currentOpp=null;
+}
+
+// ═══════════════════════════════════════
 // HOME PREVIEW
 // ═══════════════════════════════════════
 function buildHomePreview(){
@@ -3656,7 +3374,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     playIntro();
   }
   setInterval(checkNightMode,60000);
-  document.getElementById('btn-chat-game').style.display='none';
   document.getElementById('btn-emoji-game').style.display='none';
   document.getElementById('btn-voice').style.display='none';
 });
