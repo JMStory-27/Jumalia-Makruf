@@ -3,351 +3,280 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>50 Desain Bentuk Kuda Catur – Mirip Kuda Asli!</title>
+<title>50 Desain Kuda Catur</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0f0f1a;font-family:'Segoe UI',sans-serif;color:#f0d9b5;padding:16px;min-height:100vh}
-h1{text-align:center;font-size:22px;margin-bottom:4px;color:#d4af37;padding-top:8px}
-p.sub{text-align:center;font-size:12px;opacity:.6;margin-bottom:4px}
-.ref{text-align:center;font-size:11px;color:#d4af37;opacity:.7;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
-.card{background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:all .2s;position:relative}
-.card:hover{border-color:#d4af37;background:rgba(212,175,55,.1);transform:translateY(-3px);box-shadow:0 8px 24px rgba(212,175,55,.2)}
+body{background:#0f0f1a;font-family:'Segoe UI',sans-serif;color:#f0d9b5;padding:14px;min-height:100vh}
+h1{text-align:center;font-size:20px;margin-bottom:3px;color:#d4af37;padding-top:6px}
+p.sub{text-align:center;font-size:11px;opacity:.55;margin-bottom:3px}
+.ref{text-align:center;font-size:10px;color:#d4af37;opacity:.65;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .18s;position:relative}
+.card:hover{border-color:#d4af37;background:rgba(212,175,55,.1);transform:translateY(-2px)}
 .card.selected{border-color:#d4af37;background:rgba(212,175,55,.15);box-shadow:0 0 0 2px #d4af37}
-.card label{font-size:11px;text-align:center;opacity:.85;font-weight:700;letter-spacing:.3px}
-.card .desc{font-size:9px;opacity:.45;font-weight:600;text-align:center}
-.num{position:absolute;top:6px;left:8px;font-size:9px;opacity:.35;font-weight:700}
-#sel{text-align:center;margin:14px 0 8px;font-size:13px;color:#d4af37;font-weight:700;min-height:20px}
+.card label{font-size:10px;text-align:center;font-weight:700}
+.card .desc{font-size:8px;opacity:.4;text-align:center}
+.num{position:absolute;top:5px;left:7px;font-size:9px;opacity:.3;font-weight:700}
+#sel{text-align:center;margin:12px 0 6px;font-size:12px;color:#d4af37;font-weight:700;min-height:18px}
 </style>
 </head>
 <body>
-<h1>♞ 50 Desain Kuda Catur — Mirip Kuda Asli!</h1>
-<p class="sub">Semua bentuk SKAKMAT-style: hidung bulat besar, siluet bersih. Bukan katak! 🐴</p>
-<p class="ref">Referensi: bentuk seperti gambar kuda di kiri pada thumbnail SKAKMAT</p>
+<h1>♞ 50 Desain Kuda Catur</h1>
+<p class="sub">Mirip kuda asli: hidung di tengah, leher ramping, kepala menonjol ke kiri</p>
+<p class="ref">Referensi: knight dari game catur (bentuk Staunton horse head)</p>
 <div id="sel">Klik kartu untuk pilih favoritmu 👆</div>
 <div class="grid" id="grid"></div>
 <script>
-// All 50 designs — proper SKAKMAT-style horse head, facing LEFT
-// Viewbox 45x45. Path = horse silhouette. Base rect always at y=38.
-// Key: round prominent nose, pointed ear, clean neck silhouette.
-const D=[
-{n:"SKAKMAT Original",d:"Referensi utama",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+// Base design - all share same general structure (proper horse head):
+// Ear at top-right, nose/muzzle extends LEFT at MID-HEIGHT, neck is narrower than head
+// ViewBox 45x45. Key: nose is in MIDDLE of piece, not top!
 
-{n:"Hidung Super Bulat",d:"Moncong paling round",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,30 10,26 C 9,22 7,19 7,16 C 6,13 6,11 9,9 C 11,7 14,7 17,9 C 19,9 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="17" r="2.1"/>`},
+const BASE = "M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z";
 
-{n:"Moncong Panjang",d:"Leher angsa klasik",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 7,21 7,18 C 6,15 6,13 7,11 C 8,9 11,9 14,11 C 17,12 20,11 22,10 C 23,9 24,7 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+const D = [
+{n:"Staunton Klasik",d:"Proporsi standar",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Telinga Menjulang",d:"Kupingan tinggi panjang",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,2 C 27,1 30,5 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,6 24,4 25,2 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Hidung Besar",d:"Moncong jauh ke kiri",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 13,26 C 12,24 10,22 8,21 C 7,20 6,18 5,16 C 5,14 6,12 9,11 C 11,9 14,9 17,10 C 19,11 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:15},
 
-{n:"Kepala Lebar",d:"Wajah gemuk lebar",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 26,5 C 28,4 31,7 30,10 C 32,11 35,13 36,17 C 38,21 37,28 35,33 C 33,36 31,38 31,38 L 11,38 C 11,35 10,31 9,27 C 8,24 7,21 7,18 C 6,15 6,13 8,11 C 10,9 13,9 16,10 C 18,10 20,9 22,9 C 23,7 25,5 26,5 Z"/>
-    <circle fill="#f0d9b5" cx="32" cy="18" r="2.1"/>`},
+{n:"Hidung Kecil",d:"Moncong sederhana",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 12,22 10,21 C 9,20 8,19 8,17 C 8,15 9,13 10,12 C 12,10 15,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Kepala Ramping",d:"Profil tipis elegan",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,6 C 26,5 27,8 26,10 C 27,11 29,13 30,17 C 31,21 31,28 30,33 C 29,36 27,38 27,38 L 13,38 C 13,35 12,31 11,27 C 10,24 9,21 9,18 C 8,16 8,14 10,11 C 12,9 15,9 18,10 C 20,10 22,9 22,9 C 23,8 23,7 24,6 Z"/>
-    <circle fill="#f0d9b5" cx="27" cy="17" r="1.9"/>`},
+{n:"Telinga Tinggi",d:"Kuping menjulang",
+ p:"M 25,3 C 27,2 30,6 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,5 25,3 Z",
+ ex:30,ey:16},
 
-{n:"Leher Panjang",d:"Jerapah chic",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,4 C 27,3 29,6 28,9 C 30,10 32,12 33,16 C 35,20 35,29 33,34 C 31,37 29,40 29,40 L 12,40 C 12,37 11,33 10,29 C 9,26 8,22 8,19 C 7,17 7,15 9,12 C 11,10 14,10 17,11 C 19,11 21,10 22,10 C 23,8 24,5 25,4 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Kepala Lebar",d:"Wajah gemuk",
+ p:"M 26,5 C 28,3 31,7 30,11 C 33,12 37,15 37,20 C 37,26 34,32 31,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 20,12 23,11 25,10 C 26,8 25,6 26,5 Z",
+ ex:33,ey:16},
 
-{n:"Leher Pendek",d:"Kompak sturdy",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,7 C 27,6 29,9 28,12 C 30,13 32,15 33,18 C 35,22 35,28 33,32 C 31,35 29,37 29,37 L 12,37 C 12,34 11,30 10,26 C 9,23 8,20 8,17 C 7,15 7,13 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,8 24,7 25,7 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Kepala Ramping",d:"Profil tipis",
+ p:"M 24,5 C 26,3 28,7 27,11 C 29,12 31,15 31,20 C 31,26 30,32 27,37 L 14,37 C 14,33 13,29 13,26 C 12,24 10,22 8,21 C 7,20 6,19 6,17 C 5,15 6,13 8,12 C 10,10 13,10 16,11 C 18,12 20,11 22,10 C 23,8 23,6 24,5 Z",
+ ex:28,ey:16},
 
-{n:"Kurva Sangat Lembut",d:"Semua garis halus",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,6 C 26,5 28,7 28,10 C 30,11 32,13 32,17 C 34,21 34,28 32,33 C 30,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,22 8,19 C 7,17 8,14 10,12 C 12,10 15,9 17,10 C 19,10 21,9 22,9 C 23,8 24,7 24,6 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="18" r="2.1"/>`},
+{n:"Leher Panjang",d:"Jangkung elegan",
+ p:"M 25,4 C 27,2 30,6 28,10 C 31,11 34,14 34,19 C 34,25 32,31 29,36 C 27,38 26,40 26,40 L 14,40 C 14,36 13,32 13,28 C 12,26 10,24 8,23 C 7,22 6,21 6,19 C 5,17 6,15 8,14 C 10,12 13,12 16,13 C 18,14 20,13 22,12 C 23,10 24,7 25,4 Z",
+ ex:30,ey:16},
 
-{n:"Geometris Tegas",d:"Sudut-sudut tajam",
- p:`<path fill="#222" stroke="#222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 L 27,4 L 29,8 L 28,10 L 33,14 L 34,18 L 35,28 L 33,33 L 30,38 L 12,38 L 10,33 L 8,27 L 8,18 L 9,11 L 14,9 L 17,10 L 22,9 L 24,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="19" r="2"/>`},
+{n:"Kompak Sturdy",d:"Pendek bertenaga",
+ p:"M 25,7 C 27,5 30,9 28,12 C 31,13 34,16 34,21 C 34,26 32,31 29,35 L 15,35 C 15,31 14,27 14,24 C 13,22 11,20 9,19 C 8,18 7,17 7,15 C 6,13 7,11 9,10 C 11,8 14,8 17,9 C 19,10 21,9 23,9 C 24,8 24,8 25,7 Z",
+ ex:30,ey:16},
 
-{n:"Hidung Menonjol",d:"Moncong melebar",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,23 7,20 7,17 C 7,14 7,12 8,10 C 9,8 12,7 15,9 C 17,10 20,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Kepala Jenjang",d:"Membusung bangga",
+ p:"M 26,4 C 28,2 31,6 30,11 C 33,12 35,14 35,19 C 35,24 33,30 30,36 C 28,38 27,38 27,38 L 15,38 C 15,34 14,30 14,27 C 13,25 11,23 9,22 C 8,21 7,20 7,18 C 6,16 7,14 9,13 C 11,11 14,11 17,12 C 19,13 22,12 24,11 C 25,9 25,6 26,4 Z",
+ ex:31,ey:16},
 
-{n:"Hidung Mancung",d:"Convex roman nose",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 8,14 9,12 C 10,10 12,9 14,10 C 16,11 19,11 21,10 C 22,9 23,7 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Lengkung S",d:"Neck S-curve artistik",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,14 34,18 C 34,22 32,25 30,28 C 28,31 28,34 29,37 L 15,37 C 14,34 14,31 15,28 C 16,25 16,23 14,21 C 12,19 10,18 8,17 C 7,17 6,16 6,15 C 5,13 6,11 9,10 C 11,8 14,8 17,10 C 19,11 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:29,ey:14},
 
-{n:"Muka Cekung",d:"Dished concave face",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 9,22 9,20 C 10,18 9,15 8,13 C 7,11 9,10 12,10 C 14,10 17,10 19,10 C 21,10 22,9 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Hidung di Tengah",d:"Moncong persis tengah",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,30 14,27 C 13,25 11,23 9,22 C 8,21 7,20 7,18 C 6,16 7,14 9,13 C 11,12 14,12 17,13 C 19,13 21,12 23,11 C 24,9 24,7 25,5 Z",
+ ex:30,ey:17},
 
-{n:"Moncong Mendatar",d:"Horizontal long nose",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 7,20 C 6,18 6,16 7,15 C 8,14 10,13 12,13 C 14,13 17,12 20,11 C 21,10 22,9 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Dagu Kuat",d:"Rahang menonjol",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 13,29 12,26 C 11,23 9,21 7,20 C 6,19 5,18 5,16 C 5,14 6,12 9,11 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Moncong Pendek",d:"Stubby short muzzle",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 9,22 9,20 C 9,18 9,16 10,14 C 11,12 13,12 15,12 C 17,12 19,11 21,10 C 22,9 23,7 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Moncong Mendatar",d:"Hidung lurus horizontal",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,20 6,19 C 5,17 5,15 6,14 C 7,12 10,11 13,12 C 15,12 17,12 19,11 C 21,10 22,9 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Hidung Menunduk",d:"Drooped downward",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,19 C 8,17 9,16 10,15 C 11,14 12,13 13,13 C 15,14 18,13 20,12 C 22,11 23,9 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="17" r="2.1"/>`},
+{n:"Roman Nose",d:"Hidung sedikit cembung",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 8,17 C 8,15 9,13 11,12 C 13,10 15,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Hidung Menengadah",d:"Upturned proud",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,19 C 8,17 8,15 9,13 C 10,11 12,10 15,11 C 17,12 19,11 21,10 C 22,9 23,7 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Dished Face",d:"Wajah cekung Arabian",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,11 14,12 17,12 C 19,12 20,10 22,9 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Moncong Lebar",d:"Wide broad muzzle",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 26,5 C 28,4 30,7 29,10 C 31,11 33,13 34,17 C 36,21 36,28 34,33 C 32,36 30,38 30,38 L 11,38 C 11,35 10,31 9,27 C 8,24 7,21 7,18 C 6,15 6,13 8,11 C 10,9 13,9 16,10 C 18,10 20,9 22,9 C 23,7 25,5 26,5 Z"/>
-    <circle fill="#f0d9b5" cx="31" cy="18" r="2.1"/>`},
+{n:"Dua Telinga",d:"Dua kuping nampak",
+ p:"M 22,6 C 23,4 25,3 26,5 C 27,7 26,9 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 22,10 C 22,9 22,7 22,6 Z",
+ ex:30,ey:16},
 
-{n:"Moncong Sempit",d:"Narrow pointy muzzle",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 13,38 C 13,35 12,31 11,27 C 10,24 10,21 10,18 C 10,16 10,14 11,12 C 12,10 14,10 16,11 C 18,12 21,11 22,10 C 23,9 24,7 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Telinga Bulat",d:"Kuping ujung membulat",
+ p:"M 25,6 C 27,5 28,7 28,10 C 30,11 33,14 34,19 C 34,25 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,9 24,7 25,6 Z",
+ ex:30,ey:16},
 
-{n:"Bulat Total",d:"All-round head",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,15 7,12 9,10 C 11,8 14,8 16,10 C 18,11 20,10 21,9 C 22,8 23,6 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Telinga Mundur",d:"Kuping ke belakang",
+ p:"M 26,5 C 29,4 29,8 27,11 C 30,12 33,15 33,20 C 33,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 25,6 26,5 Z",
+ ex:30,ey:16},
 
-{n:"Telinga Super Tinggi",d:"Ear goes to the sky",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,1 C 27,0 30,4 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,6 24,3 25,1 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Telinga Maju",d:"Kuping ke depan",
+ p:"M 23,5 C 24,4 26,6 27,10 C 30,11 33,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 22,10 C 23,9 23,7 23,5 Z",
+ ex:30,ey:16},
 
-{n:"Dua Telinga",d:"Both ears visible",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 22,7 C 23,5 25,4 26,5 C 27,6 26,8 28,9 C 30,10 32,12 33,16 C 35,20 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 20,9 21,8 C 21,7 22,7 22,7 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Telinga Jauh Kanan",d:"Kuping wide-set",
+ p:"M 28,5 C 30,4 32,7 31,11 C 33,12 36,15 36,20 C 36,26 34,32 31,37 L 16,37 C 16,33 15,29 15,26 C 14,24 12,22 10,21 C 9,20 8,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 22,11 25,10 C 26,8 27,6 28,5 Z",
+ ex:33,ey:16},
 
-{n:"Telinga Bulat",d:"Rounded ear tip",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,6 C 26,5 27,7 27,9 C 28,9 30,11 32,14 C 34,18 34,28 32,33 C 30,36 28,38 28,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,8 24,7 24,6 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="18" r="2"/>`},
+{n:"Dahi Tinggi",d:"Tengkorak lebar atas",
+ p:"M 25,5 C 27,3 30,6 29,11 C 32,12 35,14 35,19 C 35,25 33,31 30,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 22,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:31,ey:16},
 
-{n:"Telinga Jauh",d:"Wide-set far ear",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 27,5 C 29,4 31,7 30,10 C 32,11 34,13 35,17 C 37,21 37,28 35,33 C 33,36 31,38 31,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 23,9 C 25,8 26,6 27,5 Z"/>
-    <circle fill="#f0d9b5" cx="32" cy="18" r="2.1"/>`},
+{n:"Kepala Pendek",d:"Moncong dekat leher",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,25 32,31 29,35 C 28,37 26,37 26,37 L 14,37 C 14,33 13,29 13,26 C 12,24 10,22 8,21 C 7,20 6,19 6,17 C 5,15 6,13 8,12 C 10,10 13,10 16,11 C 18,12 20,11 22,10 C 23,8 24,6 25,5 Z",
+ ex:29,ey:16},
 
-{n:"Telinga Maju",d:"Forward tilted ear",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 23,5 C 24,4 26,6 27,9 C 29,10 31,12 33,16 C 35,20 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 22,8 23,6 23,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Leher Tebal",d:"Otot leher besar",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 33,32 31,37 L 12,37 C 12,33 12,29 12,26 C 11,24 10,22 8,21 C 7,20 6,19 6,17 C 5,15 6,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Telinga Mundur",d:"Back-tilted ear",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 26,5 C 29,4 29,8 27,10 C 29,11 31,13 32,17 C 34,21 34,28 32,33 C 30,36 28,38 28,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,8 25,6 26,5 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="18" r="2"/>`},
+{n:"Leher Tipis",d:"Ramping seperti rusa",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 17,37 C 17,33 16,29 16,26 C 15,24 13,22 10,21 C 9,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Tanpa Telinga",d:"Smooth bump only",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,7 C 26,6 28,8 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,8 23,7 24,7 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Menoleh Bawah",d:"Kepala menunduk",
+ p:"M 25,7 C 27,5 30,9 29,13 C 32,14 35,17 35,22 C 35,28 33,33 30,37 L 15,37 C 15,33 14,30 14,27 C 13,25 11,23 9,22 C 8,21 7,20 7,18 C 6,16 7,14 9,13 C 11,12 14,12 17,13 C 19,13 21,12 23,11 C 24,9 24,8 25,7 Z",
+ ex:31,ey:18},
 
-{n:"Telinga Cangkup",d:"Large cupped ear",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,5 C 26,3 30,5 29,9 C 30,10 32,12 33,16 C 35,20 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 23,6 24,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Menengadah",d:"Kepala mendongak",
+ p:"M 25,4 C 27,2 30,5 28,9 C 31,10 34,13 34,18 C 34,24 32,30 29,36 C 27,38 26,38 26,38 L 14,38 C 14,34 13,30 13,27 C 12,25 10,22 8,21 C 7,20 6,18 6,16 C 5,14 6,11 9,10 C 11,8 14,8 17,10 C 19,11 21,10 22,9 C 23,7 24,5 25,4 Z",
+ ex:30,ey:15},
 
-{n:"Telinga Terbelah",d:"Split/notched ear",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 26,4 27,6 26,8 C 27,7 28,5 29,6 C 30,7 30,9 29,10 C 31,11 33,13 34,17 C 36,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,6 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Jawa Kuda",d:"Gaya lokal stylized",
+ p:"M 25,5 C 27,3 31,6 29,11 C 32,11 35,14 35,20 C 35,26 33,32 30,37 L 14,37 C 14,33 13,29 12,26 C 11,24 9,22 7,21 C 6,20 5,19 5,17 C 4,15 5,12 8,11 C 10,9 13,9 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:31,ey:16},
 
-{n:"Telinga Mini",d:"Tiny ear nub",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,8 C 25,7 26,8 26,9 C 28,10 30,12 32,16 C 34,20 34,28 32,33 C 30,36 28,38 28,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,9 24,9 24,8 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="18" r="2"/>`},
+{n:"Kuda Arab",d:"Arabian dished face",
+ p:"M 25,5 C 27,3 29,7 28,11 C 30,12 33,14 33,19 C 33,25 31,31 28,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,12 9,11 C 11,9 14,9 17,10 C 19,11 21,11 22,10 C 23,9 24,7 25,5 Z",
+ ex:29,ey:15},
 
-{n:"Leher Melengkung S",d:"Proud S-curve neck",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,10 32,12 31,15 C 30,18 31,23 33,28 C 34,32 32,36 30,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="17" r="2"/>`},
+{n:"Friesian Besar",d:"Heavy horse massive",
+ p:"M 25,5 C 27,3 31,7 30,12 C 33,13 37,16 37,21 C 37,27 35,33 32,37 L 14,37 C 14,33 13,29 12,26 C 11,24 9,22 7,21 C 6,20 5,19 5,17 C 4,15 5,12 8,11 C 10,9 13,9 16,10 C 18,11 21,11 24,10 C 25,8 25,6 25,5 Z",
+ ex:33,ey:16},
 
-{n:"Leher Vertikal",d:"Straight vertical neck",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 31,12 31,16 C 31,20 31,28 31,33 C 31,36 30,38 30,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="28" cy="18" r="2"/>`},
+{n:"Mustang Liar",d:"Wild horse fiercing",
+ p:"M 26,4 C 28,2 32,6 30,11 C 33,12 36,14 36,19 C 36,25 34,31 31,36 C 29,38 27,38 27,38 L 14,38 C 14,34 13,30 12,26 C 11,24 9,22 7,21 C 6,20 5,19 5,17 C 4,14 5,12 8,11 C 10,9 13,9 16,11 C 18,12 21,11 24,10 C 25,8 25,5 26,4 Z",
+ ex:32,ey:16},
 
-{n:"Dada Super Lebar",d:"Broad chest stallion",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 30,7 29,10 C 32,11 36,14 37,18 C 39,22 38,29 35,33 C 33,36 31,38 31,38 L 10,38 C 10,35 9,31 8,27 C 7,23 6,20 7,17 C 7,14 8,12 10,11 C 12,9 15,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="32" cy="18" r="2.1"/>`},
+{n:"Quarter Horse",d:"Compact muscle",
+ p:"M 24,6 C 26,4 29,8 27,12 C 30,13 33,16 33,21 C 33,26 31,31 28,35 C 26,37 25,37 25,37 L 14,37 C 14,33 13,29 13,26 C 12,24 10,22 8,21 C 7,20 6,19 6,17 C 5,15 6,13 8,12 C 10,10 13,10 16,11 C 18,12 20,11 22,10 C 23,9 23,7 24,6 Z",
+ ex:29,ey:17},
 
-{n:"Leher Tipis Elegan",d:"Thin graceful neck",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,5 C 26,4 28,7 27,10 C 28,11 29,13 29,17 C 29,21 29,28 28,33 C 27,36 25,38 25,38 L 13,38 C 13,35 12,31 11,27 C 10,24 9,21 9,18 C 8,16 8,14 10,11 C 12,9 15,9 18,10 C 20,10 22,9 22,9 C 23,7 23,6 24,5 Z"/>
-    <circle fill="#f0d9b5" cx="27" cy="18" r="1.9"/>`},
+{n:"Andalusian",d:"Baroque horse head",
+ p:"M 25,5 C 28,3 31,7 29,12 C 32,13 35,16 35,21 C 35,27 33,33 30,37 L 14,37 C 14,33 13,29 12,26 C 11,24 9,21 7,20 C 6,19 5,18 5,16 C 4,14 5,11 8,10 C 10,8 14,8 17,10 C 19,11 22,11 24,10 C 25,8 25,6 25,5 Z",
+ ex:31,ey:15},
 
-{n:"Lengkung Crest",d:"S-curve crest neck",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 30,7 29,10 C 31,11 33,12 32,16 C 31,20 32,25 34,29 C 35,33 33,37 30,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="17" r="2"/>`},
+{n:"Geometry Hard",d:"Sudut-sudut tegas",
+ p:"M 25,5 L 28,4 L 29,11 L 34,15 L 34,21 L 32,32 L 29,37 L 15,37 L 14,26 L 9,21 L 7,17 L 9,12 L 17,11 L 23,10 L 24,5 Z",
+ ex:30,ey:16},
 
-{n:"Kepala Rendah",d:"Low grazing head",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,8 C 27,7 29,10 28,13 C 30,14 32,16 33,20 C 35,24 35,30 33,35 C 31,37 29,39 29,39 L 12,39 C 12,36 11,32 10,28 C 9,25 8,22 8,19 C 7,17 7,15 9,13 C 11,11 14,11 17,12 C 19,12 21,11 22,11 C 23,10 24,9 25,8 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="20" r="2.1"/>`},
+{n:"Geometry Soft",d:"Sudut-sudut lembut",
+ p:"M 25,5 C 26,4 28,5 28,9 L 34,14 C 35,17 35,24 33,30 L 29,37 L 15,37 L 14,27 C 13,24 11,22 9,21 L 7,18 C 6,15 7,12 9,12 L 17,11 L 23,10 C 24,9 24,7 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Kepala Tinggi",d:"High proud head position",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,3 C 27,2 29,5 28,8 C 30,9 32,11 33,15 C 35,19 35,27 33,32 C 31,35 29,37 29,37 L 12,37 C 12,34 11,30 10,26 C 9,23 8,20 8,17 C 7,15 7,13 9,10 C 11,8 14,8 17,9 C 19,9 21,8 22,8 C 23,6 24,4 25,3 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="16" r="2.1"/>`},
+{n:"Garis Tebal",d:"Stroke sangat bold",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,sw:2.8},
 
-{n:"Alas Super Lebar",d:"Very wide base",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 36,28 35,33 C 33,36 32,38 32,38 L 9,38 C 9,35 8,31 8,27 C 7,23 7,20 8,17 C 8,14 9,12 11,11 C 13,9 16,9 18,10 C 20,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Garis Tipis",d:"Outline halus minimal",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,sw:0.8},
 
-{n:"Alas Sempit",d:"Narrow elegant base",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 34,28 32,33 C 31,36 29,38 29,38 L 14,38 C 14,35 13,31 12,27 C 11,24 10,21 9,18 C 8,16 8,14 10,11 C 12,9 15,9 18,10 C 20,10 22,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Surai Terlihat",d:"Detail rambut mane",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,
+ extra:`<path fill="none" stroke="#f0d9b5" stroke-width="1" stroke-linecap="round" d="M 23,10 Q 21,13 20,17 M 25,11 Q 24,14 23,18 M 27,12 Q 27,15 26,19"/>`},
 
-{n:"Kompak Bulky",d:"Short and chunky",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,6 C 26,5 28,8 27,11 C 29,12 31,14 32,18 C 33,22 33,28 31,33 C 30,36 28,38 28,38 L 13,38 C 13,35 12,31 11,27 C 10,24 9,21 9,18 C 8,16 8,14 10,11 C 12,9 15,9 17,10 C 19,10 21,9 22,9 C 23,8 23,7 24,6 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="18" r="2"/>`},
+{n:"Lubang Hidung",d:"Detail nostril",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,
+ extra:`<path fill="none" stroke="#f0d9b5" stroke-width="1.2" stroke-linecap="round" d="M 9,20 C 8,19 8,17 9,18"/>`},
 
-{n:"Proportional Ideal",d:"Perfect balance",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,9 C 30,10 32,12 33,15 C 35,19 36,26 34,31 C 32,34 30,37 30,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,8 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="17" r="2.1"/>`},
+{n:"Mata Besar",d:"Bola mata menonjol",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,er:3.2},
 
-{n:"Kartun Besar",d:"Cartoon big head",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,5 C 26,4 28,7 28,10 C 30,11 32,13 33,17 C 35,22 34,28 32,33 C 30,36 28,38 28,38 L 13,38 C 13,35 12,31 11,27 C 10,24 9,21 8,18 C 7,15 7,13 9,10 C 11,8 14,8 17,10 C 19,10 21,9 22,9 C 23,7 23,6 24,5 Z"/>
-    <circle fill="#f0d9b5" cx="29" cy="18" r="2.4"/>`},
+{n:"Mata Kecil",d:"Mata sipit elegan",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,er:1.2},
 
-{n:"Super Gemuk",d:"Extra fat & bold",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,4 C 28,3 31,7 30,11 C 33,12 36,14 37,19 C 39,23 38,30 35,34 C 33,37 31,39 31,39 L 10,39 C 10,36 9,31 8,27 C 7,23 6,20 7,17 C 7,14 8,12 11,10 C 13,8 16,8 19,9 C 21,10 22,9 23,8 C 24,6 24,5 25,4 Z"/>
-    <circle fill="#f0d9b5" cx="32" cy="18" r="2.3"/>`},
+{n:"Gold Border",d:"Outline emas premium",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,stroke:"#d4af37"},
 
-{n:"Super Kurus",d:"Very slim & tall",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,6 C 26,5 27,8 26,10 C 27,11 29,13 30,17 C 31,21 30,28 29,32 C 28,35 26,38 26,38 L 14,38 C 14,35 13,31 12,28 C 11,25 10,22 10,19 C 9,17 9,15 11,12 C 13,10 16,10 18,11 C 20,11 22,10 23,9 C 23,8 24,7 24,6 Z"/>
-    <circle fill="#f0d9b5" cx="27" cy="18" r="1.8"/>`},
+{n:"Neon Cyber",d:"Glow sci-fi",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,stroke:"#00e5ff",eyeFill:"#00e5ff"},
 
-{n:"Kuda Poni",d:"Short squat pony",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 23,7 C 25,6 26,9 26,11 C 28,12 30,14 31,17 C 33,21 32,27 30,31 C 29,34 27,37 27,37 L 13,37 C 13,34 12,30 11,27 C 10,24 9,21 9,19 C 8,17 8,15 10,13 C 12,11 14,11 16,12 C 18,12 20,11 21,10 C 22,9 23,8 23,7 Z"/>
-    <circle fill="#f0d9b5" cx="28" cy="18" r="2"/>`},
+{n:"Leher Melengkung",d:"S-neck artistic",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,19 C 34,22 32,24 30,26 C 28,28 28,31 30,37 L 15,37 C 14,31 14,28 15,25 C 16,23 16,21 14,19 C 12,17 10,17 8,17 C 7,17 6,16 6,15 C 5,13 6,11 9,10 C 11,9 14,9 17,10 C 19,11 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:29,ey:14},
 
-{n:"Thoroughbred",d:"Tall race horse",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,4 C 27,3 29,6 28,9 C 30,10 32,12 33,16 C 35,20 35,28 33,33 C 31,37 29,39 29,39 L 12,39 C 12,36 11,32 10,28 C 9,25 8,22 8,19 C 7,17 7,15 9,12 C 11,10 14,10 17,11 C 19,11 21,10 22,10 C 23,8 24,5 25,4 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Kepala Mundur",d:"Head set back",
+ p:"M 27,5 C 29,3 32,7 30,11 C 33,12 36,15 36,20 C 36,26 34,32 31,37 L 17,37 C 17,33 16,29 16,26 C 15,24 13,22 11,21 C 10,20 9,19 8,17 C 7,15 8,13 10,12 C 12,10 15,10 18,11 C 20,12 22,11 24,10 C 25,8 26,6 27,5 Z",
+ ex:32,ey:16},
 
-{n:"Membusung Dada",d:"Prancing raised neck",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 27,4 C 29,3 31,7 30,11 C 31,12 32,13 31,17 C 30,21 30,27 30,32 C 29,35 27,38 27,38 L 14,38 C 15,35 16,31 15,27 C 14,24 12,21 10,18 C 8,15 8,13 10,11 C 12,9 15,9 17,10 C 19,10 21,9 23,9 C 25,8 26,5 27,4 Z"/>
-    <circle fill="#f0d9b5" cx="28" cy="17" r="2.1"/>`},
+{n:"Base Lebar",d:"Kaki alas lebar",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 33,32 31,37 L 11,37 C 11,33 11,29 12,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16},
 
-{n:"Menunduk Rendah",d:"Head tilted low down",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 24,8 C 26,7 28,9 28,12 C 30,13 32,15 33,19 C 35,23 35,29 33,34 C 31,37 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,22 7,20 C 6,18 6,15 7,13 C 8,11 11,10 14,11 C 16,12 18,12 20,11 C 21,10 22,9 24,8 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="19" r="2.1"/>`},
+{n:"Kuda Perang",d:"War horse fierce",
+ p:"M 26,4 C 28,2 31,6 30,11 C 33,11 36,14 36,19 C 36,25 35,31 32,36 C 30,38 28,38 28,38 L 13,38 C 13,34 12,30 11,27 C 10,24 8,22 6,21 C 5,20 4,19 4,17 C 3,15 4,12 7,11 C 9,9 12,9 16,11 C 18,12 21,11 24,10 C 25,8 25,5 26,4 Z",
+ ex:32,ey:15},
 
-{n:"Detail Lubang Hidung",d:"Nostril detail added",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>
-    <path fill="none" stroke="#f0d9b5" stroke-width="1.2" stroke-linecap="round" d="M 10,17 C 9,16 10,14 11,16"/>`},
+{n:"Unicorn Mode",d:"Tanduk imajiner",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,
+ extra:`<line x1="20" y1="9" x2="16" y2="2" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>`},
 
-{n:"Kepala Condong",d:"Head tilted forward",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 23,6 C 25,5 28,7 28,10 C 30,11 32,14 33,18 C 35,22 35,29 33,34 C 31,37 29,38 29,38 L 11,38 C 11,35 10,31 10,27 C 9,24 8,21 7,17 C 6,14 7,12 9,11 C 12,9 15,10 17,11 C 19,11 21,10 21,9 C 22,8 22,7 23,6 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.1"/>`},
+{n:"Pixel Horse",d:"8-bit blocky style",
+ p:"M 24,5 L 26,5 L 26,7 L 29,7 L 29,11 L 34,11 L 34,21 L 32,21 L 32,32 L 29,37 L 15,37 L 15,27 L 13,27 L 13,21 L 9,21 L 9,17 L 7,17 L 7,13 L 9,13 L 9,11 L 17,11 L 17,9 L 22,9 L 22,7 L 24,7 Z",
+ ex:30,ey:16},
 
-{n:"Surai Ditampilkan",d:"Mane lines detail",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2"/>
-    <path fill="none" stroke="#f0d9b5" stroke-width="1" stroke-linecap="round" d="M 21,9 Q 20,12 19,15 M 23,10 Q 23,13 22,17 M 26,11 Q 27,14 26,18"/>`},
+{n:"Kuda Senang",d:"Happy rounded face",
+ p:"M 25,6 C 27,4 30,8 28,12 C 31,13 34,16 34,21 C 34,27 32,33 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 12,22 10,21 C 9,20 8,19 8,17 C 7,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,9 24,7 25,6 Z",
+ ex:30,ey:17},
 
-{n:"Bola Mata Besar",d:"Oversized eye",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="3.5"/>
-    <circle fill="#222" cx="30" cy="18" r="1.5"/>`},
+{n:"Kuda Galak",d:"Fierce horse sharp",
+ p:"M 26,4 C 28,3 31,6 29,10 L 34,14 L 35,20 L 33,31 L 29,37 L 15,37 L 14,26 L 9,21 L 7,17 L 8,12 L 14,10 L 17,11 L 23,10 L 25,4 Z",
+ ex:30,ey:15},
 
-{n:"Profil Kiri Penuh",d:"Left-facing clean profile",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 26,5 C 28,4 30,7 29,10 C 31,11 33,13 34,17 C 36,21 36,28 34,33 C 32,36 30,38 30,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 23,9 C 24,7 25,5 26,5 Z"/>
-    <circle fill="#f0d9b5" cx="31" cy="18" r="2.1"/>
-    <path fill="none" stroke="#f0d9b5" stroke-width="1.2" stroke-linecap="round" d="M 10,17 C 9,15 11,14 12,16"/>`},
+{n:"Kuda Santai",d:"Chill casual look",
+ p:"M 24,7 C 26,5 29,9 28,12 C 31,13 33,16 33,21 C 33,27 32,33 29,37 L 14,37 C 14,33 13,29 13,26 C 12,24 11,22 9,21 C 8,20 8,19 7,18 C 6,16 7,14 9,13 C 11,11 14,11 17,12 C 19,12 21,11 22,11 C 23,10 24,9 24,7 Z",
+ ex:29,ey:17},
 
-{n:"Bold & Tegas",d:"Maximum boldness",
- p:`<path fill="#222" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2.2"/>`},
+{n:"Turbo Speed",d:"Streamlined aerodynamic",
+ p:"M 24,6 C 26,4 30,7 28,11 C 32,11 36,14 36,19 C 36,24 34,30 30,37 L 16,37 C 16,34 15,30 14,26 C 13,23 10,21 8,20 C 7,19 6,18 6,16 C 6,14 7,12 9,11 C 11,10 14,10 17,11 C 19,12 21,11 22,10 C 23,9 23,7 24,6 Z",
+ ex:31,ey:15},
 
-{n:"Outline Tipis",d:"Thin stroke outline",
- p:`<path fill="#333" stroke="#555" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="18" r="2"/>`},
+{n:"Classic Staunton #2",d:"Variasi Staunton resmi",
+ p:"M 25,5 C 27,3 29,7 28,11 C 30,12 33,14 33,19 C 33,25 31,31 28,36 C 27,38 25,38 25,38 L 14,38 C 14,34 13,30 13,27 C 12,25 10,23 8,22 C 7,21 6,20 6,18 C 5,16 6,14 8,13 C 10,11 13,11 16,12 C 18,13 20,12 22,11 C 23,9 24,7 25,5 Z",
+ ex:29,ey:17},
 
-{n:"Ukiran Kayu",d:"Wooden chiseled feel",
- p:`<path fill="#2a1a0a" stroke="#7a5a3a" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"
-      d="M 25,5 C 26,4 28,6 27,9 L 32,13 L 34,18 L 35,28 L 33,33 L 30,38 L 12,38 L 10,33 L 8,27 L 8,18 L 9,11 L 14,9 L 17,10 L 22,9 L 24,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="19" r="2"/>`},
-
-{n:"Gold Outline",d:"Gold border accent",
- p:`<path fill="#222" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#d4af37" cx="30" cy="18" r="2"/>`},
-
-{n:"Futuristik",d:"Sci-fi neon stroke",
- p:`<path fill="#0a0a14" stroke="#00e5ff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 30,11 32,13 33,17 C 35,21 35,28 33,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#00e5ff" cx="30" cy="18" r="2"/>
-    <path fill="none" stroke="#00e5ff" stroke-width="0.6" opacity="0.4" d="M 12,38 L 29,38"/>`},
-
-{n:"Ariel — Kuda Putra",d:"Prince horse head",
- p:`<path fill="#222" stroke="#222" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
-      d="M 25,5 C 27,4 29,7 28,10 C 31,11 33,13 33,17 C 33,21 33,28 32,33 C 31,36 29,38 29,38 L 12,38 C 12,35 11,31 10,27 C 9,24 8,21 8,18 C 7,16 7,14 9,11 C 11,9 14,9 17,10 C 19,10 21,9 22,9 C 23,7 24,5 25,5 Z"/>
-    <circle fill="#f0d9b5" cx="30" cy="17" r="2.1"/>
-    <path fill="none" stroke="#f0d9b5" stroke-width="1" stroke-linecap="round" d="M 19,10 C 18,12 17,15 17,18 M 22,9 C 22,12 21,15 21,18"/>`}
+{n:"Detail Lengkap",d:"Most realistic",
+ p:"M 25,5 C 27,3 30,7 28,11 C 31,12 34,15 34,20 C 34,26 32,32 29,37 L 15,37 C 15,33 14,29 14,26 C 13,24 11,22 9,21 C 8,20 7,19 7,17 C 6,15 7,13 9,12 C 11,10 14,10 17,11 C 19,12 21,11 23,10 C 24,8 24,6 25,5 Z",
+ ex:30,ey:16,
+ extra:`<path fill="none" stroke="#f0d9b5" stroke-width="1" stroke-linecap="round" d="M 9,20 C 8,19 8,17 9,18 M 22,10 Q 21,13 20,17"/>
+<circle fill="#f0d9b5" cx="30" cy="16" r="1" opacity="0.4"/>`}
 ];
 
-const grid=document.getElementById('grid');
-D.forEach((d,i)=>{
-  const card=document.createElement('div');
-  card.className='card';
-  card.innerHTML=`<span class="num">#${i+1}</span>
-    <svg width="96" height="96" viewBox="0 0 45 45">
-      <rect width="45" height="45" fill="#f0d9b5" rx="5"/>
-      <rect fill="#222" stroke="#222" stroke-width="1.5" rx="2" x="9" y="38" width="27" height="4"/>
-      ${d.p}
+const grid = document.getElementById('grid');
+D.forEach((d,i) => {
+  const sw = d.sw || 1.8;
+  const er = d.er || 2;
+  const stroke = d.stroke || '#222';
+  const eyeFill = d.eyeFill || '#f0d9b5';
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<span class="num">#${i+1}</span>
+    <svg width="90" height="90" viewBox="0 0 45 45">
+      <rect width="45" height="45" fill="#f0d9b5" rx="6"/>
+      <rect fill="${stroke}" stroke="${stroke}" stroke-width="1.3" rx="2" x="9" y="37" width="26" height="5"/>
+      <path fill="${stroke}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" d="${d.p}"/>
+      <circle fill="${eyeFill}" cx="${d.ex}" cy="${d.ey}" r="${er}"/>
+      ${d.extra || ''}
     </svg>
     <label>${d.n}</label><span class="desc">${d.d}</span>`;
-  card.onclick=()=>{
-    document.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));
+  card.onclick = () => {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
-    document.getElementById('sel').textContent=`✅ Pilihan: #${i+1} — ${d.n}`;
+    document.getElementById('sel').textContent = `✅ #${i+1} — ${d.n}`;
   };
   grid.appendChild(card);
 });
