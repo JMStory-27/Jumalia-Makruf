@@ -3575,13 +3575,39 @@ function _startMatchmakingAnimation(){
     try{
       const ac=getACtx();if(!ac)return;
       if(ac.state==='suspended')ac.resume();
-      const o=ac.createOscillator(),g=ac.createGain();
-      o.connect(g);g.connect(ac.destination);
-      o.type='triangle';
-      o.frequency.setValueAtTime(260+Math.random()*160,ac.currentTime);
-      g.gain.setValueAtTime(0.07,ac.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.05);
-      o.start(ac.currentTime);o.stop(ac.currentTime+0.055);
+      const t=ac.currentTime;
+      const pick=Math.floor(Math.random()*4);
+      if(pick===0){
+        // Bubble pop: pitch drops fast
+        const o=ac.createOscillator(),g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);o.type='sine';
+        const f=500+Math.random()*400;
+        o.frequency.setValueAtTime(f*1.4,t);o.frequency.exponentialRampToValueAtTime(f*0.25,t+0.07);
+        g.gain.setValueAtTime(0.13,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.09);
+        o.start(t);o.stop(t+0.1);
+      } else if(pick===1){
+        // Cute ping
+        const o=ac.createOscillator(),g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);o.type='sine';
+        o.frequency.setValueAtTime(900+Math.random()*500,t);
+        g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.14);
+        o.start(t);o.stop(t+0.16);
+      } else if(pick===2){
+        // Boing spring
+        const o=ac.createOscillator(),g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);o.type='triangle';
+        const f=180+Math.random()*80;
+        o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*2.8,t+0.04);o.frequency.exponentialRampToValueAtTime(f*0.7,t+0.1);
+        g.gain.setValueAtTime(0.14,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.13);
+        o.start(t);o.stop(t+0.15);
+      } else {
+        // Blip blop
+        const o=ac.createOscillator(),g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);o.type='square';
+        o.frequency.setValueAtTime(300+Math.random()*200,t);
+        g.gain.setValueAtTime(0.06,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+        o.start(t);o.stop(t+0.06);
+      }
     }catch(e){}
   }
 
@@ -3610,20 +3636,26 @@ function _startMatchmakingAnimation(){
       if(enRating)enRating.textContent='⭐ '+_matchedOpponent.rating;
       const box2=document.getElementById('mm-enemy-box');
       if(box2){box2.classList.remove('enemy');void box2.offsetWidth;box2.classList.add('enemy');}
-      // Landing "ding" double-tone
+      // Ta-da! funny fanfare
       try{
         const ac=getACtx();if(ac){
           if(ac.state==='suspended')ac.resume();
-          [880,1100].forEach((freq,i)=>{
+          const t=ac.currentTime;
+          // Quick ascending arpeggio then big final note
+          [[523,.08,.15],[659,.16,.13],[784,.24,.13],[1047,.34,.28],[1319,.46,.22],[1047,.58,.35]].forEach(([f,st,vol])=>{
             const o=ac.createOscillator(),g=ac.createGain();
             o.connect(g);g.connect(ac.destination);
             o.type='sine';
-            o.frequency.setValueAtTime(freq,ac.currentTime+i*0.12);
-            o.frequency.exponentialRampToValueAtTime(freq*0.75,ac.currentTime+i*0.12+0.22);
-            g.gain.setValueAtTime(0.22,ac.currentTime+i*0.12);
-            g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+i*0.12+0.4);
-            o.start(ac.currentTime+i*0.12);o.stop(ac.currentTime+i*0.12+0.45);
+            o.frequency.setValueAtTime(f,t+st);
+            g.gain.setValueAtTime(vol,t+st);g.gain.exponentialRampToValueAtTime(0.001,t+st+0.28);
+            o.start(t+st);o.stop(t+st+0.32);
           });
+          // Wobbly "woo" bass under it
+          const ob=ac.createOscillator(),gb=ac.createGain();
+          ob.connect(gb);gb.connect(ac.destination);ob.type='triangle';
+          ob.frequency.setValueAtTime(180,t+0.34);ob.frequency.exponentialRampToValueAtTime(260,t+0.65);
+          gb.gain.setValueAtTime(0.18,t+0.34);gb.gain.exponentialRampToValueAtTime(0.001,t+0.9);
+          ob.start(t+0.34);ob.stop(t+0.95);
         }
       }catch(e){}
       const ring=document.querySelector('#mm-en-av .mm-spin-ring');if(ring)ring.style.display='none';
@@ -3935,6 +3967,7 @@ function sendTextChat(){
   inp.value='';
   _addChatMsg({from:'me',type:'text',content:txt});
   if(gameMode==='bot')setTimeout(()=>_botChatReply(txt),900+Math.random()*1800);
+  else if(_oppChatActive&&_currentOpp)_aiChatReply(txt);
 }
 function _playChatNotif(){
   try{
@@ -4050,19 +4083,59 @@ const _GZ_REPLIES={
   default:["hmm okee 🗿","ya ya, gua dengerin kok 😌","wkwk bro 💀","noted bestie~","okde 🙂","bro serius? 😂","haha ngab 🤌","ok ok 👍","lanjut aja yuk 🔥"]
 };
 function _smartBotReply(userMsg){
-  if(!_oppChatActive&&gameMode!=='bot')return;
+  // Keyword fallback used for bot mode only
   const txt=(userMsg||'').toLowerCase();
   let replies=_GZ_REPLIES.default;
-  if(/halo|hai|hei|hey|oi|oy|halo|yo\b/.test(txt))replies=_GZ_REPLIES.sapa;
-  else if(/gg|good game|bagus|keren|mantap|salut|hebat|respect/.test(txt))replies=_GZ_REPLIES.gg;
-  else if(/nyerah|menyerah|surrender|give up|kalah/.test(txt))replies=_GZ_REPLIES.menyerah;
-  else if(/bagus|keren|mantap|good|nice|wow|gak nyangka/.test(txt))replies=_GZ_REPLIES.bagus;
-  else if(/curang|cheat|bot|hack|script|otomatis/.test(txt))replies=_GZ_REPLIES.curang;
-  else if(/noob|newbie|pemula|gak bisa|payah|lemah|jelek/.test(txt))replies=_GZ_REPLIES.noob;
-  else if(/jago|pro|master|grandmaster|kamu jago|lu jago|emang jago/.test(txt))replies=_GZ_REPLIES.jago;
-  else if(/mana|kemana|dimana|where|kamu ada|lu ada/.test(txt))replies=_GZ_REPLIES.mana;
+  if(/halo|hai|hei|hey|oi|oy|yo\b/.test(txt))replies=_GZ_REPLIES.sapa;
+  else if(/gg|good game|mantap|salut|hebat|respect/.test(txt))replies=_GZ_REPLIES.gg;
+  else if(/nyerah|menyerah|surrender|give up/.test(txt))replies=_GZ_REPLIES.menyerah;
+  else if(/bagus|keren|mantap|good|nice|wow/.test(txt))replies=_GZ_REPLIES.bagus;
+  else if(/curang|cheat|hack|script/.test(txt))replies=_GZ_REPLIES.curang;
+  else if(/noob|newbie|pemula|payah|lemah|jelek/.test(txt))replies=_GZ_REPLIES.noob;
+  else if(/jago|pro|master|grandmaster/.test(txt))replies=_GZ_REPLIES.jago;
+  else if(/mana|kemana|dimana|where/.test(txt))replies=_GZ_REPLIES.mana;
   const reply=replies[Math.floor(Math.random()*replies.length)];
   _addChatMsg({from:'them',type:'text',content:reply});
+}
+
+// ── Typing indicator helpers ──
+function _showTypingBubble(){
+  const el=document.getElementById('chat-messages');if(!el)return;
+  if(document.getElementById('_ai-typing'))return;
+  const wrap=document.createElement('div');wrap.className='chat-msg them';wrap.id='_ai-typing';
+  const sender=document.createElement('div');sender.className='chat-sender';sender.textContent=_currentOpp?.name||'Lawan';
+  const bubble=document.createElement('div');bubble.className='chat-bubble';bubble.style.cssText='font-style:italic;opacity:.65;letter-spacing:.04em';
+  bubble.textContent='⌨️ sedang mengetik...';
+  wrap.appendChild(sender);wrap.appendChild(bubble);
+  el.appendChild(wrap);
+  requestAnimationFrame(()=>{el.scrollTop=el.scrollHeight;});
+}
+function _hideTypingBubble(){
+  const el=document.getElementById('_ai-typing');if(el)el.remove();
+}
+
+// ── AI-powered reply for random match (5-second human delay) ──
+async function _aiChatReply(userMsg){
+  if(!_oppChatActive||!_currentOpp)return;
+  _showTypingBubble();
+  // Human-like delay: 4–6 seconds
+  const delay=4000+Math.random()*2000;
+  await new Promise(r=>setTimeout(r,delay));
+  _hideTypingBubble();
+  if(!_oppChatActive)return;
+  try{
+    const resp=await fetch('/game/chat-reply',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:userMsg,opponentName:_currentOpp.name})
+    });
+    if(!resp.ok)throw new Error('server error');
+    const data=await resp.json();
+    _addChatMsg({from:'them',type:'text',content:data.reply||'wkwk 🗿'});
+  }catch(e){
+    const fb=['wkwk bro 💀','okde bestie~','noted ngab 🗿','haha serius? 😂','yoi gaskeun 🔥'];
+    _addChatMsg({from:'them',type:'text',content:fb[Math.floor(Math.random()*fb.length)]});
+  }
 }
 let _lastUserMsg='';
 function _botChatReply(userMsg){
