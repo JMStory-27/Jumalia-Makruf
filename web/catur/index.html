@@ -1976,6 +1976,14 @@ function showPromo(templateMv){
 }
 
 function executeMove(mv){
+  // Clear hint immediately when any move is made
+  hintMove=null;
+  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
+  document.getElementById('btn-hint')?.classList.remove('hint-active');
+  const hintLbl=document.getElementById('btn-hint')?.querySelector('span:last-child');
+  if(hintLbl&&hintLbl.textContent!=='Petunjuk')hintLbl.textContent='Petunjuk';
+
   const prevGS=cloneGS(gs);
   gameSnapshots.push({state:prevGS,move:mv});
   moveHistory.push(gs);
@@ -2338,17 +2346,17 @@ function showHint(){
     _hintWorker=w;
     w.onmessage=(e)=>{
       const d=e.data;if(!d||!d.move)return;
-      const mv=d.move;
-      hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
-      // DO NOT set selected/legalFromSel — hint only shows from/to highlight
-      if(hintLabel)hintLabel.textContent='D'+d.depth+'/'+MD+'✓';
-      renderBoard();
+      // Only update the visual hint when fully done (final depth) — no mid-search flickering
       if(d.depth>=MD){
+        const mv=d.move;
+        hintMove={fr:mv.fr,fc:mv.fc,tr:mv.tr,tc:mv.tc};
         if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
         if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
         if(hintLabel)hintLabel.textContent=origLabel;
-        toast('💡 Analisis selesai! (D'+MD+')');
+        renderBoard();
+        toast('💡 Petunjuk terbaik siap! (analisis dalam)');
       }
+      // Intermediate depths: silently track but don't update the board
     };
     w.onerror=()=>{if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}if(hintLabel)hintLabel.textContent=origLabel;};
     w.postMessage({gs:snapGS,color:c,depth:MD});
