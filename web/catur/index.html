@@ -482,17 +482,19 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — cburnett two-path design -->
+<!-- WHITE KNIGHT — Staunton horse-head silhouette -->
 <g id="wN">
+  <rect fill="#fff" stroke="#404040" stroke-width="1.5" rx="2" x="9" y="38" width="27" height="4"/>
   <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round"
-    d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
-       C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
-       C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
-       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
-  <circle fill="#404040" cx="33" cy="24" r="1.85"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
+    d="M 22,12 C 25,9 31,9 34,13 C 37,17 36,25 33,29 C 31,32 29,35 29,38
+       L 12,38 C 12,35 10,31 8,27 C 6,23 7,17 10,14
+       C 11,12 13,11 14,11 C 14,9 15,7 17,8
+       C 17,10 17,12 18,13 C 19,12 21,11 22,12 Z"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 21,12 C 20,9 21,7 23,7 C 25,7 26,9 24,12"/>
+  <circle fill="#404040" cx="30" cy="17" r="1.85"/>
+  <path fill="none" stroke="#aaa" stroke-width="1.2" stroke-linecap="round"
+    d="M 10,22 C 9,20 11,19 12,21"/>
 </g>
 <!-- WHITE PAWN — round head + smooth waist + round base -->
 <g id="wP">
@@ -537,17 +539,19 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — cburnett two-path design -->
+<!-- BLACK KNIGHT — Staunton horse-head silhouette -->
 <g id="bN">
+  <rect fill="#111" stroke="#ccc" stroke-width="1.5" rx="2" x="9" y="38" width="27" height="4"/>
   <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"
-    d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
-       C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
-       C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
-       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
-  <circle fill="#ccc" cx="33" cy="24" r="1.85"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
+    d="M 22,12 C 25,9 31,9 34,13 C 37,17 36,25 33,29 C 31,32 29,35 29,38
+       L 12,38 C 12,35 10,31 8,27 C 6,23 7,17 10,14
+       C 11,12 13,11 14,11 C 14,9 15,7 17,8
+       C 17,10 17,12 18,13 C 19,12 21,11 22,12 Z"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 21,12 C 20,9 21,7 23,7 C 25,7 26,9 24,12"/>
+  <circle fill="#ccc" cx="30" cy="17" r="1.85"/>
+  <path fill="none" stroke="#555" stroke-width="1.2" stroke-linecap="round"
+    d="M 10,22 C 9,20 11,19 12,21"/>
 </g>
 <!-- BLACK PAWN — round head + smooth waist + round base -->
 <g id="bP">
@@ -2052,7 +2056,7 @@ const _AN_F='ABCDEFGH';
 function _anPcName(p){return PNAMES_ID[Math.abs(p)]||'?';}
 
 function _computeAnalysisEntry(state,move){
-  const bestMv=getBestMove(state,state.turn,2);
+  const bestMv=getBestMove(state,state.turn,1);
   const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evaluate(state);
   const evalActual=evaluate(applyMove(state,move));
   const isW=state.turn==='w';
@@ -2067,31 +2071,25 @@ function _computeAnalysisEntry(state,move){
   return {state,move,rating,rc,re,comment,loss,evalAfter:evalActual};
 }
 
-/* Build analysis async — runs during the 3s game-over delay, yields between moves */
+/* Build analysis — runs synchronously with depth=1 for instant results */
 function buildAnalysisDataAsync(snaps){
   _analysisReady=false;
   _analysisData=[];
   const bid=++_analysisBuildId;
-  const total=snaps.length;
-  let i=0,brilliant=0,mistakes=0,blunders=0;
-  function step(){
-    if(bid!==_analysisBuildId)return; // superseded
-    if(i>=total){
-      document.getElementById('an-n0').textContent=brilliant;
-      document.getElementById('an-n1').textContent=mistakes;
-      document.getElementById('an-n2').textContent=blunders;
-      _analysisReady=true;
-      return;
-    }
-    const {state,move}=snaps[i++];
+  let brilliant=0,mistakes=0,blunders=0;
+  for(let i=0;i<snaps.length;i++){
+    if(bid!==_analysisBuildId)return;
+    const {state,move}=snaps[i];
     const entry=_computeAnalysisEntry(state,move);
     if(entry.rc==='rate-brilliant')brilliant++;
     else if(entry.rc==='rate-mistake')mistakes++;
     else if(entry.rc==='rate-blunder')blunders++;
     _analysisData.push(entry);
-    setTimeout(step,0);
   }
-  setTimeout(step,80);
+  document.getElementById('an-n0').textContent=brilliant;
+  document.getElementById('an-n1').textContent=mistakes;
+  document.getElementById('an-n2').textContent=blunders;
+  _analysisReady=true;
 }
 
 /* Sync fallback (depth=1) — used when user opens analysis mid-game or before async done */
