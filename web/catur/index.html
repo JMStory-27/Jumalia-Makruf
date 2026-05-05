@@ -103,6 +103,56 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .set-section{margin-bottom:16px}
 .set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:6px}
 .set-label{font-size:14px;font-weight:600;color:var(--txt)}
+
+/* ── PROFILE SECTION ── */
+.profile-preview-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(212,175,55,.1),rgba(212,175,55,.04));border:1px solid rgba(212,175,55,.3);margin-bottom:14px;position:relative}
+.profile-big-avatar{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid var(--gold);background:rgba(212,175,55,.15);overflow:hidden;flex-shrink:0;cursor:pointer;position:relative}
+.profile-big-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-big-avatar .av-edit{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;font-size:18px;border-radius:50%}
+.profile-big-avatar:hover .av-edit{display:flex}
+.profile-info-edit{flex:1;min-width:0}
+.profile-name-display{font-size:16px;font-weight:700;color:var(--txt);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-country-display{font-size:13px;color:var(--txt2)}
+.profile-edit-hint{font-size:11px;color:var(--gold);margin-top:4px;opacity:.8}
+.profile-input{width:100%;background:rgba(255,255,255,.07);border:1px solid var(--card-b);border-radius:10px;padding:9px 12px;font-size:14px;color:var(--txt);outline:none;margin-bottom:8px}
+.profile-input:focus{border-color:rgba(212,175,55,.5)}
+.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.av-opt{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid var(--card-b);background:rgba(255,255,255,.05);cursor:pointer;transition:all .15s}
+.av-opt:hover{border-color:var(--gold);transform:scale(1.1)}
+.av-opt.selected{border-color:var(--gold);background:rgba(212,175,55,.2);box-shadow:0 0 10px rgba(212,175,55,.4)}
+.country-grid{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.cn-opt{padding:6px 10px;border-radius:8px;border:1px solid var(--card-b);background:rgba(255,255,255,.04);cursor:pointer;font-size:13px;transition:all .15s}
+.cn-opt:hover{border-color:rgba(212,175,55,.4)}
+.cn-opt.selected{border-color:var(--gold);background:rgba(212,175,55,.12);color:var(--gold)}
+.upload-av-btn{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;border:1px dashed rgba(212,175,55,.4);background:transparent;color:var(--gold);font-size:13px;cursor:pointer;width:100%;justify-content:center;margin-top:4px}
+.upload-av-btn:hover{background:rgba(212,175,55,.08)}
+
+/* ── MATCHMAKING SCREEN ── */
+#s-match{justify-content:center;background:var(--bg);z-index:15}
+.match-inner{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;padding:20px 16px}
+.match-title{font-size:14px;font-weight:700;letter-spacing:1.5px;color:var(--txt2);text-transform:uppercase;margin-bottom:6px}
+.match-online-badge{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:999px;padding:4px 14px;font-size:12px;color:#4ade80;font-weight:600;margin-bottom:24px;animation:pulseBadge 2s ease-in-out infinite}
+@keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.3)}50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}}
+.match-cards-row{display:flex;align-items:center;gap:14px;width:100%;margin-bottom:20px}
+.match-card{flex:1;padding:16px 12px;border-radius:16px;border:1px solid var(--card-b);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;backdrop-filter:blur(12px)}
+.match-card.me-card{border-color:rgba(212,175,55,.35)}
+.match-card.opp-card{border-color:rgba(100,180,255,.25)}
+.match-avatar-lg{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;border:2px solid var(--card-b);background:rgba(255,255,255,.07);overflow:hidden;position:relative}
+.match-avatar-lg img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.match-card.me-card .match-avatar-lg{border-color:var(--gold);box-shadow:0 0 16px rgba(212,175,55,.35)}
+.match-card.opp-card .match-avatar-lg{border-color:rgba(100,180,255,.5)}
+.match-pname{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.match-country{font-size:12px;color:var(--txt2)}
+.match-vs{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.match-vs-text{font-size:22px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(212,175,55,.5);animation:vsGlow 1.5s ease-in-out infinite}
+@keyframes vsGlow{0%,100%{text-shadow:0 0 10px rgba(212,175,55,.4)}50%{text-shadow:0 0 30px rgba(212,175,55,.8)}}
+.match-timer{font-size:11px;color:var(--txt2)}
+.match-status{font-size:13px;color:var(--txt2);text-align:center;margin-bottom:14px;min-height:20px}
+.match-bar-wrap{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:20px}
+.match-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-d),var(--gold),var(--gold-d));transition:width .4s ease;animation:barShimmer 1.5s linear infinite;background-size:200% 100%}
+@keyframes barShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.match-card .opp-shuffle{display:inline-block;animation:shuffleFlip .25s ease-in-out}
+@keyframes shuffleFlip{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
 .set-desc{font-size:11px;color:var(--txt2)}
 .toggle-row{display:flex;gap:6px}
 .tgl{padding:7px 14px;border-radius:8px;border:1px solid var(--card-b);background:transparent;color:var(--txt2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
@@ -286,18 +336,37 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 #bot-bubble{position:fixed;bottom:calc(140px + var(--safe));left:50%;transform:translateX(-50%) translateY(10px);max-width:280px;padding:10px 16px;border-radius:16px;border:1px solid var(--card-b);background:rgba(10,8,28,.96);font-size:12px;color:var(--txt2);text-align:center;z-index:150;opacity:0;transition:all .3s;pointer-events:none;backdrop-filter:blur(12px)}
 #bot-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-#emoji-panel{position:fixed;bottom:calc(80px + var(--safe));left:50%;transform:translateX(-50%);background:rgba(10,8,28,.96);border:1px solid var(--card-b);border-radius:16px;padding:10px;display:none;gap:8px;z-index:150;backdrop-filter:blur(12px);flex-wrap:wrap;max-width:280px;justify-content:center}
+#emoji-panel{position:fixed;bottom:calc(80px + var(--safe));left:50%;transform:translateX(-50%);background:rgba(10,8,28,.97);border:1px solid var(--card-b);border-radius:18px;padding:12px 10px;display:none;gap:4px;z-index:150;backdrop-filter:blur(16px);flex-wrap:wrap;max-width:320px;justify-content:center;max-height:260px;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.7)}
 #emoji-panel.show{display:flex}
-.emoji-btn{font-size:28px;cursor:pointer;transition:transform .2s;padding:4px}
-.emoji-btn:hover{transform:scale(1.3)}
-.emoji-fly{position:fixed;font-size:40px;animation:emojiUp 2s ease-out forwards;pointer-events:none;z-index:500}
-@keyframes emojiUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-200px) scale(1.5);opacity:0}}
+.emoji-btn{font-size:26px;cursor:pointer;transition:transform .15s,filter .15s;padding:3px 2px;border-radius:8px;line-height:1.2}
+.emoji-btn:hover,.emoji-btn:active{transform:scale(1.35);filter:drop-shadow(0 0 8px rgba(212,175,55,.8))}
+.emoji-fly{position:fixed;font-size:48px;animation:emojiUp 2.2s ease-out forwards;pointer-events:none;z-index:500}
+@keyframes emojiUp{0%{transform:translateY(0) scale(.8) rotate(-10deg);opacity:1}30%{transform:translateY(-60px) scale(1.3) rotate(8deg);opacity:1}100%{transform:translateY(-220px) scale(1.6) rotate(-5deg);opacity:0}}
+.emoji-cat-lbl{width:100%;font-size:10px;color:var(--txt2);text-align:left;padding:4px 2px 2px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,.15);margin-top:4px}
 
 #voice-wave{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:6px;background:rgba(10,8,28,.96);padding:20px 30px;border-radius:20px;border:1px solid var(--card-b);z-index:160}
 #voice-wave.show{display:flex}
 .rec-pulse{animation:recBlink .8s ease-in-out infinite}
 @keyframes recBlink{0%,100%{color:var(--txt2)}50%{color:#f87171}}
 #voice-timer{font-size:20px;font-weight:700;color:var(--gold)}
+
+/* ── CHAT PANEL ── */
+#chat-panel{position:fixed;bottom:0;left:0;right:0;height:52%;background:rgba(8,6,22,.97);border-top:1px solid var(--card-b);z-index:180;display:none;flex-direction:column;backdrop-filter:blur(20px);border-radius:20px 20px 0 0;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+#chat-panel.show{display:flex}
+#chat-msgs{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin}
+.chat-msg{max-width:78%;padding:7px 12px;border-radius:14px;font-size:13px;line-height:1.45;word-break:break-word;animation:msgIn .2s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.me{align-self:flex-end;background:linear-gradient(135deg,#8b6914,#d4af37);color:#1a0800;border-bottom-right-radius:4px}
+.chat-msg.opp{align-self:flex-start;background:rgba(255,255,255,.1);color:var(--txt);border:1px solid var(--card-b);border-bottom-left-radius:4px}
+.chat-msg.system{align-self:center;background:transparent;color:var(--txt2);font-size:11px;font-style:italic}
+.chat-input-row{display:flex;gap:8px;padding:8px 12px calc(8px + var(--safe));border-top:1px solid rgba(212,175,55,.15)}
+#chat-input{flex:1;background:rgba(255,255,255,.08);border:1px solid var(--card-b);border-radius:22px;padding:9px 14px;font-size:14px;color:var(--txt);outline:none}
+#chat-input::placeholder{color:var(--txt2)}
+.chat-send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#8b6914,#d4af37);border:none;color:#1a0800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;border-bottom:1px solid rgba(212,175,55,.15)}
+.chat-hdr-title{font-size:14px;font-weight:700;color:var(--txt)}
+.chat-close{font-size:20px;cursor:pointer;color:var(--txt2);padding:4px}
+#btn-chat-game{display:none}
 
 /* ── BOARD THEMES ── */
 #board-grid.t-classic{--sq-l:#f0d9b5;--sq-d:#b58863}
@@ -444,194 +513,152 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- ══ PARTICLES ══ -->
 <div id="ptl"></div>
 
-<!-- ══ SVG PIECE DEFS ══ -->
+<!-- ══ SVG PIECE DEFS — OUTLINE STYLE ══ -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<!-- ═══ WHITE PIECES — from ChessPiecesLibrary.jsx (scaled 100→45) ═══ -->
+<filter id="pshadow" x="-50%" y="-50%" width="200%" height="200%">
+  <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.5"/>
+</filter>
 
-<!-- WHITE KING: Crown 5-point + cross on top -->
+<!-- ═══ WHITE PIECES ═══ -->
+
+<!-- WHITE KING -->
 <g id="wK">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13.5,34 Q 13.5,25 16,20 L 29,20 Q 31.5,25 31.5,34 Z"/>
-  <ellipse fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="20" rx="6.8" ry="5.4"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 16,20 L 19,11 L 20.5,16 L 22.5,7 L 24.5,16 L 26,11 L 29,20"/>
-  <line x1="22.5" y1="3.6" x2="22.5" y2="9.9" stroke="#404040" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="19.8" y1="6.3" x2="25.2" y2="6.3" stroke="#404040" stroke-width="1.5" stroke-linecap="round"/>
-  <circle fill="#404040" cx="22.5" cy="27" r="1.8" opacity="0.3"/>
+  <path d="M 20 85 Q 20 85 50 85 Q 80 85 80 85 L 75 75 L 25 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 75 L 35 50 L 65 50 L 68 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="48" rx="12" ry="9" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="35" rx="16" ry="14" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="48" y="18" width="4" height="20" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="42" y="24" width="16" height="4" fill="white" stroke="black" stroke-width="1.5"/>
 </g>
 
-<!-- WHITE QUEEN: Crown 8-point + decorative balls -->
+<!-- WHITE QUEEN -->
 <g id="wQ">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 12.6,34 Q 12.6,27 14.4,21.6 L 30.6,21.6 Q 32.4,27 32.4,34 Z"/>
-  <ellipse fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="21.6" rx="7.2" ry="4.5"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 14.4,21.6 L 16.2,9.9 L 18.4,14.4 L 20.2,8.1 L 22.5,14.4 L 24.8,8.1 L 26.6,14.4 L 28.8,9.9 L 30.6,21.6"/>
-  <circle fill="#404040" cx="16.2" cy="9.9" r="1.2" opacity="0.4"/>
-  <circle fill="#404040" cx="20.2" cy="8.1" r="1.2" opacity="0.4"/>
-  <circle fill="#404040" cx="22.5" cy="4.5" r="1.4" opacity="0.4"/>
-  <circle fill="#404040" cx="24.8" cy="8.1" r="1.2" opacity="0.4"/>
-  <circle fill="#404040" cx="28.8" cy="9.9" r="1.2" opacity="0.4"/>
-  <circle fill="#404040" cx="22.5" cy="28" r="1.6" opacity="0.3"/>
+  <path d="M 20 85 Q 50 85 80 85 L 75 75 L 25 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 30 75 L 34 52 L 66 52 L 70 75 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="50" rx="13" ry="10" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="34" rx="17" ry="15" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <polygon points="50,15 47,28 50,22 53,28" fill="white" stroke="black" stroke-width="1.5"/>
+  <polygon points="37,24 33,18 37,30" fill="white" stroke="black" stroke-width="1.5"/>
+  <polygon points="63,24 67,18 63,30" fill="white" stroke="black" stroke-width="1.5"/>
+  <circle cx="50" cy="15" r="2.5" fill="black"/>
+  <circle cx="37" cy="18" r="2" fill="black"/>
+  <circle cx="63" cy="18" r="2" fill="black"/>
 </g>
 
-<!-- WHITE ROOK: Tower with battlements -->
+<!-- WHITE ROOK -->
 <g id="wR">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 9,38 L 36,38 L 34,33 L 11,33 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13.5,33 L 13.5,24.8 L 15.8,24.8 L 15.8,29.2 L 29.2,29.2 L 29.2,24.8 L 31.5,24.8 L 31.5,33 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13.5,24.8 L 13.5,15.8 L 17.1,15.8 L 17.1,19 L 22.5,19 L 22.5,15.8 L 27.9,15.8 L 27.9,19 L 31.5,19 L 31.5,15.8 L 31.5,24.8"/>
-  <line x1="18" y1="24.8" x2="18" y2="33" stroke="#404040" stroke-width="1" opacity="0.3"/>
-  <line x1="27" y1="24.8" x2="27" y2="33" stroke="#404040" stroke-width="1" opacity="0.3"/>
-  <circle fill="#404040" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+  <path d="M 22 85 Q 50 85 78 85 L 73 74 L 27 74 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 74 L 32 55 L 68 55 L 68 74 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="32" y="35" width="10" height="20" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="42" y="30" width="8" height="25" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="50" y="30" width="8" height="25" fill="white" stroke="black" stroke-width="1.5"/>
+  <rect x="58" y="35" width="10" height="20" fill="white" stroke="black" stroke-width="1.5"/>
+  <line x1="40" y1="55" x2="40" y2="74" stroke="black" stroke-width="1" opacity="0.4"/>
+  <line x1="60" y1="55" x2="60" y2="74" stroke="black" stroke-width="1" opacity="0.4"/>
 </g>
 
-<!-- WHITE BISHOP: Dome + pointed spike + ring -->
+<!-- WHITE BISHOP -->
 <g id="wB">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 14.4,34 Q 14.4,29 15.8,24.8 Q 15.8,22.5 18,20.2 L 27,20.2 Q 29.2,22.5 29.2,24.8 Q 30.6,29 30.6,34 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 18,20.2 Q 22.5,13.5 27,20.2"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 21.6,13.5 L 22.5,5.4 L 23.4,13.5"/>
-  <line x1="22.5" y1="13.5" x2="22.5" y2="5.4" stroke="#404040" stroke-width="1" opacity="0.4"/>
-  <ellipse fill="none" stroke="#404040" stroke-width="0.8" cx="22.5" cy="22.5" rx="5.4" ry="2.7" opacity="0.3"/>
-  <circle fill="#404040" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 34 76 L 37 55 L 63 55 L 66 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 38 55 Q 50 38 62 55" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 48 38 L 50 20 L 52 38 Z" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="52" rx="13" ry="6" fill="none" stroke="black" stroke-width="1" opacity="0.5"/>
 </g>
 
-<!-- WHITE KNIGHT: Horse head — neck+head+muzzle+2 ears+eye+nostril -->
+<!-- WHITE KNIGHT -->
 <g id="wN">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 15.8,34 Q 14.4,29 14.8,24.8 Q 15.3,22.5 18,21.6 L 18,34 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 18,21.6 Q 20.2,18.9 22.5,17.1 Q 24.8,15.8 26.1,18 Q 27,22.5 26.1,27 Q 24.8,30.6 21.6,32.4 Q 18.9,34 18,34"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 26.1,18 Q 31.5,15.8 35.1,17.1 Q 36,18.9 35.1,22.5 Q 33.8,27 29.2,29.2 Q 26.1,27 26.1,22.5"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
-    d="M 21.6,15.8 Q 20.2,11.2 21.6,8.1 Q 23.4,9 23.4,13.5"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
-    d="M 24.8,14.4 Q 26.1,9.9 27.9,7.2 Q 29.2,9 27.9,14.4"/>
-  <circle fill="#404040" cx="27.9" cy="20.2" r="1.5" opacity="0.7"/>
-  <circle fill="#404040" cx="31.5" cy="22.5" r="1" opacity="0.4"/>
-  <path fill="none" stroke="#404040" stroke-width="0.8" stroke-linecap="round"
-    d="M 18,22.5 Q 17.1,27 16.7,31.5" opacity="0.2"/>
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 76 Q 34 66 35 55 Q 36 50 42 48 L 42 76 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 42 48 Q 47 42 52 38 Q 58 36 62 42 Q 64 52 62 62 Q 59 70 50 74 Q 44 76 42 73" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 62 42 Q 72 38 80 42 Q 82 46 80 54 Q 77 60 68 62 Q 62 60 62 52" fill="white" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 50 38 Q 46 28 48 18 Q 52 20 52 38" fill="white" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 56 36 Q 60 26 64 16 Q 62 22 60 38" fill="white" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="64" cy="48" r="2.5" fill="black"/>
+  <circle cx="72" cy="52" r="1.5" fill="black" opacity="0.7"/>
+  <path d="M 51 36 Q 53 30 55 36" stroke="black" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.5"/>
 </g>
 
-<!-- WHITE PAWN: Round head + waist + base -->
+<!-- WHITE PAWN -->
 <g id="wP">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 11.2,38 L 33.8,38 L 32.4,34.6 L 12.6,34.6 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 15.8,34.6 Q 15.8,29.2 17.1,24.8 L 27.9,24.8 Q 29.2,29.2 29.2,34.6 Z"/>
-  <ellipse fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="24.8" rx="5.4" ry="3.6"/>
-  <circle fill="#fff" stroke="#404040" stroke-width="1.5" cx="22.5" cy="18" r="5.9"/>
-  <circle fill="#404040" cx="22.5" cy="30" r="1.1" opacity="0.2"/>
-  <circle fill="#404040" cx="22.5" cy="18" r="0.7" opacity="0.15"/>
+  <path d="M 26 85 Q 50 85 74 85 L 71 78 L 29 78 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 78 L 39 60 L 61 60 L 64 78 Z" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="58" rx="11" ry="8" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="42" r="13" fill="white" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="28" r="2.5" fill="black"/>
 </g>
 
-<!-- ═══ BLACK PIECES — mirror of white with dark fill ═══ -->
+<!-- ═══ BLACK PIECES ═══ -->
 
 <!-- BLACK KING -->
 <g id="bK">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13.5,34 Q 13.5,25 16,20 L 29,20 Q 31.5,25 31.5,34 Z"/>
-  <ellipse fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="20" rx="6.8" ry="5.4"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 16,20 L 19,11 L 20.5,16 L 22.5,7 L 24.5,16 L 26,11 L 29,20"/>
-  <line x1="22.5" y1="3.6" x2="22.5" y2="9.9" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="19.8" y1="6.3" x2="25.2" y2="6.3" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
-  <circle fill="#ccc" cx="22.5" cy="27" r="1.8" opacity="0.3"/>
+  <path d="M 20 85 Q 20 85 50 85 Q 80 85 80 85 L 75 75 L 25 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 75 L 35 50 L 65 50 L 68 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="48" rx="12" ry="9" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="35" rx="16" ry="14" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="48" y="18" width="4" height="20" fill="black" stroke="white" stroke-width="1.5"/>
+  <rect x="42" y="24" width="16" height="4" fill="black" stroke="white" stroke-width="1.5"/>
+  <rect x="48" y="18" width="4" height="20" fill="white" opacity="0.35"/>
+  <rect x="42" y="24" width="16" height="4" fill="white" opacity="0.35"/>
 </g>
 
 <!-- BLACK QUEEN -->
 <g id="bQ">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 9,38 L 36,38 L 34,34 L 11,34 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 12.6,34 Q 12.6,27 14.4,21.6 L 30.6,21.6 Q 32.4,27 32.4,34 Z"/>
-  <ellipse fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="21.6" rx="7.2" ry="4.5"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 14.4,21.6 L 16.2,9.9 L 18.4,14.4 L 20.2,8.1 L 22.5,14.4 L 24.8,8.1 L 26.6,14.4 L 28.8,9.9 L 30.6,21.6"/>
-  <circle fill="#ccc" cx="16.2" cy="9.9" r="1.2" opacity="0.4"/>
-  <circle fill="#ccc" cx="20.2" cy="8.1" r="1.2" opacity="0.4"/>
-  <circle fill="#ccc" cx="22.5" cy="4.5" r="1.4" opacity="0.4"/>
-  <circle fill="#ccc" cx="24.8" cy="8.1" r="1.2" opacity="0.4"/>
-  <circle fill="#ccc" cx="28.8" cy="9.9" r="1.2" opacity="0.4"/>
-  <circle fill="#ccc" cx="22.5" cy="28" r="1.6" opacity="0.3"/>
+  <path d="M 20 85 Q 50 85 80 85 L 75 75 L 25 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 30 75 L 34 52 L 66 52 L 70 75 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="50" rx="13" ry="10" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="34" rx="17" ry="15" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <polygon points="50,15 47,28 50,22 53,28" fill="black" stroke="white" stroke-width="1.5"/>
+  <polygon points="37,24 33,18 37,30" fill="black" stroke="white" stroke-width="1.5"/>
+  <polygon points="63,24 67,18 63,30" fill="black" stroke="white" stroke-width="1.5"/>
+  <circle cx="50" cy="15" r="2.5" fill="white"/>
+  <circle cx="37" cy="18" r="2" fill="white"/>
+  <circle cx="63" cy="18" r="2" fill="white"/>
 </g>
 
 <!-- BLACK ROOK -->
 <g id="bR">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 9,38 L 36,38 L 34,33 L 11,33 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13.5,33 L 13.5,24.8 L 15.8,24.8 L 15.8,29.2 L 29.2,29.2 L 29.2,24.8 L 31.5,24.8 L 31.5,33 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 13.5,24.8 L 13.5,15.8 L 17.1,15.8 L 17.1,19 L 22.5,19 L 22.5,15.8 L 27.9,15.8 L 27.9,19 L 31.5,19 L 31.5,15.8 L 31.5,24.8"/>
-  <line x1="18" y1="24.8" x2="18" y2="33" stroke="#ccc" stroke-width="1" opacity="0.3"/>
-  <line x1="27" y1="24.8" x2="27" y2="33" stroke="#ccc" stroke-width="1" opacity="0.3"/>
-  <circle fill="#ccc" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+  <path d="M 22 85 Q 50 85 78 85 L 73 74 L 27 74 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 32 74 L 32 55 L 68 55 L 68 74 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <rect x="32" y="35" width="10" height="20" fill="black" stroke="black" stroke-width="1.5"/>
+  <rect x="42" y="30" width="8" height="25" fill="black" stroke="black" stroke-width="1.5"/>
+  <rect x="50" y="30" width="8" height="25" fill="black" stroke="black" stroke-width="1.5"/>
+  <rect x="58" y="35" width="10" height="20" fill="black" stroke="black" stroke-width="1.5"/>
+  <line x1="40" y1="55" x2="40" y2="74" stroke="white" stroke-width="1" opacity="0.3"/>
+  <line x1="60" y1="55" x2="60" y2="74" stroke="white" stroke-width="1" opacity="0.3"/>
 </g>
 
 <!-- BLACK BISHOP -->
 <g id="bB">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 14.4,34 Q 14.4,29 15.8,24.8 Q 15.8,22.5 18,20.2 L 27,20.2 Q 29.2,22.5 29.2,24.8 Q 30.6,29 30.6,34 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 18,20.2 Q 22.5,13.5 27,20.2"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 21.6,13.5 L 22.5,5.4 L 23.4,13.5"/>
-  <line x1="22.5" y1="13.5" x2="22.5" y2="5.4" stroke="#ccc" stroke-width="1" opacity="0.4"/>
-  <ellipse fill="none" stroke="#ccc" stroke-width="0.8" cx="22.5" cy="22.5" rx="5.4" ry="2.7" opacity="0.3"/>
-  <circle fill="#ccc" cx="22.5" cy="29" r="1.4" opacity="0.2"/>
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 34 76 L 37 55 L 63 55 L 66 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 38 55 Q 50 38 62 55" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 48 38 L 50 20 L 52 38 Z" fill="black" stroke="black" stroke-width="1.5" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="52" rx="13" ry="6" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
 </g>
 
 <!-- BLACK KNIGHT -->
 <g id="bN">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 10,38 L 35,38 L 32.4,34 L 12.6,34 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 15.8,34 Q 14.4,29 14.8,24.8 Q 15.3,22.5 18,21.6 L 18,34 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 18,21.6 Q 20.2,18.9 22.5,17.1 Q 24.8,15.8 26.1,18 Q 27,22.5 26.1,27 Q 24.8,30.6 21.6,32.4 Q 18.9,34 18,34"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 26.1,18 Q 31.5,15.8 35.1,17.1 Q 36,18.9 35.1,22.5 Q 33.8,27 29.2,29.2 Q 26.1,27 26.1,22.5"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
-    d="M 21.6,15.8 Q 20.2,11.2 21.6,8.1 Q 23.4,9 23.4,13.5"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"
-    d="M 24.8,14.4 Q 26.1,9.9 27.9,7.2 Q 29.2,9 27.9,14.4"/>
-  <circle fill="#ccc" cx="27.9" cy="20.2" r="1.5" opacity="0.7"/>
-  <circle fill="#ccc" cx="31.5" cy="22.5" r="1" opacity="0.4"/>
-  <path fill="none" stroke="#ccc" stroke-width="0.8" stroke-linecap="round"
-    d="M 18,22.5 Q 17.1,27 16.7,31.5" opacity="0.2"/>
+  <path d="M 24 85 Q 50 85 76 85 L 71 76 L 29 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 76 Q 34 66 35 55 Q 36 50 42 48 L 42 76 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 42 48 Q 47 42 52 38 Q 58 36 62 42 Q 64 52 62 62 Q 59 70 50 74 Q 44 76 42 73" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 62 42 Q 72 38 80 42 Q 82 46 80 54 Q 77 60 68 62 Q 62 60 62 52" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#pshadow)"/>
+  <path d="M 50 38 Q 46 28 48 18 Q 52 20 52 38" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path d="M 56 36 Q 60 26 64 16 Q 62 22 60 38" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <circle cx="64" cy="48" r="2.5" fill="white"/>
+  <circle cx="72" cy="52" r="1.5" fill="white" opacity="0.7"/>
 </g>
 
 <!-- BLACK PAWN -->
 <g id="bP">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 11.2,38 L 33.8,38 L 32.4,34.6 L 12.6,34.6 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 15.8,34.6 Q 15.8,29.2 17.1,24.8 L 27.9,24.8 Q 29.2,29.2 29.2,34.6 Z"/>
-  <ellipse fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="24.8" rx="5.4" ry="3.6"/>
-  <circle fill="#111" stroke="#ccc" stroke-width="1.5" cx="22.5" cy="18" r="5.9"/>
-  <circle fill="#ccc" cx="22.5" cy="30" r="1.1" opacity="0.2"/>
-  <circle fill="#ccc" cx="22.5" cy="18" r="0.7" opacity="0.15"/>
+  <path d="M 26 85 Q 50 85 74 85 L 71 78 L 29 78 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <path d="M 36 78 L 39 60 L 61 60 L 64 78 Z" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <ellipse cx="50" cy="58" rx="11" ry="8" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="42" r="13" fill="black" stroke="black" stroke-width="2" filter="url(#pshadow)"/>
+  <circle cx="50" cy="28" r="2.5" fill="white"/>
 </g>
+
 </defs>
 </svg>
 
@@ -677,6 +704,11 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <span class="btn-icon">🌐</span>
         <span class="btn-label">Main Online</span>
         <span class="btn-arrow">›</span>
+      </button>
+      <button class="btn-main" style="border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.05)" onclick="showMatchmaking()">
+        <span class="btn-icon">🎮</span>
+        <span class="btn-label" style="color:var(--txt)">Cari Lawan Random</span>
+        <span style="font-size:11px;color:#4ade80;font-weight:700;background:rgba(74,222,128,.15);border-radius:6px;padding:2px 7px">ONLINE</span>
       </button>
       <button class="btn-main" onclick="startHorde()">
         <span class="btn-icon">⚔️</span>
@@ -779,6 +811,33 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   </div>
 </div>
 
+<!-- ══ MATCHMAKING SCREEN ══ -->
+<div id="s-match" class="screen">
+  <div class="match-inner">
+    <div class="match-title">🔍 Mencari Lawan</div>
+    <div class="match-online-badge">🟢 <span id="match-online-count">12,847</span> pemain online</div>
+    <div class="match-cards-row">
+      <div class="match-card me-card">
+        <div class="match-avatar-lg" id="match-my-av"><span id="match-my-av-inner">♟</span></div>
+        <div class="match-pname" id="match-my-name">Kamu</div>
+        <div class="match-country" id="match-my-country">🇮🇩</div>
+      </div>
+      <div class="match-vs">
+        <div class="match-vs-text">VS</div>
+        <div class="match-timer" id="match-timer-lbl">10</div>
+      </div>
+      <div class="match-card opp-card">
+        <div class="match-avatar-lg"><span id="match-opp-av">❓</span></div>
+        <div class="match-pname opp-shuffle" id="match-opp-name">Mencari...</div>
+        <div class="match-country" id="match-opp-country">🌐</div>
+      </div>
+    </div>
+    <div class="match-status" id="match-status">Menganalisa pemain di sekitarmu...</div>
+    <div class="match-bar-wrap"><div class="match-bar-fill" id="match-bar" style="width:0%"></div></div>
+    <button class="ov-btn" style="max-width:200px" onclick="cancelMatchmaking()">❌ Batalkan</button>
+  </div>
+</div>
+
 <!-- ══ SETTINGS SCREEN ══ -->
 <div id="s-settings" class="screen">
   <div class="scr-header">
@@ -786,6 +845,31 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div class="scr-title">Pengaturan</div>
   </div>
   <div class="set-inner">
+    <!-- PROFILE SECTION -->
+    <div class="sec-label">Profil Pemain</div>
+    <div class="profile-preview-card glass" onclick="toggleProfileEdit()">
+      <div class="profile-big-avatar" id="prof-av-preview">
+        <span id="prof-av-emoji">♟</span>
+        <img id="prof-av-img" src="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%">
+        <div class="av-edit">✏️</div>
+      </div>
+      <div class="profile-info-edit">
+        <div class="profile-name-display" id="prof-name-display">Pemain</div>
+        <div class="profile-country-display" id="prof-country-display">🇮🇩 Indonesia</div>
+        <div class="profile-edit-hint">Ketuk untuk edit profil</div>
+      </div>
+    </div>
+    <div id="profile-edit-panel" style="display:none">
+      <input id="prof-name-input" class="profile-input" placeholder="Nama kamu..." maxlength="20" oninput="updateProfilePreview()">
+      <div class="sec-label" style="margin-top:4px">Pilih Avatar</div>
+      <div class="avatar-grid" id="avatar-grid"></div>
+      <button class="upload-av-btn" onclick="document.getElementById('av-upload').click()">📷 Upload Foto Sendiri</button>
+      <input type="file" id="av-upload" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+      <div class="sec-label" style="margin-top:4px">Negara</div>
+      <div class="country-grid" id="country-grid"></div>
+      <button class="ov-btn gold" style="margin-top:10px" onclick="saveProfile()">💾 Simpan Profil</button>
+    </div>
+    <div class="sep"></div>
     <div class="sec-label">Tema Papan</div>
     <div id="theme-strip" class="theme-strip"></div>
     <div class="sep"></div>
@@ -888,6 +972,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div id="game-mode-lbl" class="game-mode-badge">Catur</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
+      <div id="btn-chat-game" class="ic-btn" style="display:none" onclick="toggleChatPanel()">💬</div>
       <div id="btn-emoji-game" class="ic-btn" style="display:none" onclick="toggleEmojiPanel()">😄</div>
       <div id="btn-voice" class="ic-btn" style="display:none" onclick="toggleVoiceNote()">🎙️</div>
       <div id="btn-music-game" class="ic-btn" onclick="toggleMusic()">🎵</div>
@@ -1055,16 +1140,28 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <button id="m-toggle" onclick="toggleMusic()">⏸</button>
 </div>
 
-<!-- ══ EMOJI PANEL ══ -->
+<!-- ══ EMOJI PANEL (100 emojis) ══ -->
 <div id="emoji-panel">
-  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span>
-  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span>
-  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span>
-  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span>
-  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
-  <span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span>
-  <span class="emoji-btn" onclick="sendEmoji('👏')">👏</span>
-  <span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span>
+  <div class="emoji-cat-lbl" style="border-top:none;margin-top:0">🏆 Kemenangan</div>
+  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span><span class="emoji-btn" onclick="sendEmoji('🏆')">🏆</span><span class="emoji-btn" onclick="sendEmoji('🥇')">🥇</span><span class="emoji-btn" onclick="sendEmoji('🎖️')">🎖️</span><span class="emoji-btn" onclick="sendEmoji('🏅')">🏅</span><span class="emoji-btn" onclick="sendEmoji('💪')">💪</span><span class="emoji-btn" onclick="sendEmoji('🦁')">🦁</span><span class="emoji-btn" onclick="sendEmoji('🐯')">🐯</span><span class="emoji-btn" onclick="sendEmoji('🦅')">🦅</span><span class="emoji-btn" onclick="sendEmoji('⚔️')">⚔️</span>
+  <div class="emoji-cat-lbl">😂 Ketawa</div>
+  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span><span class="emoji-btn" onclick="sendEmoji('🤣')">🤣</span><span class="emoji-btn" onclick="sendEmoji('😆')">😆</span><span class="emoji-btn" onclick="sendEmoji('😄')">😄</span><span class="emoji-btn" onclick="sendEmoji('😁')">😁</span><span class="emoji-btn" onclick="sendEmoji('🤭')">🤭</span><span class="emoji-btn" onclick="sendEmoji('😝')">😝</span><span class="emoji-btn" onclick="sendEmoji('😜')">😜</span><span class="emoji-btn" onclick="sendEmoji('🤪')">🤪</span><span class="emoji-btn" onclick="sendEmoji('🫡')">🫡</span>
+  <div class="emoji-cat-lbl">🔥 Api & Ledakan</div>
+  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span><span class="emoji-btn" onclick="sendEmoji('💥')">💥</span><span class="emoji-btn" onclick="sendEmoji('⚡')">⚡</span><span class="emoji-btn" onclick="sendEmoji('🌋')">🌋</span><span class="emoji-btn" onclick="sendEmoji('🧨')">🧨</span><span class="emoji-btn" onclick="sendEmoji('💣')">💣</span><span class="emoji-btn" onclick="sendEmoji('🎆')">🎆</span><span class="emoji-btn" onclick="sendEmoji('🎇')">🎇</span><span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span><span class="emoji-btn" onclick="sendEmoji('🎳')">🎳</span>
+  <div class="emoji-cat-lbl">💀 Gelap</div>
+  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span><span class="emoji-btn" onclick="sendEmoji('☠️')">☠️</span><span class="emoji-btn" onclick="sendEmoji('👻')">👻</span><span class="emoji-btn" onclick="sendEmoji('🦇')">🦇</span><span class="emoji-btn" onclick="sendEmoji('🌑')">🌑</span><span class="emoji-btn" onclick="sendEmoji('🌚')">🌚</span><span class="emoji-btn" onclick="sendEmoji('🖤')">🖤</span><span class="emoji-btn" onclick="sendEmoji('⚰️')">⚰️</span><span class="emoji-btn" onclick="sendEmoji('🕷️')">🕷️</span><span class="emoji-btn" onclick="sendEmoji('👁️')">👁️</span>
+  <div class="emoji-cat-lbl">😭 Nangis</div>
+  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span><span class="emoji-btn" onclick="sendEmoji('😢')">😢</span><span class="emoji-btn" onclick="sendEmoji('😥')">😥</span><span class="emoji-btn" onclick="sendEmoji('😰')">😰</span><span class="emoji-btn" onclick="sendEmoji('😓')">😓</span><span class="emoji-btn" onclick="sendEmoji('💧')">💧</span><span class="emoji-btn" onclick="sendEmoji('😞')">😞</span><span class="emoji-btn" onclick="sendEmoji('😔')">😔</span><span class="emoji-btn" onclick="sendEmoji('💔')">💔</span><span class="emoji-btn" onclick="sendEmoji('🥺')">🥺</span>
+  <div class="emoji-cat-lbl">❤️ Cinta</div>
+  <span class="emoji-btn" onclick="sendEmoji('❤️')">❤️</span><span class="emoji-btn" onclick="sendEmoji('💕')">💕</span><span class="emoji-btn" onclick="sendEmoji('💖')">💖</span><span class="emoji-btn" onclick="sendEmoji('💗')">💗</span><span class="emoji-btn" onclick="sendEmoji('💝')">💝</span><span class="emoji-btn" onclick="sendEmoji('🌹')">🌹</span><span class="emoji-btn" onclick="sendEmoji('💐')">💐</span><span class="emoji-btn" onclick="sendEmoji('🥰')">🥰</span><span class="emoji-btn" onclick="sendEmoji('😍')">😍</span><span class="emoji-btn" onclick="sendEmoji('🤩')">🤩</span>
+  <div class="emoji-cat-lbl">😱 Kaget</div>
+  <span class="emoji-btn" onclick="sendEmoji('😱')">😱</span><span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span><span class="emoji-btn" onclick="sendEmoji('😲')">😲</span><span class="emoji-btn" onclick="sendEmoji('😮')">😮</span><span class="emoji-btn" onclick="sendEmoji('😵')">😵</span><span class="emoji-btn" onclick="sendEmoji('💫')">💫</span><span class="emoji-btn" onclick="sendEmoji('🌀')">🌀</span><span class="emoji-btn" onclick="sendEmoji('🔮')">🔮</span><span class="emoji-btn" onclick="sendEmoji('🫠')">🫠</span><span class="emoji-btn" onclick="sendEmoji('🤔')">🤔</span>
+  <div class="emoji-cat-lbl">😎 Keren</div>
+  <span class="emoji-btn" onclick="sendEmoji('😎')">😎</span><span class="emoji-btn" onclick="sendEmoji('🤙')">🤙</span><span class="emoji-btn" onclick="sendEmoji('🤘')">🤘</span><span class="emoji-btn" onclick="sendEmoji('🤞')">🤞</span><span class="emoji-btn" onclick="sendEmoji('✌️')">✌️</span><span class="emoji-btn" onclick="sendEmoji('🕶️')">🕶️</span><span class="emoji-btn" onclick="sendEmoji('🪩')">🪩</span><span class="emoji-btn" onclick="sendEmoji('🎸')">🎸</span><span class="emoji-btn" onclick="sendEmoji('🏄')">🏄</span><span class="emoji-btn" onclick="sendEmoji('🦄')">🦄</span>
+  <div class="emoji-cat-lbl">😡 Marah</div>
+  <span class="emoji-btn" onclick="sendEmoji('😤')">😤</span><span class="emoji-btn" onclick="sendEmoji('😡')">😡</span><span class="emoji-btn" onclick="sendEmoji('🤬')">🤬</span><span class="emoji-btn" onclick="sendEmoji('👊')">👊</span><span class="emoji-btn" onclick="sendEmoji('💢')">💢</span><span class="emoji-btn" onclick="sendEmoji('👿')">👿</span><span class="emoji-btn" onclick="sendEmoji('🐉')">🐉</span><span class="emoji-btn" onclick="sendEmoji('🗡️')">🗡️</span><span class="emoji-btn" onclick="sendEmoji('🔴')">🔴</span><span class="emoji-btn" onclick="sendEmoji('🥊')">🥊</span>
+  <div class="emoji-cat-lbl">🎉 Pesta</div>
+  <span class="emoji-btn" onclick="sendEmoji('🎉')">🎉</span><span class="emoji-btn" onclick="sendEmoji('🎊')">🎊</span><span class="emoji-btn" onclick="sendEmoji('🥳')">🥳</span><span class="emoji-btn" onclick="sendEmoji('🎈')">🎈</span><span class="emoji-btn" onclick="sendEmoji('🎂')">🎂</span><span class="emoji-btn" onclick="sendEmoji('🍾')">🍾</span><span class="emoji-btn" onclick="sendEmoji('🎁')">🎁</span><span class="emoji-btn" onclick="sendEmoji('👏')">👏</span><span class="emoji-btn" onclick="sendEmoji('🪅')">🪅</span><span class="emoji-btn" onclick="sendEmoji('🎪')">🎪</span>
 </div>
 
 <!-- ══ VOICE WAVE ══ -->
@@ -1073,6 +1170,19 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <div id="voice-timer" style="font-size:20px;font-weight:700;color:var(--gold)">3</div>
   <div style="font-size:12px;color:var(--txt2)">Rekaman...</div>
   <button class="ov-btn danger" style="margin-top:8px;padding:8px 20px" onclick="cancelVoiceNote()">❌ Batal</button>
+</div>
+
+<!-- ══ CHAT PANEL ══ -->
+<div id="chat-panel">
+  <div class="chat-hdr">
+    <div class="chat-hdr-title">💬 Chat Lawan</div>
+    <div class="chat-close" onclick="toggleChatPanel()">✕</div>
+  </div>
+  <div id="chat-msgs"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ketik pesan..." maxlength="150" onkeydown="if(event.key==='Enter')sendChatMsg()">
+    <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>
+  </div>
 </div>
 
 <!-- ══ FIREBASE ══ -->
@@ -1108,6 +1218,95 @@ cfg.musicTrack=cfg.musicTrack??0;
 cfg.musicOn=cfg.musicOn!==false;
 cfg.comment=false;
 function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
+
+// ═══════════════════════════════════════
+// PROFILE SYSTEM
+// ═══════════════════════════════════════
+const PROFILE_AVATARS=['♟','👑','🐯','🦁','🐉','🔥','⚡','🌙','💀','🎯','🚀','🦅','⚔️','🎸','🌟'];
+const COUNTRIES=[
+  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
+  {flag:'🇵🇭',name:'Filipina'},{flag:'🇻🇳',name:'Vietnam'},{flag:'🇹🇭',name:'Thailand'},
+  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇺🇸',name:'Amerika'},
+  {flag:'🇬🇧',name:'Inggris'},{flag:'🇸🇦',name:'Arab Saudi'},{flag:'🇦🇪',name:'UAE'},
+  {flag:'🇦🇺',name:'Australia'},{flag:'🇮🇳',name:'India'},{flag:'🇨🇳',name:'Tiongkok'},
+];
+let userProfile=JSON.parse(localStorage.getItem('chess_profile')||'{}');
+userProfile.name=userProfile.name||'Pemain';
+userProfile.avatar=userProfile.avatar||'♟';
+userProfile.country=userProfile.country||{flag:'🇮🇩',name:'Indonesia'};
+userProfile.photoUrl=userProfile.photoUrl||'';
+function saveProfile(){
+  const inp=document.getElementById('prof-name-input');
+  const nm=(inp?.value||'').trim();
+  if(nm)userProfile.name=nm.slice(0,20);
+  localStorage.setItem('chess_profile',JSON.stringify(userProfile));
+  refreshProfileUI();
+  document.getElementById('profile-edit-panel').style.display='none';
+  toast('✅ Profil disimpan!');
+}
+function refreshProfileUI(){
+  const emoji=document.getElementById('prof-av-emoji');
+  const img=document.getElementById('prof-av-img');
+  const nd=document.getElementById('prof-name-display');
+  const cd=document.getElementById('prof-country-display');
+  if(userProfile.photoUrl){
+    if(img){img.src=userProfile.photoUrl;img.style.display='block';}
+    if(emoji)emoji.style.display='none';
+  } else {
+    if(img)img.style.display='none';
+    if(emoji){emoji.style.display='';emoji.textContent=userProfile.avatar;}
+  }
+  if(nd)nd.textContent=userProfile.name;
+  if(cd)cd.textContent=userProfile.country.flag+' '+userProfile.country.name;
+}
+function toggleProfileEdit(){
+  const panel=document.getElementById('profile-edit-panel');
+  const isOpen=panel.style.display==='block';
+  panel.style.display=isOpen?'none':'block';
+  if(!isOpen){
+    const inp=document.getElementById('prof-name-input');
+    if(inp)inp.value=userProfile.name;
+    buildAvatarGrid();
+    buildCountryGrid();
+  }
+}
+function updateProfilePreview(){
+  const inp=document.getElementById('prof-name-input');
+  if(inp&&inp.value.trim())document.getElementById('prof-name-display').textContent=inp.value.trim();
+}
+function buildAvatarGrid(){
+  const grid=document.getElementById('avatar-grid');if(!grid)return;
+  grid.innerHTML='';
+  PROFILE_AVATARS.forEach(av=>{
+    const d=document.createElement('div');d.className='av-opt'+(userProfile.avatar===av&&!userProfile.photoUrl?' selected':'');
+    d.textContent=av;d.onclick=()=>{userProfile.avatar=av;userProfile.photoUrl='';grid.querySelectorAll('.av-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');const img=document.getElementById('prof-av-img');if(img)img.style.display='none';const em=document.getElementById('prof-av-emoji');if(em){em.style.display='';em.textContent=av;}};
+    grid.appendChild(d);
+  });
+}
+function buildCountryGrid(){
+  const grid=document.getElementById('country-grid');if(!grid)return;
+  grid.innerHTML='';
+  COUNTRIES.forEach(cn=>{
+    const d=document.createElement('div');d.className='cn-opt'+(userProfile.country.flag===cn.flag?' selected':'');
+    d.textContent=cn.flag+' '+cn.name;d.onclick=()=>{userProfile.country=cn;grid.querySelectorAll('.cn-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');document.getElementById('prof-country-display').textContent=cn.flag+' '+cn.name;};
+    grid.appendChild(d);
+  });
+}
+function handleAvatarUpload(e){
+  const file=e.target.files?.[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    userProfile.photoUrl=ev.target.result;
+    const img=document.getElementById('prof-av-img');if(img){img.src=ev.target.result;img.style.display='block';}
+    const em=document.getElementById('prof-av-emoji');if(em)em.style.display='none';
+    toast('📷 Foto diupload!');
+  };
+  reader.readAsDataURL(file);
+}
+function getMyAvatarEl(){
+  if(userProfile.photoUrl)return `<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`;
+  return userProfile.avatar;
+}
 
 let gameMode=null,botLevel=1,myColor='w',roomCode=null,roomRef=null,roomListener=null;
 let isHordeMode=false;
@@ -1314,7 +1513,7 @@ function showScreen(id){
     el.classList.add('active');
   }
 }
-function backHome(){cancelRoom();stopMusic();showScreen('home')}
+function backHome(){clearInterval(matchInterval);matchInterval=null;clearTimeout(fakeHumanChatTimer);fakeHumanChatTimer=null;cancelRoom();stopMusic();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home')}
 function showSettings(){buildThemeStrip();updateSettingsUI();showScreen('settings')}
 function showLevel(){
   selectedLevel=null;
@@ -1358,7 +1557,7 @@ function showJoinRoom(){document.getElementById('join-input').value='';document.
 function showGameMenu(){document.getElementById('o-menu').classList.add('show')}
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
-function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();showScreen('home');}
+function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));clearInterval(matchInterval);matchInterval=null;clearTimeout(fakeHumanChatTimer);fakeHumanChatTimer=null;stopMusic();cancelRoom();document.getElementById('chat-panel').classList.remove('show');document.getElementById('emoji-panel').classList.remove('show');document.getElementById('btn-chat-game').style.display='none';showScreen('home');}
 function dismissPassOverlay(){document.getElementById('o-pass-device').classList.remove('show');}
 
 // ═══════════════════════════════════════
@@ -1401,6 +1600,7 @@ function setMusicTrack(i){cfg.musicTrack=i;saveCfg();updateSettingsUI();if(cfg.m
 function updateSettingsUI(){
   [['t-son',cfg.snd],['t-soff',!cfg.snd],['t-comon',cfg.comment],['t-comoff',!cfg.comment],['t-putih',cfg.color==='w'],['t-hitam',cfg.color==='b'],['t-alt',cfg.color==='alt']].forEach(([id,on])=>document.getElementById(id)?.classList.toggle('on',on));
   for(let i=0;i<5;i++)document.getElementById('t-m'+i)?.classList.toggle('on',cfg.musicTrack===i);
+  refreshProfileUI();
 }
 
 // ═══════════════════════════════════════
@@ -1469,7 +1669,7 @@ function renderBoard(){
     const pieceId=(pc==='w'?'w':'b')+''+['P','N','B','R','Q','K'][ap-1];
     const sq=sqs[getIdx(r,c)];if(!sq)continue;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 45 45');svg.setAttribute('class','piece-svg');
+    svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('class','piece-svg');
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     use.setAttribute('href','#'+pieceId);svg.appendChild(use);sq.appendChild(svg);
   }
@@ -1510,12 +1710,214 @@ function updateCapturedDisplay(){
   });
 }
 
+// ═══════════════════════════════════════
+// MATCHMAKING SYSTEM
+// ═══════════════════════════════════════
+const RANDOM_NAMES=[
+  'xNovriansyah','RezaGanteng77','BayuSlayer','FarhanOP','AhmadSniper','DimasKing',
+  'RizkiMaster','HendraGG','AgusPro','YudiElite','IrfanBoss','HadiGenius',
+  'NandangCepat','SyaifulRajawali','BambangLegend','SuryadiMvp','WahyuRocket',
+  'KurniaMagic','EkoPintar','TokoGlory','RandiVipers','FaizalHawk','LukasKnight',
+  'ZulfanChess','RasyidRuler','GalihWizard','DeniQueen','SatriaDragon','PrabuGod',
+  'AldiFury','ReyfaldoX','ZidanPremium','NabilGhost','HilmanTitan','BimaElang',
+  'RafaldiPro','FirmanKing77','HafizRaja','AriqSniper','GinaldoCepat','TaufiqBoss',
+  'AsepGaming','CahyoMaster','DediPro123','ErwinElite','FaizdulRocket','GunturOP',
+  'HaryoNinja','IqbalFire','JafarWin','KarimChess','LuthfiGG','MuzakkirPRO',
+  'NurdinSlayer','OktaviansyahX','PanjiKing','QodriAce','RullyBeast','SoniFast',
+  'TeguhGod','UmarVipers','VenturaRajawali','WandaPro','XanderID','YantoLegend',
+  'ZakiMvp','AbdullahGG','BudiSuperior','CandraElang','DinnoRuler','EvanKnight',
+  'FahriWizard','GalihDragon','HerlambangFury','IkhsanX','JokoGhost','KenPremium',
+  'LioTitan','MarshaKing','NathanGaming','OscarBoss','PutuMaster','QaisarPintar',
+  'RakiElite','SamuelRocket','TomiMagic','UdinGlory','VandaVipers','WawanHawk',
+  'XenoBeast','YuniKnight','ZainulWizard','AfifahChess','BessiFire','CindyGG',
+  'DewiSniper','ErlinaNinja','FitraOP','GitaGod','HaniAce','IndahFast',
+  'JuliaBoss','KartikaPRO','LailaMaster','MelisaRuler','NurHaliza77','OktaElite',
+  'PermataKing','QueenRaisa','RahayuSuperior','SintaSlayer','TikaLegend',
+  'UlfaVipers','ViolaFury','WidyaGhost','XiomaTitan','YuliaPremium','ZaskiaGG',
+];
+const RANDOM_COUNTRIES=[
+  {flag:'🇮🇩',name:'Indonesia'},{flag:'🇲🇾',name:'Malaysia'},{flag:'🇸🇬',name:'Singapura'},
+  {flag:'🇵🇭',name:'Filipina'},{flag:'🇸🇦',name:'Arab Saudi'},{flag:'🇦🇪',name:'UAE'},
+  {flag:'🇯🇵',name:'Jepang'},{flag:'🇰🇷',name:'Korea'},{flag:'🇺🇸',name:'Amerika'},
+  {flag:'🇮🇳',name:'India'},
+];
+const MATCH_STATUSES=[
+  'Menganalisa rating pemain...','Menyocokkan skill level...','Menemukan kandidat lawan...',
+  'Memverifikasi koneksi lawan...','Hampir ketemu nih...','Lawan ditemukan! Mempersiapkan...',
+];
+let matchTimer=null,matchInterval=null,fakeHumanChatTimer=null;
+let fakeOpponentProfile={name:'Bot',avatar:'♟',country:{flag:'🇮🇩',name:'Indonesia'}};
+
+function showMatchmaking(){
+  showScreen('match');
+  // Fill user side
+  const myAvEl=document.getElementById('match-my-av-inner');
+  const myNmEl=document.getElementById('match-my-name');
+  const myCnEl=document.getElementById('match-my-country');
+  if(myAvEl){
+    if(userProfile.photoUrl){
+      document.getElementById('match-my-av').innerHTML=`<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    } else myAvEl.textContent=userProfile.avatar;
+  }
+  if(myNmEl)myNmEl.textContent=userProfile.name;
+  if(myCnEl)myCnEl.textContent=userProfile.country.flag;
+
+  // Animate online count
+  let oc=Math.floor(10000+Math.random()*5000);
+  document.getElementById('match-online-count').textContent=oc.toLocaleString('id-ID');
+
+  // Reset opponent side
+  document.getElementById('match-opp-av').textContent='❓';
+  document.getElementById('match-opp-name').textContent='Mencari...';
+  document.getElementById('match-opp-country').textContent='🌐';
+  document.getElementById('match-bar').style.width='0%';
+  document.getElementById('match-status').textContent=MATCH_STATUSES[0];
+
+  let elapsed=0;
+  const TOTAL=10;
+  let statusIdx=0;
+  clearInterval(matchInterval);
+
+  matchInterval=setInterval(()=>{
+    elapsed++;
+    const pct=Math.min(100,Math.round((elapsed/TOTAL)*100));
+    document.getElementById('match-bar').style.width=pct+'%';
+    document.getElementById('match-timer-lbl').textContent=Math.max(0,TOTAL-elapsed);
+
+    // Shuffle opponent profile
+    const rName=RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)];
+    const rAv=PROFILE_AVATARS[Math.floor(Math.random()*PROFILE_AVATARS.length)];
+    const rCn=RANDOM_COUNTRIES[Math.floor(Math.random()*RANDOM_COUNTRIES.length)];
+    const oppNm=document.getElementById('match-opp-name');
+    const oppAv=document.getElementById('match-opp-av');
+    const oppCn=document.getElementById('match-opp-country');
+    if(oppNm){oppNm.textContent=rName;oppNm.classList.remove('opp-shuffle');void oppNm.offsetWidth;oppNm.classList.add('opp-shuffle');}
+    if(oppAv)oppAv.textContent=rAv;
+    if(oppCn)oppCn.textContent=rCn.flag;
+
+    // Status messages
+    if(elapsed===2)statusIdx=1;
+    else if(elapsed===4)statusIdx=2;
+    else if(elapsed===6)statusIdx=3;
+    else if(elapsed===8)statusIdx=4;
+    else if(elapsed===9)statusIdx=5;
+    document.getElementById('match-status').textContent=MATCH_STATUSES[statusIdx];
+
+    if(elapsed>=TOTAL){
+      clearInterval(matchInterval);matchInterval=null;
+      // Pick final opponent — freeze the last shuffled one
+      fakeOpponentProfile={name:rName,avatar:rAv,country:rCn};
+      setTimeout(()=>startFakeHumanGame(),400);
+    }
+  },1000);
+}
+
+function cancelMatchmaking(){
+  clearInterval(matchInterval);matchInterval=null;
+  backHome();
+}
+
+// Difficulty distribution: 15% ultra-easy, 30% easy, 25% medium, 20% hard, 10% ultra-hard
+function pickMatchDifficulty(){
+  const r=Math.random();
+  if(r<.15)return{level:1,label:'Pemula',winPct:92};
+  if(r<.45)return{level:1,label:'Mudah',winPct:80};
+  if(r<.70)return{level:2,label:'Menengah',winPct:65};
+  if(r<.90)return{level:3,label:'Sulit',winPct:45};
+  return{level:3,label:'Dewa',winPct:28};
+}
+
+function startFakeHumanGame(){
+  const diff=pickMatchDifficulty();
+  clearTimeout(thinkTimer);thinkTimer=null;
+  if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
+  if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
+  gameMode='match';botLevel=diff.level;isHordeMode=false;
+  myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
+  flipped=myColor==='b';
+  gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
+  initBoardDOM();renderBoard();
+  setPlayerNames(fakeOpponentProfile.name,userProfile.name,myColor==='w'?'b':'w',myColor);
+  showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+  // Show emoji/chat buttons same as online
+  document.getElementById('btn-emoji-game').style.display='flex';
+  document.getElementById('btn-chat-game').style.display='flex';
+  chatMsgsEl=document.getElementById('chat-msgs');chatRenderedKeys={};
+  // Start fake human bot chat
+  startFakeHumanChat();
+  if(myColor==='b')setTimeout(doBotMove,800+Math.random()*1200);
+  setTimeout(()=>toast('🎮 Lawan ditemukan: '+fakeOpponentProfile.name+' ('+fakeOpponentProfile.country.flag+')'),200);
+}
+
+// ═══════════════════════════════════════
+// FAKE HUMAN BOT CHAT (Gen-Z Indonesia)
+// ═══════════════════════════════════════
+const GENZ_CHAT=[
+  'halo bro siap nih','gas gas gas','jangan underestimate gua ya wkwk','kita lihat siapa yang menang',
+  'gua udah warm up nih','skill issue kalo kalah','ayo tunjukkin yang terbaik','gl hf bro',
+  'wkwkwk tenang aja','gua lagi on fire nih','jangan baper kalau gua menang ya',
+  'chill aja bro ini cuma game','nice move sih','anjay bisa juga','wah pintar juga kamu',
+  'gg ez','hampir aja tuh','sabar sabar...','gua comeback nih tunggu','ayo siapa takut',
+  'ih ngeri juga lu','gua udah tau strateginya','jangan senang dulu','masih panjang permainannya',
+  'lagi mikir nih sebentar','mantap jiwa','respect bro move-mu solid','nah gitu dong',
+  'duh salah langkah gua','ya ampun','aduh','untung masih bisa defend','ini susah juga',
+  'gua masih bisa comeback tenang','wkwk seru juga nih','ayo gas terus','ngeri lu bro',
+  'gua fokus dulu ya','hmm menarik','lu main lama juga?','good game so far',
+  'jangan kasih ampun ya','gua serius nih sekarang','semangat!','ayo dong jangan pelan-pelan',
+  'wah hampir kena tuh','bagus juga pertahananmu','gua excited nih','asik juga mainnya',
+  'kalau gua kalah gg aja ya','gua challenge lu fair and square','siap!','ini seru banget sih',
+];
+const GENZ_EMOJI_CHAT=['😂','🔥','💀','🤯','😤','👑','💪','😎','🎯','🤝','gg','ez','wkwk','mantap','anjay'];
+
+function startFakeHumanChat(){
+  clearTimeout(fakeHumanChatTimer);
+  function scheduleNext(){
+    const delay=20000+Math.random()*50000; // 20-70 sec intervals
+    fakeHumanChatTimer=setTimeout(()=>{
+      if(gameMode!=='match'||!gs||gs.gameOver)return;
+      // 70% text, 30% emoji/slang
+      const r=Math.random();
+      let msg;
+      if(r<.7)msg=GENZ_CHAT[Math.floor(Math.random()*GENZ_CHAT.length)];
+      else msg=GENZ_EMOJI_CHAT[Math.floor(Math.random()*GENZ_EMOJI_CHAT.length)];
+      appendChatMsg(msg,'opp');
+      // Also float emoji sometimes
+      if(Math.random()<.35){const em=EMOJI_SOUNDS.laugh[Math.floor(Math.random()*4)];floatEmoji(em);playEmojiSound(em);}
+      scheduleNext();
+    },delay);
+  }
+  // First message after 5-12 seconds
+  fakeHumanChatTimer=setTimeout(()=>{
+    if(gameMode!=='match')return;
+    const greet=['halo bro siap nih 👋','gas gas gas 🔥','gl hf bro','ayo siapa takut 😤','kita lihat siapa yang menang 👑'];
+    appendChatMsg(greet[Math.floor(Math.random()*greet.length)],'opp');
+    scheduleNext();
+  },5000+Math.random()*7000);
+}
+
 function setPlayerNames(topName,botName,topColor,botColor){
   const avTop=document.getElementById('av-top'),avBot=document.getElementById('av-bot');
   const nmTop=document.getElementById('name-top'),nmBot=document.getElementById('name-bot');
   if(nmTop)nmTop.textContent=topName;if(nmBot)nmBot.textContent=botName;
-  if(avTop)avTop.textContent=topColor==='b'?'♚':'♔';
-  if(avBot)avBot.textContent=botColor==='b'?'♚':'♔';
+  // Top (opponent)
+  if(avTop){
+    if(gameMode==='match'){
+      avTop.style.cssText='font-size:20px;position:relative';
+      avTop.textContent='';
+      if(fakeOpponentProfile){
+        const sp=document.createElement('span');sp.textContent=fakeOpponentProfile.avatar;avTop.appendChild(sp);
+      }
+    } else avTop.textContent=topColor==='b'?'♚':'♔';
+  }
+  // Bottom (me)
+  if(avBot){
+    if(userProfile.photoUrl){
+      avBot.innerHTML=`<img src="${userProfile.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`;
+      avBot.style.position='relative';avBot.style.overflow='hidden';
+    } else {
+      avBot.textContent=userProfile.avatar;
+    }
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1530,7 +1932,7 @@ function _getLegal(s,c){
 function onSquareClick(r,c){
   if(!gs||gs.gameOver)return;
   if(gameMode==='online'&&gs.turn!==myColor)return;
-  if(gameMode==='bot'&&gs.turn!==myColor)return;
+  if((gameMode==='bot'||gameMode==='match')&&gs.turn!==myColor)return;
   const clickR=flipped?7-r:r,clickC=flipped?7-c:c;
   // Check if clicking on legal dest
   if(selected!==null){
@@ -1563,7 +1965,7 @@ function showPromo(templateMv){
     const actualPp=promoColor==='w'?pp:-pp;
     const sq=document.createElement('div');sq.className='promo-sq';
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 45 45');svg.style.cssText='width:52px;height:52px';
+    svg.setAttribute('viewBox','0 0 100 100');svg.style.cssText='width:52px;height:52px';
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     const pid=(promoColor==='w'?'w':'b')+''+['P','N','B','R','Q','K'][pp-1];
     use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
@@ -1615,15 +2017,17 @@ function executeMove(mv){
   if(gameMode==='online'&&roomRef){
     roomRef.update({state:serGS(gs),lastMove:mv||null});
   }
-  if(gameMode==='bot'&&gs.turn!==myColor&&!gs.gameOver){
+  if((gameMode==='bot'||gameMode==='match')&&gs.turn!==myColor&&!gs.gameOver){
     clearTimeout(thinkTimer);
     const topCard=document.getElementById('p-top');topCard?.classList.add('thinking');
+    // Fake human "thinking" delay — longer for match mode to feel human
+    const thinkDelay=gameMode==='match'?600+Math.random()*1800:300+Math.random()*500;
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
       const mv2=getBotMove(gs,gs.turn,botLevel);
       if(mv2)executeMove(mv2);
       else{gs.gameOver=true;renderBoard();showGameOver(gs.turn==='w'?'b':'w');}
-    },300+Math.random()*500);
+    },thinkDelay);
   }
 }
 
@@ -1635,7 +2039,7 @@ function undoMove(){
   if(!moveHistory.length){toast('Tidak ada langkah untuk ditarik');return;}
   gs=moveHistory.pop();
   if(gameSnapshots.length)gameSnapshots.pop();
-  if(gameMode==='bot'&&gs.turn!==myColor&&moveHistory.length){gs=moveHistory.pop();if(gameSnapshots.length)gameSnapshots.pop();}
+  if((gameMode==='bot'||gameMode==='match')&&gs.turn!==myColor&&moveHistory.length){gs=moveHistory.pop();if(gameSnapshots.length)gameSnapshots.pop();}
   lastMove=null;selected=null;legalFromSel=[];hintMove=null;renderBoard();toast('Langkah ditarik ↩');
 }
 function confirmReset(){if(confirm('Ulangi permainan dari awal?'))restartSameMode()}
@@ -2046,7 +2450,7 @@ function startHorde(){
 function restartSameMode(){
   ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
   if(isHordeMode)startHorde();
-  else if(gameMode==='bot')startVsBot(botLevel);
+  else if(gameMode==='match')startFakeHumanGame();else if(gameMode==='bot')startVsBot(botLevel);
   else if(gameMode==='pass')startPassPlay();
   else quitToHome();
 }
@@ -2068,7 +2472,7 @@ function showGameOver(result){
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
   if(myWin||passWin){spawnVictoryConfetti();setTimeout(spawnVictoryConfetti,500);}
-  if(gameMode==='bot'||gameMode==='pass'){
+  if(gameMode==='bot'||gameMode==='match'||gameMode==='pass'){
     buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
     setTimeout(()=>{closeOverlay('o-gameover');showAnalysis();},3000);
   }
@@ -2077,7 +2481,7 @@ function showAutoDraw(reason){
   document.getElementById('draw-reason').textContent=reason;
   document.getElementById('o-draw').classList.add('show');
   playSound('end');stopMusic();
-  if(gameMode==='bot'||gameMode==='pass'){
+  if(gameMode==='bot'||gameMode==='match'||gameMode==='pass'){
     buildAnalysisDataAsync([...gameSnapshots]); // pre-compute during the 3s delay
     setTimeout(()=>{closeOverlay('o-draw');showAnalysis();},3000);
   }
@@ -2128,7 +2532,7 @@ const _AN_F='ABCDEFGH';
 function _anPcName(p){return PNAMES_ID[Math.abs(p)]||'?';}
 
 function _computeAnalysisEntry(state,move){
-  const bestMv=getBestMove(state,state.turn,1);
+  const bestMv=getBestMove(state,state.turn,2);
   const evalBest=bestMv?evaluate(applyMove(state,bestMv)):evaluate(state);
   const evalActual=evaluate(applyMove(state,move));
   const isW=state.turn==='w';
@@ -2143,25 +2547,31 @@ function _computeAnalysisEntry(state,move){
   return {state,move,rating,rc,re,comment,loss,evalAfter:evalActual};
 }
 
-/* Build analysis — runs synchronously with depth=1 for instant results */
+/* Build analysis async — runs during the 3s game-over delay, yields between moves */
 function buildAnalysisDataAsync(snaps){
   _analysisReady=false;
   _analysisData=[];
   const bid=++_analysisBuildId;
-  let brilliant=0,mistakes=0,blunders=0;
-  for(let i=0;i<snaps.length;i++){
-    if(bid!==_analysisBuildId)return;
-    const {state,move}=snaps[i];
+  const total=snaps.length;
+  let i=0,brilliant=0,mistakes=0,blunders=0;
+  function step(){
+    if(bid!==_analysisBuildId)return; // superseded
+    if(i>=total){
+      document.getElementById('an-n0').textContent=brilliant;
+      document.getElementById('an-n1').textContent=mistakes;
+      document.getElementById('an-n2').textContent=blunders;
+      _analysisReady=true;
+      return;
+    }
+    const {state,move}=snaps[i++];
     const entry=_computeAnalysisEntry(state,move);
     if(entry.rc==='rate-brilliant')brilliant++;
     else if(entry.rc==='rate-mistake')mistakes++;
     else if(entry.rc==='rate-blunder')blunders++;
     _analysisData.push(entry);
+    setTimeout(step,0);
   }
-  document.getElementById('an-n0').textContent=brilliant;
-  document.getElementById('an-n1').textContent=mistakes;
-  document.getElementById('an-n2').textContent=blunders;
-  _analysisReady=true;
+  setTimeout(step,80);
 }
 
 /* Sync fallback (depth=1) — used when user opens analysis mid-game or before async done */
@@ -2213,7 +2623,7 @@ function renderAnalysisBoard(stateObj,lastMv,rc){
       const pc=(p>0?'w':'b');
       const pid=pc+['P','N','B','R','Q','K'][Math.abs(p)-1];
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 45 45');
+      svg.setAttribute('viewBox','0 0 100 100');
       svg.style.cssText='width:'+(sz*.86)+'px;height:'+(sz*.86)+'px;pointer-events:none';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
       use.setAttribute('href','#'+pid);svg.appendChild(use);sq.appendChild(svg);
@@ -2336,7 +2746,7 @@ function buildTutStep(){
     if(t.moves.some(m=>m[0]===r&&m[1]===c))sq.classList.add('vm');
     if(t.from[0]===r&&t.from[1]===c){
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 45 45');svg.style.cssText=`width:${sz*.9}px;height:${sz*.9}px`;
+      svg.setAttribute('viewBox','0 0 100 100');svg.style.cssText=`width:${sz*.9}px;height:${sz*.9}px`;
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href','#w'+t.pc);svg.appendChild(use);sq.appendChild(svg);
     }
     board.appendChild(sq);
@@ -2384,16 +2794,26 @@ function startOnlineGame(myCol){
   initBoardDOM();
   setPlayerNames(myCol==='b'?'Lawan (Putih)':'Lawan (Hitam)',myCol==='w'?'Kamu (Putih)':'Kamu (Hitam)',myCol==='b'?'w':'b',myCol);
   showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+  document.getElementById('btn-chat-game').style.display='flex';
   document.getElementById('btn-emoji-game').style.display='flex';
   document.getElementById('btn-voice').style.display='flex';
+  chatMsgsEl=document.getElementById('chat-msgs');
+  chatRenderedKeys={};
   if(roomListener)roomRef.off('value',roomListener);
   roomListener=roomRef.on('value',snap=>{
     if(!snap.exists())return;
     const data=snap.val();
     if(data.state){gs=desGS(data.state);lastMove=data.lastMove||null;renderBoard();}
-    if(data.emoji&&data.emoji.by!==myColor)floatEmoji(data.emoji.e);
+    if(data.emoji&&data.emoji.by!==myColor){floatEmoji(data.emoji.e);playEmojiSound(data.emoji.e);}
     if(data.voice&&data.voice.by!==myColor&&data.voice.data)playVoice(data.voice.data);
     if(data.resign&&data.resign.by!==myColor){gs={...gs,gameOver:true,result:myColor};showGameOver(myColor);}
+    if(data.chat){
+      Object.entries(data.chat).forEach(([k,msg])=>{
+        if(chatRenderedKeys[k])return;
+        chatRenderedKeys[k]=true;
+        appendChatMsg(msg.txt,msg.by===myColor?'me':'opp');
+      });
+    }
   });
 }
 function cancelRoom(){if(roomRef){if(roomListener)roomRef.off('value',roomListener);if(gameMode!=='online')roomRef.remove();roomRef=null;roomListener=null;}roomCode=null;gameMode=null;}
@@ -2401,19 +2821,107 @@ function serGS(s){return{board:s.board.map(r=>r.join(',')).join('|'),turn:s.turn
 function desGS(d){return{board:d.board.split('|').map(r=>r.split(',').map(Number)),turn:d.turn,castling:d.castling,ep:d.ep||null,halfMove:d.halfMove,fullMove:d.fullMove,captured:{w:d.captured.w?d.captured.w.split(',').filter(Boolean).map(Number):[],b:d.captured.b?d.captured.b.split(',').filter(Boolean).map(Number):[]},gameOver:d.gameOver||false,result:d.result||null}}
 
 // ═══════════════════════════════════════
+// EMOJI SOUND ENGINE
+// ═══════════════════════════════════════
+const EMOJI_SOUNDS={
+  victory:['👑','🏆','🥇','🎖️','🏅','💪','🦁','🐯','🦅','⚔️'],
+  laugh:  ['😂','🤣','😆','😄','😁','🤭','😝','😜','🤪','🫡'],
+  fire:   ['🔥','💥','⚡','🌋','🧨','💣','🎆','🎇','🎯','🎳'],
+  skull:  ['💀','☠️','👻','🦇','🌑','🌚','🖤','⚰️','🕷️','👁️'],
+  sad:    ['😭','😢','😥','😰','😓','💧','😞','😔','💔','🥺'],
+  heart:  ['❤️','💕','💖','💗','💝','🌹','💐','🥰','😍','🤩'],
+  shock:  ['😱','🤯','😲','😮','😵','💫','🌀','🔮','🫠','🤔'],
+  cool:   ['😎','🤙','🤘','🤞','✌️','🕶️','🪩','🎸','🏄','🦄'],
+  angry:  ['😤','😡','🤬','👊','💢','👿','🐉','🗡️','🔴','🥊'],
+  party:  ['🎉','🎊','🥳','🎈','🎂','🍾','🎁','👏','🪅','🎪']
+};
+function getEmojiSound(e){
+  for(const[type,arr]of Object.entries(EMOJI_SOUNDS)){if(arr.includes(e))return type;}
+  return 'party';
+}
+function playEmojiSound(e){
+  try{
+    const ac=getACtx();if(!ac)return;
+    const t=ac.currentTime;
+    const type=getEmojiSound(e);
+    const play=(freq,wave,vol,start,dur,detune=0)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.type=wave;o.frequency.value=freq;if(detune)o.detune.value=detune;
+      g.gain.setValueAtTime(0,t+start);g.gain.linearRampToValueAtTime(vol,t+start+.03);
+      g.gain.exponentialRampToValueAtTime(.001,t+start+dur);
+      o.start(t+start);o.stop(t+start+dur+.05);
+    };
+    const noise=(vol,start,dur)=>{
+      const buf=ac.createBuffer(1,ac.sampleRate*.2,ac.sampleRate);
+      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      const src=ac.createBufferSource(),g=ac.createGain(),f=ac.createBiquadFilter();
+      src.buffer=buf;src.connect(f);f.connect(g);g.connect(ac.destination);
+      f.type='bandpass';f.frequency.value=type==='fire'?800:300;
+      g.gain.setValueAtTime(vol,t+start);g.gain.exponentialRampToValueAtTime(.001,t+start+dur);
+      src.start(t+start);src.stop(t+start+dur);
+    };
+    if(type==='victory'){play(523,`triangle`,.12,0,.2);play(659,`triangle`,.12,.15,.2);play(784,`triangle`,.15,.3,.4);}
+    else if(type==='laugh'){[0,.1,.2].forEach((s,i)=>play([880,1047,1319][i],'sine',.08,s,.15));}
+    else if(type==='fire'){noise(.3,0,.08);noise(.2,.05,.1);play(120,'sawtooth',.06,0,.2);}
+    else if(type==='skull'){play(82,'sawtooth',.15,0,.3);play(65,'square',.1,.2,.4);}
+    else if(type==='sad'){play(392,'triangle',.1,0,.25);play(349,'triangle',.1,.2,.25);play(293,'triangle',.08,.4,.35);}
+    else if(type==='heart'){[0,.12,.24].forEach((s,i)=>play([523,659,784][i],'sine',.07,s,.3,i*12));}
+    else if(type==='shock'){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(1800,t+.3);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.start(t);o.stop(t+.5);}
+    else if(type==='cool'){[0,.1,.2,.3].forEach((s,i)=>play([330,392,494,587][i],'triangle',.07,s,.25));}
+    else if(type==='angry'){play(150,'sawtooth',.15,0,.05);noise(.4,0,.08);play(100,'square',.12,.05,.15);}
+    else{noise(.15,0,.06);play(880,'triangle',.1,.05,.2);play(1046,'triangle',.08,.15,.2);}
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════
 // EMOJI CHAT
 // ═══════════════════════════════════════
-function toggleEmojiPanel(){document.getElementById('emoji-panel').classList.toggle('show')}
+function toggleEmojiPanel(){
+  document.getElementById('chat-panel').classList.remove('show');
+  document.getElementById('emoji-panel').classList.toggle('show');
+}
 function sendEmoji(e){
   document.getElementById('emoji-panel').classList.remove('show');
   floatEmoji(e);
+  playEmojiSound(e);
   if(gameMode==='online'&&roomRef)roomRef.child('emoji').set({e,t:Date.now(),by:myColor});
-  else toast(e+' Emoji!');
 }
 function floatEmoji(e){
   const el=document.createElement('div');el.className='emoji-fly';el.textContent=e;
-  el.style.cssText=`left:${20+Math.random()*60}%;bottom:${15+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
-  document.body.appendChild(el);setTimeout(()=>el.remove(),2100);
+  el.style.cssText=`left:${15+Math.random()*70}%;bottom:${18+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),2400);
+}
+
+// ═══════════════════════════════════════
+// CHAT PANEL
+// ═══════════════════════════════════════
+let chatMsgsEl=null,chatRenderedKeys={};
+function toggleChatPanel(){
+  document.getElementById('emoji-panel').classList.remove('show');
+  const p=document.getElementById('chat-panel');
+  p.classList.toggle('show');
+  if(p.classList.contains('show'))setTimeout(()=>{const i=document.getElementById('chat-input');i&&i.focus();chatMsgsEl&&(chatMsgsEl.scrollTop=chatMsgsEl.scrollHeight);},100);
+}
+function appendChatMsg(txt,side){
+  if(!chatMsgsEl)chatMsgsEl=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.className='chat-msg '+side;d.textContent=txt;
+  chatMsgsEl.appendChild(d);chatMsgsEl.scrollTop=chatMsgsEl.scrollHeight;
+  const p=document.getElementById('chat-panel');
+  if(side==='opp'&&!p.classList.contains('show')){
+    const btn=document.getElementById('btn-chat-game');
+    if(btn){btn.style.animation='recBlink .5s 3';setTimeout(()=>btn.style.animation='',1600);}
+  }
+}
+function sendChatMsg(){
+  const inp=document.getElementById('chat-input');
+  const txt=(inp?.value||'').trim();
+  if(!txt)return;
+  inp.value='';
+  appendChatMsg(txt,'me');
+  if(gameMode==='online'&&roomRef){
+    roomRef.child('chat').push({txt,by:myColor,t:Date.now()});
+  }
 }
 
 // ═══════════════════════════════════════
@@ -2746,7 +3254,7 @@ function playIntro(){
       const color=item.p>0?'w':'b';
       const pid=color+['','P','N','B','R','Q','K'][ap];
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 45 45');
+      svg.setAttribute('viewBox','0 0 100 100');
       svg.setAttribute('class','intro-piece');
       svg.style.cssText='width:88%;height:88%;animation-delay:0s';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
@@ -2801,7 +3309,7 @@ function animatePieceSlide(mv,piece,rookSrc,rookDst){
         `left:${fR.left+(fR.width-sz)/2}px;top:${fR.top+(fR.height-sz)/2}px;`+
         `will-change:transform;transition:transform ${MS}ms cubic-bezier(.33,.87,.44,.99)`;
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 45 45');
+      svg.setAttribute('viewBox','0 0 100 100');
       svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.92))';
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
       use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
@@ -2935,7 +3443,7 @@ function spawnCapFly(mv,board){
     const rot=-300+Math.random()*600;
     clone.style.cssText=`left:${tRect.left+(tRect.width-sz)/2}px;top:${tRect.top+(tRect.height-sz)/2}px;width:${sz}px;height:${sz}px;--fly-end:translate(${dx}px,${dy}px);--fly-rot:${rot}deg`;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 45 45');
+    svg.setAttribute('viewBox','0 0 100 100');
     svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 8px 24px rgba(0,0,0,.9))';
     const use=document.createElementNS('http://www.w3.org/2000/svg','use');
     use.setAttribute('href','#'+pid);svg.appendChild(use);clone.appendChild(svg);
@@ -3007,6 +3515,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     playIntro();
   }
   setInterval(checkNightMode,60000);
+  document.getElementById('btn-chat-game').style.display='none';
   document.getElementById('btn-emoji-game').style.display='none';
   document.getElementById('btn-voice').style.display='none';
 });
