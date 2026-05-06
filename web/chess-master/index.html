@@ -3565,37 +3565,113 @@ function _buildRandOpp(){
     case 6:name=fn.toLowerCase()+'_'+Math.floor(Math.random()*9999);break;
     default:name=r(PFX)+'_'+fn+'_'+r(SFX).replace('_','');
   }
-  // Wide rating range with tiered distribution for real variety
-  const tier=Math.random();
-  let rating;
-  if(tier<0.18)rating=450+Math.floor(Math.random()*400);       // 450-850  (newbie tier)
-  else if(tier<0.38)rating=850+Math.floor(Math.random()*450);  // 850-1300 (medium tier)
-  else if(tier<0.62)rating=1300+Math.floor(Math.random()*400); // 1300-1700 (hard tier)
-  else if(tier<0.82)rating=1700+Math.floor(Math.random()*400); // 1700-2100 (super hard)
-  else rating=2100+Math.floor(Math.random()*500);               // 2100-2600 (grandmaster)
-  return{name,avatar:Math.floor(Math.random()*100),country:r(CTRY),rating};
+  // ── 6-tier persona: setiap lawan unik semua ──
+  const TIERS=[
+    {id:'pemula',rMin:400,rMax:700,thinkMin:5000,thinkMax:15000,wMin:15,wMax:38,gMin:10,gMax:200,chatStyle:'pemula',
+     mk:()=>{const fn=r(FN);return fn.toLowerCase()+(Math.random()<.5?(Math.floor(Math.random()*999+1)):'_coba');}},
+    {id:'sedang',rMin:800,rMax:1300,thinkMin:2200,thinkMax:9000,wMin:38,wMax:54,gMin:60,gMax:700,chatStyle:'casual',
+     mk:()=>{const fn=r(FN);return r(['Bang','Mas','Kang','Bro','Dewa'])+fn+r(['_ID','77','_GG','Joss','Gaming','_ML']);}},
+    {id:'profesional',rMin:1300,rMax:1700,thinkMin:1200,thinkMax:6000,wMin:52,wMax:67,gMin:250,gMax:1800,chatStyle:'pro',
+     mk:()=>{const fn=r(FN);return r(['Pro','Master','King','Legend','Champion'])+'_'+fn+r(['_Chess','_Pro','_ID','_OP']);}},
+    {id:'sepuh',rMin:1700,rMax:2050,thinkMin:3500,thinkMax:12000,wMin:60,wMax:73,gMin:700,gMax:6000,chatStyle:'sepuh',
+     mk:()=>{const fn=r(FN);return r(['Pak','Haji','Abah','Aki','Mbah'])+fn+r(['_Catur','_Chess','','_Senior']);}},
+    {id:'master',rMin:2050,rMax:2300,thinkMin:700,thinkMax:4000,wMin:68,wMax:82,gMin:1200,gMax:9000,chatStyle:'master',
+     mk:()=>{const fn=r(FN);return r(['IM','Master','Grand','Titan'])+'_'+fn;}},
+    {id:'grandmaster',rMin:2300,rMax:2650,thinkMin:300,thinkMax:3200,wMin:78,wMax:93,gMin:2500,gMax:20000,chatStyle:'grandmaster',
+     mk:()=>{const fn=r(FN);return r(['GM','WGM','SuperGM','Dewa'])+fn+r(['_ID','_FIDE','_GM','']);}},
+  ];
+  const roll=Math.random();
+  const tierObj=roll<.20?TIERS[0]:roll<.42?TIERS[1]:roll<.62?TIERS[2]:roll<.76?TIERS[3]:roll<.90?TIERS[4]:TIERS[5];
+  const rating=tierObj.rMin+Math.floor(Math.random()*(tierObj.rMax-tierObj.rMin));
+  const totalGames=tierObj.gMin+Math.floor(Math.random()*(tierObj.gMax-tierObj.gMin));
+  const winRate=tierObj.wMin+Math.floor(Math.random()*(tierObj.wMax-tierObj.wMin));
+  const wins=Math.round(totalGames*winRate/100);
+  return{name:tierObj.mk(),avatar:Math.floor(Math.random()*100),country:r(CTRY),
+    rating,totalGames,wins,winRate,tierId:tierObj.id,
+    thinkMin:tierObj.thinkMin,thinkMax:tierObj.thinkMax,chatStyle:tierObj.chatStyle};
 }
+
+// ── 15-tier title system ──────────────────────────────────────────────────────
+// Makin tinggi rating → makin keren gelarnya, makin susah bot-nya
+// 18 title — urutan dari noob paling kroco sampai Dewa Catur
+const _TITLES=[
+  {min:0,    label:'🐣 Kroco'},           // 1  — baru kenal catur
+  {min:300,  label:'🐥 Bocah Catur'},     // 2  — masih belajar jalan buah
+  {min:500,  label:'👣 Pemula'},          // 3  — ngerti aturan dasar
+  {min:680,  label:'🎮 Amatir'},          // 4  — main buat seru-seruan
+  {min:860,  label:'♟ Pion Sejati'},      // 5  — berjuang langkah demi langkah
+  {min:1050, label:'🎯 Pemain'},          // 6  — beneran bisa main catur
+  {min:1200, label:'🔥 Pemain Aktif'},    // 7  — sering menang, makin panas
+  {min:1360, label:'⚔️ Pemain Tangguh'},  // 8  — lawan yang susah dikalahkan
+  {min:1500, label:'🏅 Semi Pro'},        // 9  — setengah jalan menuju pro
+  {min:1650, label:'💼 Profesional'},     // 10 — main catur level serius
+  {min:1800, label:'🦁 Pro Elite'},       // 11 — di atas rata-rata pemain umum
+  {min:1950, label:'🧠 Ahli Strategi'},   // 12 — mikir beberapa langkah ke depan
+  {min:2100, label:'🏆 Expert'},          // 13 — diakui sebagai pemain handal
+  {min:2280, label:'👨‍🎓 Master Muda'},    // 14 — calon master sejati
+  {min:2450, label:'👑 Master'},          // 15 — salah satu yang terbaik
+  {min:2620, label:'💎 Master Elite'},    // 16 — sangat langka, di atas Master
+  {min:2800, label:'🌠 Grandmaster'},     // 17 — level turnamen dunia
+  {min:2980, label:'⚡ Dewa Catur'},      // 18 — tidak ada yang bisa menandingi (bot 80%+)
+];
 
 function _ratingToLabel(rating){
-  if(rating<700)return'🌱 Pemula';
-  if(rating<900)return'♟ Pion';
-  if(rating<1100)return'⚔️ Kavaleri';
-  if(rating<1300)return'🏰 Benteng';
-  if(rating<1500)return'♝ Gajah';
-  if(rating<1700)return'♛ Ratu';
-  if(rating<1900)return'👑 Raja';
-  if(rating<2100)return'💫 Maestro';
-  if(rating<2300)return'🌟 Grandmaster';
-  if(rating<2500)return'🔱 Legendaris';
-  return'👾 Dewa Catur';
+  let t=_TITLES[0];
+  for(const x of _TITLES){if(rating>=x.min)t=x;else break;}
+  return t.label;
 }
 
+// Kesulitan bot naik seiring tier — Dewa Catur (diff 5) menang ~80% vs pemain rata-rata
 function _ratingToDiff(rating){
-  if(rating<900)return 1;
-  if(rating<1300)return 2;
-  if(rating<1700)return 3;
-  if(rating<2100)return 4;
-  return 5;
+  if(rating<650) return 1;   // Telur–Calon Pion
+  if(rating<1100)return 2;   // Pion–Prajurit–Pemanah
+  if(rating<1580)return 3;   // Penjaga–Kavaleri–Benteng
+  if(rating<2150)return 4;   // Ahli Taktik–Uskup–Bangsawan
+  return 5;                  // Maestro–Grandmaster–Dewa Catur
+}
+
+// ── Animasi promosi title ─────────────────────────────────────────────────────
+function _showTitlePromotion(oldTitle,newTitle){
+  if(!document.getElementById('_tpo_style')){
+    const s=document.createElement('style');s.id='_tpo_style';
+    s.textContent=`
+      @keyframes tpoIn{from{opacity:0;transform:scale(.7) translateY(40px)}to{opacity:1;transform:scale(1) translateY(0)}}
+      @keyframes tpoOut{to{opacity:0;transform:scale(1.08) translateY(-20px)}}
+      @keyframes tpoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+      @keyframes tpoGlow{0%,100%{text-shadow:0 0 18px #ffd700,0 0 40px #ff8c00}50%{text-shadow:0 0 60px #ffd700,0 0 100px #ff6600}}
+      @keyframes tpoStars{0%{opacity:0;transform:scale(0) rotate(0deg)}60%{opacity:1;transform:scale(1.4) rotate(180deg)}100%{opacity:0;transform:scale(.5) rotate(360deg)}}
+      #_tpo_ov{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);animation:tpoIn .45s cubic-bezier(.34,1.56,.64,1) both}
+      #_tpo_ov._out{animation:tpoOut .45s ease forwards}
+      ._tpo_card{background:linear-gradient(145deg,#0a0a2e,#1a0a4a,#0d2060);border:2px solid #ffd700;border-radius:28px;padding:36px 32px 28px;text-align:center;max-width:320px;width:88%;box-shadow:0 0 80px rgba(255,215,0,.5),0 20px 60px rgba(0,0,0,.6)}
+      ._tpo_stars{font-size:28px;animation:tpoStars 1.2s ease infinite;display:block;margin-bottom:4px}
+      ._tpo_badge{font-size:64px;display:block;animation:tpoPulse 1s ease infinite;margin:4px 0 12px}
+      ._tpo_head{font-size:13px;letter-spacing:3px;color:#88ccff;text-transform:uppercase;margin-bottom:6px}
+      ._tpo_promo{font-size:20px;font-weight:900;color:#ffd700;animation:tpoGlow 1.6s ease infinite;margin-bottom:16px;letter-spacing:1px}
+      ._tpo_from{font-size:18px;color:#888;text-decoration:line-through;margin-bottom:2px}
+      ._tpo_arrow{font-size:22px;margin:6px 0;color:#ffd700}
+      ._tpo_to{font-size:24px;font-weight:900;color:#ffd700;text-shadow:0 0 20px #ffd700;margin-bottom:16px}
+      ._tpo_sub{font-size:13px;color:#aac4ff;line-height:1.6}
+      ._tpo_tap{font-size:11px;color:#555;margin-top:12px}
+    `;
+    document.head.appendChild(s);
+  }
+  const old=document.getElementById('_tpo_ov');if(old)old.remove();
+  const ov=document.createElement('div');ov.id='_tpo_ov';
+  ov.innerHTML=`<div class="_tpo_card">
+    <span class="_tpo_stars">⭐✨🌟✨⭐</span>
+    <span class="_tpo_badge">🎖️</span>
+    <div class="_tpo_head">Selamat!</div>
+    <div class="_tpo_promo">🎉 NAIK TITLE!</div>
+    <div class="_tpo_from">${oldTitle}</div>
+    <div class="_tpo_arrow">▼</div>
+    <div class="_tpo_to">${newTitle}</div>
+    <div class="_tpo_sub">Kamu berhasil naik peringkat!<br>Terus tingkatkan kemampuanmu 💪<br><b style="color:#ffd700">Lawan ke depan akan lebih kuat!</b></div>
+    <div class="_tpo_tap">Tap untuk tutup</div>
+  </div>`;
+  ov.addEventListener('click',()=>ov.remove());
+  document.body.appendChild(ov);
+  if(typeof spawnVictoryConfetti==='function'){spawnVictoryConfetti();setTimeout(spawnVictoryConfetti,700);}
+  setTimeout(()=>{ov.classList.add('_out');setTimeout(()=>ov.remove(),450);},5500);
 }
 
 // Build a pool of 80 unique opponents for this session
@@ -3615,6 +3691,70 @@ const HUMAN_CHAT_MSGS=[
   {t:'winning',msgs:["udah mau kelar nih bestie~ 😏","gua rasa ini akhirnya... hehe","jangan menyerah ya~ canda ding, udah nyerah aja 💅","GG EZ~ just kidding masih ada sedikit effort sih 😂"]},
   {t:'emote',msgs:["🗿","💀","WKWKWK","😭😭😭","🤌🤌","😤","🙂","bruh"]},
 ];
+
+// ── Tier-based chat pool — each opponent personality unique ──
+const _TIER_CHAT={
+  pemula:{
+    intro:["halo..? ini bisa dimain kan? 😅","hai! tolong jangan keras-keras ya 🙏","eh haloo! aku masih belajar nih","halo, maaf ya kalau langkahku jelek 😓"],
+    good_enemy:["wah itu langkah apa? bagus banget...","eh bisa gitu ya?? aku ga tau 😮","aku belum ngerti langkah itu deh..."],
+    blunder:["eh eh salah ya aku? 😅","hmm... aku bingung sebenernya 😅","maaf ya aku masih belajar 🙏","ya ampun salah lagi 😓"],
+    check:["eh aku kena skak? 😰","waaah skak! panik...","aduh skak lagi, gimana nih 😥"],
+    losing:["ya ampun... hampir menyerah 😅","gimana caranya balik nih...","aku udah bingung banget 😓"],
+    winning:["eh kayanya aku menang? beneran? 😮","wah aku bisa menang!!! 🥳","horeee pertama kalinya 🎉"],
+    think:["bentar bentar... aku mikir 🤔","gimana ya... bingung","aku perlu mikir dulu ya..."],
+    emote:["😅","🙏","wkwk","😓","hmm...","aduh"],
+  },
+  casual:{
+    intro:["hai juga! siap dihajar ya? 😏","yooo! gua udah lama tunggu 🥱","halo~ gua gak bakal kasih ampun 💅","wassaap! jgn nyesel kalau kalah 😂"],
+    good_enemy:["wah oke juga nih langkah lu 👀","anjir lu mikir dari mana tuh 🤔","hm... menarik. jgn ge-er dulu 😌","goks sih lu... tapi gua masih tenang 😎"],
+    blunder:["BRO ITU APAAN 💀 ASTAGA","HAH?? gua kira lu jago 🫢","WKWKWKWK gua gak bisa nahan 😂","oof. gua sampe kasian anjir","bro skill issue detected 😭"],
+    check:["SKAK! bangun dulu tidurnya 🙂","skaak~ jgn panik bestie 💀","RUN KING RUN 🏃","skak bestie~ gimana rasanya? 😏"],
+    losing:["eh jangan gini... gua masih bisa balik","ok gua akui lu lumayan. LUMAYAN AJA 😌","gua masih tenang kok 😤"],
+    winning:["udah mau kelar nih bestie~ 😏","GG EZ~ just kidding 😂","jangan menyerah ya~ canda ding 💅"],
+    think:["mikir dong cepetan ☕","sloww banget sih 🙄","halow? masih hidup? 🤔"],
+    emote:["🗿","💀","WKWKWK","😭😭😭","bruh","🤌🤌","😤"],
+  },
+  pro:{
+    intro:["Siap bermain.","Game bagus dimulai dari pembukaan solid.","Ayo mulai. Semoga seru.","Ready."],
+    good_enemy:["Opening yang tidak buruk.","Langkah yang interesting.","Kamu bermain cukup baik.","Noted."],
+    blunder:["Blunder besar.","Material loss signifikan.","Kesalahan yang merugikan posisi.","?!"],
+    check:["Skak.","Raja kamu terancam.","Perhatikan rajamu.","Check."],
+    losing:["Ini masih bisa diselamatkan.","Posisiku masih bisa diperbaiki.","Belum berakhir."],
+    winning:["Posisiku sudah advantage.","Endgame ini ada di pihakku.","GG hampir selesai."],
+    think:["Tunggu sebentar.","Analysing...","Hmm."],
+    emote:["👀","🤔","...","ok.","noted."],
+  },
+  sepuh:{
+    intro:["Selamat bermain, nak 🙏","Bismillah, kita mulai ya","Sudah lama saya menunggu lawan serius","Semoga kita bisa saling belajar 🙏"],
+    good_enemy:["Langkah yang bagus, nak. Bapak kagum 🙏","Hmm... anak muda memang kreatif","Bapak harus lebih berhati-hati nih"],
+    blunder:["Sayang sekali langkahnya, nak...","Itu keputusan terburu-buru, nak","Bapak sudah lihat ini berkali-kali 😌"],
+    check:["Skak. Rajamu perlu dilindungi, nak 🙏","Hati-hati dengan rajamu, nak","Skak. Bapak sudah prediksi ini dari tadi"],
+    losing:["Hmm... bapak perlu berpikir lebih dalam","Tua-tua belum tentu kalah, nak 😌","Masih ada jalan..."],
+    winning:["Pengalaman itu memang berharga 🙏","Bapak sudah main catur sejak kamu belum lahir 😌","Alhamdulillah posisi bapak bagus"],
+    think:["Sabar nak, bapak sedang berpikir...","Bapak perlu waktu sebentar, nak...","Bismillah..."],
+    emote:["🙏","😌","Bismillah...","Alhamdulillah","Walah...","Subhanallah"],
+  },
+  master:{
+    intro:["Siap.","GG.","Let's go.","main."],
+    good_enemy:["decent.","noted.","interesting.","ok."],
+    blunder:["??","?!","blunder.","material drop."],
+    check:["check.","check+","king safety.","skak."],
+    losing:["not over.","still alive.","comeback possible."],
+    winning:["GG.","almost done.","resign?","winning."],
+    think:["...","thinking.","give me a sec."],
+    emote:["!","?","...","GG","EZ","lol"],
+  },
+  grandmaster:{
+    intro:["","...",""],
+    good_enemy:["","ok","?"],
+    blunder:["??","?!",""],
+    check:["±","+/-",""],
+    losing:["","...",""],
+    winning:["","GG",""],
+    think:["","..."],
+    emote:["","?!","!?","GG",""],
+  },
+};
 
 // ═══════════════════════════════════════
 // MATCHMAKING SYSTEM
@@ -3645,7 +3785,7 @@ function _startMatchmakingAnimation(){
   const meRating=document.getElementById('mm-me-rating');
   if(meAv){
     if(userProfile.photo)meAv.innerHTML=`<img src="${userProfile.photo}" class="mm-av-img">`;
-    else meAv.textContent=userProfile.avatar;
+    else _renderMmAvatar(meAv,userProfile.avatar??0);
   }
   if(meName)meName.textContent=userProfile.name;
   if(meCountry)meCountry.textContent=userProfile.country;
@@ -3681,6 +3821,8 @@ function _startMatchmakingAnimation(){
   if(enRating)enRating.textContent='⭐ ???';
   if(enLevel)enLevel.textContent='???';
   if(enAv){enAv.innerHTML='<span style="font-size:28px">❓</span>';}
+  const _wrReset=document.getElementById('mm-en-winrate');
+  if(_wrReset){_wrReset.style.display='none';_wrReset.style.opacity='0';}
 
   // Random online count
   const onlineNum=document.getElementById('mm-online-num');
@@ -3755,14 +3897,24 @@ function _startMatchmakingAnimation(){
     if(elapsed<SETTLE_AT){
       _mmCycleTimer=setTimeout(cycleShuffle,CYCLE_MS);
     } else {
-      // Settle on matched opponent
+      // Settle on matched opponent — staggered reveal (#22)
       _renderMmAvatar(enAv,_matchedOpponent.avatar);
-      if(enName)enName.textContent=_matchedOpponent.name;
-      if(enCountry)enCountry.textContent=_matchedOpponent.country;
-      if(enRating)enRating.textContent='⭐ '+_matchedOpponent.rating;
-      if(enLevel)enLevel.textContent=_ratingToLabel(_matchedOpponent.rating);
       const box2=document.getElementById('mm-enemy-box');
       if(box2){box2.classList.remove('enemy');void box2.offsetWidth;box2.classList.add('enemy');}
+      const _fi=el=>{if(!el)return;el.style.opacity='0';el.style.transition='opacity .45s';requestAnimationFrame(()=>requestAnimationFrame(()=>el.style.opacity='1'));};
+      if(enName){enName.textContent='...';setTimeout(()=>{enName.textContent=_matchedOpponent.name;_fi(enName);},300);}
+      if(enCountry){enCountry.textContent='';setTimeout(()=>{enCountry.textContent=_matchedOpponent.country;_fi(enCountry);},580);}
+      setTimeout(()=>{
+        if(enRating){enRating.textContent='⭐ '+_matchedOpponent.rating;_fi(enRating);}
+        if(enLevel){enLevel.textContent=_ratingToLabel(_matchedOpponent.rating);_fi(enLevel);}
+      },860);
+      setTimeout(()=>{
+        const wr=document.getElementById('mm-en-winrate');
+        if(wr&&_matchedOpponent.totalGames){
+          wr.textContent='🏆 '+_matchedOpponent.wins+' menang / '+_matchedOpponent.totalGames+' game ('+_matchedOpponent.winRate+'%)';
+          wr.style.display='block';requestAnimationFrame(()=>requestAnimationFrame(()=>wr.style.opacity='1'));
+        }
+      },1150);
       // Ta-da! funny fanfare
       try{
         const ac=getACtx();if(ac){
@@ -3822,9 +3974,17 @@ let _currentOpp=null;
 
 function _showOppChat(type){
   if(!_oppChatActive||!_currentOpp)return;
-  const group=HUMAN_CHAT_MSGS.find(g=>g.t===type)||HUMAN_CHAT_MSGS.find(g=>g.t==='emote');
-  if(!group)return;
-  const msg=group.msgs[Math.floor(Math.random()*group.msgs.length)];
+  let msg;
+  const style=_currentOpp.chatStyle;
+  if(style&&_TIER_CHAT[style]){
+    const pool=(_TIER_CHAT[style][type]||_TIER_CHAT[style].emote||[]).filter(m=>m.length>0);
+    if(!pool.length)return;
+    msg=pool[Math.floor(Math.random()*pool.length)];
+  } else {
+    const group=HUMAN_CHAT_MSGS.find(g=>g.t===type)||HUMAN_CHAT_MSGS.find(g=>g.t==='emote');
+    if(!group)return;
+    msg=group.msgs[Math.floor(Math.random()*group.msgs.length)];
+  }
   const bubble=document.getElementById('online-chat-bubble');
   const nameEl=document.getElementById('online-chat-name');
   const msgEl=document.getElementById('online-chat-msg');
@@ -4418,8 +4578,12 @@ function _updateRandomRating(result){
   }else{
     change=Math.floor(Math.random()*5)-2;
   }
+  const oldTitle=_ratingToLabel(userProfile.rating||1200);
   userProfile.rating=Math.max(100,(userProfile.rating||1200)+change);
   try{localStorage.setItem('catur_user_profile',JSON.stringify(userProfile));}catch(e){}
+  const newTitle=_ratingToLabel(userProfile.rating);
+  // Tampilkan animasi promosi jika title naik (hanya saat menang/draw)
+  if(result!=='loss'&&oldTitle!==newTitle)setTimeout(()=>_showTitlePromotion(oldTitle,newTitle),1800);
   const meRating=document.getElementById('mm-me-rating');
   if(meRating)meRating.textContent='⭐ '+userProfile.rating;
   return change;
