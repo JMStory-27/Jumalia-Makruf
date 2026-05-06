@@ -46,8 +46,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .crown-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:10px;margin-top:16px}
 .crown-icon{font-size:52px;filter:drop-shadow(0 0 18px var(--gold));animation:crownPulse 3s ease-in-out infinite}
 @keyframes crownPulse{0%,100%{filter:drop-shadow(0 0 12px var(--gold))}50%{filter:drop-shadow(0 0 30px var(--gold)) drop-shadow(0 0 60px rgba(212,175,55,.3))}}
-.game-title{font-size:36px;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,#d4af37 0%,#f5e6aa 40%,#d4af37 65%,#8b6914 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;margin-bottom:2px}
-.game-tagline{font-size:12px;letter-spacing:2px;color:var(--txt2);text-transform:uppercase;margin-bottom:18px}
+.game-title{font-size:32px;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,#d4af37 0%,#f5e6aa 40%,#d4af37 65%,#8b6914 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;margin-bottom:2px;text-align:center;width:100%}
+.game-tagline{font-size:12px;letter-spacing:2px;color:var(--txt2);text-transform:uppercase;margin-bottom:10px}
 .home-mini-board{display:grid;grid-template-columns:repeat(5,1fr);width:110px;height:110px;border-radius:8px;overflow:hidden;border:1px solid var(--card-b);box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 30px var(--gold-glow);margin-bottom:22px}
 .bp-sq{flex:1}
 .event-badge{display:none;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#1a0800;font-size:11px;font-weight:700;padding:5px 14px;border-radius:999px;letter-spacing:.5px;margin-bottom:14px;text-align:center}
@@ -332,6 +332,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .mm-name{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mm-country{font-size:11px;color:var(--txt2);text-align:center}
 .mm-rating{font-size:11px;color:var(--gold);font-weight:700}
+.mm-level{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:.3px;opacity:.75;text-align:center;margin-top:1px}
+.player-elo{font-size:10px;color:var(--gold);opacity:.7;font-weight:600;letter-spacing:.3px;margin-top:1px}
 .mm-vs-badge{font-size:28px;font-weight:900;color:var(--txt2);flex-shrink:0;letter-spacing:-1px}
 .mm-progress-wrap{width:100%;max-width:340px;background:rgba(255,255,255,.06);border-radius:99px;height:6px;overflow:hidden;position:relative}
 .mm-progress-bar{height:100%;background:linear-gradient(90deg,#d4af37,#f5e6aa,#d4af37);background-size:200%;border-radius:99px;animation:mmProgShimmer 1.5s linear infinite;width:0;transition:width .25s ease}
@@ -450,10 +452,10 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 #intro-overlay{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#03020f 0%,#06040f 50%,#020208 100%);overflow:hidden;transition:opacity .8s ease}
 #intro-overlay.fade-out{opacity:0;pointer-events:none}
 .intro-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.intro-title-wrap{position:relative;z-index:2;text-align:center}
+.intro-title-wrap{position:relative;z-index:2;text-align:center;width:100%;padding:0 24px;display:flex;flex-direction:column;align-items:center}
 .intro-crown{font-size:58px;display:block;animation:introCrown .8s .2s cubic-bezier(.22,1,.36,1) forwards;opacity:0;filter:drop-shadow(0 0 24px rgba(212,175,55,.8)) drop-shadow(0 0 60px rgba(212,175,55,.4));margin-bottom:6px}
 @keyframes introCrown{from{opacity:0;transform:scale(.3) translateY(-20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.intro-title{font-size:38px;font-weight:900;letter-spacing:5px;text-transform:uppercase;background:linear-gradient(90deg,#6b4f12,#d4af37 25%,#f5e6aa 50%,#d4af37 75%,#6b4f12);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:introTitleIn .7s .6s ease-out forwards,shimmerGold 4s 1.3s linear infinite;opacity:0}
+.intro-title{font-size:34px;font-weight:900;letter-spacing:4px;text-transform:uppercase;text-align:center;background:linear-gradient(90deg,#6b4f12,#d4af37 25%,#f5e6aa 50%,#d4af37 75%,#6b4f12);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:introTitleIn .7s .6s ease-out forwards,shimmerGold 4s 1.3s linear infinite;opacity:0;width:100%}
 @keyframes introTitleIn{from{opacity:0;transform:translateY(16px) skewX(-3deg)}to{opacity:1;transform:translateY(0) skewX(0)}}
 @keyframes shimmerGold{0%{background-position:0% center}100%{background-position:300% center}}
 .intro-tagline{font-size:11px;letter-spacing:4px;color:rgba(212,175,55,.55);text-transform:uppercase;animation:introFade .8s 1.1s ease-out forwards;opacity:0;margin-top:4px}
@@ -779,6 +781,13 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div class="crown-icon">♛</div>
       <div class="game-title">Game Master Chess Royale</div>
       <div class="game-tagline">♟ Strategi Papan Raja Sejati</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px;margin-bottom:2px;background:linear-gradient(135deg,#7c1a00,#b8860b,#7c1a00);border:2px solid #d4af37;border-radius:999px;padding:7px 20px 7px 14px;box-shadow:0 0 18px rgba(212,175,55,.55),0 2px 12px rgba(0,0,0,.6);animation:crownPulse 3s ease-in-out infinite">
+        <span style="font-size:18px;line-height:1;filter:drop-shadow(0 0 6px #ffd700)">👑</span>
+        <div style="display:flex;flex-direction:column;gap:1px;line-height:1.2">
+          <span style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:#ffd700;text-transform:uppercase;text-shadow:0 0 8px rgba(255,215,0,.8)">King Maharaja Lawrenz</span>
+          <span style="font-size:8.5px;letter-spacing:1px;color:rgba(255,235,150,.7);text-transform:uppercase">BY Creator</span>
+        </div>
+      </div>
     </div>
     <div id="home-preview" class="home-mini-board"></div>
     <div class="home-btns">
@@ -948,6 +957,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <div class="mm-name" id="mm-me-name">Kamu</div>
         <div class="mm-country" id="mm-me-country">🇮🇩 Indonesia</div>
         <div class="mm-rating" id="mm-me-rating">⭐ 1200</div>
+        <div class="mm-level" id="mm-me-level">🌱 Pemula</div>
       </div>
       <div class="mm-vs-badge">VS</div>
       <div class="mm-player-box enemy" id="mm-enemy-box">
@@ -958,6 +968,8 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <div class="mm-name" id="mm-en-name">Mencari...</div>
         <div class="mm-country" id="mm-en-country">🌐 ???</div>
         <div class="mm-rating" id="mm-en-rating">⭐ ???</div>
+        <div class="mm-level" id="mm-en-level">???</div>
+        <div id="mm-en-winrate" style="display:none;opacity:0;transition:opacity .5s ease;font-size:9.5px;color:rgba(74,222,128,.88);font-weight:700;text-align:center;margin-top:2px;white-space:nowrap"></div>
       </div>
     </div>
     <div class="mm-progress-wrap"><div class="mm-progress-bar" id="mm-progbar"></div></div>
@@ -1147,6 +1159,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div id="av-top" class="player-avatar">♟</div>
     <div style="flex:1;min-width:0">
       <div id="name-top" class="player-name">Lawan</div>
+      <div id="elo-top" class="player-elo" style="display:none"></div>
       <div id="caps-top" class="caps-row"></div>
     </div>
     <div id="score-top" class="score-diff"></div>
@@ -1189,6 +1202,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div id="av-bot" class="player-avatar">♙</div>
     <div style="flex:1;min-width:0">
       <div id="name-bot" class="player-name">Kamu</div>
+      <div id="elo-bot" class="player-elo" style="display:none"></div>
       <div id="caps-bot" class="caps-row"></div>
     </div>
     <div id="score-bot" class="score-diff"></div>
@@ -1232,7 +1246,6 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <div id="sticker-overlay" onclick="this.classList.remove('show');clearTimeout(this._hideTimer)">
   <canvas id="so-cv" width="300" height="300"></canvas>
   <div class="so-cap" id="so-cap"></div>
-  <div class="so-dismiss">ketuk untuk tutup ✕</div>
 </div>
 
 <!-- ══ OVERLAY: GAME MENU ══ -->
@@ -1685,8 +1698,19 @@ function showJoinRoom(){document.getElementById('join-input').value='';document.
 function showGameMenu(){document.getElementById('o-menu').classList.add('show')}
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
-function quitToHome(){['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();_stopOppChat();closeChatPanels?.();_clearChat?.();showScreen('home');}
+function quitToHome(){clearTimeout(_passNudgeTimer);['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();_stopOppChat();closeChatPanels?.();_clearChat?.();showScreen('home');}
 function dismissPassOverlay(){document.getElementById('o-pass-device').classList.remove('show');}
+let _passNudgeTimer=null;
+function _resetPassNudge(){
+  clearTimeout(_passNudgeTimer);
+  if(gameMode!=='pass'||gs?.gameOver)return;
+  _passNudgeTimer=setTimeout(()=>{
+    if(gameMode!=='pass'||gs?.gameOver)return;
+    const isW=gs.turn==='w';
+    try{navigator.vibrate&&navigator.vibrate([120,60,120,60,200]);}catch(e){}
+    toast('⏰ '+(isW?'Pemain 1':'Pemain 2')+', ayo langkah sekarang!');
+  },10000);
+}
 
 // ═══════════════════════════════════════
 // SETTINGS
@@ -1966,16 +1990,12 @@ function executeMove(mv){
   if(isInCheck(gs,gs.turn)){playSound('check');}
   renderBoard();
   animatePieceSlide(mv,movedPiece,castleRookSrc,castleRookDst);
-  // Pass-and-play: show device handoff overlay
+  // Pass-and-play: vibrate + toast, then nudge after 10s inactivity
   if(gameMode==='pass'&&!gs.gameOver){
     const isW=gs.turn==='w';
-    const icon=document.getElementById('pass-device-icon');
-    const title=document.getElementById('pass-device-title');
-    const sub=document.getElementById('pass-device-sub');
-    if(icon)icon.textContent=isW?'⬜':'⬛';
-    if(title)title.textContent=isW?'Giliran Pemain 1!':'Giliran Pemain 2!';
-    if(sub)sub.textContent=isW?'Serahkan HP ke Pemain 1 (Putih)':'Serahkan HP ke Pemain 2 (Hitam)';
-    setTimeout(()=>document.getElementById('o-pass-device').classList.add('show'),300);
+    try{navigator.vibrate&&navigator.vibrate([80,40,80]);}catch(e){}
+    toast((isW?'⬜ Giliran Pemain 1':'⬛ Giliran Pemain 2')+'!');
+    _resetPassNudge();
   }
   if(gameMode==='online'&&roomRef){
     roomRef.update({state:serGS(gs),lastMove:mv||null});
@@ -1983,7 +2003,9 @@ function executeMove(mv){
   if(gameMode==='bot'&&gs.turn!==myColor&&!gs.gameOver){
     clearTimeout(thinkTimer);
     const topCard=document.getElementById('p-top');topCard?.classList.add('thinking');
-    const botDelay=_currentOpp?(600+Math.random()*1400):(300+Math.random()*500);
+    const botDelay=_currentOpp
+      ?((_currentOpp.thinkMin||800)+Math.random()*((_currentOpp.thinkMax||4000)-(_currentOpp.thinkMin||800)))
+      :(300+Math.random()*500);
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
       const mv2=getBotMoveWithPersonality(gs,gs.turn,botLevel);
@@ -2376,14 +2398,23 @@ function startVsBot(level,oppProfile){
         if(userProfile.photo){avBot.innerHTML=`<img src="${userProfile.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
         else{avBot.innerHTML='';const cv=document.createElement('canvas');cv.width=36;cv.height=36;cv.style.cssText='width:36px;height:36px;border-radius:50%;display:block';try{(_EMOJIS||_CHIBI_EMOJIS)[userProfile.avatar??0]?.d(cv.getContext('2d'),36);}catch(e){}avBot.appendChild(cv);}
       }
+      // Show ELO & level badges for both players in-game
+      const eloTop=document.getElementById('elo-top');
+      const eloBot=document.getElementById('elo-bot');
+      if(eloTop){eloTop.textContent='⭐ '+oppProfile.rating+' · '+_ratingToLabel(oppProfile.rating);eloTop.style.display='block';}
+      if(eloBot){const myRating=userProfile.rating||1200;eloBot.textContent='⭐ '+myRating+' · '+_ratingToLabel(myRating);eloBot.style.display='block';}
       // Show game mode badge
       const badge=document.getElementById('game-mode-lbl');
       if(badge)badge.textContent='🎲 Random Match';
       // Start opponent chat
       setTimeout(()=>_startOppChat(oppProfile),1200);
     } else {
-      const ln=['','Mudah','Sedang','Sulit'][level];
+      const ln=['','Mudah','Sedang','Sulit','Super Sulit','Grandmaster'][level]||'';
       setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
+      const eloTop=document.getElementById('elo-top');
+      const eloBot=document.getElementById('elo-bot');
+      if(eloTop)eloTop.style.display='none';
+      if(eloBot)eloBot.style.display='none';
     }
     _clearChat?.();closeChatPanels?.();
     _addChatMsg?.({type:'sys',content:'Game dimulai! Chat bareng lawan di sini 💬',ts:Date.now()});
@@ -2418,8 +2449,18 @@ function getBotMove(s,c,level){
   }
   // Hard: depth-3 with 6% chance of playing depth-1 (occasional blunder)
   // → user wins ~55%
-  if(Math.random()<0.06)return getBestMove(s,c,1);
-  return getBestMove(s,c,3);
+  if(level===3){
+    if(Math.random()<0.06)return getBestMove(s,c,1);
+    return getBestMove(s,c,3);
+  }
+  // Super Hard: depth-4, zero blunder
+  // → user wins ~30%
+  if(level===4){
+    return getBestMove(s,c,4);
+  }
+  // Grandmaster: depth-5, zero blunder, very hard to beat
+  // → user wins ~10%
+  return getBestMove(s,c,5);
 }
 function startPassPlay(){
   clearTimeout(thinkTimer);thinkTimer=null;
@@ -2433,14 +2474,8 @@ function startPassPlay(){
     _clearChat?.();closeChatPanels?.();
     _addChatMsg?.({type:'sys',content:'Pass & Play dimulai! Chat satu layar bareng 💬',ts:Date.now()});
     showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
-    // Show initial pass overlay
-    const icon=document.getElementById('pass-device-icon');
-    const title=document.getElementById('pass-device-title');
-    const sub=document.getElementById('pass-device-sub');
-    if(icon)icon.textContent='⬜';
-    if(title)title.textContent='Pemain 1 Mulai!';
-    if(sub)sub.textContent='Pemain 1 (Putih) bermain duluan';
-    setTimeout(()=>document.getElementById('o-pass-device').classList.add('show'),400);
+    setTimeout(()=>toast('⬜ Pemain 1 (Putih) duluan — gas!'),400);
+    _resetPassNudge();
   }catch(e){toast('Error: '+e.message);console.error(e);}
 }
 function startHorde(){
@@ -3077,6 +3112,7 @@ function playIntroFanfare(){
   if(hint){hint.style.transition='opacity .5s';hint.style.opacity='0';}
   try{
     const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    ctx.resume();
     const now=ctx.currentTime;
     const master=ctx.createGain();
     master.gain.setValueAtTime(0.55,now);
@@ -3198,20 +3234,20 @@ function playIntro(){
   setTimeout(()=>board.classList.add('board-lit'),allDone+300);
   // Auto end
   _introTimer=setTimeout(()=>endIntro(),7000);
-  // Auto-play fanfare immediately (Telegram WebApp allows autoplay)
+  // Auto-play fanfare — check state==='running' to avoid false positives (GitHub Pages blocks autoplay)
   _introFanfarePlayed=false;
   const hint=document.getElementById('intro-tap-hint');
-  // Try auto-play right away, hide tap hint if it works
   setTimeout(()=>{
     try{
       const _testAC=new(window.AudioContext||window.webkitAudioContext)();
       _testAC.resume().then(()=>{
+        const canPlay=_testAC.state==='running';
         _testAC.close();
-        if(!_introFanfarePlayed){playIntroFanfare();if(hint){hint.style.opacity='0';}}
+        if(canPlay&&!_introFanfarePlayed){playIntroFanfare();if(hint){hint.style.opacity='0';}}
       }).catch(()=>{_testAC.close();});
     }catch(e){}
   },200);
-  // Fallback: tap still triggers if auto-play blocked
+  // Fallback: first tap/touch plays fanfare (works on GitHub Pages & blocked autoplay)
   const _onIntroTap=()=>{
     overlay.removeEventListener('touchstart',_onIntroTap,true);
     overlay.removeEventListener('click',_onIntroTap,true);
@@ -3529,7 +3565,37 @@ function _buildRandOpp(){
     case 6:name=fn.toLowerCase()+'_'+Math.floor(Math.random()*9999);break;
     default:name=r(PFX)+'_'+fn+'_'+r(SFX).replace('_','');
   }
-  return{name,avatar:Math.floor(Math.random()*100),country:r(CTRY),rating:750+Math.floor(Math.random()*750)};
+  // Wide rating range with tiered distribution for real variety
+  const tier=Math.random();
+  let rating;
+  if(tier<0.18)rating=450+Math.floor(Math.random()*400);       // 450-850  (newbie tier)
+  else if(tier<0.38)rating=850+Math.floor(Math.random()*450);  // 850-1300 (medium tier)
+  else if(tier<0.62)rating=1300+Math.floor(Math.random()*400); // 1300-1700 (hard tier)
+  else if(tier<0.82)rating=1700+Math.floor(Math.random()*400); // 1700-2100 (super hard)
+  else rating=2100+Math.floor(Math.random()*500);               // 2100-2600 (grandmaster)
+  return{name,avatar:Math.floor(Math.random()*100),country:r(CTRY),rating};
+}
+
+function _ratingToLabel(rating){
+  if(rating<700)return'🌱 Pemula';
+  if(rating<900)return'♟ Pion';
+  if(rating<1100)return'⚔️ Kavaleri';
+  if(rating<1300)return'🏰 Benteng';
+  if(rating<1500)return'♝ Gajah';
+  if(rating<1700)return'♛ Ratu';
+  if(rating<1900)return'👑 Raja';
+  if(rating<2100)return'💫 Maestro';
+  if(rating<2300)return'🌟 Grandmaster';
+  if(rating<2500)return'🔱 Legendaris';
+  return'👾 Dewa Catur';
+}
+
+function _ratingToDiff(rating){
+  if(rating<900)return 1;
+  if(rating<1300)return 2;
+  if(rating<1700)return 3;
+  if(rating<2100)return 4;
+  return 5;
 }
 
 // Build a pool of 80 unique opponents for this session
@@ -3583,7 +3649,9 @@ function _startMatchmakingAnimation(){
   }
   if(meName)meName.textContent=userProfile.name;
   if(meCountry)meCountry.textContent=userProfile.country;
-  if(meRating)meRating.textContent='⭐ '+userProfile.rating;
+  if(meRating)meRating.textContent='⭐ '+(userProfile.rating||1200);
+  const meLevel=document.getElementById('mm-me-level');
+  if(meLevel)meLevel.textContent=_ratingToLabel(userProfile.rating||1200);
 
   // Reset state
   const found=document.getElementById('mm-found-badge');
@@ -3607,9 +3675,11 @@ function _startMatchmakingAnimation(){
   if(found)found.classList.remove('show');
   if(dots)dots.style.display='flex';
   if(progbar)progbar.style.width='0%';
+  const enLevel=document.getElementById('mm-en-level');
   if(enName)enName.textContent='Mencari...';
   if(enCountry)enCountry.textContent='🌐 ???';
   if(enRating)enRating.textContent='⭐ ???';
+  if(enLevel)enLevel.textContent='???';
   if(enAv){enAv.innerHTML='<span style="font-size:28px">❓</span>';}
 
   // Random online count
@@ -3622,7 +3692,7 @@ function _startMatchmakingAnimation(){
 
   // GACHA cycle: rapid spin then settle
   let cycleCount=0;
-  const TOTAL_MS=5000;
+  const TOTAL_MS=8000+Math.floor(Math.random()*10000);
   let CYCLE_MS=75;
   const SETTLE_AT=TOTAL_MS-800;
 
@@ -3675,6 +3745,7 @@ function _startMatchmakingAnimation(){
     if(enName)enName.textContent=rand.name;
     if(enCountry)enCountry.textContent=rand.country;
     if(enRating)enRating.textContent='⭐ '+rand.rating;
+    if(enLevel)enLevel.textContent=_ratingToLabel(rand.rating);
     _mmSpinTick();
     cycleCount++;
     const elapsed=cycleCount*CYCLE_MS;
@@ -3689,6 +3760,7 @@ function _startMatchmakingAnimation(){
       if(enName)enName.textContent=_matchedOpponent.name;
       if(enCountry)enCountry.textContent=_matchedOpponent.country;
       if(enRating)enRating.textContent='⭐ '+_matchedOpponent.rating;
+      if(enLevel)enLevel.textContent=_ratingToLabel(_matchedOpponent.rating);
       const box2=document.getElementById('mm-enemy-box');
       if(box2){box2.classList.remove('enemy');void box2.offsetWidth;box2.classList.add('enemy');}
       // Ta-da! funny fanfare
@@ -3737,8 +3809,8 @@ function _startRandomMatch(){
   _mmActive=false;
   clearTimeout(_mmTimer);clearTimeout(_mmCycleTimer);
   const opp=_matchedOpponent||_buildRandOpp();
-  // Pick random difficulty 1-2 (variable: mostly 1-2, makes bot lose 70-80%)
-  const diff=Math.random()<0.45?1:2;
+  // Difficulty derived directly from opponent's displayed rating — what you see is what you get
+  const diff=_ratingToDiff(opp.rating);
   startVsBot(diff,opp);
 }
 
@@ -4196,7 +4268,7 @@ function _showStickerOverlay(idx,fromMe){
   ov.classList.add('show');
   if(!fromMe)_playEmojiSound(def.snd);
   clearTimeout(ov._hideTimer);
-  ov._hideTimer=setTimeout(()=>ov.classList.remove('show'),4500);
+  ov._hideTimer=setTimeout(()=>ov.classList.remove('show'),1000);
 }
 // Gen-Z Indonesian keyword-based smart reply for random match bot
 const _GZ_REPLIES={
@@ -4306,7 +4378,7 @@ function closeChatPanels(){closeChat();closeEmojiPicker();}
 // ═══════════════════════════════════════
 const LEVEL_THRESHOLDS=[0,100,250,450,700,1000,1400,1850,2350,2900,3500,4200];
 const LEVEL_BADGES=['🌱 Pemula','♟ Pion','⚔️ Kavaleri','🏰 Benteng','♝ Gajah','♛ Ratu','👑 Raja','💫 Maestro','🌟 Grandmaster','🔱 Legendaris','💎 Elite','👾 Dewa Catur'];
-const BOT_ELO=[0,800,1100,1450];
+const BOT_ELO=[0,800,1100,1450,1900,2400];
 function getPlayerData(){try{return JSON.parse(localStorage.getItem('catur_player_data')||'{}');}catch{return {};}}
 function savePlayerData(d){localStorage.setItem('catur_player_data',JSON.stringify(d));}
 function initPlayerData(){
@@ -4665,13 +4737,5 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').then(()=>{}).catch(()=>{});
 }
 </script>
-<!-- Creator Watermark Badge -->
-<div id="creator-badge" style="position:fixed;bottom:9px;right:10px;z-index:9999;pointer-events:none;user-select:none;display:flex;flex-direction:column;align-items:flex-end;gap:1px">
-  <div style="display:flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(26,8,0,.82),rgba(42,22,0,.82));border:1px solid rgba(212,175,55,.35);border-radius:20px;padding:3px 9px 3px 7px;backdrop-filter:blur(8px);box-shadow:0 2px 12px rgba(0,0,0,.5),0 0 8px rgba(212,175,55,.12)">
-    <span style="font-size:11px;line-height:1">👑</span>
-    <span style="font-size:9px;font-weight:800;letter-spacing:.8px;color:rgba(212,175,55,.85);text-transform:uppercase">King Maharaja Lawrenz</span>
-  </div>
-  <span style="font-size:7.5px;letter-spacing:.6px;color:rgba(212,175,55,.38);text-align:right;padding-right:4px;text-transform:uppercase">Game Master Chess Royale</span>
-</div>
 </body>
 </html>
