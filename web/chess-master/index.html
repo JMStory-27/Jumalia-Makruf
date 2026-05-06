@@ -342,7 +342,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .mm-online-count{font-size:12px;color:var(--txt2);text-align:center;opacity:.7}
 .mm-cancel-btn{margin-top:4px;padding:11px 28px;border-radius:99px;border:1px solid rgba(248,113,113,.4);background:transparent;color:#f87171;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
 .mm-cancel-btn:hover{background:rgba(248,113,113,.08)}
-.mm-spin-ring{position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold);border-right-color:rgba(212,175,55,.4);animation:spin360 1s linear infinite}
+.mm-spin-ring{position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold);border-right-color:rgba(212,175,55,.4);animation:spin360 1.25s linear infinite}
 @keyframes spin360{to{transform:rotate(360deg)}}
 
 /* ── PROFILE SETTINGS ── */
@@ -977,7 +977,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div class="profile-card">
       <div class="prof-top">
         <div class="prof-main-avatar" id="prof-main-av" onclick="document.getElementById('prof-photo-input').click()">
-          <span id="prof-av-disp">🎮</span>
+          <span id="prof-av-disp"></span>
           <div class="edit-badge">edit</div>
         </div>
         <div class="prof-main-info">
@@ -1225,7 +1225,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   </div>
   <div id="emoji-grid"></div>
 </div>
-<div id="sticker-overlay">
+<div id="sticker-overlay" onclick="this.classList.remove('show');clearTimeout(this._hideTimer)">
   <canvas id="so-cv" width="300" height="300"></canvas>
   <div class="so-cap" id="so-cap"></div>
   <div class="so-dismiss">ketuk untuk tutup ✕</div>
@@ -1382,14 +1382,6 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 
 <!-- ══ EMOJI PANEL ══ -->
 <div id="emoji-panel">
-  <span class="emoji-btn" onclick="sendEmoji('👑')">👑</span>
-  <span class="emoji-btn" onclick="sendEmoji('🔥')">🔥</span>
-  <span class="emoji-btn" onclick="sendEmoji('💀')">💀</span>
-  <span class="emoji-btn" onclick="sendEmoji('😂')">😂</span>
-  <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
-  <span class="emoji-btn" onclick="sendEmoji('🤯')">🤯</span>
-  <span class="emoji-btn" onclick="sendEmoji('👏')">👏</span>
-  <span class="emoji-btn" onclick="sendEmoji('🎯')">🎯</span>
 </div>
 
 <!-- ══ VOICE WAVE ══ -->
@@ -1841,12 +1833,28 @@ function updateCapturedDisplay(){
   });
 }
 
+function _renderAvatarInEl(el,avatarIdx,size){
+  if(!el)return;el.innerHTML='';
+  const cv=document.createElement('canvas');cv.width=size;cv.height=size;
+  cv.style.cssText=`width:${size}px;height:${size}px;border-radius:50%;display:block`;
+  try{(_EMOJIS||_CHIBI_EMOJIS)[avatarIdx??0]?.d(cv.getContext('2d'),size);}catch(e){}
+  el.appendChild(cv);
+}
 function setPlayerNames(topName,botName,topColor,botColor){
   const avTop=document.getElementById('av-top'),avBot=document.getElementById('av-bot');
   const nmTop=document.getElementById('name-top'),nmBot=document.getElementById('name-bot');
   if(nmTop)nmTop.textContent=topName;if(nmBot)nmBot.textContent=botName;
-  if(avTop)avTop.textContent=topColor==='b'?'♚':'♔';
-  if(avBot)avBot.textContent=botColor==='b'?'♚':'♔';
+  // Show user's chibi for their side; random chibi for opponent
+  const botAv=userProfile.avatar??0;
+  const topAv=Math.floor(Math.random()*100);
+  if(avTop){
+    if(userProfile.photo&&botColor!==topColor){avTop.innerHTML='';const img=document.createElement('img');img.src=userProfile.photo;img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%';avTop.appendChild(img);}
+    else _renderAvatarInEl(avTop,topAv,36);
+  }
+  if(avBot){
+    if(userProfile.photo){avBot.innerHTML='';const img=document.createElement('img');img.src=userProfile.photo;img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%';avBot.appendChild(img);}
+    else _renderAvatarInEl(avBot,botAv,36);
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1895,11 +1903,24 @@ function onSquareClick(r,c){
   // Select piece — use cached legal moves
   const p=gs.board[clickR][clickC];
   if(p&&col(p)===gs.turn){
+    // Clear hint if user picks a different piece than the hinted one
+    if(hintMove&&(clickR!==hintMove.fr||clickC!==hintMove.fc)){
+      hintMove=null;
+      document.getElementById('btn-hint')?.classList.remove('hint-active');
+      const grid2=document.getElementById('board-grid');
+      if(grid2)grid2.querySelectorAll('.hint-from,.hint-to').forEach(s=>s.classList.remove('hint-from','hint-to'));
+    }
     selected=[clickR,clickC];
     legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===clickR&&m.fc===clickC);
     playSound('select');
     _renderSel();
   }else{
+    if(hintMove){
+      hintMove=null;
+      document.getElementById('btn-hint')?.classList.remove('hint-active');
+      const grid2=document.getElementById('board-grid');
+      if(grid2)grid2.querySelectorAll('.hint-from,.hint-to').forEach(s=>s.classList.remove('hint-from','hint-to'));
+    }
     selected=null;legalFromSel=[];_renderSel();
   }
 }
@@ -2343,7 +2364,7 @@ function startVsBot(level,oppProfile){
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   _stopOppChat();
   try{
-    gameMode='bot';botLevel=level;isHordeMode=false;
+    gameMode=oppProfile?'random':'bot';botLevel=level;isHordeMode=false;
     myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
     flipped=myColor==='b';
     gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
@@ -2357,10 +2378,10 @@ function startVsBot(level,oppProfile){
       // Set avatars
       const avTop=document.getElementById('av-top');
       const avBot=document.getElementById('av-bot');
-      if(avTop)avTop.textContent=oppProfile.avatar||'🤖';
+      if(avTop){avTop.innerHTML='';const cv=document.createElement('canvas');cv.width=36;cv.height=36;cv.style.cssText='width:36px;height:36px;border-radius:50%;display:block';try{(_EMOJIS||_CHIBI_EMOJIS)[oppProfile.avatar??Math.floor(Math.random()*100)]?.d(cv.getContext('2d'),36);}catch(e){}avTop.appendChild(cv);}
       if(avBot){
         if(userProfile.photo){avBot.innerHTML=`<img src="${userProfile.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
-        else{avBot.textContent=userProfile.avatar||'🎮';}
+        else{avBot.innerHTML='';const cv=document.createElement('canvas');cv.width=36;cv.height=36;cv.style.cssText='width:36px;height:36px;border-radius:50%;display:block';try{(_EMOJIS||_CHIBI_EMOJIS)[userProfile.avatar??0]?.d(cv.getContext('2d'),36);}catch(e){}avBot.appendChild(cv);}
       }
       // Show game mode badge
       const badge=document.getElementById('game-mode-lbl');
@@ -2448,6 +2469,7 @@ function restartSameMode(){
   ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
   if(isHordeMode)startHorde();
   else if(gameMode==='bot')startVsBot(botLevel);
+  else if(gameMode==='random')showMatchmaking();
   else if(gameMode==='pass')startPassPlay();
   else quitToHome();
 }
@@ -2467,7 +2489,7 @@ function showGameOver(result){
   document.getElementById('go-title').textContent=title;
   document.getElementById('go-sub').textContent=sub;
   // ELO & XP update (bot/random match only)
-  if(gameMode==='bot'){
+  if(gameMode==='bot'||gameMode==='random'){
     const r=isDraw?'draw':myWin?'win':'loss';
     try{updateAfterGame(r);}catch(e){}
   }
@@ -2804,6 +2826,7 @@ function startOnlineGame(myCol){
     const data=snap.val();
     if(data.state){gs=desGS(data.state);lastMove=data.lastMove||null;renderBoard();}
     if(data.emoji&&data.emoji.by!==myColor)floatEmoji(data.emoji.e);
+    if(data.sticker&&data.sticker.by!==myColor&&typeof data.sticker.idx==='number'){_playEmojiSound((_EMOJIS||_CHIBI_EMOJIS)[data.sticker.idx]?.snd);_showStickerOverlay(data.sticker.idx,false);}
     if(data.voice&&data.voice.by!==myColor&&data.voice.data)playVoice(data.voice.data);
     if(data.resign&&data.resign.by!==myColor){gs={...gs,gameOver:true,result:myColor};showGameOver(myColor);}
   });
@@ -2815,13 +2838,23 @@ function desGS(d){return{board:d.board.split('|').map(r=>r.split(',').map(Number
 // ═══════════════════════════════════════
 // EMOJI CHAT
 // ═══════════════════════════════════════
-function toggleEmojiPanel(){document.getElementById('emoji-panel').classList.toggle('show')}
-function sendEmoji(e){
-  document.getElementById('emoji-panel').classList.remove('show');
-  floatEmoji(e);
-  if(gameMode==='online'&&roomRef)roomRef.child('emoji').set({e,t:Date.now(),by:myColor});
-  else toast(e+' Emoji!');
+function toggleEmojiPanel(){
+  const panel=document.getElementById('emoji-panel');
+  if(panel.dataset.built)return panel.classList.toggle('show');
+  panel.dataset.built='1';
+  // Quick-pick: 8 hand-picked chibi stickers (indices matching funny/popular ones)
+  const picks=[0,4,1,3,7,9,10,14];
+  picks.forEach(idx=>{
+    const item=document.createElement('div');item.className='emoji-btn';item.title=(_EMOJIS||_CHIBI_EMOJIS)[idx]?.n||'Stiker';
+    const cv=document.createElement('canvas');cv.width=40;cv.height=40;cv.style.cssText='width:40px;height:40px;display:block;border-radius:50%';
+    try{(_EMOJIS||_CHIBI_EMOJIS)[idx]?.d(cv.getContext('2d'),40);}catch(e){}
+    item.appendChild(cv);
+    item.onclick=()=>{panel.classList.remove('show');sendEmojiSticker(idx);};
+    panel.appendChild(item);
+  });
+  panel.classList.toggle('show');
 }
+function sendEmoji(e){document.getElementById('emoji-panel').classList.remove('show');}
 function floatEmoji(e){
   const el=document.createElement('div');el.className='emoji-fly';el.textContent=e;
   el.style.cssText=`left:${20+Math.random()*60}%;bottom:${15+Math.random()*25}%;z-index:400;position:fixed;pointer-events:none`;
@@ -3408,12 +3441,12 @@ function initParticles(){
 // ═══════════════════════════════════════
 // PROFILE SYSTEM
 // ═══════════════════════════════════════
-const AVATARS=['🎮','👾','🤖','🦸','🧙','🥷','⚔️','🏆','🎯','🎲',
-               '👦','👧','🧑‍💻','👩‍💻','🧑‍🎮','👩‍🎮','🧑‍🚀','👩‍🚀','🦊','🐉'];
+const AVATARS=Array.from({length:100},(_,i)=>i);
 
 let userProfile=JSON.parse(localStorage.getItem('catur_profile')||'{}');
 userProfile.name=userProfile.name||'Pemain';
-userProfile.avatar=userProfile.avatar||'🎮';
+// Migrate old emoji-string avatars to chibi index 0
+if(typeof userProfile.avatar!=='number')userProfile.avatar=0;
 userProfile.country=userProfile.country||'🇮🇩 Indonesia';
 userProfile.photo=userProfile.photo||null;
 userProfile.rating=userProfile.rating||(1000+Math.floor(Math.random()*400));
@@ -3445,7 +3478,11 @@ function renderProfileAvatar(){
   if(userProfile.photo){
     disp.innerHTML=`<img src="${userProfile.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
   } else {
-    disp.textContent=userProfile.avatar||'🎮';
+    disp.innerHTML='';
+    const cv=document.createElement('canvas');cv.width=68;cv.height=68;
+    cv.style.cssText='width:68px;height:68px;border-radius:50%;display:block';
+    try{(_EMOJIS||_CHIBI_EMOJIS)[userProfile.avatar??0]?.d(cv.getContext('2d'),68);}catch(e){}
+    disp.appendChild(cv);
   }
 }
 
@@ -3456,7 +3493,11 @@ function buildProfileUI(){
   AVATARS.forEach(av=>{
     const el=document.createElement('div');
     el.className='av-opt'+(userProfile.avatar===av&&!userProfile.photo?' selected':'');
-    el.textContent=av;
+    el.title=(_EMOJIS||_CHIBI_EMOJIS)[av]?.n||('Chibi #'+av);
+    const cv=document.createElement('canvas');cv.width=38;cv.height=38;
+    cv.style.cssText='width:38px;height:38px;border-radius:50%;display:block';
+    try{(_EMOJIS||_CHIBI_EMOJIS)[av]?.d(cv.getContext('2d'),38);}catch(e){}
+    el.appendChild(cv);
     el.onclick=()=>{
       userProfile.avatar=av;
       userProfile.photo=null;
@@ -3481,7 +3522,7 @@ function _buildRandOpp(){
   const PFX=['Pro','King','Master','Sir','Bang','Kang','Mas','Sultan','Dark','Fire','Black','Sky','Night','Ice','Gold','Neo','Hyper','Ultra','Super','Mad','Wild','Epic','Real','Boss','Dewa','Raja','Jago','Anti','Giga','Turbo','Legend','Dragon','Shadow','Storm','Blaze','Frost','Venom','Phoenix','Flash','Ghost'];
   const SFX=['_ID','Gaming','YT','FF','ML','07','77','01','99','2024','2025','Pro','OP','Boss','GG','God','Legend','MVP','Elite','Noobx','HD','VIP','Max','Plus','Official','Asli','Bro','Satu','Dua','Joss','Gans','Cuy','Wkwk','Anjay','Gasss','Dong','_Chess','_Catur','_Pion','_King','_Queen','Zz','_Real','_Only','_AJA'];
   const CTRY=['🌋 Jawa','🏝️ Bali','🏔️ Sumatera','🌊 Sulawesi','🌴 Kalimantan','🇮🇩 Indonesia','🇲🇾 Malaysia','🇸🇬 Singapore','🗺️ Lombok','🌏 Papua','🏡 NTB','⛵ Maluku','🌺 Flores','🏰 Jogja','🌿 Aceh','🌅 Manado','🌊 Ambon','🏔️ Toraja','🎋 Sunda','🌴 Makassar','🌾 Madura','🏖️ Ternate','🌄 Kupang','🏕️ Pontianak','⛰️ Palembang','🌻 Banjarmasin','🏙️ Bandung','🌃 Surabaya','🌆 Medan','🌇 Semarang'];
-  const AVAT=['🧑‍💻','🦊','🎯','👧','👦','🏆','⚔️','🧙','🥷','🤖','👩‍💻','🐉','🦸','👾','🎮','😭','👩‍🎮','🐺','🦁','🐯','🦅','🔥','⚡','🌙','💀','🎭','🏹','🗡️','🛡️','🪄','🐻','🐸','🎪','🌟','💎','🎲','🃏','🤺','🦂','🦚','🦜','🐦','🦋','🌹','🌊','🔮','⚗️','🏴‍☠️','🎩','🦝'];
+  const AVAT=Array.from({length:100},(_,i)=>i);
   const r=a=>a[Math.floor(Math.random()*a.length)];
   const fn=r(FN);
   const pat=Math.floor(Math.random()*8);
@@ -3496,7 +3537,7 @@ function _buildRandOpp(){
     case 6:name=fn.toLowerCase()+'_'+Math.floor(Math.random()*9999);break;
     default:name=r(PFX)+'_'+fn+'_'+r(SFX).replace('_','');
   }
-  return{name,avatar:r(AVAT),country:r(CTRY),rating:750+Math.floor(Math.random()*750)};
+  return{name,avatar:Math.floor(Math.random()*100),country:r(CTRY),rating:750+Math.floor(Math.random()*750)};
 }
 
 // Build a pool of 80 unique opponents for this session
@@ -3973,6 +4014,8 @@ const _CHIBI_EMOJIS=[
 {n:'GOATED',cap:'GOATED NO CAP BESTIE 🐐 fr fr fr',d:(c,s)=>_ch(c,s,{hs:9,hc:'#CC8800',et:4,ec:'#FFD700',mt:1,ac:1,aac:'#FFD700',sk:'#FFEE88',o1:'#884400',o2:'#FFD700',x:(c,s)=>{const rc=['#FF4444','#FF8800','#FFD700','#44FF88','#4488FF','#AA44FF'];for(let i=0;i<8;i++){const a=Math.PI*2*i/8;c.strokeStyle=rc[i%6];c.lineWidth=s*.025;c.lineCap='round';c.beginPath();c.moveTo(s*.5+Math.cos(a)*s*.2,s*.44+Math.sin(a)*s*.2);c.lineTo(s*.5+Math.cos(a)*s*.46,s*.44+Math.sin(a)*s*.46);c.stroke();}}}),snd:[[523,659,784,1047,1319,1047,784],.38,'sine',.28]},
 {n:'LEGENDARY',cap:'LEGENDARY STATUS BESTIE! GOATED 🌟👑',d:(c,s)=>_ch(c,s,{hs:9,hc:'#FFD700',et:4,ec:'#FFD700',mt:1,ac:1,aac:'#FFD700',sk:'#FFEE88',o1:'#FF8800',o2:'#FFD700',x:(c,s)=>{const lc=['#FF4444','#FF8800','#FFD700','#44FF88','#4488FF','#8844FF'];for(let i=0;i<12;i++){const a=Math.PI*2*i/12;c.strokeStyle=lc[i%6];c.lineWidth=s*.025;c.lineCap='round';c.beginPath();c.moveTo(s*.5+Math.cos(a)*s*.2,s*.44+Math.sin(a)*s*.2);c.lineTo(s*.5+Math.cos(a)*s*.48,s*.44+Math.sin(a)*s*.48);c.stroke();}c.fillStyle='rgba(255,215,0,.12)';c.beginPath();c.arc(s*.5,s*.44,s*.44,0,Math.PI*2);c.fill();}}),snd:[[523,659,784,1047,1319,1047,784,659],.4,'sine',.3]}
 ];
+// _EMOJIS alias — must be placed AFTER _CHIBI_EMOJIS is fully defined above
+const _EMOJIS=_CHIBI_EMOJIS;
 
 
 // ══════════════════════════════════════════════
@@ -4128,10 +4171,31 @@ function stopVnRec(){
 }
 function sendEmojiSticker(idx){
   closeEmojiPicker();
-  _playEmojiSound(_EMOJIS[idx]?.snd);
-  _addChatMsg({from:'me',type:'sticker',content:idx});
-  _openChat();
-  if(gameMode==='bot')setTimeout(_botChatReply,1500+Math.random()*2000);
+  const def=(_EMOJIS||_CHIBI_EMOJIS)[idx];if(!def)return;
+  _playEmojiSound(def.snd);
+  _showStickerOverlay(idx,true);
+  if(gameMode==='online'&&roomRef)roomRef.child('sticker').set({idx,t:Date.now(),by:myColor});
+  else if(gameMode==='bot'||gameMode==='pass'||gameMode==='horde'){
+    setTimeout(()=>{
+      const ri=Math.floor(Math.random()*(_EMOJIS||_CHIBI_EMOJIS).length);
+      _showStickerOverlay(ri,false);
+    },2200+Math.random()*2000);
+  }
+}
+function _showStickerOverlay(idx,fromMe){
+  const def=(_EMOJIS||_CHIBI_EMOJIS)[idx];if(!def)return;
+  const ov=document.getElementById('sticker-overlay');
+  const cv=document.getElementById('so-cv');
+  const capEl=document.getElementById('so-cap');
+  if(!ov||!cv||!capEl)return;
+  const ctx=cv.getContext('2d');ctx.clearRect(0,0,300,300);
+  try{def.d(ctx,300);}catch(e){}
+  const who=fromMe?'Kamu':(_currentOpp?.name||(gameMode==='pass'?'Lawan':'Bot'));
+  capEl.textContent=who+': '+def.cap;
+  ov.classList.add('show');
+  if(!fromMe)_playEmojiSound(def.snd);
+  clearTimeout(ov._hideTimer);
+  ov._hideTimer=setTimeout(()=>ov.classList.remove('show'),4500);
 }
 // Gen-Z Indonesian keyword-based smart reply for random match bot
 const _GZ_REPLIES={
@@ -4278,7 +4342,17 @@ function updateAfterGame(result){
   if(result==='win')d.wins++;else if(result==='loss')d.losses++;else d.draws++;
   const newLv=getLevel(d.xp);
   savePlayerData(d);
-  saveGameHistory({date:Date.now(),mode:gameMode,botLv:botLevel,result,eloChange,elo:d.elo});
+  // Star rating update for random match (performance-based)
+  if(gameMode==='random'){
+    const moves=moveHistory.length;
+    let rChange=0;
+    if(result==='win'){rChange=moves<20?28:moves<35?18:12;}
+    else if(result==='loss'){rChange=moves<20?-22:moves<35?-10:-5;}
+    else{rChange=moves>30?3:-3;}
+    userProfile.rating=Math.max(100,Math.min(2500,(userProfile.rating||1200)+rChange));
+    try{localStorage.setItem('catur_profile',JSON.stringify(userProfile));}catch(e){}
+  }
+  saveGameHistory({date:Date.now(),mode:gameMode,botLv:gameMode==='random'?null:botLevel,result,eloChange,elo:d.elo,oppName:gameMode==='random'?(_currentOpp?.name||null):null});
   // Update game over overlay
   const statsEl=document.getElementById('go-stats');if(statsEl)statsEl.style.display='flex';
   const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
@@ -4371,7 +4445,7 @@ function renderHistoryScreen(){
     <div class="hist-sum-box"><div class="hist-sum-val">${d.draws||0}</div><div class="hist-sum-lbl">Seri</div></div>`;
   const listEl=document.getElementById('hist-list');if(!listEl)return;
   if(!hist.length){listEl.innerHTML='<div class="hist-empty">📭 Belum ada riwayat permainan.<br>Mulai bermain dan riwayatmu<br>akan muncul di sini!</div>';return;}
-  const modeNames={bot:'🤖 Vs Bot',pass:'👥 Pass & Play',random:'🎲 Random',online:'🌐 Online'};
+  const modeNames={bot:'🤖 Vs Bot',pass:'👥 Pass & Play',random:'🎲 Random Match',online:'🌐 Online'};
   const lvNames=['','Mudah','Sedang','Sulit'];
   listEl.innerHTML=hist.map(g=>{
     const res=g.result==='win'?'🏆 MENANG':g.result==='loss'?'😞 KALAH':'🤝 SERI';
@@ -4380,9 +4454,10 @@ function renderHistoryScreen(){
     const eloStr=g.eloChange!=null?(g.eloChange>=0?'<span style="color:#4ade80">+'+g.eloChange+'</span>':'<span style="color:#f87171">'+g.eloChange+'</span>'):'';
     const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'';
     const botLbl=g.botLv?` — ${lvNames[g.botLv]||''}`:''
+    const modeLbl=g.mode==='random'&&g.oppName?`🎲 Vs ${g.oppName}`:(modeNames[g.mode]||g.mode||'Catur')+botLbl;
     return `<div class="hist-card ${cls}">
       <div class="hist-icon">${icon}</div>
-      <div class="hist-info"><div class="hist-mode">${modeNames[g.mode]||g.mode||'Catur'}${botLbl}</div><div class="hist-result">${res}</div><div class="hist-date">${dt}</div></div>
+      <div class="hist-info"><div class="hist-mode">${modeLbl}</div><div class="hist-result">${res}</div><div class="hist-date">${dt}</div></div>
       <div class="hist-elo">${eloStr}<div style="font-size:10px;color:var(--txt2);margin-top:2px">${g.elo?'ELO '+g.elo:''}</div></div>
     </div>`;
   }).join('');
@@ -4402,9 +4477,10 @@ function renderHistoryInAnalysis(){
     const res=g.result==='win'?'Menang':g.result==='loss'?'Kalah':'Seri';
     const eloStr=g.eloChange!=null?(g.eloChange>=0?'+'+g.eloChange:String(g.eloChange)):'';
     const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'}):'';
+    const modeLbl=g.mode==='random'&&g.oppName?`🎲 Vs ${g.oppName}`:(modeNames[g.mode]||g.mode);
     return `<div class="hist-card ${cls}" style="margin-bottom:6px">
       <div class="hist-icon" style="font-size:22px">${icon}</div>
-      <div class="hist-info"><div class="hist-mode" style="font-size:10px">${modeNames[g.mode]||g.mode}</div><div class="hist-result" style="font-size:13px">${res}</div></div>
+      <div class="hist-info"><div class="hist-mode" style="font-size:10px">${modeLbl}</div><div class="hist-result" style="font-size:13px">${res}</div></div>
       <div class="hist-elo" style="font-size:12px">${eloStr?`<span style="${g.eloChange>=0?'color:#4ade80':'color:#f87171'}">${eloStr}</span>`:''}<div style="font-size:9px;color:var(--txt2)">${dt}</div></div>
     </div>`;
   }).join('');
