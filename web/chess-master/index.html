@@ -826,6 +826,11 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <span class="btn-label">Riwayat Permainan</span>
         <span class="btn-arrow">›</span>
       </button>
+      <button class="btn-main" style="border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.07)" onclick="showLeaderboard()">
+        <span class="btn-icon">🏆</span>
+        <span class="btn-label">Leaderboard</span>
+        <span class="btn-arrow">›</span>
+      </button>
     </div>
     <div class="home-footer">
       <div class="ic-btn" onclick="showSettings()" title="Pengaturan">⚙️</div>
@@ -979,6 +984,21 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     <div class="mm-found-badge" id="mm-found-badge">✅ Lawan Ditemukan! Memulai permainan...</div>
     <div class="mm-online-count" id="mm-online-txt">🟢 <span id="mm-online-num">247</span> pemain online sekarang</div>
     <button class="mm-cancel-btn" id="mm-cancel-btn" onclick="cancelMatchmaking()">✕ Batalkan</button>
+  </div>
+</div>
+
+<!-- ══ LEADERBOARD SCREEN ══ -->
+<div id="s-leaderboard" class="screen">
+  <div class="scr-header">
+    <div class="back-btn" onclick="backHome()">←</div>
+    <div class="scr-title">🏆 Leaderboard</div>
+  </div>
+  <div style="padding:14px;overflow-y:auto;max-height:calc(100vh - 60px)">
+    <div id="lb-my-stat" class="glass" style="padding:18px;margin-bottom:16px;text-align:center;border-radius:18px"></div>
+    <div class="sec-label" style="margin-bottom:10px">🥇 Kemenangan Terbaikmu (vs Lawan Random)</div>
+    <div id="lb-best-wins" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div class="sec-label" style="margin:16px 0 10px">📈 Rating Tertinggi Dicapai</div>
+    <div id="lb-peak-info" class="glass" style="padding:16px;border-radius:16px;text-align:center"></div>
   </div>
 </div>
 
@@ -1286,6 +1306,14 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
     </div>
     <div id="go-level-up" style="display:none;padding:6px 0;font-size:14px;font-weight:900;color:var(--gold);text-shadow:0 0 12px rgba(212,175,55,.7)">🎉 LEVEL UP! 🎉</div>
     <div id="go-level-badge" style="font-size:12px;color:var(--txt2);margin-bottom:6px"></div>
+    <!-- #99 XP Progress Bar -->
+    <div id="go-xp-bar-wrap" style="display:none;margin:4px 14px 12px">
+      <div style="font-size:10px;color:var(--txt2);margin-bottom:5px;text-align:left;letter-spacing:.3px;opacity:.8">Progress XP ke Level berikutnya</div>
+      <div style="background:rgba(255,255,255,.1);border-radius:99px;height:13px;overflow:hidden;position:relative">
+        <div id="go-xp-bar" style="height:100%;border-radius:99px;width:0%;background:linear-gradient(90deg,#92400e,#d97706,#fbbf24,#ffd700);box-shadow:0 0 12px rgba(212,175,55,.8);transition:width 1.5s cubic-bezier(.34,1.2,.64,1)"></div>
+      </div>
+      <div style="font-size:10px;color:rgba(212,175,55,.85);margin-top:4px;text-align:right;font-weight:700"><span id="go-xp-pct">0</span>% ke level berikutnya</div>
+    </div>
     <div class="ov-btns">
       <button class="ov-btn gold" onclick="restartSameMode()">🔄 Main Lagi</button>
       <button class="ov-btn" onclick="showAnalysis()">📊 Analisis</button>
@@ -3270,7 +3298,7 @@ function skipIntro(){endIntro();}
 // PIECE SLIDE + LAND RIPPLE ANIMATIONS
 // ═══════════════════════════════════════
 function animatePieceSlide(mv,piece,rookSrc,rookDst){
-  const MS=165;
+  const MS=290; // #34 — animasi buah lebih lambat & smooth (spring bounce)
   function slideOne(frR,frC,toR,toC,pc,ap,delay){
     try{
       const grid=document.getElementById('board-grid');if(!grid||!pc)return;
@@ -3285,7 +3313,7 @@ function animatePieceSlide(mv,piece,rookSrc,rookDst){
       const clone=document.createElement('div');
       clone.style.cssText=`position:fixed;pointer-events:none;z-index:9999;width:${sz}px;height:${sz}px;`+
         `left:${fR.left+(fR.width-sz)/2}px;top:${fR.top+(fR.height-sz)/2}px;`+
-        `will-change:transform;transition:transform ${MS}ms cubic-bezier(.33,.87,.44,.99)`;
+        `will-change:transform;transition:transform ${MS}ms cubic-bezier(.34,1.56,.64,1)`;
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
       svg.setAttribute('viewBox','0 0 45 45');
       svg.style.cssText='width:100%;height:100%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.92))';
@@ -3330,28 +3358,67 @@ function spawnLandRipple(sq){
 // ═══════════════════════════════════════
 // VICTORY CONFETTI
 // ═══════════════════════════════════════
+// #36 — Efek kemenangan epik: konfeti deras + firework burst dari berbagai titik
 function spawnVictoryConfetti(){
   try{
-    const colors=['#d4af37','#fff','#f87171','#4ade80','#60a5fa','#f59e0b','#e879f9','#fbbf24'];
-    for(let i=0;i<72;i++){
+    const colors=['#d4af37','#fff','#f87171','#4ade80','#60a5fa','#f59e0b','#e879f9','#fbbf24','#c084fc','#34d399','#fb923c','#38bdf8'];
+    // Konfeti: 130 partikel jatuh dari atas
+    for(let i=0;i<130;i++){
       const el=document.createElement('div');
       el.className='confetti-p';
-      const cx=10+Math.random()*80; // % across screen
-      const cy=120+Math.random()*280; // px fall
-      const cr=-360+Math.random()*720; // rotation
-      const cd=(0.7+Math.random()*0.9)+'s';
-      const sz=5+Math.random()*8;
+      const cx=3+Math.random()*94;
+      const cy=160+Math.random()*380;
+      const cr=-720+Math.random()*1440;
+      const cd=(0.9+Math.random()*1.6)+'s';
+      const sz=4+Math.random()*11;
       const col=colors[Math.floor(Math.random()*colors.length)];
-      const startY=-20-Math.random()*60;
-      el.style.cssText=`left:${cx}vw;top:${startY}px;width:${sz}px;height:${sz}px;`+
-        `background:${col};border-radius:${Math.random()>.5?'50%':'2px'};`+
+      const startY=-10-Math.random()*80;
+      const shape=Math.random();
+      el.style.cssText=`left:${cx}vw;top:${startY}px;width:${sz}px;height:${sz*(shape>.7?.35:1)}px;`+
+        `background:${col};border-radius:${shape>.5?'50%':'2px'};`+
         `--cy:${cy}px;--cr:${cr}deg;--cd:${cd};`+
-        `animation-delay:${Math.random()*.6}s`;
+        `animation-delay:${Math.random()*1.1}s;box-shadow:0 0 4px ${col}`;
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),2000);
+      setTimeout(()=>el.remove(),3200);
     }
+    // Firework bursts: 6 ledakan di posisi acak layar
+    const fw=[[20,25],[50,15],[80,30],[35,45],[65,20],[50,50]];
+    fw.forEach(([xpct,ypct],idx)=>{
+      setTimeout(()=>{
+        const cx=window.innerWidth*xpct/100;
+        const cy=window.innerHeight*ypct/100;
+        for(let j=0;j<32;j++){
+          const p=document.createElement('div');
+          const ang=(j/32)*Math.PI*2+Math.random()*.2;
+          const dist=55+Math.random()*130;
+          const col=colors[Math.floor(Math.random()*colors.length)];
+          const sz=5+Math.random()*5;
+          p.style.cssText=`position:fixed;pointer-events:none;z-index:9996;`+
+            `border-radius:50%;width:${sz}px;height:${sz}px;`+
+            `background:${col};box-shadow:0 0 8px ${col},0 0 16px ${col};`+
+            `left:${cx-sz/2}px;top:${cy-sz/2}px;`+
+            `transition:transform 1.2s cubic-bezier(.2,.8,.25,1),opacity 1.2s ease`;
+          document.body.appendChild(p);
+          requestAnimationFrame(()=>requestAnimationFrame(()=>{
+            p.style.transform=`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist+30}px) scale(.2)`;
+            p.style.opacity='0';
+          }));
+          setTimeout(()=>p.remove(),1350);
+        }
+        // Ring flash di titik ledakan
+        const ring=document.createElement('div');
+        ring.style.cssText=`position:fixed;pointer-events:none;z-index:9995;border-radius:50%;`+
+          `width:10px;height:10px;left:${cx-5}px;top:${cy-5}px;`+
+          `background:transparent;border:3px solid #ffd700;`+
+          `animation:fwRing .6s ease-out forwards`;
+        document.body.appendChild(ring);
+        setTimeout(()=>ring.remove(),700);
+      },idx*220+Math.random()*120);
+    });
   }catch(e){}
 }
+// CSS keyframe untuk ring firework (inject sekali)
+(function(){if(document.getElementById('_fw_style'))return;const s=document.createElement('style');s.id='_fw_style';s.textContent='@keyframes fwRing{0%{transform:scale(1);opacity:1}100%{transform:scale(8);opacity:0;border-width:1px}}';document.head.appendChild(s);})();
 
 // ═══════════════════════════════════════
 // PROMOTION SPARKLE
@@ -3580,8 +3647,8 @@ function _buildRandOpp(){
     {id:'grandmaster',rMin:2300,rMax:2650,thinkMin:300,thinkMax:3200,wMin:78,wMax:93,gMin:2500,gMax:20000,chatStyle:'grandmaster',
      mk:()=>{const fn=r(FN);return r(['GM','WGM','SuperGM','Dewa'])+fn+r(['_ID','_FIDE','_GM','']);}},
   ];
-  const roll=Math.random();
-  const tierObj=roll<.20?TIERS[0]:roll<.42?TIERS[1]:roll<.62?TIERS[2]:roll<.76?TIERS[3]:roll<.90?TIERS[4]:TIERS[5];
+  // Semua tier sama kemungkinannya — user level berapapun bisa ketemu ⚡ Dewa Catur!
+  const tierObj=TIERS[Math.floor(Math.random()*TIERS.length)];
   const rating=tierObj.rMin+Math.floor(Math.random()*(tierObj.rMax-tierObj.rMin));
   const totalGames=tierObj.gMin+Math.floor(Math.random()*(tierObj.gMax-tierObj.gMin));
   const winRate=tierObj.wMin+Math.floor(Math.random()*(tierObj.wMax-tierObj.wMin));
@@ -3621,13 +3688,13 @@ function _ratingToLabel(rating){
   return t.label;
 }
 
-// Kesulitan bot naik seiring tier — Dewa Catur (diff 5) menang ~80% vs pemain rata-rata
+// Kesulitan bot naik seiring 18 tier — Dewa Catur (diff 5) menang ~80% vs pemain rata-rata
 function _ratingToDiff(rating){
-  if(rating<650) return 1;   // Telur–Calon Pion
-  if(rating<1100)return 2;   // Pion–Prajurit–Pemanah
-  if(rating<1580)return 3;   // Penjaga–Kavaleri–Benteng
-  if(rating<2150)return 4;   // Ahli Taktik–Uskup–Bangsawan
-  return 5;                  // Maestro–Grandmaster–Dewa Catur
+  if(rating<860) return 1;   // Kroco–Bocah Catur–Pemula–Amatir
+  if(rating<1360)return 2;   // Pion Sejati–Pemain–Pemain Aktif
+  if(rating<1800)return 3;   // Pemain Tangguh–Semi Pro–Profesional
+  if(rating<2280)return 4;   // Pro Elite–Ahli Strategi–Expert
+  return 5;                  // Master Muda–Master–Elite–Grandmaster–Dewa Catur (80%+)
 }
 
 // ── Animasi promosi title ─────────────────────────────────────────────────────
@@ -4600,7 +4667,8 @@ function updateAfterGame(result){
   if(result==='win')d.wins++;else if(result==='loss')d.losses++;else d.draws++;
   const newLv=getLevel(d.xp);
   savePlayerData(d);
-  const histEntry={date:Date.now(),mode:isRandom?'random':gameMode,botLv:isRandom?null:botLevel,result,eloChange,elo:d.elo};
+  const histEntry={date:Date.now(),mode:isRandom?'random':gameMode,botLv:isRandom?null:botLevel,result,eloChange,elo:d.elo,
+    oppRating:isRandom?(_currentOpp?.rating||null):null};
   if(isRandom)histEntry.oppName=_currentOpp.name;
   saveGameHistory(histEntry);
   if(isRandom)_updateRandomRating(result);
@@ -4613,6 +4681,16 @@ function updateAfterGame(result){
   el('go-xp-val','+'+xpGain+' XP');
   const lvUpEl=document.getElementById('go-level-up');if(lvUpEl)lvUpEl.style.display=newLv>oldLv?'block':'none';
   const lvBadgeEl=document.getElementById('go-level-badge');if(lvBadgeEl)lvBadgeEl.textContent=getLevelBadge(newLv)+' — Level '+newLv;
+  // #99 — Animasi XP progress bar
+  const prog=getXpProgress(d.xp);
+  const barWrap=document.getElementById('go-xp-bar-wrap');
+  const xpBar=document.getElementById('go-xp-bar');
+  const xpPct=document.getElementById('go-xp-pct');
+  if(barWrap&&xpBar&&xpPct){
+    barWrap.style.display='block';
+    xpBar.style.transition='none';xpBar.style.width='0%';xpPct.textContent='0';
+    setTimeout(()=>{xpBar.style.transition='width 1.5s cubic-bezier(.34,1.2,.64,1)';xpBar.style.width=prog.pct+'%';xpPct.textContent=prog.pct;},350);
+  }
   updateProfileStats();
 }
 function updateProfileStats(){
@@ -4685,6 +4763,94 @@ function saveGameHistory(entry){
   try{let h=JSON.parse(localStorage.getItem('catur_game_hist')||'[]');h.unshift(entry);if(h.length>50)h=h.slice(0,50);localStorage.setItem('catur_game_hist',JSON.stringify(h));}catch(e){}
 }
 function getGameHistory(){try{return JSON.parse(localStorage.getItem('catur_game_hist')||'[]');}catch{return [];}}
+
+// ═══════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════
+function showLeaderboard(){
+  if(!document.getElementById('_lb_sty')){
+    const s=document.createElement('style');s.id='_lb_sty';
+    s.textContent=`
+      .lb-win-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;transition:background .2s}
+      .lb-win-card:active{background:rgba(255,255,255,.12)}
+      .lb-win-rank{font-size:22px;min-width:34px;text-align:center;font-weight:900;line-height:1}
+      .lb-win-info{flex:1;min-width:0}
+      .lb-win-opp{font-size:14px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .lb-win-sub{font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4}
+      .lb-win-elo{font-size:14px;font-weight:900;color:#4ade80;text-align:right;white-space:nowrap}
+      .lb-empty{text-align:center;color:var(--txt2);font-size:13px;padding:36px 20px;opacity:.7;line-height:1.8}
+      .lb-stat-grid{display:flex;justify-content:center;gap:18px;margin-top:12px}
+      .lb-stat-item{text-align:center}
+      .lb-stat-val{font-size:22px;font-weight:900;color:var(--gold)}
+      .lb-stat-lbl{font-size:10px;color:var(--txt2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+    `;
+    document.head.appendChild(s);
+  }
+  showScreen('leaderboard');
+  renderLeaderboard();
+}
+function renderLeaderboard(){
+  const hist=getGameHistory();
+  const d=initPlayerData();
+  // Stat card
+  const statEl=document.getElementById('lb-my-stat');
+  if(statEl){
+    const myTitle=_ratingToLabel(userProfile.rating||1200);
+    const badge=myTitle.split(' ')[0];
+    const titleText=myTitle.split(' ').slice(1).join(' ');
+    statEl.innerHTML=`
+      <div style="font-size:46px;margin-bottom:4px">${badge}</div>
+      <div style="font-size:18px;font-weight:900;color:var(--gold);margin-bottom:2px">${titleText}</div>
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:14px">Title kamu sekarang</div>
+      <div class="lb-stat-grid">
+        <div class="lb-stat-item"><div class="lb-stat-val">${d.elo||1200}</div><div class="lb-stat-lbl">ELO</div></div>
+        <div class="lb-stat-item"><div class="lb-stat-val" style="color:#4ade80">${d.wins||0}</div><div class="lb-stat-lbl">Menang</div></div>
+        <div class="lb-stat-item"><div class="lb-stat-val" style="color:#f87171">${d.losses||0}</div><div class="lb-stat-lbl">Kalah</div></div>
+        <div class="lb-stat-item"><div class="lb-stat-val" style="color:var(--txt2)">${d.draws||0}</div><div class="lb-stat-lbl">Seri</div></div>
+      </div>`;
+  }
+  // Top 10 wins vs random opponents (sorted by opp rating — makin tinggi makin keren)
+  const wins=hist
+    .filter(g=>g.result==='win'&&g.mode==='random'&&g.oppRating)
+    .sort((a,b)=>(b.oppRating||0)-(a.oppRating||0))
+    .slice(0,10);
+  const listEl=document.getElementById('lb-best-wins');
+  if(listEl){
+    if(!wins.length){
+      listEl.innerHTML='<div class="lb-empty">🎮 Belum ada kemenangan di mode Lawan Random.<br>Kalahkan lawan random untuk masuk leaderboard!<br><span style="font-size:11px;opacity:.6">Bahkan Kroco bisa ketemu ⚡ Dewa Catur — siap?</span></div>';
+    } else {
+      const medals=['🥇','🥈','🥉'];
+      listEl.innerHTML=wins.map((g,i)=>{
+        const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'2-digit'}):'';
+        const oppTitle=_ratingToLabel(g.oppRating||0);
+        const oppBadge=oppTitle.split(' ')[0];
+        const oppTitleText=oppTitle.split(' ').slice(1).join(' ');
+        return `<div class="lb-win-card">
+          <div class="lb-win-rank">${medals[i]||'#'+(i+1)}</div>
+          <div class="lb-win-info">
+            <div class="lb-win-opp">${g.oppName||'Lawan Random'}</div>
+            <div class="lb-win-sub">${oppBadge} ${oppTitleText} · ⭐ ${g.oppRating} · ${dt}</div>
+          </div>
+          <div class="lb-win-elo">+${g.eloChange||0}<div style="font-size:9px;color:var(--txt2);font-weight:400;margin-top:1px">ELO</div></div>
+        </div>`;
+      }).join('');
+    }
+  }
+  // Peak rating
+  const peakEl=document.getElementById('lb-peak-info');
+  if(peakEl){
+    const allElos=[d.elo||1200,...hist.map(g=>g.elo||0)].filter(e=>e>0);
+    const peak=Math.max(...allElos);
+    const peakTitle=_ratingToLabel(peak);
+    const peakBadge=peakTitle.split(' ')[0];
+    const peakTitleText=peakTitle.split(' ').slice(1).join(' ');
+    peakEl.innerHTML=`
+      <div style="font-size:36px;margin-bottom:4px">${peakBadge}</div>
+      <div style="font-size:26px;font-weight:900;color:var(--gold)">⭐ ${peak}</div>
+      <div style="font-size:13px;color:var(--txt2);margin-top:5px">${peakTitleText} — rating tertinggi dicapai</div>
+    `;
+  }
+}
 function showHistory(){showScreen('history');renderHistoryScreen();}
 function renderHistoryScreen(){
   const hist=getGameHistory(),d=initPlayerData();
