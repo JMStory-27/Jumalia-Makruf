@@ -199,6 +199,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .act-btn:active{transform:scale(.97)}
 .act-btn.danger:hover{border-color:rgba(248,113,113,.4);color:#f87171}
 .act-btn.hidden{display:none}
+/* ── APK / PWA standalone mode: hide hint & undo ── */
+@media (display-mode: standalone) {
+  #btn-hint, #btn-undo { display: none !important; }
+}
 
 /* ── OVERLAYS ── */
 .overlay{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -342,7 +346,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .mm-online-count{font-size:12px;color:var(--txt2);text-align:center;opacity:.7}
 .mm-cancel-btn{margin-top:4px;padding:11px 28px;border-radius:99px;border:1px solid rgba(248,113,113,.4);background:transparent;color:#f87171;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
 .mm-cancel-btn:hover{background:rgba(248,113,113,.08)}
-.mm-spin-ring{position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold);border-right-color:rgba(212,175,55,.4);animation:spin360 1.25s linear infinite}
+.mm-spin-ring{position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold);border-right-color:rgba(212,175,55,.4);animation:spin360 1s linear infinite}
 @keyframes spin360{to{transform:rotate(360deg)}}
 
 /* ── PROFILE SETTINGS ── */
@@ -1195,7 +1199,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 
   <!-- Action buttons -->
   <div class="game-actions">
-    <div class="act-btn" onclick="undoMove()"><span class="act-icon">↩️</span><span>Undo</span></div>
+    <div id="btn-undo" class="act-btn" onclick="undoMove()"><span class="act-icon">↩️</span><span>Undo</span></div>
     <div id="btn-hint" class="act-btn" onclick="showHint()"><span class="act-icon">💡</span><span>Petunjuk</span></div>
     <div id="btn-resign-act" class="act-btn danger" onclick="doResign()"><span class="act-icon">🏳️</span><span>Menyerah</span></div>
   </div>
@@ -1903,24 +1907,13 @@ function onSquareClick(r,c){
   // Select piece — use cached legal moves
   const p=gs.board[clickR][clickC];
   if(p&&col(p)===gs.turn){
-    // Clear hint if user picks a different piece than the hinted one
-    if(hintMove&&(clickR!==hintMove.fr||clickC!==hintMove.fc)){
-      hintMove=null;
-      document.getElementById('btn-hint')?.classList.remove('hint-active');
-      const grid2=document.getElementById('board-grid');
-      if(grid2)grid2.querySelectorAll('.hint-from,.hint-to').forEach(s=>s.classList.remove('hint-from','hint-to'));
-    }
     selected=[clickR,clickC];
     legalFromSel=_getLegal(gs,gs.turn).filter(m=>m.fr===clickR&&m.fc===clickC);
     playSound('select');
+    if(hintMove){hintMove=null;document.getElementById('btn-hint')?.classList.remove('hint-active');renderBoard();return;}
     _renderSel();
   }else{
-    if(hintMove){
-      hintMove=null;
-      document.getElementById('btn-hint')?.classList.remove('hint-active');
-      const grid2=document.getElementById('board-grid');
-      if(grid2)grid2.querySelectorAll('.hint-from,.hint-to').forEach(s=>s.classList.remove('hint-from','hint-to'));
-    }
+    if(hintMove){hintMove=null;document.getElementById('btn-hint')?.classList.remove('hint-active');renderBoard();}
     selected=null;legalFromSel=[];_renderSel();
   }
 }
@@ -2364,7 +2357,7 @@ function startVsBot(level,oppProfile){
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   _stopOppChat();
   try{
-    gameMode=oppProfile?'random':'bot';botLevel=level;isHordeMode=false;
+    gameMode='bot';botLevel=level;isHordeMode=false;
     myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
     flipped=myColor==='b';
     gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
@@ -2469,7 +2462,6 @@ function restartSameMode(){
   ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
   if(isHordeMode)startHorde();
   else if(gameMode==='bot')startVsBot(botLevel);
-  else if(gameMode==='random')showMatchmaking();
   else if(gameMode==='pass')startPassPlay();
   else quitToHome();
 }
@@ -2489,7 +2481,7 @@ function showGameOver(result){
   document.getElementById('go-title').textContent=title;
   document.getElementById('go-sub').textContent=sub;
   // ELO & XP update (bot/random match only)
-  if(gameMode==='bot'||gameMode==='random'){
+  if(gameMode==='bot'){
     const r=isDraw?'draw':myWin?'win':'loss';
     try{updateAfterGame(r);}catch(e){}
   }
@@ -3603,13 +3595,22 @@ function _startMatchmakingAnimation(){
   const enCountry=document.getElementById('mm-en-country');
   const enRating=document.getElementById('mm-en-rating');
   const enAv=document.getElementById('mm-en-av-inner');
+  function _renderMmAvatar(el,avatarIdx){
+    if(!el)return;
+    el.innerHTML='';
+    const cv=document.createElement('canvas');
+    cv.width=68;cv.height=68;
+    cv.style.cssText='width:68px;height:68px;border-radius:50%;display:block';
+    try{(_EMOJIS||_CHIBI_EMOJIS)?.[avatarIdx]?.d(cv.getContext('2d'),68);}catch(e){}
+    el.appendChild(cv);
+  }
   if(found)found.classList.remove('show');
   if(dots)dots.style.display='flex';
   if(progbar)progbar.style.width='0%';
   if(enName)enName.textContent='Mencari...';
   if(enCountry)enCountry.textContent='🌐 ???';
   if(enRating)enRating.textContent='⭐ ???';
-  if(enAv)enAv.textContent='❓';
+  if(enAv){enAv.innerHTML='<span style="font-size:28px">❓</span>';}
 
   // Random online count
   const onlineNum=document.getElementById('mm-online-num');
@@ -3622,7 +3623,7 @@ function _startMatchmakingAnimation(){
   // GACHA cycle: rapid spin then settle
   let cycleCount=0;
   const TOTAL_MS=5000;
-  let CYCLE_MS=60;
+  let CYCLE_MS=75;
   const SETTLE_AT=TOTAL_MS-800;
 
   function _mmSpinTick(){
@@ -3670,7 +3671,7 @@ function _startMatchmakingAnimation(){
     const rand=pool[Math.floor(Math.random()*pool.length)];
     const box=document.getElementById('mm-enemy-box');
     if(box){box.classList.remove('enemy');void box.offsetWidth;box.classList.add('enemy');}
-    if(enAv)enAv.textContent=rand.avatar;
+    _renderMmAvatar(enAv,rand.avatar);
     if(enName)enName.textContent=rand.name;
     if(enCountry)enCountry.textContent=rand.country;
     if(enRating)enRating.textContent='⭐ '+rand.rating;
@@ -3684,7 +3685,7 @@ function _startMatchmakingAnimation(){
       _mmCycleTimer=setTimeout(cycleShuffle,CYCLE_MS);
     } else {
       // Settle on matched opponent
-      if(enAv)enAv.textContent=_matchedOpponent.avatar;
+      _renderMmAvatar(enAv,_matchedOpponent.avatar);
       if(enName)enName.textContent=_matchedOpponent.name;
       if(enCountry)enCountry.textContent=_matchedOpponent.country;
       if(enRating)enRating.textContent='⭐ '+_matchedOpponent.rating;
@@ -4331,10 +4332,31 @@ function calcEloChange(myElo,oppElo,result){
   const S=result==='win'?1:result==='draw'?0.5:0;
   return Math.round(K*(S-E));
 }
+function _updateRandomRating(result){
+  const totalMoves=moveHistory.length;
+  let change;
+  if(result==='win'){
+    if(totalMoves<25)change=22+Math.floor(Math.random()*12);
+    else if(totalMoves<50)change=12+Math.floor(Math.random()*8);
+    else change=6+Math.floor(Math.random()*6);
+  }else if(result==='loss'){
+    if(totalMoves<25)change=-(22+Math.floor(Math.random()*12));
+    else if(totalMoves<50)change=-(10+Math.floor(Math.random()*8));
+    else change=-(3+Math.floor(Math.random()*5));
+  }else{
+    change=Math.floor(Math.random()*5)-2;
+  }
+  userProfile.rating=Math.max(100,(userProfile.rating||1200)+change);
+  try{localStorage.setItem('catur_user_profile',JSON.stringify(userProfile));}catch(e){}
+  const meRating=document.getElementById('mm-me-rating');
+  if(meRating)meRating.textContent='⭐ '+userProfile.rating;
+  return change;
+}
 function updateAfterGame(result){
   const d=initPlayerData();
   const oldLv=getLevel(d.xp);
-  const oppElo=BOT_ELO[botLevel]||1000;
+  const isRandom=!!(gameMode==='bot'&&_currentOpp);
+  const oppElo=isRandom?(_currentOpp.rating||1000):(BOT_ELO[botLevel]||1000);
   const eloChange=calcEloChange(d.elo,oppElo,result);
   d.elo=Math.max(100,d.elo+eloChange);
   const xpGain=result==='win'?(40+botLevel*15):result==='draw'?20:10;
@@ -4342,17 +4364,10 @@ function updateAfterGame(result){
   if(result==='win')d.wins++;else if(result==='loss')d.losses++;else d.draws++;
   const newLv=getLevel(d.xp);
   savePlayerData(d);
-  // Star rating update for random match (performance-based)
-  if(gameMode==='random'){
-    const moves=moveHistory.length;
-    let rChange=0;
-    if(result==='win'){rChange=moves<20?28:moves<35?18:12;}
-    else if(result==='loss'){rChange=moves<20?-22:moves<35?-10:-5;}
-    else{rChange=moves>30?3:-3;}
-    userProfile.rating=Math.max(100,Math.min(2500,(userProfile.rating||1200)+rChange));
-    try{localStorage.setItem('catur_profile',JSON.stringify(userProfile));}catch(e){}
-  }
-  saveGameHistory({date:Date.now(),mode:gameMode,botLv:gameMode==='random'?null:botLevel,result,eloChange,elo:d.elo,oppName:gameMode==='random'?(_currentOpp?.name||null):null});
+  const histEntry={date:Date.now(),mode:isRandom?'random':gameMode,botLv:isRandom?null:botLevel,result,eloChange,elo:d.elo};
+  if(isRandom)histEntry.oppName=_currentOpp.name;
+  saveGameHistory(histEntry);
+  if(isRandom)_updateRandomRating(result);
   // Update game over overlay
   const statsEl=document.getElementById('go-stats');if(statsEl)statsEl.style.display='flex';
   const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
@@ -4453,8 +4468,7 @@ function renderHistoryScreen(){
     const icon=g.result==='win'?'🏆':g.result==='loss'?'💔':'🤝';
     const eloStr=g.eloChange!=null?(g.eloChange>=0?'<span style="color:#4ade80">+'+g.eloChange+'</span>':'<span style="color:#f87171">'+g.eloChange+'</span>'):'';
     const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'';
-    const botLbl=g.botLv?` — ${lvNames[g.botLv]||''}`:''
-    const modeLbl=g.mode==='random'&&g.oppName?`🎲 Vs ${g.oppName}`:(modeNames[g.mode]||g.mode||'Catur')+botLbl;
+    const modeLbl=g.mode==='random'?`🎲 vs ${g.oppName||'Lawan Random'}`:((modeNames[g.mode]||g.mode||'Catur')+(g.botLv?` — ${lvNames[g.botLv]||''}`:''));
     return `<div class="hist-card ${cls}">
       <div class="hist-icon">${icon}</div>
       <div class="hist-info"><div class="hist-mode">${modeLbl}</div><div class="hist-result">${res}</div><div class="hist-date">${dt}</div></div>
@@ -4477,7 +4491,7 @@ function renderHistoryInAnalysis(){
     const res=g.result==='win'?'Menang':g.result==='loss'?'Kalah':'Seri';
     const eloStr=g.eloChange!=null?(g.eloChange>=0?'+'+g.eloChange:String(g.eloChange)):'';
     const dt=g.date?new Date(g.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'}):'';
-    const modeLbl=g.mode==='random'&&g.oppName?`🎲 Vs ${g.oppName}`:(modeNames[g.mode]||g.mode);
+    const modeLbl=g.mode==='random'?`🎲 vs ${g.oppName||'Lawan Random'}`:(modeNames[g.mode]||g.mode);
     return `<div class="hist-card ${cls}" style="margin-bottom:6px">
       <div class="hist-icon" style="font-size:22px">${icon}</div>
       <div class="hist-info"><div class="hist-mode" style="font-size:10px">${modeLbl}</div><div class="hist-result" style="font-size:13px">${res}</div></div>
