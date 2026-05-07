@@ -161,6 +161,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .player-avatar.active-turn{border-color:var(--gold);box-shadow:0 0 12px rgba(212,175,55,.5);animation:turnPulse 1.5s ease-in-out infinite}
 /* When data-border is applied, remove old static border so tier border shows cleanly */
 .player-avatar[data-border]{border:none !important;}
+/* When active-turn + data-border coexist, use outline so turnPulse doesn't overwrite the tier glow */
+.player-avatar[data-border].active-turn{animation:none !important;box-shadow:none !important;outline:2.5px solid var(--gold);outline-offset:3px;border:none !important;}
 @keyframes turnPulse{0%,100%{box-shadow:0 0 8px rgba(212,175,55,.4)}50%{box-shadow:0 0 20px rgba(212,175,55,.7)}}
 .player-name{font-size:13px;font-weight:700;color:var(--txt)}
 .player-caps{font-size:12px;color:var(--txt2);line-height:1.2}
@@ -323,7 +325,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .mm-title{font-size:22px;font-weight:800;color:var(--gold);text-align:center;letter-spacing:1px}
 .mm-subtitle{font-size:13px;color:var(--txt2);text-align:center}
 .mm-vs-row{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;margin:8px 0}
-.mm-player-box{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--rad);border:1px solid var(--card-b);background:var(--card);min-width:0;max-width:160px;position:relative;overflow:hidden}
+.mm-player-box{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px 12px;border-radius:var(--rad);border:1px solid var(--card-b);background:var(--card);min-width:0;max-width:160px;position:relative;overflow:visible}
 .mm-player-box.me{border-color:rgba(212,175,55,.45)}
 .mm-player-box.enemy{animation:mmEnmFlick .12s ease-in-out}
 @keyframes mmEnmFlick{0%{opacity:0;transform:translateY(-6px)}100%{opacity:1;transform:translateY(0)}}
@@ -727,7 +729,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 .pick-bd-item{position:relative;overflow:visible}
 .pick-bd-item:not(.locked):hover{transform:translateY(-2px) scale(1.01);box-shadow:0 8px 25px rgba(0,0,0,.4)}
 .pick-bd-badge{font-size:16px;flex-shrink:0;width:24px;text-align:center}
-.pick-bd-chibi-wrap{position:relative;width:64px;height:64px;flex-shrink:0}
+.pick-bd-chibi-wrap{position:relative;width:84px;height:84px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .pick-bd-chibi{width:64px;height:64px;border-radius:50%;background:rgba(20,20,30,.6);display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;z-index:1;flex-shrink:0}
 .pick-bd-floater{position:absolute;font-size:14px;animation:floatAround var(--fa-dur,3s) ease-in-out infinite;z-index:3;pointer-events:none;top:50%;left:50%;transform-origin:0 0;line-height:1}
 @keyframes floatAround{0%{transform:translate(-50%,-50%) rotate(var(--fa-start,0deg)) translateX(var(--fa-r,32px)) scale(1);opacity:.95}50%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 180deg)) translateX(var(--fa-r,32px)) scale(1.25);opacity:1}100%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 360deg)) translateX(var(--fa-r,32px)) scale(1);opacity:.95}}
@@ -740,8 +742,8 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 .pick-ov-grid{width:100%;max-width:480px;display:grid;grid-template-columns:repeat(6,1fr);gap:8px;overflow-y:auto;flex:1;padding-bottom:12px}
 .pick-av-item{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid transparent;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s}
 .pick-av-item.selected{border-color:#ffd700;background:rgba(212,175,55,.15);box-shadow:0 0 10px rgba(212,175,55,.4)}
-.pick-bd-grid{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;padding-bottom:12px}
-.pick-bd-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:2px solid transparent;cursor:pointer;transition:all .18s}
+.pick-bd-grid{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;overflow-x:visible;flex:1;padding-bottom:12px}
+.pick-bd-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:2px solid transparent;cursor:pointer;transition:all .18s;overflow:visible}
 .pick-bd-item.selected{border-color:#ffd700;background:rgba(212,175,55,.1)}
 .pick-bd-item.locked{opacity:.45;cursor:not-allowed}
 .pick-bd-demo{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
@@ -761,6 +763,80 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 .prof-wr-val{font-size:17px;font-weight:800;color:#fff}
 .prof-wr-lbl{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;text-transform:uppercase;letter-spacing:.5px}
 .prof-divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
+
+/* ══ TITLE-UP OVERLAY (3 fase) ══ */
+#titleup-ov{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;overflow:hidden;background:#000}
+#titleup-ov.show{display:flex}
+.tu-phase{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;pointer-events:none;transition:opacity .45s}
+.tu-phase.active{opacity:1;pointer-events:auto}
+/* Phase 1: Drumroll */
+.tu-drum-ring{width:170px;height:170px;border-radius:50%;border:5px solid;position:absolute;animation:tuRingPulse .28s ease-in-out infinite alternate}
+@keyframes tuRingPulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.14);opacity:1}}
+.tu-drum-ring2{width:220px;height:220px;border-radius:50%;border:2px solid;position:absolute;opacity:.3;animation:tuRingPulse .28s .14s ease-in-out infinite alternate}
+.tu-drum-icon{font-size:70px;animation:tuDrumBounce .12s ease-in-out infinite alternate;z-index:2}
+@keyframes tuDrumBounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-8px) scale(1.08)}}
+.tu-count{font-size:110px;font-weight:900;line-height:1;z-index:2;animation:tuCountPop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes tuCountPop{from{transform:scale(0) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.tu-drum-lbl{font-size:14px;font-weight:800;letter-spacing:4px;text-transform:uppercase;z-index:2;animation:tuLblPulse .7s ease-in-out infinite alternate}
+@keyframes tuLblPulse{from{opacity:.4}to{opacity:1}}
+.tu-drum-dots{font-size:28px;letter-spacing:8px;z-index:2;animation:tuLblPulse .4s ease-in-out infinite alternate}
+/* Phase 2: Evolution */
+.tu-evo-from,.tu-evo-to{font-size:26px;font-weight:900;text-align:center;z-index:2;line-height:1.3}
+.tu-evo-arrow{font-size:44px;z-index:2;animation:tuEvoArrow 1.5s ease-in-out infinite}
+@keyframes tuEvoArrow{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.4) rotate(180deg)}}
+.tu-evo-ring{position:absolute;width:260px;height:260px;border-radius:50%;border:3px solid;animation:tuEvoRing 1.5s linear infinite}
+@keyframes tuEvoRing{from{transform:rotate(0) scale(.8);opacity:.5}to{transform:rotate(360deg) scale(1.2);opacity:0}}
+.tu-evo-parts{position:absolute;inset:0;pointer-events:none}
+@keyframes tuEvoFadeOut{0%{opacity:1;transform:scale(1) translateY(0)}70%{opacity:0;transform:scale(2.5) translateY(-30px)}100%{opacity:0;transform:scale(0)}}
+@keyframes tuEvoFadeIn{0%{opacity:0;transform:scale(0) rotate(-200deg)}70%{opacity:1;transform:scale(1.15) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+/* Phase 3: Crown Drop */
+.tu-crown-bg-el{position:absolute;inset:0}
+.tu-crown-icon{font-size:96px;z-index:2;animation:tuCrownDrop .75s cubic-bezier(.34,1.2,.64,1) forwards;opacity:0}
+@keyframes tuCrownDrop{0%{transform:translateY(-220px) scale(2) rotate(-20deg);opacity:0}65%{transform:translateY(12px) scale(.92) rotate(4deg);opacity:1}80%{transform:translateY(-6px) scale(1.06) rotate(-1deg)}100%{transform:translateY(0) scale(1) rotate(0);opacity:1}}
+.tu-crown-name{font-size:28px;font-weight:900;text-align:center;z-index:2;opacity:0;animation:tuReveal 1s .65s both;text-shadow:0 0 30px currentColor;line-height:1.2}
+@keyframes tuReveal{from{opacity:0;transform:translateY(22px) scale(.75)}to{opacity:1;transform:translateY(0) scale(1)}}
+.tu-crown-sub{font-size:12px;font-weight:700;letter-spacing:4px;text-transform:uppercase;z-index:2;opacity:0;animation:tuReveal 1s 1s both}
+.tu-sparks{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.tu-spark{position:absolute;border-radius:50%;animation:tuSparkFly linear forwards}
+@keyframes tuSparkFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(0)}}
+.tu-tap-skip{position:fixed;bottom:28px;right:18px;padding:8px 20px;border-radius:20px;border:1.5px solid rgba(255,255,255,.18);background:rgba(0,0,0,.5);color:rgba(255,255,255,.45);font-size:11px;cursor:pointer;z-index:9999;backdrop-filter:blur(8px);font-weight:600}
+
+/* ══ MODE LATIHAN ══ */
+#s-latihan{justify-content:flex-start}
+.lt-inner{width:100%;max-width:420px;display:flex;flex-direction:column;gap:12px;padding:0 0 80px}
+.lt-progress{display:flex;gap:4px;padding:4px 0 8px}
+.lt-prog-dot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.1);transition:background .3s}
+.lt-prog-dot.done{background:#4ade80}.lt-prog-dot.active{background:#ffd700}
+.lt-lesson-card{border-radius:18px;padding:20px;border:1.5px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:13px;transition:border-color .3s,background .3s}
+.lt-piece-row{display:flex;align-items:center;gap:14px}
+.lt-piece-icon{width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.lt-piece-name{font-size:21px;font-weight:900;line-height:1.1}
+.lt-piece-sym{font-size:11px;opacity:.55;margin-top:3px;letter-spacing:.5px}
+.lt-desc{font-size:13.5px;line-height:1.65;color:rgba(255,255,255,.82)}
+.lt-tips{display:flex;flex-direction:column;gap:7px}
+.lt-tip{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:rgba(255,255,255,.78);line-height:1.5}
+.lt-tip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+/* Mini board */
+.lt-board{display:grid;grid-template-columns:repeat(8,1fr);border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,.12);width:100%;aspect-ratio:1}
+.lt-sq{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;cursor:default}
+.lt-sq.light{background:#f0d9b5}.lt-sq.dark{background:#b58863}
+.lt-sq.piece{background:#ffd700!important;box-shadow:inset 0 0 0 2px rgba(0,0,0,.2)}
+.lt-sq.move::after{content:'';position:absolute;width:34%;height:34%;border-radius:50%;background:rgba(60,210,90,.85);box-shadow:0 0 6px rgba(60,210,90,.5)}
+.lt-sq.capture{background:rgba(220,60,60,.75)!important}
+.lt-sq.capture::after{content:'';position:absolute;inset:8%;border-radius:50%;background:rgba(255,80,80,.25);border:2.5px solid rgba(255,60,60,.8)}
+/* Nav */
+.lt-nav{display:flex;gap:10px;padding:2px 0 6px}
+.lt-btn{flex:1;padding:14px;border-radius:14px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center}
+.lt-btn-prev{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55)}
+.lt-btn-prev:active{background:rgba(255,255,255,.14)}
+.lt-btn-next{background:#ffd700;color:#000}.lt-btn-next:active{transform:scale(.97)}
+.lt-practice-btn{width:100%;padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,#4ade80,#16a34a);color:#fff;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:.5px;box-shadow:0 4px 20px rgba(74,222,128,.35)}
+.lt-no-xp{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);font-size:10px;color:#fca5a5;font-weight:700;margin-top:4px}
+
+/* ══ COSMIC EVOLUTION PROFILE THEME ══ */
+.profile-card,.prof-title-card{transition:background .5s,border-color .5s,box-shadow .5s}
+.prof-title-big{transition:color .5s,text-shadow .5s}
+#prof-xp-bar{transition:background .5s,width 1.5s cubic-bezier(.34,1.2,.64,1)}
 </style>
 </head>
 <body>
@@ -808,12 +884,8 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 </g>
 <!-- WHITE KNIGHT — separate fills with same-colour stroke bleed to eliminate antialiasing gaps -->
 <g id="wN">
-  <!-- Fill 1: main body — stroke bleeds outward to seal any gap -->
-  <path fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <!-- Fill 2: head — starts at 21,17 (inside body) + stroke bleed -->
-  <path fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
-  <!-- Fill 3: front leg area — stroke bleed -->
-  <path fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Solid hull — one unified fill to eliminate any antialiasing gaps -->
+  <path fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
   <!-- Outline strokes -->
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
@@ -866,12 +938,8 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 </g>
 <!-- BLACK KNIGHT — separate fills with same-colour stroke bleed to eliminate antialiasing gaps -->
 <g id="bN">
-  <!-- Fill 1: main body — stroke bleeds outward to seal any gap -->
-  <path fill="#111" stroke="#111" stroke-width="2" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <!-- Fill 2: head — starts at 21,17 (inside body) + stroke bleed -->
-  <path fill="#111" stroke="#111" stroke-width="2" stroke-linejoin="round" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
-  <!-- Fill 3: front leg area — stroke bleed -->
-  <path fill="#111" stroke="#111" stroke-width="2" stroke-linejoin="round" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Solid hull — one unified fill to eliminate any antialiasing gaps -->
+  <path fill="#111" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
   <!-- Outline strokes -->
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
@@ -939,9 +1007,9 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
         <span class="btn-label">Main Online</span>
         <span class="btn-arrow">›</span>
       </button>
-      <button class="btn-main" onclick="startHorde()">
-        <span class="btn-icon">⚔️</span>
-        <span class="btn-label">Mode Horde</span>
+      <button class="btn-main" onclick="showLatihan()">
+        <span class="btn-icon">🎓</span>
+        <span class="btn-label">Mode Latihan</span>
         <span class="btn-arrow">›</span>
       </button>
       <button class="btn-main" style="border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.06)" onclick="showMatchmaking()">
@@ -2660,31 +2728,30 @@ function getBotMove(s,c,level){
   const moves=legalMoves(s,c);if(!moves.length)return null;
   const rnd=()=>moves[Math.floor(Math.random()*moves.length)];
   if(level===1){
-    // Easy: 42% fully random move, rest depth-1
-    // → user wins ~80% against average player
+    // Pemula–Amatir: 42% random — user wins ~80%
     if(Math.random()<0.42)return rnd();
     return getBestMove(s,c,1);
   }
   if(level===2){
-    // Medium: 15% random move, rest depth-2
-    // → user wins ~70%
+    // Pion Sejati–Pemain Aktif: 15% random — user wins ~70%
     if(Math.random()<0.15)return rnd();
     return getBestMove(s,c,2);
   }
-  // Hard: depth-3 with 6% chance of playing depth-1 (occasional blunder)
-  // → user wins ~55%
   if(level===3){
+    // Pemain Tangguh–Profesional: 6% blunder — user wins ~55%
     if(Math.random()<0.06)return getBestMove(s,c,1);
     return getBestMove(s,c,3);
   }
-  // Super Hard: depth-4, zero blunder
-  // → user wins ~30%
   if(level===4){
+    // Pro Elite–Expert: depth-4, zero blunder — user wins ~30%
     return getBestMove(s,c,4);
   }
-  // Grandmaster: depth-5, zero blunder, very hard to beat
-  // → user wins ~10%
-  return getBestMove(s,c,5);
+  if(level===5){
+    // Master–Grandmaster: depth-5, zero blunder — user wins ~10%
+    return getBestMove(s,c,5);
+  }
+  // Level 6 — Grandmaster Elite + Dewa Catur: depth-6, near-perfect, user wins <5%
+  return getBestMove(s,c,6);
 }
 function startPassPlay(){
   clearTimeout(thinkTimer);thinkTimer=null;
@@ -3786,6 +3853,7 @@ function buildProfileUI(){
   const sel=document.getElementById('prof-country-select');
   [...sel.options].forEach(o=>o.selected=o.value===userProfile.country);
   renderProfileAvatar();
+  applyCosmicProfileTheme();
 }
 
 // ═══════════════════════════════════════
@@ -3960,9 +4028,13 @@ function _buildRandOpp(){
     {id:'master',rMin:2050,rMax:2300,thinkMin:700,thinkMax:4000,wMin:68,wMax:82,gMin:1200,gMax:9000,chatStyle:'master',
      mk:()=>{const fn=r(FN);return r(['IM','Master','Grand','Titan'])+'_'+fn;}},
     {id:'grandmaster',rMin:2300,rMax:2650,thinkMin:300,thinkMax:3200,wMin:78,wMax:93,gMin:2500,gMax:20000,chatStyle:'grandmaster',
-     mk:()=>{const fn=r(FN);return r(['GM','WGM','SuperGM','Dewa'])+fn+r(['_ID','_FIDE','_GM','']);}},
+     mk:()=>{const fn=r(FN);return r(['GM','WGM','SuperGM','GrandMstr'])+fn+r(['_ID','_FIDE','_GM','']);}},
+    {id:'grandmaster_elite',rMin:2650,rMax:2850,thinkMin:150,thinkMax:2200,wMin:85,wMax:96,gMin:5000,gMax:35000,chatStyle:'grandmaster',
+     mk:()=>{const fn=r(FN);return r(['EliteGM','SuperGM','IronGM','LegendGM'])+fn+r(['_World','_FIDE','_GM','']);}},
+    {id:'dewa_catur',rMin:2850,rMax:3200,thinkMin:80,thinkMax:1500,wMin:92,wMax:99,gMin:10000,gMax:60000,chatStyle:'grandmaster',
+     mk:()=>{const fn=r(FN);return r(['Dewa','GodOfChess','Legend','GOAT_GM'])+fn+r(['_Catur','_Chess','_FIDE','']);}},
   ];
-  // Semua tier sama kemungkinannya — user level berapapun bisa ketemu ⚡ Dewa Catur!
+  // Semua 8 tier sama kemungkinannya — dari Pemula sampai ⚡ Dewa Catur bisa muncul!
   const tierObj=TIERS[Math.floor(Math.random()*TIERS.length)];
   const rating=tierObj.rMin+Math.floor(Math.random()*(tierObj.rMax-tierObj.rMin));
   const totalGames=tierObj.gMin+Math.floor(Math.random()*(tierObj.gMax-tierObj.gMin));
@@ -4003,13 +4075,14 @@ function _ratingToLabel(rating){
   return t.label;
 }
 
-// Kesulitan bot naik seiring 18 tier — Dewa Catur (diff 5) menang ~80% vs pemain rata-rata
+// Kesulitan bot naik seiring 18 tier — Dewa Catur (diff 6) quasiperfect vs pemain rata-rata
 function _ratingToDiff(rating){
-  if(rating<860) return 1;   // Kroco–Bocah Catur–Pemula–Amatir
-  if(rating<1360)return 2;   // Pion Sejati–Pemain–Pemain Aktif
-  if(rating<1800)return 3;   // Pemain Tangguh–Semi Pro–Profesional
-  if(rating<2280)return 4;   // Pro Elite–Ahli Strategi–Expert
-  return 5;                  // Master Muda–Master–Elite–Grandmaster–Dewa Catur (80%+)
+  if(rating<860) return 1;   // Kroco–Bocah Catur–Pemula–Amatir        (depth-1, 42% random)
+  if(rating<1360)return 2;   // Pion Sejati–Pemain–Pemain Aktif        (depth-2, 15% random)
+  if(rating<1800)return 3;   // Pemain Tangguh–Semi Pro–Profesional    (depth-3, 6% blunder)
+  if(rating<2280)return 4;   // Pro Elite–Ahli Strategi–Expert         (depth-4, zero blunder)
+  if(rating<2700)return 5;   // Master Muda–Master–Master Elite–GM     (depth-5, zero blunder)
+  return 6;                  // Grandmaster Elite + Dewa Catur          (depth-6, near-perfect)
 }
 
 // ── Animasi promosi title ─────────────────────────────────────────────────────
@@ -4971,24 +5044,30 @@ function calcEloChange(myElo,oppElo,result){
   return Math.round(K*(S-E));
 }
 function _updateRandomRating(result){
-  const totalMoves=moveHistory.length;
-  let change;
+  const oppRating=_currentOpp?.rating||1000;
+  const myRating=Math.max(100,userProfile.rating??400);
+  // Gunakan rumus ELO standar — makin kuat lawan, makin besar gain kalau menang
+  const K=40;
+  const E=1/(1+Math.pow(10,(oppRating-myRating)/400));
+  const S=result==='win'?1:result==='draw'?0.5:0;
+  let change=Math.round(K*(S-E));
+  // Bonus upset: kalahkan lawan yang jauh lebih tinggi = ekstra rating
   if(result==='win'){
-    if(totalMoves<25)change=22+Math.floor(Math.random()*12);
-    else if(totalMoves<50)change=12+Math.floor(Math.random()*8);
-    else change=6+Math.floor(Math.random()*6);
-  }else if(result==='loss'){
-    if(totalMoves<25)change=-(22+Math.floor(Math.random()*12));
-    else if(totalMoves<50)change=-(10+Math.floor(Math.random()*8));
-    else change=-(3+Math.floor(Math.random()*5));
-  }else{
-    change=Math.floor(Math.random()*5)-2;
+    const gap=oppRating-myRating;
+    if(gap>300)change+=Math.round(gap/80);  // bonus makin besar saat upset besar
+    change=Math.max(3,Math.min(100,change));
+  } else if(result==='loss'){
+    const gap=myRating-oppRating;
+    if(gap>300)change-=Math.round(gap/100); // penalti lebih besar jika kalah dari yang lemah
+    change=Math.min(-3,Math.max(-100,change));
+  } else {
+    change=Math.max(-5,Math.min(10,change));
   }
   const oldTitle=_ratingToLabel(userProfile.rating??0);
   userProfile.rating=Math.max(0,(userProfile.rating??0)+change);
   try{localStorage.setItem('catur_user_profile',JSON.stringify(userProfile));}catch(e){}
   const newTitle=_ratingToLabel(userProfile.rating);
-  // Tampilkan animasi promosi jika title naik (hanya saat menang/draw)
+  // Animasi promosi jika title naik (saat menang/draw)
   if(result!=='loss'&&oldTitle!==newTitle)setTimeout(()=>_showTitlePromotion(oldTitle,newTitle),1800);
   const meRating=document.getElementById('mm-me-rating');
   if(meRating)meRating.textContent='⭐ '+userProfile.rating;
@@ -5001,7 +5080,13 @@ function updateAfterGame(result){
   const oppElo=isRandom?(_currentOpp.rating||1000):(BOT_ELO[botLevel]||1000);
   const eloChange=calcEloChange(d.elo,oppElo,result);
   d.elo=Math.max(100,d.elo+eloChange);
-  const xpGain=result==='win'?(40+botLevel*15):result==='draw'?20:10;
+  // Upset bonus XP: kalahkan lawan title lebih tinggi = XP jauh lebih besar
+  const myTitleIdx=getLevelTitleIdx(getLevel(d.xp));
+  const oppTitleIdx=getTitleIdxByRating(oppElo);
+  const titleGap=Math.max(0,oppTitleIdx-myTitleIdx);
+  const upsetMultiplier=result==='win'&&titleGap>0?1+titleGap*0.5:1;
+  const baseXp=result==='win'?(40+botLevel*15):result==='draw'?20:10;
+  const xpGain=Math.round(baseXp*upsetMultiplier)+(result==='win'&&titleGap>=2?titleGap*10:0);
   d.xp+=xpGain;d.games++;
   if(result==='win')d.wins++;else if(result==='loss')d.losses++;else d.draws++;
   const newLv=getLevel(d.xp);
@@ -5020,6 +5105,12 @@ function updateAfterGame(result){
   el('go-xp-val','+'+xpGain+' XP');
   const lvUpEl=document.getElementById('go-level-up');if(lvUpEl)lvUpEl.style.display=newLv>oldLv?'block':'none';
   const lvBadgeEl=document.getElementById('go-level-badge');if(lvBadgeEl)lvBadgeEl.textContent=getLevelBadge(newLv)+' — Level '+newLv;
+  // Deteksi naik title → tampilkan animasi 3-fase
+  const oldTitleIdx=getLevelTitleIdx(oldLv);
+  const newTitleIdx=getLevelTitleIdx(newLv);
+  if(newTitleIdx>oldTitleIdx){
+    setTimeout(()=>showTitleUpAnimation(LEVEL_TITLE_NAMES[oldTitleIdx],LEVEL_TITLE_NAMES[newTitleIdx],newTitleIdx),1400);
+  }
   // #99 — Animasi XP progress bar
   const prog=getXpProgress(d.xp);
   const barWrap=document.getElementById('go-xp-bar-wrap');
@@ -5048,6 +5139,7 @@ function updateProfileStats(){
   const lvInEl=document.getElementById('prof-lv-in-title');if(lvInEl)lvInEl.textContent=lvIn;
   el('prof-badge-lbl',getLevelBadge(lv));el('prof-xp-lbl',(xp-cur)+' / '+(nxt-cur)+' XP');
   const bar=document.getElementById('prof-xp-bar');if(bar)bar.style.width=pct+'%';
+  applyCosmicProfileTheme();
 }
 
 // ═══════════════════════════════════════
@@ -5412,6 +5504,224 @@ window.addEventListener('resize',()=>{
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').then(()=>{}).catch(()=>{});
 }
+
+// ═══════════════════════════════════════
+// COSMIC EVOLUTION PROFILE THEME
+// ═══════════════════════════════════════
+const COSMIC_THEME=[
+  {bg:'linear-gradient(160deg,#1a1008,#0e0a04)',accent:'#906a40',glow:'rgba(144,106,64,.4)',txt:'#c09060',icon:'🪨'},
+  {bg:'linear-gradient(160deg,#0a1218,#040c12)',accent:'#2a6080',glow:'rgba(42,96,128,.4)',txt:'#5090b0',icon:'🌊'},
+  {bg:'linear-gradient(160deg,#0a1620,#060c14)',accent:'#2870b0',glow:'rgba(40,112,176,.4)',txt:'#60a0d8',icon:'🌍'},
+  {bg:'linear-gradient(160deg,#081830,#04101e)',accent:'#3090c8',glow:'rgba(48,144,200,.45)',txt:'#70b8e0',icon:'🪐'},
+  {bg:'linear-gradient(160deg,#081440,#040c2a)',accent:'#4070e8',glow:'rgba(64,112,232,.5)',txt:'#80a0ff',icon:'🌙'},
+  {bg:'linear-gradient(160deg,#060e40,#040a2a)',accent:'#4a90ff',glow:'rgba(74,144,255,.5)',txt:'#88c0ff',icon:'⭐'},
+  {bg:'linear-gradient(160deg,#100838,#080420)',accent:'#7050e8',glow:'rgba(112,80,232,.5)',txt:'#a080ff',icon:'☄️'},
+  {bg:'linear-gradient(160deg,#180640,#0e0428)',accent:'#a050e8',glow:'rgba(160,80,232,.55)',txt:'#cc90ff',icon:'🌌'},
+  {bg:'linear-gradient(160deg,#200040,#140030)',accent:'#c868ff',glow:'rgba(200,104,255,.55)',txt:'#e0a8ff',icon:'🌠'},
+  {bg:'linear-gradient(160deg,#2a0060,#1c0050)',accent:'#e090ff',glow:'rgba(224,144,255,.55)',txt:'#f0c8ff',icon:'✨'},
+  {bg:'linear-gradient(160deg,#200840,#160634)',accent:'#ff88c8',glow:'rgba(255,136,200,.55)',txt:'#ffc0e4',icon:'🌟'},
+  {bg:'linear-gradient(160deg,#280640,#1a0430)',accent:'#ff68e0',glow:'rgba(255,104,224,.6)',txt:'#ffb0f0',icon:'💫'},
+  {bg:'linear-gradient(160deg,#300820,#200614)',accent:'#ffd700',glow:'rgba(255,215,0,.6)',txt:'#ffe566',icon:'🌞'},
+  {bg:'linear-gradient(160deg,#0c0808,#020000)',accent:'#ffe898',glow:'rgba(255,232,152,.6)',txt:'#fff4cc',icon:'🌕'},
+  {bg:'linear-gradient(160deg,#080008,#000006)',accent:'#e0e8ff',glow:'rgba(220,230,255,.6)',txt:'#ffffff',icon:'🌕'},
+  {bg:'linear-gradient(160deg,#060010,#020008)',accent:'#c0a8ff',glow:'rgba(192,168,255,.65)',txt:'#e8d8ff',icon:'🌈'},
+  {bg:'conic-gradient(from 0deg,#070035,#120055,#050022,#070035)',accent:'#ffd700',glow:'rgba(255,215,0,.7)',txt:'#fff0aa',icon:'👼',rainbow:true},
+  {bg:'radial-gradient(circle at 50% 40%,#200830,#050008)',accent:'#ffffff',glow:'rgba(255,255,255,.8)',txt:'#ffffff',icon:'⚡',divine:true},
+];
+
+function applyCosmicProfileTheme(){
+  const d=initPlayerData();
+  const lv=getLevel(d.xp||0);
+  const idx=getLevelTitleIdx(lv);
+  const t=COSMIC_THEME[idx];
+  if(!t)return;
+
+  const card=document.querySelector('.profile-card');
+  const titleCard=document.querySelector('.prof-title-card');
+  if(card){
+    card.style.background=t.bg;
+    card.style.borderColor=t.accent+'55';
+    card.style.boxShadow=`0 0 32px ${t.glow},inset 0 0 20px rgba(0,0,0,.25)`;
+    card.style.position='relative';
+    // Floating cosmic icon badge
+    let cosIcon=card.querySelector('.cos-prof-icon');
+    if(!cosIcon){cosIcon=document.createElement('div');cosIcon.className='cos-prof-icon';cosIcon.style.cssText='position:absolute;top:10px;right:12px;font-size:22px;opacity:.35;pointer-events:none;animation:cosIconF 3s ease-in-out infinite';card.appendChild(cosIcon);}
+    cosIcon.textContent=t.icon;
+  }
+  if(titleCard){
+    titleCard.style.background=t.bg;
+    titleCard.style.borderColor=t.accent+'77';
+    titleCard.style.boxShadow=`0 0 40px ${t.glow}`;
+  }
+  const titleBig=document.getElementById('prof-title-big');
+  if(titleBig){titleBig.style.color=t.accent;titleBig.style.textShadow=`0 0 18px ${t.glow}`;}
+  const xpBar=document.getElementById('prof-xp-bar');
+  if(xpBar){
+    if(t.rainbow)xpBar.style.background='linear-gradient(90deg,#ffd700,#ff80ff,#80ffff,#ffd700)';
+    else if(t.divine)xpBar.style.background='linear-gradient(90deg,#ffffff,#c0a0ff,#ffffff)';
+    else xpBar.style.background=`linear-gradient(90deg,${t.accent}66,${t.accent})`;
+  }
+  const xpWrap=document.querySelector('.xp-bar-wrap');
+  if(xpWrap)xpWrap.style.background=t.accent+'1a';
+  ['prof-elo-val','prof-level-val','prof-wr-val'].forEach(id=>{
+    const e=document.getElementById(id);if(e)e.style.color=t.accent;
+  });
+  // Cosmic float animation
+  if(!document.getElementById('cos-theme-kf')){
+    const s=document.createElement('style');s.id='cos-theme-kf';
+    s.textContent='@keyframes cosIconF{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.1)}}';
+    document.head.appendChild(s);
+  }
+}
+
+// ═══════════════════════════════════════
+// TITLE-UP ANIMATION (3 Fase)
+// 🥁 Drumroll → 🦋 Evolution → 👑 Crown Drop
+// ═══════════════════════════════════════
+let _tuRunning=false,_tuTimer=null;
+
+function showTitleUpAnimation(oldName,newName,titleIdx){
+  if(_tuRunning)return;
+  _tuRunning=true;
+  const ct=COSMIC_THEME[Math.min(titleIdx,17)];
+  const accent=ct.accent;
+  const ov=document.getElementById('titleup-ov');
+  if(!ov)return;
+  ov.style.display='flex';
+  ov.style.opacity='1';
+  document.querySelectorAll('.tu-phase').forEach(p=>p.classList.remove('active'));
+
+  // ── FASE 1: 🥁 DRUMROLL ──────────────────
+  const p1=document.getElementById('tu-p1');
+  const ring1=p1.querySelector('.tu-drum-ring');
+  const ring2=p1.querySelector('.tu-drum-ring2');
+  const countEl=p1.querySelector('.tu-count');
+  const lblEl=p1.querySelector('.tu-drum-lbl');
+  const dotsEl=p1.querySelector('.tu-drum-dots');
+  p1.style.background=`radial-gradient(ellipse at 50% 50%,${accent}12,#000)`;
+  ring1.style.borderColor=accent;ring1.style.boxShadow=`0 0 40px ${accent},0 0 80px ${accent}44`;
+  ring2.style.borderColor=accent;
+  lblEl.style.color=accent;dotsEl.style.color=accent;
+  countEl.textContent='';
+  p1.classList.add('active');
+
+  let cnt=3;
+  const tick=()=>{
+    if(!_tuRunning)return;
+    // Restart animation
+    countEl.style.animation='none';countEl.offsetHeight;
+    countEl.style.animation='tuCountPop .4s cubic-bezier(.34,1.56,.64,1)';
+    countEl.style.color=cnt>0?'#fff':accent;
+    countEl.style.textShadow=`0 0 60px ${cnt>0?'#fff':accent}`;
+    countEl.textContent=cnt>0?cnt:'🎉';
+    if(cnt>0){cnt--;_tuTimer=setTimeout(tick,950);}
+    else{_tuTimer=setTimeout(goPhase2,700);}
+  };
+  _tuTimer=setTimeout(tick,300);
+
+  // ── FASE 2: 🦋 EVOLUTION ─────────────────
+  function goPhase2(){
+    if(!_tuRunning)return;
+    p1.classList.remove('active');
+    const p2=document.getElementById('tu-p2');
+    const fromEl=p2.querySelector('.tu-evo-from');
+    const toEl=p2.querySelector('.tu-evo-to');
+    const evoRing=p2.querySelector('.tu-evo-ring');
+    const evoParts=p2.querySelector('.tu-evo-parts');
+    p2.style.background=`radial-gradient(ellipse at 50% 50%,${accent}20,#000)`;
+    evoRing.style.borderColor=accent;evoRing.style.boxShadow=`0 0 30px ${accent}66`;
+    fromEl.textContent=oldName;fromEl.style.color='rgba(255,255,255,.7)';fromEl.style.textShadow='0 0 20px #fff4';
+    toEl.textContent=newName;toEl.style.color=accent;toEl.style.textShadow=`0 0 28px ${accent}`;
+    // Reset animations
+    [fromEl,toEl].forEach(el=>{el.style.animation='none';el.offsetHeight;});
+    fromEl.style.animation='tuEvoFadeOut 1.2s .2s forwards';
+    toEl.style.animation='tuEvoFadeIn 1.2s 1s both';
+    // Particles
+    evoParts.innerHTML='';
+    const pColors=[accent,'#fff',accent+'aa'];
+    for(let i=0;i<25;i++){
+      const sp=document.createElement('div');
+      sp.style.cssText=`position:absolute;width:${2+Math.random()*4}px;height:${2+Math.random()*4}px;border-radius:50%;background:${pColors[i%3]};left:${10+Math.random()*80}%;top:${10+Math.random()*80}%;opacity:0;animation:cosIconF ${1+Math.random()*2}s ${Math.random()*2}s ease-in-out infinite`;
+      evoParts.appendChild(sp);
+    }
+    p2.classList.add('active');
+    _tuTimer=setTimeout(goPhase3,3400);
+  }
+
+  // ── FASE 3: 👑 CROWN DROP ─────────────────
+  function goPhase3(){
+    if(!_tuRunning)return;
+    const p2=document.getElementById('tu-p2');
+    p2.classList.remove('active');
+    const p3=document.getElementById('tu-p3');
+    const bgEl=p3.querySelector('.tu-crown-bg-el');
+    const crownEl=p3.querySelector('.tu-crown-icon');
+    const nameEl=p3.querySelector('.tu-crown-name');
+    const subEl=p3.querySelector('.tu-crown-sub');
+    const sparksEl=p3.querySelector('.tu-sparks');
+    bgEl.style.background=`radial-gradient(ellipse at 50% 38%,${accent}20,#000 70%)`;
+    nameEl.textContent=newName;nameEl.style.color=accent;nameEl.style.textShadow=`0 0 35px ${accent}`;
+    subEl.style.color=accent+'99';
+    // Reset
+    [crownEl,nameEl,subEl].forEach(el=>{el.style.animation='none';el.offsetHeight;});
+    crownEl.style.animation='tuCrownDrop .75s cubic-bezier(.34,1.2,.64,1) forwards';
+    nameEl.style.animation='tuReveal 1s .65s both';
+    subEl.style.animation='tuReveal 1s 1s both';
+    // Sparkles burst
+    sparksEl.innerHTML='';
+    const sColors=[accent,'#ffffff','#ffd700',accent+'cc'];
+    for(let i=0;i<45;i++){
+      const sp=document.createElement('div');sp.className='tu-spark';
+      const ang=Math.random()*Math.PI*2,dist=70+Math.random()*200;
+      const sz=2+Math.random()*6,col=sColors[i%sColors.length];
+      sp.style.cssText=`width:${sz}px;height:${sz}px;background:${col};box-shadow:0 0 ${sz*2}px ${col};left:calc(50% - ${sz/2}px);top:42%;--sx:${(Math.cos(ang)*dist).toFixed(0)}px;--sy:${(Math.sin(ang)*dist).toFixed(0)}px;animation-duration:${.5+Math.random()*.9}s;animation-delay:${Math.random()*.25}s`;
+      sparksEl.appendChild(sp);
+    }
+    p3.classList.add('active');
+    _tuTimer=setTimeout(closeTitleAnim,5000);
+  }
+}
+
+function skipTitleAnim(){clearTimeout(_tuTimer);_tuRunning=false;closeTitleAnim();}
+function closeTitleAnim(){
+  const ov=document.getElementById('titleup-ov');
+  if(!ov)return;
+  ov.style.transition='opacity .5s';ov.style.opacity='0';
+  setTimeout(()=>{ov.style.display='none';ov.style.opacity='1';ov.style.transition='';_tuRunning=false;
+    document.querySelectorAll('.tu-phase').forEach(p=>p.classList.remove('active'));
+  },520);
+}
 </script>
+
+<!-- ══ TITLE-UP OVERLAY ══ -->
+<div id="titleup-ov">
+  <!-- FASE 1: Drumroll -->
+  <div id="tu-p1" class="tu-phase">
+    <div class="tu-drum-ring"></div>
+    <div class="tu-drum-ring2"></div>
+    <div class="tu-drum-icon">🥁</div>
+    <div class="tu-count"></div>
+    <div class="tu-drum-lbl">⚡ naik title ⚡</div>
+    <div class="tu-drum-dots">· · ·</div>
+  </div>
+  <!-- FASE 2: Evolution -->
+  <div id="tu-p2" class="tu-phase">
+    <div class="tu-evo-ring"></div>
+    <div class="tu-evo-parts"></div>
+    <div class="tu-evo-from"></div>
+    <div class="tu-evo-arrow">🦋</div>
+    <div class="tu-evo-to"></div>
+  </div>
+  <!-- FASE 3: Crown Drop -->
+  <div id="tu-p3" class="tu-phase">
+    <div class="tu-crown-bg-el"></div>
+    <div class="tu-sparks"></div>
+    <div class="tu-crown-icon">👑</div>
+    <div class="tu-crown-name"></div>
+    <div class="tu-crown-sub">✦ title baru ✦</div>
+  </div>
+  <button class="tu-tap-skip" onclick="skipTitleAnim()">tap untuk skip ›</button>
+</div>
+
 </body>
 </html>
