@@ -723,10 +723,10 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 .pick-bd-item{position:relative;overflow:visible}
 .pick-bd-item:not(.locked):hover{transform:translateY(-2px) scale(1.01);box-shadow:0 8px 25px rgba(0,0,0,.4)}
 .pick-bd-badge{font-size:16px;flex-shrink:0;width:24px;text-align:center}
-.pick-bd-chibi-wrap{position:relative;width:52px;height:52px;flex-shrink:0}
-.pick-bd-chibi{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;z-index:1}
-.pick-bd-floater{position:absolute;font-size:10px;animation:floatAround var(--fa-dur,3s) ease-in-out infinite;z-index:2;pointer-events:none;top:50%;left:50%;transform-origin:0 0}
-@keyframes floatAround{0%{transform:translate(-50%,-50%) rotate(var(--fa-start,0deg)) translateX(var(--fa-r,26px)) scale(1);opacity:.9}50%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 180deg)) translateX(var(--fa-r,26px)) scale(1.2);opacity:1}100%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 360deg)) translateX(var(--fa-r,26px)) scale(1);opacity:.9}}
+.pick-bd-chibi-wrap{position:relative;width:64px;height:64px;flex-shrink:0}
+.pick-bd-chibi{width:64px;height:64px;border-radius:50%;background:rgba(20,20,30,.6);display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;z-index:1;flex-shrink:0}
+.pick-bd-floater{position:absolute;font-size:14px;animation:floatAround var(--fa-dur,3s) ease-in-out infinite;z-index:3;pointer-events:none;top:50%;left:50%;transform-origin:0 0;line-height:1}
+@keyframes floatAround{0%{transform:translate(-50%,-50%) rotate(var(--fa-start,0deg)) translateX(var(--fa-r,32px)) scale(1);opacity:.95}50%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 180deg)) translateX(var(--fa-r,32px)) scale(1.25);opacity:1}100%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 360deg)) translateX(var(--fa-r,32px)) scale(1);opacity:.95}}
 /* ── PICKER OVERLAY ── */
 .pick-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);display:none;flex-direction:column;align-items:center;padding:14px 12px;overflow:hidden}
 .pick-ov.show{display:flex}
@@ -802,9 +802,15 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — compound fill eliminates transparency gaps -->
+<!-- WHITE KNIGHT — separate overlapping fills guarantee no transparency gaps -->
 <g id="wN">
-  <path fill="#fff" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Fill 1: main body -->
+  <path fill="#fff" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <!-- Fill 2: head — starts at 21,17 (inside body) then line to 24,18 to guarantee overlap -->
+  <path fill="#fff" stroke="none" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
+  <!-- Fill 3: front leg area — overlaps fill 2 -->
+  <path fill="#fff" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Outline strokes -->
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
   <circle fill="#404040" cx="33" cy="24" r="1.85"/>
@@ -854,9 +860,15 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — compound fill eliminates transparency gaps -->
+<!-- BLACK KNIGHT — separate overlapping fills guarantee no transparency gaps -->
 <g id="bN">
-  <path fill="#111" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Fill 1: main body -->
+  <path fill="#111" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <!-- Fill 2: head — starts at 21,17 (inside body) then line to 24,18 to guarantee overlap -->
+  <path fill="#111" stroke="none" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
+  <!-- Fill 3: front leg area — overlaps fill 2 -->
+  <path fill="#111" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Outline strokes -->
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
   <circle fill="#ccc" cx="33" cy="24" r="1.85"/>
@@ -3850,19 +3862,19 @@ function openBorderPicker(){
       const chibi=document.createElement('div');
       chibi.className='pick-bd-chibi';
       chibi.setAttribute('data-border',String(i));
-      chibi.style.fontSize='22px';
+      chibi.style.fontSize='30px';
       chibi.textContent=BORDER_CHIBI[i]||'♟';
       chibiWrap.appendChild(chibi);
 
       // Add floating emojis orbiting the chibi
       const floaters=BORDER_FLOATERS[i]||[];
       const count=Math.min(floaters.length,i<2?1:i<5?2:i<10?3:i<14?4:6);
-      const radius=i<3?22:i<8?25:i<13?28:32;
+      const radius=i<3?34:i<8?38:i<13?42:46;
       for(let f=0;f<count;f++){
         const fl=document.createElement('span');
         fl.className='pick-bd-floater';
         const startDeg=(360/count)*f;
-        fl.style.cssText=`--fa-start:${startDeg}deg;--fa-dur:${2.5+i*0.15}s;--fa-r:${radius}px;font-size:${8+Math.floor(i/6)}px;animation-delay:${f*0.4}s`;
+        fl.style.cssText=`--fa-start:${startDeg}deg;--fa-dur:${2.5+i*0.15}s;--fa-r:${radius}px;font-size:${12+Math.floor(i/5)}px;animation-delay:${f*0.4}s`;
         fl.textContent=floaters[f%floaters.length];
         chibiWrap.appendChild(fl);
       }
