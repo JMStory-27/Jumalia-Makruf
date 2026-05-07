@@ -682,14 +682,13 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- WHITE KNIGHT — cburnett two-path design -->
 <g id="wN">
   <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
+  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round"
     d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
        C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
        C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
-       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
+       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
   <circle fill="#404040" cx="33" cy="24" r="1.85"/>
-  <circle fill="#404040" cx="9.5" cy="25.5" r="0.75"/>
   <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
 </g>
 <!-- WHITE PAWN — round head + smooth waist + round base -->
@@ -738,14 +737,13 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 <!-- BLACK KNIGHT — cburnett two-path design -->
 <g id="bN">
   <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
+  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"
     d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
        C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
        C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
-       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
+       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
   <circle fill="#ccc" cx="33" cy="24" r="1.85"/>
-  <circle fill="#ccc" cx="9.5" cy="25.5" r="0.75"/>
   <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
 </g>
 <!-- BLACK PAWN — round head + smooth waist + round base -->
@@ -1873,10 +1871,8 @@ function renderBoard(){
   // Game mode badge
   const badge=document.getElementById('game-mode-lbl');
   if(badge){
-    if(isHordeMode){badge.textContent='⚔️ Horde';}
-    else if(gameMode==='bot'&&_currentOpp){badge.textContent=_ratingToLabel(_currentOpp.rating)+' · WR '+_currentOpp.winRate+'%';}
-    else if(gameMode==='bot'){badge.textContent='🤖 Bot '+('⭐'.repeat(botLevel));}
-    else{const modes={pass:'👥 2 Pemain',online:'🌐 Online'};badge.textContent=modes[gameMode]||'♟ Catur';}
+    const modes={bot:`🤖 Bot ${'⭐'.repeat(botLevel)}`,pass:'👥 2 Pemain',online:'🌐 Online',horde:'⚔️ Horde'};
+    badge.textContent=modes[isHordeMode?'horde':gameMode]||'♟ Catur';
   }
 }
 
@@ -2035,27 +2031,9 @@ function executeMove(mv){
   if(gameMode==='bot'&&gs.turn!==myColor&&!gs.gameOver){
     clearTimeout(thinkTimer);
     const topCard=document.getElementById('p-top');topCard?.classList.add('thinking');
-    const _mc=(moveHistory||[]).length;
-    const _phase=_mc<14?'opening':_mc<40?'middle':'endgame';
-    let botDelay;
-    if(_currentOpp){
-      const _instant=Math.random()<(_phase==='opening'?0.70:_phase==='middle'?0.50:0.30);
-      if(_instant){
-        botDelay=80+Math.random()*250;
-      } else if(_phase==='opening'){
-        botDelay=180+Math.random()*700;
-      } else if(_phase==='middle'){
-        const mn=Math.min(800,(_currentOpp.thinkMin||800)*0.45);
-        const mx=Math.min(3200,(_currentOpp.thinkMax||4000)*0.55);
-        botDelay=mn+Math.random()*(mx-mn);
-      } else {
-        const mn=Math.min(900,(_currentOpp.thinkMin||800)*0.6);
-        const mx=_currentOpp.thinkMax||4000;
-        botDelay=mn+Math.random()*(mx-mn);
-      }
-    } else {
-      botDelay=150+Math.random()*500;
-    }
+    const botDelay=_currentOpp
+      ?((_currentOpp.thinkMin||800)+Math.random()*((_currentOpp.thinkMax||4000)-(_currentOpp.thinkMin||800)))
+      :(300+Math.random()*500);
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
       const mv2=getBotMoveWithPersonality(gs,gs.turn,botLevel);
@@ -2756,10 +2734,6 @@ function replayGoto(idx){
   const d=_analysisData[_replayIdx];
   const stateAfter=applyMove(d.state,d.move);
   renderAnalysisBoard(stateAfter,d.move,d.rc);
-  const _destCell=d.state.board[d.move.tr][d.move.tc];
-  const _isCap=(_destCell!==null&&_destCell!==undefined)||!!d.move.ep;
-  playSound(_isCap?'capture':d.move.castle?'castle':'move');
-  if(isInCheck(stateAfter,stateAfter.turn))setTimeout(()=>playSound('check'),200);
   const pc=_anPcName(d.state.board[d.move.fr][d.move.fc]);
   const who=d.state.turn==='w'?'⬜ Putih':'⬛ Hitam';
   if(lbl)lbl.textContent=(_replayIdx+1)+'. '+who+': '+pc+' '+_AN_F[d.move.fc]+(8-d.move.fr)+'→'+_AN_F[d.move.tc]+(8-d.move.tr)+' '+d.re;
