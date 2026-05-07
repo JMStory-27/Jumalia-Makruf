@@ -634,50 +634,99 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 /* ── MOVEMENT TRAIL ── */
 .piece-trail{animation-duration:.45s !important}
 @keyframes trailFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
-/* ── AVATAR BORDER RINGS (18 tiers) ── */
-/* Tier 0: Kroco — dull iron ring */
-[data-border="0"]{box-shadow:0 0 0 2px #555,0 0 0 3.5px #222,0 0 6px rgba(0,0,0,.6);border-radius:50%}
-/* Tier 1: Pejuang — double silver */
-[data-border="1"]{box-shadow:0 0 0 1.5px #999,0 0 0 3px #444,0 0 0 4.5px #777,0 0 10px rgba(180,180,180,.2);border-radius:50%}
-/* Tier 2: Petarung — steel blue ring + soft glow */
-[data-border="2"]{box-shadow:0 0 0 2px #1e40af,0 0 0 3.5px #60a5fa,0 0 0 5px rgba(96,165,250,.15),0 0 14px rgba(96,165,250,.5);border-radius:50%}
-/* Tier 3: Ksatria — vivid blue double ring + glow burst */
-[data-border="3"]{box-shadow:0 0 0 2px #bfdbfe,0 0 0 4px #3b82f6,0 0 0 6.5px rgba(37,99,235,.45),0 0 20px rgba(59,130,246,.75),0 0 38px rgba(59,130,246,.25);border-radius:50%}
-/* Tier 4: Pendekar — emerald ring + leaf glow */
-[data-border="4"]{box-shadow:0 0 0 2px #166534,0 0 0 3.5px #4ade80,0 0 0 5.5px rgba(74,222,128,.2),0 0 16px rgba(74,222,128,.6);border-radius:50%}
-/* Tier 5: Elite — forest double ring + pulse */
-[data-border="5"]{box-shadow:0 0 0 2px #86efac,0 0 0 4px #22c55e,0 0 0 7px rgba(21,128,61,.5),0 0 22px rgba(34,197,94,.75),0 0 40px rgba(34,197,94,.25);border-radius:50%}
-/* Tier 6: Expert — molten orange + heat shimmer */
-[data-border="6"]{box-shadow:0 0 0 2px #7c2d12,0 0 0 3.5px #fb923c,0 0 0 6px rgba(234,88,12,.3),0 0 18px rgba(251,146,60,.7),0 0 35px rgba(239,68,68,.2);border-radius:50%}
-/* Tier 7: Ahli — burning red triple ring */
-[data-border="7"]{box-shadow:0 0 0 1.5px #fca5a5,0 0 0 3.5px #ef4444,0 0 0 6px #991b1b,0 0 0 8.5px rgba(127,29,29,.4),0 0 24px rgba(239,68,68,.85),0 0 50px rgba(239,68,68,.25);border-radius:50%}
-/* Tier 8: Master — purple mystic halo */
-[data-border="8"]{box-shadow:0 0 0 2px #581c87,0 0 0 4px #c084fc,0 0 0 6.5px rgba(147,51,234,.35),0 0 20px rgba(192,132,252,.7),0 0 40px rgba(168,85,247,.25);border-radius:50%}
-/* Tier 9: Grand Master — deep purple royal crown */
-[data-border="9"]{box-shadow:0 0 0 1.5px #e9d5ff,0 0 0 3.5px #9333ea,0 0 0 6.5px #4c1d95,0 0 0 9px rgba(76,29,149,.45),0 0 26px rgba(147,51,234,.9),0 0 55px rgba(147,51,234,.3);border-radius:50%}
-/* Tier 10: International Master — warm gold ring */
-[data-border="10"]{box-shadow:0 0 0 2px #78350f,0 0 0 3.5px #d4af37,0 0 0 6px rgba(180,130,30,.3),0 0 20px rgba(212,175,55,.8),0 0 38px rgba(212,175,55,.25);border-radius:50%}
-/* Tier 11: FIDE Master — bright gold + animated pulse */
-[data-border="11"]{box-shadow:0 0 0 2px #fef08a,0 0 0 4px #ffd700,0 0 0 7px rgba(161,98,7,.5),0 0 25px rgba(255,215,0,.9),0 0 55px rgba(255,215,0,.3);border-radius:50%;animation:bd11 2.2s ease-in-out infinite alternate}
-/* Tier 12: Candidate Master — fire gold + orange flame */
-[data-border="12"]{box-shadow:0 0 0 2px #fde68a,0 0 0 4.5px #f59e0b,0 0 0 8px #dc2626,0 0 0 11px rgba(185,28,28,.3),0 0 28px #fbbf24,0 0 65px rgba(245,158,11,.4);border-radius:50%;animation:bd12 1.6s ease-in-out infinite}
-/* Tier 13: National Master — rainbow cycling */
-[data-border="13"]{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #ff6ec7,0 0 0 7px rgba(255,110,199,.3),0 0 25px rgba(255,110,199,.9),0 0 55px rgba(255,110,199,.35);border-radius:50%;animation:bd13 2.2s linear infinite}
-/* Tier 14: Senior Master — diamond ice crystal */
-[data-border="14"]{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #bae6fd,0 0 0 6px #0ea5e9,0 0 0 9px rgba(3,105,161,.4),0 0 32px #bae6fd,0 0 70px rgba(14,165,233,.5);border-radius:50%;animation:bd14 1.3s ease-in-out infinite alternate}
-/* Tier 15: Super GM — cosmic cyan storm */
-[data-border="15"]{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #22d3ee,0 0 0 7px #0e7490,0 0 0 11px rgba(8,145,178,.4),0 0 38px #22d3ee,0 0 80px rgba(6,182,212,.6);border-radius:50%;animation:bd15 1.6s ease-in-out infinite alternate}
-/* Tier 16: Legendary — galaxy aurora */
-[data-border="16"]{box-shadow:0 0 0 2px #f0abfc,0 0 0 5px #a855f7,0 0 0 9px #581c87,0 0 0 13px rgba(88,28,135,.4),0 0 35px #c084fc,0 0 80px rgba(168,85,247,.5);border-radius:50%;animation:bd16 2.2s linear infinite}
+/* ── AVATAR BORDER RINGS (18 tiers) — Super Keren Edition ── */
+/* Tier 0: Kroco — dull iron, barely visible */
+[data-border="0"]{box-shadow:0 0 0 2px #444,0 0 0 3.5px #1a1a1a,0 0 5px rgba(0,0,0,.5);border-radius:50%;animation:bd0 4s ease-in-out infinite alternate}
+/* Tier 1: Bocah Catur — soft silver pulse */
+[data-border="1"]{box-shadow:0 0 0 2px #aaa,0 0 0 3.5px #555,0 0 0 5.5px #888,0 0 12px rgba(200,200,200,.25);border-radius:50%;animation:bd1 3s ease-in-out infinite alternate}
+/* Tier 2: Pemula — steel blue glow */
+[data-border="2"]{box-shadow:0 0 0 2px #1e3a8a,0 0 0 4px #60a5fa,0 0 0 6px rgba(96,165,250,.2),0 0 18px rgba(96,165,250,.6);border-radius:50%;animation:bd2 2.5s ease-in-out infinite alternate}
+/* Tier 3: Ksatria — vivid blue triple ring + burst */
+[data-border="3"]{box-shadow:0 0 0 1.5px #bfdbfe,0 0 0 3.5px #3b82f6,0 0 0 6px #1d4ed8,0 0 0 9px rgba(29,78,216,.3),0 0 24px rgba(59,130,246,.85),0 0 48px rgba(59,130,246,.3);border-radius:50%;animation:bd3 2s ease-in-out infinite alternate}
+/* Tier 4: Pendekar — emerald forest ring */
+[data-border="4"]{box-shadow:0 0 0 2px #14532d,0 0 0 4px #4ade80,0 0 0 6.5px rgba(74,222,128,.25),0 0 20px rgba(74,222,128,.7),0 0 40px rgba(34,197,94,.2);border-radius:50%;animation:bd4 2.5s ease-in-out infinite alternate}
+/* Tier 5: Elite — neon green double ring pulse */
+[data-border="5"]{box-shadow:0 0 0 1.5px #bbf7d0,0 0 0 3.5px #22c55e,0 0 0 6px #15803d,0 0 0 9px rgba(21,128,61,.35),0 0 28px rgba(34,197,94,.9),0 0 55px rgba(74,222,128,.3);border-radius:50%;animation:bd5 1.8s ease-in-out infinite alternate}
+/* Tier 6: Expert — molten orange fire */
+[data-border="6"]{box-shadow:0 0 0 2px #431407,0 0 0 4px #f97316,0 0 0 7px rgba(234,88,12,.35),0 0 22px rgba(249,115,22,.85),0 0 50px rgba(239,68,68,.3);border-radius:50%;animation:bd6 1.5s ease-in-out infinite alternate}
+/* Tier 7: Ahli Strategi — burning red inferno */
+[data-border="7"]{box-shadow:0 0 0 1.5px #fecaca,0 0 0 3.5px #ef4444,0 0 0 6.5px #991b1b,0 0 0 10px rgba(127,29,29,.4),0 0 28px rgba(239,68,68,.95),0 0 60px rgba(220,38,38,.35);border-radius:50%;animation:bd7 1.2s ease-in-out infinite alternate}
+/* Tier 8: Semi Pro — purple mystic halo */
+[data-border="8"]{box-shadow:0 0 0 2px #3b0764,0 0 0 4px #c084fc,0 0 0 7px rgba(147,51,234,.3),0 0 24px rgba(192,132,252,.8),0 0 50px rgba(168,85,247,.3);border-radius:50%;animation:bd8 2s ease-in-out infinite alternate}
+/* Tier 9: Profesional — royal purple crown */
+[data-border="9"]{box-shadow:0 0 0 1.5px #e9d5ff,0 0 0 3.5px #9333ea,0 0 0 7px #4c1d95,0 0 0 10px rgba(76,29,149,.4),0 0 30px rgba(147,51,234,.95),0 0 65px rgba(147,51,234,.35);border-radius:50%;animation:bd9 1.6s ease-in-out infinite alternate}
+/* Tier 10: Pro Elite — warm gold ring shimmer */
+[data-border="10"]{box-shadow:0 0 0 2px #713f12,0 0 0 4px #d4af37,0 0 0 7px rgba(212,175,55,.3),0 0 24px rgba(212,175,55,.9),0 0 50px rgba(212,175,55,.3);border-radius:50%;animation:bd10 2s ease-in-out infinite alternate}
+/* Tier 11: Ahli Strategi — bright gold sunburst */
+[data-border="11"]{box-shadow:0 0 0 2px #fef08a,0 0 0 4.5px #ffd700,0 0 0 8px rgba(161,98,7,.5),0 0 28px rgba(255,215,0,.95),0 0 65px rgba(255,215,0,.4);border-radius:50%;animation:bd11 1.8s ease-in-out infinite alternate}
+/* Tier 12: Expert — fire gold + flame storm */
+[data-border="12"]{box-shadow:0 0 0 2px #fde68a,0 0 0 5px #f59e0b,0 0 0 9px #dc2626,0 0 0 13px rgba(185,28,28,.3),0 0 32px #fbbf24,0 0 75px rgba(245,158,11,.5);border-radius:50%;animation:bd12 1.3s ease-in-out infinite}
+/* Tier 13: Master Muda — full rainbow cycle */
+[data-border="13"]{box-shadow:0 0 0 2px #fff,0 0 0 5px #ff6ec7,0 0 0 8px rgba(255,110,199,.3),0 0 28px rgba(255,110,199,.95),0 0 65px rgba(255,110,199,.4);border-radius:50%;animation:bd13 2s linear infinite}
+/* Tier 14: Master — diamond ice blizzard */
+[data-border="14"]{box-shadow:0 0 0 1.5px #fff,0 0 0 4px #bae6fd,0 0 0 7px #0ea5e9,0 0 0 11px rgba(3,105,161,.4),0 0 38px #bae6fd,0 0 85px rgba(14,165,233,.6);border-radius:50%;animation:bd14 1.1s ease-in-out infinite alternate}
+/* Tier 15: Master Elite — cosmic cyan storm */
+[data-border="15"]{box-shadow:0 0 0 1.5px #fff,0 0 0 4px #22d3ee,0 0 0 8px #0e7490,0 0 0 13px rgba(8,145,178,.4),0 0 45px #22d3ee,0 0 95px rgba(6,182,212,.7);border-radius:50%;animation:bd15 1.3s ease-in-out infinite alternate}
+/* Tier 16: Grandmaster — galaxy aurora shift */
+[data-border="16"]{box-shadow:0 0 0 2px #f0abfc,0 0 0 5.5px #a855f7,0 0 0 10px #581c87,0 0 0 15px rgba(88,28,135,.4),0 0 42px #c084fc,0 0 95px rgba(168,85,247,.6);border-radius:50%;animation:bd16 1.8s linear infinite}
 /* Tier 17: Dewa Catur — god-tier divine radiance */
-[data-border="17"]{box-shadow:0 0 0 2px #fff,0 0 0 5px #ffd700,0 0 0 9px #ff8c00,0 0 0 13px #dc2626,0 0 0 17px rgba(220,38,38,.25),0 0 45px #ffd700,0 0 100px rgba(255,140,0,.65),0 0 150px rgba(255,69,0,.3);border-radius:50%;animation:bd17 0.85s ease-in-out infinite alternate}
-@keyframes bd11{0%{box-shadow:0 0 0 2px #fef08a,0 0 0 4px #ffd700,0 0 0 7px rgba(161,98,7,.5),0 0 25px rgba(255,215,0,.9),0 0 55px rgba(255,215,0,.3)}100%{box-shadow:0 0 0 2.5px #fff7a0,0 0 0 5.5px #ffd700,0 0 0 9px rgba(161,98,7,.35),0 0 38px rgba(255,215,0,.7),0 0 80px rgba(255,215,0,.2)}}
-@keyframes bd12{0%{box-shadow:0 0 0 2px #fde68a,0 0 0 4.5px #f59e0b,0 0 0 8px #dc2626,0 0 0 11px rgba(185,28,28,.3),0 0 28px #fbbf24,0 0 65px rgba(245,158,11,.4)}50%{box-shadow:0 0 0 2px #fed7aa,0 0 0 4.5px #ef4444,0 0 0 8px #d97706,0 0 0 11px rgba(120,53,15,.3),0 0 32px #f87171,0 0 75px rgba(239,68,68,.4)}100%{box-shadow:0 0 0 2px #fde68a,0 0 0 4.5px #f59e0b,0 0 0 8px #dc2626,0 0 0 11px rgba(185,28,28,.3),0 0 28px #fbbf24,0 0 65px rgba(245,158,11,.4)}}
-@keyframes bd13{0%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #ff6ec7,0 0 0 7px rgba(255,110,199,.3),0 0 25px rgba(255,110,199,.9),0 0 55px rgba(255,110,199,.35)}25%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #fbbf24,0 0 0 7px rgba(251,191,36,.3),0 0 25px rgba(251,191,36,.9),0 0 55px rgba(251,191,36,.35)}50%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #4ade80,0 0 0 7px rgba(74,222,128,.3),0 0 25px rgba(74,222,128,.9),0 0 55px rgba(74,222,128,.35)}75%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #60a5fa,0 0 0 7px rgba(96,165,250,.3),0 0 25px rgba(96,165,250,.9),0 0 55px rgba(96,165,250,.35)}100%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #ff6ec7,0 0 0 7px rgba(255,110,199,.3),0 0 25px rgba(255,110,199,.9),0 0 55px rgba(255,110,199,.35)}}
-@keyframes bd14{0%{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #bae6fd,0 0 0 6px #0ea5e9,0 0 0 9px rgba(3,105,161,.4),0 0 32px #bae6fd,0 0 70px rgba(14,165,233,.5)}100%{box-shadow:0 0 0 2.5px #fff,0 0 0 5px #e0f7ff,0 0 0 8px #38bdf8,0 0 0 12px rgba(3,105,161,.3),0 0 50px #e0f7ff,0 0 100px rgba(14,165,233,.4)}}
-@keyframes bd15{0%{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #22d3ee,0 0 0 7px #0e7490,0 0 0 11px rgba(8,145,178,.4),0 0 38px #22d3ee,0 0 80px rgba(6,182,212,.6)}100%{box-shadow:0 0 0 2.5px #fff,0 0 0 5.5px #00ffff,0 0 0 10px #0891b2,0 0 0 15px rgba(8,145,178,.3),0 0 60px #00ffff,0 0 120px rgba(0,255,255,.5)}}
-@keyframes bd16{0%{box-shadow:0 0 0 2px #f0abfc,0 0 0 5px #a855f7,0 0 0 9px #581c87,0 0 0 13px rgba(88,28,135,.4),0 0 35px #c084fc,0 0 80px rgba(168,85,247,.5)}33%{box-shadow:0 0 0 2px #c7d2fe,0 0 0 5px #6366f1,0 0 0 9px #312e81,0 0 0 13px rgba(49,46,129,.4),0 0 35px #818cf8,0 0 80px rgba(99,102,241,.5)}66%{box-shadow:0 0 0 2px #fbcfe8,0 0 0 5px #ec4899,0 0 0 9px #831843,0 0 0 13px rgba(131,24,67,.4),0 0 35px #f472b6,0 0 80px rgba(236,72,153,.5)}100%{box-shadow:0 0 0 2px #f0abfc,0 0 0 5px #a855f7,0 0 0 9px #581c87,0 0 0 13px rgba(88,28,135,.4),0 0 35px #c084fc,0 0 80px rgba(168,85,247,.5)}}
-@keyframes bd17{0%{box-shadow:0 0 0 2px #fff,0 0 0 5px #ffd700,0 0 0 9px #ff8c00,0 0 0 13px #dc2626,0 0 0 17px rgba(220,38,38,.25),0 0 45px #ffd700,0 0 100px rgba(255,140,0,.65),0 0 150px rgba(255,69,0,.3)}100%{box-shadow:0 0 0 3px #fff,0 0 0 7px #fffbbf,0 0 0 12px #ff8c00,0 0 0 17px #dc2626,0 0 0 22px rgba(220,38,38,.15),0 0 70px #ffd700,0 0 140px rgba(255,140,0,.8),0 0 200px rgba(255,69,0,.4)}}
+[data-border="17"]{box-shadow:0 0 0 2px #fff,0 0 0 5.5px #ffd700,0 0 0 10px #ff8c00,0 0 0 15px #dc2626,0 0 0 20px rgba(220,38,38,.25),0 0 55px #ffd700,0 0 120px rgba(255,140,0,.7),0 0 180px rgba(255,69,0,.4);border-radius:50%;animation:bd17 0.7s ease-in-out infinite alternate}
+
+/* ── Border ring animations ── */
+@keyframes bd0{from{box-shadow:0 0 0 2px #444,0 0 0 3.5px #1a1a1a,0 0 5px rgba(0,0,0,.5)}to{box-shadow:0 0 0 2.5px #666,0 0 0 4px #222,0 0 8px rgba(100,100,100,.2)}}
+@keyframes bd1{from{box-shadow:0 0 0 2px #aaa,0 0 0 3.5px #555,0 0 0 5.5px #888,0 0 12px rgba(200,200,200,.25)}to{box-shadow:0 0 0 2.5px #ddd,0 0 0 4.5px #777,0 0 0 7px #aaa,0 0 20px rgba(200,200,200,.45)}}
+@keyframes bd2{from{box-shadow:0 0 0 2px #1e3a8a,0 0 0 4px #60a5fa,0 0 0 6px rgba(96,165,250,.2),0 0 18px rgba(96,165,250,.6)}to{box-shadow:0 0 0 2.5px #1e40af,0 0 0 5px #93c5fd,0 0 0 8px rgba(96,165,250,.3),0 0 30px rgba(96,165,250,.8)}}
+@keyframes bd3{from{box-shadow:0 0 0 1.5px #bfdbfe,0 0 0 3.5px #3b82f6,0 0 0 6px #1d4ed8,0 0 0 9px rgba(29,78,216,.3),0 0 24px rgba(59,130,246,.85),0 0 48px rgba(59,130,246,.3)}to{box-shadow:0 0 0 2.5px #e0f2fe,0 0 0 5px #60a5fa,0 0 0 8.5px #2563eb,0 0 0 13px rgba(37,99,235,.25),0 0 38px rgba(96,165,250,.95),0 0 70px rgba(59,130,246,.4)}}
+@keyframes bd4{from{box-shadow:0 0 0 2px #14532d,0 0 0 4px #4ade80,0 0 0 6.5px rgba(74,222,128,.25),0 0 20px rgba(74,222,128,.7),0 0 40px rgba(34,197,94,.2)}to{box-shadow:0 0 0 2.5px #166534,0 0 0 5px #86efac,0 0 0 8.5px rgba(74,222,128,.35),0 0 32px rgba(74,222,128,.9),0 0 60px rgba(34,197,94,.35)}}
+@keyframes bd5{from{box-shadow:0 0 0 1.5px #bbf7d0,0 0 0 3.5px #22c55e,0 0 0 6px #15803d,0 0 0 9px rgba(21,128,61,.35),0 0 28px rgba(34,197,94,.9),0 0 55px rgba(74,222,128,.3)}to{box-shadow:0 0 0 2.5px #dcfce7,0 0 0 5.5px #4ade80,0 0 0 9px #16a34a,0 0 0 13px rgba(22,163,74,.3),0 0 45px rgba(74,222,128,.95),0 0 80px rgba(34,197,94,.4)}}
+@keyframes bd6{from{box-shadow:0 0 0 2px #431407,0 0 0 4px #f97316,0 0 0 7px rgba(234,88,12,.35),0 0 22px rgba(249,115,22,.85),0 0 50px rgba(239,68,68,.3)}to{box-shadow:0 0 0 3px #7c2d12,0 0 0 6px #fb923c,0 0 0 10px rgba(249,115,22,.4),0 0 38px rgba(251,146,60,.95),0 0 80px rgba(239,68,68,.45)}}
+@keyframes bd7{from{box-shadow:0 0 0 1.5px #fecaca,0 0 0 3.5px #ef4444,0 0 0 6.5px #991b1b,0 0 0 10px rgba(127,29,29,.4),0 0 28px rgba(239,68,68,.95),0 0 60px rgba(220,38,38,.35)}to{box-shadow:0 0 0 2.5px #fff,0 0 0 5.5px #f87171,0 0 0 9.5px #dc2626,0 0 0 14px rgba(185,28,28,.35),0 0 45px rgba(239,68,68,.99),0 0 90px rgba(220,38,38,.5)}}
+@keyframes bd8{from{box-shadow:0 0 0 2px #3b0764,0 0 0 4px #c084fc,0 0 0 7px rgba(147,51,234,.3),0 0 24px rgba(192,132,252,.8),0 0 50px rgba(168,85,247,.3)}to{box-shadow:0 0 0 3px #4c1d95,0 0 0 6px #d8b4fe,0 0 0 10px rgba(168,85,247,.4),0 0 40px rgba(216,180,254,.9),0 0 80px rgba(168,85,247,.5)}}
+@keyframes bd9{from{box-shadow:0 0 0 1.5px #e9d5ff,0 0 0 3.5px #9333ea,0 0 0 7px #4c1d95,0 0 0 10px rgba(76,29,149,.4),0 0 30px rgba(147,51,234,.95),0 0 65px rgba(147,51,234,.35)}to{box-shadow:0 0 0 2.5px #fff,0 0 0 5.5px #a855f7,0 0 0 10px #5b21b6,0 0 0 14px rgba(91,33,182,.3),0 0 50px rgba(168,85,247,.99),0 0 100px rgba(147,51,234,.5)}}
+@keyframes bd10{from{box-shadow:0 0 0 2px #713f12,0 0 0 4px #d4af37,0 0 0 7px rgba(212,175,55,.3),0 0 24px rgba(212,175,55,.9),0 0 50px rgba(212,175,55,.3)}to{box-shadow:0 0 0 3px #92400e,0 0 0 6px #fbbf24,0 0 0 10px rgba(245,158,11,.4),0 0 40px rgba(251,191,36,.95),0 0 80px rgba(212,175,55,.45)}}
+@keyframes bd11{0%{box-shadow:0 0 0 2px #fef08a,0 0 0 4.5px #ffd700,0 0 0 8px rgba(161,98,7,.5),0 0 28px rgba(255,215,0,.95),0 0 65px rgba(255,215,0,.4)}100%{box-shadow:0 0 0 3px #fff7a0,0 0 0 6.5px #ffd700,0 0 0 11px rgba(161,98,7,.35),0 0 48px rgba(255,215,0,.75),0 0 100px rgba(255,215,0,.25)}}
+@keyframes bd12{0%{box-shadow:0 0 0 2px #fde68a,0 0 0 5px #f59e0b,0 0 0 9px #dc2626,0 0 0 13px rgba(185,28,28,.3),0 0 32px #fbbf24,0 0 75px rgba(245,158,11,.5)}50%{box-shadow:0 0 0 2px #fed7aa,0 0 0 5px #ef4444,0 0 0 9px #d97706,0 0 0 13px rgba(120,53,15,.3),0 0 38px #f87171,0 0 90px rgba(239,68,68,.5)}100%{box-shadow:0 0 0 2px #fde68a,0 0 0 5px #f59e0b,0 0 0 9px #dc2626,0 0 0 13px rgba(185,28,28,.3),0 0 32px #fbbf24,0 0 75px rgba(245,158,11,.5)}}
+@keyframes bd13{0%{box-shadow:0 0 0 2px #fff,0 0 0 5px #ff6ec7,0 0 0 8px rgba(255,110,199,.3),0 0 28px rgba(255,110,199,.95),0 0 65px rgba(255,110,199,.4)}20%{box-shadow:0 0 0 2px #fff,0 0 0 5px #fbbf24,0 0 0 8px rgba(251,191,36,.3),0 0 28px rgba(251,191,36,.95),0 0 65px rgba(251,191,36,.4)}40%{box-shadow:0 0 0 2px #fff,0 0 0 5px #4ade80,0 0 0 8px rgba(74,222,128,.3),0 0 28px rgba(74,222,128,.95),0 0 65px rgba(74,222,128,.4)}60%{box-shadow:0 0 0 2px #fff,0 0 0 5px #60a5fa,0 0 0 8px rgba(96,165,250,.3),0 0 28px rgba(96,165,250,.95),0 0 65px rgba(96,165,250,.4)}80%{box-shadow:0 0 0 2px #fff,0 0 0 5px #c084fc,0 0 0 8px rgba(192,132,252,.3),0 0 28px rgba(192,132,252,.95),0 0 65px rgba(192,132,252,.4)}100%{box-shadow:0 0 0 2px #fff,0 0 0 5px #ff6ec7,0 0 0 8px rgba(255,110,199,.3),0 0 28px rgba(255,110,199,.95),0 0 65px rgba(255,110,199,.4)}}
+@keyframes bd14{0%{box-shadow:0 0 0 1.5px #fff,0 0 0 4px #bae6fd,0 0 0 7px #0ea5e9,0 0 0 11px rgba(3,105,161,.4),0 0 38px #bae6fd,0 0 85px rgba(14,165,233,.6)}100%{box-shadow:0 0 0 3px #fff,0 0 0 6px #e0f7ff,0 0 0 10px #38bdf8,0 0 0 15px rgba(3,105,161,.3),0 0 60px #e0f7ff,0 0 130px rgba(14,165,233,.45)}}
+@keyframes bd15{0%{box-shadow:0 0 0 1.5px #fff,0 0 0 4px #22d3ee,0 0 0 8px #0e7490,0 0 0 13px rgba(8,145,178,.4),0 0 45px #22d3ee,0 0 95px rgba(6,182,212,.7)}100%{box-shadow:0 0 0 3px #fff,0 0 0 7px #00ffff,0 0 0 12px #0891b2,0 0 0 18px rgba(8,145,178,.3),0 0 75px #00ffff,0 0 150px rgba(0,255,255,.6)}}
+@keyframes bd16{0%{box-shadow:0 0 0 2px #f0abfc,0 0 0 5.5px #a855f7,0 0 0 10px #581c87,0 0 0 15px rgba(88,28,135,.4),0 0 42px #c084fc,0 0 95px rgba(168,85,247,.6)}25%{box-shadow:0 0 0 2px #c7d2fe,0 0 0 5.5px #6366f1,0 0 0 10px #312e81,0 0 0 15px rgba(49,46,129,.4),0 0 42px #818cf8,0 0 95px rgba(99,102,241,.6)}50%{box-shadow:0 0 0 2px #fbcfe8,0 0 0 5.5px #ec4899,0 0 0 10px #831843,0 0 0 15px rgba(131,24,67,.4),0 0 42px #f472b6,0 0 95px rgba(236,72,153,.6)}75%{box-shadow:0 0 0 2px #bfdbfe,0 0 0 5.5px #3b82f6,0 0 0 10px #1e3a8a,0 0 0 15px rgba(30,58,138,.4),0 0 42px #60a5fa,0 0 95px rgba(59,130,246,.6)}100%{box-shadow:0 0 0 2px #f0abfc,0 0 0 5.5px #a855f7,0 0 0 10px #581c87,0 0 0 15px rgba(88,28,135,.4),0 0 42px #c084fc,0 0 95px rgba(168,85,247,.6)}}
+@keyframes bd17{0%{box-shadow:0 0 0 2px #fff,0 0 0 5.5px #ffd700,0 0 0 10px #ff8c00,0 0 0 15px #dc2626,0 0 0 20px rgba(220,38,38,.25),0 0 55px #ffd700,0 0 120px rgba(255,140,0,.7),0 0 180px rgba(255,69,0,.4)}100%{box-shadow:0 0 0 3.5px #fff,0 0 0 8px #fffbbf,0 0 0 14px #ff8c00,0 0 0 20px #dc2626,0 0 0 26px rgba(220,38,38,.15),0 0 90px #ffd700,0 0 180px rgba(255,140,0,.85),0 0 260px rgba(255,69,0,.5)}}
+
+/* ── In-game board frame tiers ── */
+.board-shadow-wrap[data-tier="0"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #444}
+.board-shadow-wrap[data-tier="1"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #888,0 0 20px rgba(150,150,150,.15)}
+.board-shadow-wrap[data-tier="2"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #3b82f6,0 0 25px rgba(59,130,246,.3)}
+.board-shadow-wrap[data-tier="3"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #60a5fa,0 0 0 5px #1d4ed8,0 0 35px rgba(59,130,246,.5)}
+.board-shadow-wrap[data-tier="4"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #4ade80,0 0 0 4px #15803d,0 0 30px rgba(74,222,128,.4)}
+.board-shadow-wrap[data-tier="5"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #86efac,0 0 0 4px #22c55e,0 0 0 6px #14532d,0 0 40px rgba(34,197,94,.55)}
+.board-shadow-wrap[data-tier="6"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #f97316,0 0 0 4px #7c2d12,0 0 40px rgba(249,115,22,.5)}
+.board-shadow-wrap[data-tier="7"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #ef4444,0 0 0 4px #991b1b,0 0 0 6px #7f1d1d,0 0 50px rgba(239,68,68,.55)}
+.board-shadow-wrap[data-tier="8"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #c084fc,0 0 0 4px #581c87,0 0 50px rgba(192,132,252,.5)}
+.board-shadow-wrap[data-tier="9"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #e9d5ff,0 0 0 4px #9333ea,0 0 0 6px #3b0764,0 0 60px rgba(147,51,234,.6)}
+.board-shadow-wrap[data-tier="10"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2px #d4af37,0 0 0 4px #78350f,0 0 55px rgba(212,175,55,.55)}
+.board-shadow-wrap[data-tier="11"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #ffd700,0 0 0 5px rgba(161,98,7,.5),0 0 65px rgba(255,215,0,.6);animation:boardBd11 2s ease-in-out infinite alternate}
+.board-shadow-wrap[data-tier="12"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #f59e0b,0 0 0 5px #dc2626,0 0 70px rgba(245,158,11,.55);animation:boardBd12 1.5s ease-in-out infinite}
+.board-shadow-wrap[data-tier="13"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #ff6ec7,0 0 75px rgba(255,110,199,.5);animation:boardBd13 2s linear infinite}
+.board-shadow-wrap[data-tier="14"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #bae6fd,0 0 0 5px #0ea5e9,0 0 80px rgba(14,165,233,.6);animation:boardBd14 1.2s ease-in-out infinite alternate}
+.board-shadow-wrap[data-tier="15"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #22d3ee,0 0 0 5px #0e7490,0 0 90px rgba(6,182,212,.7);animation:boardBd15 1.4s ease-in-out infinite alternate}
+.board-shadow-wrap[data-tier="16"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #a855f7,0 0 0 6px #581c87,0 0 100px rgba(168,85,247,.65);animation:boardBd16 2s linear infinite}
+.board-shadow-wrap[data-tier="17"]{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #fff,0 0 0 6px #ffd700,0 0 0 10px #ff8c00,0 0 0 14px #dc2626,0 0 120px rgba(255,215,0,.75);animation:boardBd17 0.8s ease-in-out infinite alternate}
+@keyframes boardBd11{from{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #ffd700,0 0 0 5px rgba(161,98,7,.5),0 0 65px rgba(255,215,0,.6)}to{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3.5px #ffd700,0 0 0 7px rgba(161,98,7,.4),0 0 100px rgba(255,215,0,.4)}}
+@keyframes boardBd12{0%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #f59e0b,0 0 0 5px #dc2626,0 0 70px rgba(245,158,11,.55)}50%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #ef4444,0 0 0 5px #d97706,0 0 80px rgba(239,68,68,.55)}100%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #f59e0b,0 0 0 5px #dc2626,0 0 70px rgba(245,158,11,.55)}}
+@keyframes boardBd13{0%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #ff6ec7,0 0 75px rgba(255,110,199,.5)}25%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #fbbf24,0 0 75px rgba(251,191,36,.5)}50%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #4ade80,0 0 75px rgba(74,222,128,.5)}75%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #60a5fa,0 0 75px rgba(96,165,250,.5)}100%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #ff6ec7,0 0 75px rgba(255,110,199,.5)}}
+@keyframes boardBd14{from{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #bae6fd,0 0 0 5px #0ea5e9,0 0 80px rgba(14,165,233,.6)}to{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 4px #e0f7ff,0 0 0 7px #38bdf8,0 0 130px rgba(14,165,233,.4)}}
+@keyframes boardBd15{from{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 2.5px #22d3ee,0 0 0 5px #0e7490,0 0 90px rgba(6,182,212,.7)}to{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 4px #00ffff,0 0 0 8px #0891b2,0 0 150px rgba(0,255,255,.6)}}
+@keyframes boardBd16{0%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #a855f7,0 0 0 6px #581c87,0 0 100px rgba(168,85,247,.65)}33%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #6366f1,0 0 0 6px #312e81,0 0 100px rgba(99,102,241,.65)}66%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #ec4899,0 0 0 6px #831843,0 0 100px rgba(236,72,153,.65)}100%{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #a855f7,0 0 0 6px #581c87,0 0 100px rgba(168,85,247,.65)}}
+@keyframes boardBd17{from{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 3px #fff,0 0 0 6px #ffd700,0 0 0 10px #ff8c00,0 0 0 14px #dc2626,0 0 120px rgba(255,215,0,.75)}to{box-shadow:0 20px 70px rgba(0,0,0,.8),0 0 0 4px #fff,0 0 0 9px #fffbbf,0 0 0 14px #ff8c00,0 0 0 20px #dc2626,0 0 180px rgba(255,215,0,.9)}}
+
+/* ── Border picker item hover glow ── */
+.pick-bd-item{position:relative;overflow:visible}
+.pick-bd-item:not(.locked):hover{transform:translateY(-2px) scale(1.01);box-shadow:0 8px 25px rgba(0,0,0,.4)}
+.pick-bd-badge{font-size:16px;flex-shrink:0;width:24px;text-align:center}
+.pick-bd-chibi-wrap{position:relative;width:52px;height:52px;flex-shrink:0}
+.pick-bd-chibi{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;z-index:1}
+.pick-bd-floater{position:absolute;font-size:10px;animation:floatAround var(--fa-dur,3s) ease-in-out infinite;z-index:2;pointer-events:none;top:50%;left:50%;transform-origin:0 0}
+@keyframes floatAround{0%{transform:translate(-50%,-50%) rotate(var(--fa-start,0deg)) translateX(var(--fa-r,26px)) scale(1);opacity:.9}50%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 180deg)) translateX(var(--fa-r,26px)) scale(1.2);opacity:1}100%{transform:translate(-50%,-50%) rotate(calc(var(--fa-start,0deg) + 360deg)) translateX(var(--fa-r,26px)) scale(1);opacity:.9}}
 /* ── PICKER OVERLAY ── */
 .pick-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);display:none;flex-direction:column;align-items:center;padding:14px 12px;overflow:hidden}
 .pick-ov.show{display:flex}
@@ -753,11 +802,9 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — solid fill first, then outline on top to prevent transparency gaps -->
+<!-- WHITE KNIGHT — compound fill eliminates transparency gaps -->
 <g id="wN">
-  <path fill="#fff" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <path fill="#fff" stroke="none" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
-  <path fill="#fff" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <path fill="#fff" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
   <circle fill="#404040" cx="33" cy="24" r="1.85"/>
@@ -807,11 +854,9 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — solid fill first, then outline on top to prevent transparency gaps -->
+<!-- BLACK KNIGHT — compound fill eliminates transparency gaps -->
 <g id="bN">
-  <path fill="#111" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <path fill="#111" stroke="none" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
-  <path fill="#111" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <path fill="#111" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
   <circle fill="#ccc" cx="33" cy="24" r="1.85"/>
@@ -2555,8 +2600,11 @@ function startVsBot(level,oppProfile){
       // Show ELO & level badges for both players in-game
       const eloTop=document.getElementById('elo-top');
       const eloBot=document.getElementById('elo-bot');
-      if(eloTop){eloTop.textContent='⭐ '+oppProfile.rating+' · '+_ratingToLabel(oppProfile.rating);eloTop.style.display='block';}
+      if(eloTop){eloTop.textContent='⭐ '+oppProfile.rating+' · '+_ratingToLabel(oppProfile.rating)+(oppProfile.winRate?' · 🏆 WR '+oppProfile.winRate+'%':'');eloTop.style.display='block';}
       if(eloBot){const myRating=userProfile.rating??0;eloBot.textContent='⭐ '+myRating+' · '+_ratingToLabel(myRating);eloBot.style.display='block';}
+      // Apply board frame based on user border tier
+      const bswRm=document.getElementById('board-shadow-wrap');
+      if(bswRm)bswRm.setAttribute('data-tier',String(getUserBorderIdx()));
       // Show game mode badge
       const badge=document.getElementById('game-mode-lbl');
       if(badge)badge.textContent='🎲 Random Match';
@@ -2572,6 +2620,9 @@ function startVsBot(level,oppProfile){
       // Apply player border ring to bottom avatar in bot mode
       const avBotEl=document.getElementById('av-bot');
       if(avBotEl) applyBorderToEl(avBotEl, getUserBorderIdx());
+      // Apply board frame based on user border tier
+      const bswBot=document.getElementById('board-shadow-wrap');
+      if(bswBot)bswBot.setAttribute('data-tier',String(getUserBorderIdx()));
     }
     _clearChat?.();closeChatPanels?.();
     _addChatMsg?.({type:'sys',content:'Game dimulai! Chat bareng lawan di sini 💬',ts:Date.now()});
@@ -3792,17 +3843,46 @@ function openBorderPicker(){
       const selected=!locked&&i===curBorder;
       const item=document.createElement('div');
       item.className='pick-bd-item'+(selected?' selected':'')+(locked?' locked':'');
-      // Demo dot with border ring applied
-      const demo=document.createElement('div');
-      demo.className='pick-bd-demo';
-      demo.setAttribute('data-border',String(i));
-      demo.textContent='♟';
+
+      // Animated chibi demo circle with floating emojis
+      const chibiWrap=document.createElement('div');
+      chibiWrap.className='pick-bd-chibi-wrap';
+      const chibi=document.createElement('div');
+      chibi.className='pick-bd-chibi';
+      chibi.setAttribute('data-border',String(i));
+      chibi.style.fontSize='22px';
+      chibi.textContent=BORDER_CHIBI[i]||'♟';
+      chibiWrap.appendChild(chibi);
+
+      // Add floating emojis orbiting the chibi
+      const floaters=BORDER_FLOATERS[i]||[];
+      const count=Math.min(floaters.length,i<2?1:i<5?2:i<10?3:i<14?4:6);
+      const radius=i<3?22:i<8?25:i<13?28:32;
+      for(let f=0;f<count;f++){
+        const fl=document.createElement('span');
+        fl.className='pick-bd-floater';
+        const startDeg=(360/count)*f;
+        fl.style.cssText=`--fa-start:${startDeg}deg;--fa-dur:${2.5+i*0.15}s;--fa-r:${radius}px;font-size:${8+Math.floor(i/6)}px;animation-delay:${f*0.4}s`;
+        fl.textContent=floaters[f%floaters.length];
+        chibiWrap.appendChild(fl);
+      }
+
+      // Badge + info
+      const badge=document.createElement('span');
+      badge.className='pick-bd-badge';
+      badge.textContent=BORDER_BADGES[i]||'🎖️';
+
       const info=document.createElement('div');info.style.flex='1';
-      const name=document.createElement('div');name.className='pick-bd-name';name.textContent=lbl;
+      const name=document.createElement('div');name.className='pick-bd-name';
+      name.textContent=lbl;
       const req=document.createElement('div');req.className='pick-bd-req';
       req.textContent=locked?('🔒 Butuh title: '+LEVEL_TITLE_NAMES[i]):'✅ Terbuka';
       info.appendChild(name);info.appendChild(req);
-      item.appendChild(demo);item.appendChild(info);
+
+      item.appendChild(chibiWrap);
+      item.appendChild(info);
+      item.appendChild(badge);
+
       if(locked){
         const lockIcon=document.createElement('span');lockIcon.className='pick-bd-lock';lockIcon.textContent='🔒';
         item.appendChild(lockIcon);
@@ -3812,7 +3892,10 @@ function openBorderPicker(){
           localStorage.setItem('catur_profile',JSON.stringify(userProfile));
           grid.querySelectorAll('.pick-bd-item').forEach(x=>x.classList.remove('selected'));
           item.classList.add('selected');
-          toast('✅ Bingkai dipakai: '+lbl);
+          // Update in-game board frame
+          const bsw=document.getElementById('board-shadow-wrap');
+          if(bsw)bsw.setAttribute('data-tier',String(i));
+          toast('✅ Bingkai '+BORDER_BADGES[i]+' dipakai: '+lbl);
         };
       }
       grid.appendChild(item);
@@ -4835,6 +4918,14 @@ const LEVEL_THRESHOLDS=(()=>{const t=[0];let xp=0;for(let i=1;i<=180;i++){xp+=Ma
 const LEVEL_TITLE_NAMES=['🐣 Kroco','🐥 Bocah Catur','👣 Pemula','🎮 Amatir','♟ Pion Sejati','🎯 Pemain','🔥 Pemain Aktif','⚔️ Pemain Tangguh','🏅 Semi Pro','💼 Profesional','🦁 Pro Elite','🧠 Ahli Strategi','🏆 Expert','👨‍🎓 Master Muda','👑 Master','💎 Master Elite','🌠 Grandmaster','⚡ Dewa Catur'];
 // Border names for picker (18 tiers, progressively cooler)
 const BORDER_LABELS=['⬜ Default','🔲 Garis Ganda','💙 Biru Muda','✨ Biru Berkilau','💚 Hijau','🌿 Hijau Bersinar','🧡 Oranye Api','❤️ Merah Membara','💜 Ungu Mistis','🔮 Ungu Kerajaan','🥇 Emas','🏆 Emas Bersinar','⭐ Emas Bergerak','🌈 Pelangi','💎 Berlian','🌌 Kosmik','🌠 Galaksi','⚡ Dewa'];
+const BORDER_BADGES=['🥄','🐥','🐢','🎪','🏇','🎯','🔥','⚔️','🧙','🔮','👑','🏆','🌟','🦄','💎','🚀','🌌','⚡'];
+const BORDER_CHIBI=['🐣','🐥','🤺','🗡️','🌿','🌲','🔥','❤️‍🔥','🌸','💜','⭐','🏅','✨','🌈','❄️','🌀','🌠','👑'];
+const BORDER_FLOATERS=[
+  ['💩'],['✦','✧'],['💧','✦'],['💫','🌊'],['🍃','✨'],['🌲','🍃','✨'],
+  ['🔥','✨'],['❤️‍🔥','💥'],['💜','🌸'],['🔮','💫'],['⭐','💛'],['🏅','⭐','💛'],
+  ['⭐','💫','🌟'],['🌈','💫','🌸'],['💎','❄️','🌊'],['🌌','💫','⭐'],
+  ['🌠','💫','🌌','⭐'],['⚡','🌟','💫','🔥','✨','👑']
+];
 const BOT_ELO=[0,800,1100,1450,1900,2400];
 function getPlayerData(){try{return JSON.parse(localStorage.getItem('catur_player_data')||'{}');}catch{return {};}}
 function savePlayerData(d){localStorage.setItem('catur_player_data',JSON.stringify(d));}
