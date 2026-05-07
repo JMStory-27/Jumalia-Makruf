@@ -634,6 +634,80 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
 /* ── MOVEMENT TRAIL ── */
 .piece-trail{animation-duration:.45s !important}
 @keyframes trailFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
+/* ── AVATAR BORDER RINGS (18 tiers) ── */
+/* Tier 0: Kroco — dull iron ring */
+[data-border="0"]{box-shadow:0 0 0 2px #555,0 0 0 3.5px #222,0 0 6px rgba(0,0,0,.6);border-radius:50%}
+/* Tier 1: Pejuang — double silver */
+[data-border="1"]{box-shadow:0 0 0 1.5px #999,0 0 0 3px #444,0 0 0 4.5px #777,0 0 10px rgba(180,180,180,.2);border-radius:50%}
+/* Tier 2: Petarung — steel blue ring + soft glow */
+[data-border="2"]{box-shadow:0 0 0 2px #1e40af,0 0 0 3.5px #60a5fa,0 0 0 5px rgba(96,165,250,.15),0 0 14px rgba(96,165,250,.5);border-radius:50%}
+/* Tier 3: Ksatria — vivid blue double ring + glow burst */
+[data-border="3"]{box-shadow:0 0 0 2px #bfdbfe,0 0 0 4px #3b82f6,0 0 0 6.5px rgba(37,99,235,.45),0 0 20px rgba(59,130,246,.75),0 0 38px rgba(59,130,246,.25);border-radius:50%}
+/* Tier 4: Pendekar — emerald ring + leaf glow */
+[data-border="4"]{box-shadow:0 0 0 2px #166534,0 0 0 3.5px #4ade80,0 0 0 5.5px rgba(74,222,128,.2),0 0 16px rgba(74,222,128,.6);border-radius:50%}
+/* Tier 5: Elite — forest double ring + pulse */
+[data-border="5"]{box-shadow:0 0 0 2px #86efac,0 0 0 4px #22c55e,0 0 0 7px rgba(21,128,61,.5),0 0 22px rgba(34,197,94,.75),0 0 40px rgba(34,197,94,.25);border-radius:50%}
+/* Tier 6: Expert — molten orange + heat shimmer */
+[data-border="6"]{box-shadow:0 0 0 2px #7c2d12,0 0 0 3.5px #fb923c,0 0 0 6px rgba(234,88,12,.3),0 0 18px rgba(251,146,60,.7),0 0 35px rgba(239,68,68,.2);border-radius:50%}
+/* Tier 7: Ahli — burning red triple ring */
+[data-border="7"]{box-shadow:0 0 0 1.5px #fca5a5,0 0 0 3.5px #ef4444,0 0 0 6px #991b1b,0 0 0 8.5px rgba(127,29,29,.4),0 0 24px rgba(239,68,68,.85),0 0 50px rgba(239,68,68,.25);border-radius:50%}
+/* Tier 8: Master — purple mystic halo */
+[data-border="8"]{box-shadow:0 0 0 2px #581c87,0 0 0 4px #c084fc,0 0 0 6.5px rgba(147,51,234,.35),0 0 20px rgba(192,132,252,.7),0 0 40px rgba(168,85,247,.25);border-radius:50%}
+/* Tier 9: Grand Master — deep purple royal crown */
+[data-border="9"]{box-shadow:0 0 0 1.5px #e9d5ff,0 0 0 3.5px #9333ea,0 0 0 6.5px #4c1d95,0 0 0 9px rgba(76,29,149,.45),0 0 26px rgba(147,51,234,.9),0 0 55px rgba(147,51,234,.3);border-radius:50%}
+/* Tier 10: International Master — warm gold ring */
+[data-border="10"]{box-shadow:0 0 0 2px #78350f,0 0 0 3.5px #d4af37,0 0 0 6px rgba(180,130,30,.3),0 0 20px rgba(212,175,55,.8),0 0 38px rgba(212,175,55,.25);border-radius:50%}
+/* Tier 11: FIDE Master — bright gold + animated pulse */
+[data-border="11"]{box-shadow:0 0 0 2px #fef08a,0 0 0 4px #ffd700,0 0 0 7px rgba(161,98,7,.5),0 0 25px rgba(255,215,0,.9),0 0 55px rgba(255,215,0,.3);border-radius:50%;animation:bd11 2.2s ease-in-out infinite alternate}
+/* Tier 12: Candidate Master — fire gold + orange flame */
+[data-border="12"]{box-shadow:0 0 0 2px #fde68a,0 0 0 4.5px #f59e0b,0 0 0 8px #dc2626,0 0 0 11px rgba(185,28,28,.3),0 0 28px #fbbf24,0 0 65px rgba(245,158,11,.4);border-radius:50%;animation:bd12 1.6s ease-in-out infinite}
+/* Tier 13: National Master — rainbow cycling */
+[data-border="13"]{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #ff6ec7,0 0 0 7px rgba(255,110,199,.3),0 0 25px rgba(255,110,199,.9),0 0 55px rgba(255,110,199,.35);border-radius:50%;animation:bd13 2.2s linear infinite}
+/* Tier 14: Senior Master — diamond ice crystal */
+[data-border="14"]{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #bae6fd,0 0 0 6px #0ea5e9,0 0 0 9px rgba(3,105,161,.4),0 0 32px #bae6fd,0 0 70px rgba(14,165,233,.5);border-radius:50%;animation:bd14 1.3s ease-in-out infinite alternate}
+/* Tier 15: Super GM — cosmic cyan storm */
+[data-border="15"]{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #22d3ee,0 0 0 7px #0e7490,0 0 0 11px rgba(8,145,178,.4),0 0 38px #22d3ee,0 0 80px rgba(6,182,212,.6);border-radius:50%;animation:bd15 1.6s ease-in-out infinite alternate}
+/* Tier 16: Legendary — galaxy aurora */
+[data-border="16"]{box-shadow:0 0 0 2px #f0abfc,0 0 0 5px #a855f7,0 0 0 9px #581c87,0 0 0 13px rgba(88,28,135,.4),0 0 35px #c084fc,0 0 80px rgba(168,85,247,.5);border-radius:50%;animation:bd16 2.2s linear infinite}
+/* Tier 17: Dewa Catur — god-tier divine radiance */
+[data-border="17"]{box-shadow:0 0 0 2px #fff,0 0 0 5px #ffd700,0 0 0 9px #ff8c00,0 0 0 13px #dc2626,0 0 0 17px rgba(220,38,38,.25),0 0 45px #ffd700,0 0 100px rgba(255,140,0,.65),0 0 150px rgba(255,69,0,.3);border-radius:50%;animation:bd17 0.85s ease-in-out infinite alternate}
+@keyframes bd11{0%{box-shadow:0 0 0 2px #fef08a,0 0 0 4px #ffd700,0 0 0 7px rgba(161,98,7,.5),0 0 25px rgba(255,215,0,.9),0 0 55px rgba(255,215,0,.3)}100%{box-shadow:0 0 0 2.5px #fff7a0,0 0 0 5.5px #ffd700,0 0 0 9px rgba(161,98,7,.35),0 0 38px rgba(255,215,0,.7),0 0 80px rgba(255,215,0,.2)}}
+@keyframes bd12{0%{box-shadow:0 0 0 2px #fde68a,0 0 0 4.5px #f59e0b,0 0 0 8px #dc2626,0 0 0 11px rgba(185,28,28,.3),0 0 28px #fbbf24,0 0 65px rgba(245,158,11,.4)}50%{box-shadow:0 0 0 2px #fed7aa,0 0 0 4.5px #ef4444,0 0 0 8px #d97706,0 0 0 11px rgba(120,53,15,.3),0 0 32px #f87171,0 0 75px rgba(239,68,68,.4)}100%{box-shadow:0 0 0 2px #fde68a,0 0 0 4.5px #f59e0b,0 0 0 8px #dc2626,0 0 0 11px rgba(185,28,28,.3),0 0 28px #fbbf24,0 0 65px rgba(245,158,11,.4)}}
+@keyframes bd13{0%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #ff6ec7,0 0 0 7px rgba(255,110,199,.3),0 0 25px rgba(255,110,199,.9),0 0 55px rgba(255,110,199,.35)}25%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #fbbf24,0 0 0 7px rgba(251,191,36,.3),0 0 25px rgba(251,191,36,.9),0 0 55px rgba(251,191,36,.35)}50%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #4ade80,0 0 0 7px rgba(74,222,128,.3),0 0 25px rgba(74,222,128,.9),0 0 55px rgba(74,222,128,.35)}75%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #60a5fa,0 0 0 7px rgba(96,165,250,.3),0 0 25px rgba(96,165,250,.9),0 0 55px rgba(96,165,250,.35)}100%{box-shadow:0 0 0 2px #fff,0 0 0 4.5px #ff6ec7,0 0 0 7px rgba(255,110,199,.3),0 0 25px rgba(255,110,199,.9),0 0 55px rgba(255,110,199,.35)}}
+@keyframes bd14{0%{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #bae6fd,0 0 0 6px #0ea5e9,0 0 0 9px rgba(3,105,161,.4),0 0 32px #bae6fd,0 0 70px rgba(14,165,233,.5)}100%{box-shadow:0 0 0 2.5px #fff,0 0 0 5px #e0f7ff,0 0 0 8px #38bdf8,0 0 0 12px rgba(3,105,161,.3),0 0 50px #e0f7ff,0 0 100px rgba(14,165,233,.4)}}
+@keyframes bd15{0%{box-shadow:0 0 0 1.5px #fff,0 0 0 3.5px #22d3ee,0 0 0 7px #0e7490,0 0 0 11px rgba(8,145,178,.4),0 0 38px #22d3ee,0 0 80px rgba(6,182,212,.6)}100%{box-shadow:0 0 0 2.5px #fff,0 0 0 5.5px #00ffff,0 0 0 10px #0891b2,0 0 0 15px rgba(8,145,178,.3),0 0 60px #00ffff,0 0 120px rgba(0,255,255,.5)}}
+@keyframes bd16{0%{box-shadow:0 0 0 2px #f0abfc,0 0 0 5px #a855f7,0 0 0 9px #581c87,0 0 0 13px rgba(88,28,135,.4),0 0 35px #c084fc,0 0 80px rgba(168,85,247,.5)}33%{box-shadow:0 0 0 2px #c7d2fe,0 0 0 5px #6366f1,0 0 0 9px #312e81,0 0 0 13px rgba(49,46,129,.4),0 0 35px #818cf8,0 0 80px rgba(99,102,241,.5)}66%{box-shadow:0 0 0 2px #fbcfe8,0 0 0 5px #ec4899,0 0 0 9px #831843,0 0 0 13px rgba(131,24,67,.4),0 0 35px #f472b6,0 0 80px rgba(236,72,153,.5)}100%{box-shadow:0 0 0 2px #f0abfc,0 0 0 5px #a855f7,0 0 0 9px #581c87,0 0 0 13px rgba(88,28,135,.4),0 0 35px #c084fc,0 0 80px rgba(168,85,247,.5)}}
+@keyframes bd17{0%{box-shadow:0 0 0 2px #fff,0 0 0 5px #ffd700,0 0 0 9px #ff8c00,0 0 0 13px #dc2626,0 0 0 17px rgba(220,38,38,.25),0 0 45px #ffd700,0 0 100px rgba(255,140,0,.65),0 0 150px rgba(255,69,0,.3)}100%{box-shadow:0 0 0 3px #fff,0 0 0 7px #fffbbf,0 0 0 12px #ff8c00,0 0 0 17px #dc2626,0 0 0 22px rgba(220,38,38,.15),0 0 70px #ffd700,0 0 140px rgba(255,140,0,.8),0 0 200px rgba(255,69,0,.4)}}
+/* ── PICKER OVERLAY ── */
+.pick-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);display:none;flex-direction:column;align-items:center;padding:14px 12px;overflow:hidden}
+.pick-ov.show{display:flex}
+.pick-ov-header{width:100%;max-width:480px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.pick-ov-title{font-size:17px;font-weight:800;color:#fff}
+.pick-ov-close{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pick-ov-grid{width:100%;max-width:480px;display:grid;grid-template-columns:repeat(6,1fr);gap:8px;overflow-y:auto;flex:1;padding-bottom:12px}
+.pick-av-item{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid transparent;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s}
+.pick-av-item.selected{border-color:#ffd700;background:rgba(212,175,55,.15);box-shadow:0 0 10px rgba(212,175,55,.4)}
+.pick-bd-grid{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;padding-bottom:12px}
+.pick-bd-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:2px solid transparent;cursor:pointer;transition:all .18s}
+.pick-bd-item.selected{border-color:#ffd700;background:rgba(212,175,55,.1)}
+.pick-bd-item.locked{opacity:.45;cursor:not-allowed}
+.pick-bd-demo{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+.pick-bd-name{font-size:13px;font-weight:700;color:#fff}
+.pick-bd-req{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+.pick-bd-lock{font-size:18px;color:rgba(255,255,255,.25);margin-left:auto}
+/* Profile picker buttons */
+.prof-pick-row{display:flex;gap:8px;margin:8px 0 6px}
+.prof-pick-btn{flex:1;padding:11px 8px;border-radius:12px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .18s}
+.prof-pick-btn:active{background:rgba(212,175,55,.18);border-color:#d4af37}
+/* Stats card in settings */
+.prof-title-card{background:linear-gradient(135deg,rgba(15,8,40,.9),rgba(35,15,70,.8));border:1.5px solid rgba(212,175,55,.4);border-radius:18px;padding:16px 14px 14px;margin:10px 0 8px}
+.prof-title-big{font-size:20px;font-weight:900;color:#ffd700;text-shadow:0 0 16px rgba(255,215,0,.6);text-align:center;margin-bottom:3px}
+.prof-title-sub{font-size:10px;color:rgba(255,255,255,.45);text-align:center;margin-bottom:10px}
+.prof-wr-row{display:flex;justify-content:space-around;margin:6px 0}
+.prof-wr-item{text-align:center}
+.prof-wr-val{font-size:17px;font-weight:800;color:#fff}
+.prof-wr-lbl{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;text-transform:uppercase;letter-spacing:.5px}
+.prof-divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
 </style>
 </head>
 <body>
@@ -679,16 +753,15 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — cburnett two-path design -->
+<!-- WHITE KNIGHT — solid fill first, then outline on top to prevent transparency gaps -->
 <g id="wN">
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round"
-    d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
-       C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
-       C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
-       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
+  <path fill="#fff" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <path fill="#fff" stroke="none" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
+  <path fill="#fff" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
   <circle fill="#404040" cx="33" cy="24" r="1.85"/>
+  <circle fill="#404040" cx="9.5" cy="25.5" r="0.75"/>
   <path fill="#fff" stroke="#404040" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
 </g>
 <!-- WHITE PAWN — round head + smooth waist + round base -->
@@ -734,16 +807,15 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — cburnett two-path design -->
+<!-- BLACK KNIGHT — solid fill first, then outline on top to prevent transparency gaps -->
 <g id="bN">
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-    d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"/>
-  <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"
-    d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31
-       C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29
-       C 8.3,28.5 8.61,26.5 9.5,25 L 11,22
-       C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5"/>
+  <path fill="#111" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <path fill="#111" stroke="none" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
+  <path fill="#111" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
   <circle fill="#ccc" cx="33" cy="24" r="1.85"/>
+  <circle fill="#ccc" cx="9.5" cy="25.5" r="0.75"/>
   <path fill="#111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" d="M 11,38.5 H 34"/>
 </g>
 <!-- BLACK PAWN — round head + smooth waist + round base -->
@@ -824,11 +896,6 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <button class="btn-main" onclick="showHistory()">
         <span class="btn-icon">📜</span>
         <span class="btn-label">Riwayat Permainan</span>
-        <span class="btn-arrow">›</span>
-      </button>
-      <button class="btn-main" style="border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.07)" onclick="showLeaderboard()">
-        <span class="btn-icon">🏆</span>
-        <span class="btn-label">Leaderboard</span>
         <span class="btn-arrow">›</span>
       </button>
     </div>
@@ -1033,23 +1100,34 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
           </select>
         </div>
       </div>
-      <div class="sec-label" style="margin:0 0 6px;font-size:11px">Pilih Avatar</div>
-      <div class="avatar-grid" id="prof-avatar-grid"></div>
+      <div class="prof-pick-row">
+        <button class="prof-pick-btn" onclick="openAvatarPicker()">🎭 Pilih Avatar</button>
+        <button class="prof-pick-btn" onclick="openBorderPicker()">🖼 Pilih Bingkai</button>
+      </div>
       <label class="prof-upload-btn">
         📷 Upload Foto Sendiri
         <input type="file" id="prof-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)">
       </label>
       <button class="prof-save-btn" onclick="saveProfile()">💾 Simpan Profil</button>
-      <div class="prof-stats-row" id="prof-stats-row">
-        <div class="prof-stat"><div class="prof-stat-val" id="prof-elo-val">1200</div><div class="prof-stat-lbl">ELO</div></div>
-        <div class="prof-stat"><div class="prof-stat-val" id="prof-level-val">1</div><div class="prof-stat-lbl">Level</div></div>
-        <div class="prof-stat"><div class="prof-stat-val" id="prof-wins-val">0</div><div class="prof-stat-lbl">Menang</div></div>
-        <div class="prof-stat"><div class="prof-stat-val" id="prof-games-val">0</div><div class="prof-stat-lbl">Total</div></div>
+      <div class="prof-title-card">
+        <div id="prof-title-big" class="prof-title-big">🐣 Kroco</div>
+        <div class="prof-title-sub">Level <span id="prof-lv-in-title">1</span>/10 di tier ini</div>
+        <div class="prof-wr-row">
+          <div class="prof-wr-item"><div id="prof-elo-val" class="prof-wr-val">0</div><div class="prof-wr-lbl">ELO</div></div>
+          <div class="prof-wr-item"><div id="prof-level-val" class="prof-wr-val">1</div><div class="prof-wr-lbl">Level</div></div>
+          <div class="prof-wr-item"><div id="prof-wr-val" class="prof-wr-val">0%</div><div class="prof-wr-lbl">Winrate</div></div>
+        </div>
+        <div class="prof-divider"></div>
+        <div class="prof-wr-row">
+          <div class="prof-wr-item"><div id="prof-wins-val" class="prof-wr-val" style="color:#4ade80">0</div><div class="prof-wr-lbl">Menang</div></div>
+          <div class="prof-wr-item"><div id="prof-games-val" class="prof-wr-val">0</div><div class="prof-wr-lbl">Total</div></div>
+          <div class="prof-wr-item"><div id="prof-losses-val" class="prof-wr-val" style="color:#f87171">0</div><div class="prof-wr-lbl">Kalah</div></div>
+        </div>
       </div>
-      <div style="padding:0 4px 4px">
+      <div style="padding:0 4px 6px">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt2);margin-bottom:3px">
-          <span id="prof-badge-lbl">🌱 Pemula</span>
-          <span id="prof-xp-lbl">0 / 100 XP</span>
+          <span id="prof-badge-lbl">🐣 Kroco</span>
+          <span id="prof-xp-lbl">0 / 88 XP</span>
         </div>
         <div class="xp-bar-wrap"><div class="xp-bar-fill" id="prof-xp-bar" style="width:0%"></div></div>
       </div>
@@ -1089,6 +1167,24 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div id="t-alt2" class="col-btn" onclick="setColor('alt')">🎲 Acak</div>
     </div>
   </div>
+</div>
+
+<!-- ══ AVATAR PICKER OVERLAY ══ -->
+<div class="pick-ov" id="av-pick-ov">
+  <div class="pick-ov-header">
+    <span class="pick-ov-title">🎭 Pilih Avatar</span>
+    <button class="pick-ov-close" onclick="closeAvatarPicker()">✕</button>
+  </div>
+  <div class="pick-ov-grid" id="av-pick-grid"></div>
+</div>
+
+<!-- ══ BORDER PICKER OVERLAY ══ -->
+<div class="pick-ov" id="bd-pick-ov">
+  <div class="pick-ov-header">
+    <span class="pick-ov-title">🖼 Pilih Bingkai Avatar</span>
+    <button class="pick-ov-close" onclick="closeBorderPicker()">✕</button>
+  </div>
+  <div class="pick-bd-grid" id="bd-pick-grid"></div>
 </div>
 
 <!-- ══ TUTORIAL SCREEN ══ -->
@@ -1278,7 +1374,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div class="menu-item glass" onclick="closeMenu();doResign()"><div class="mi-icon">🏳️</div><div class="mi-label">Menyerah</div></div>
       <div class="menu-item glass" onclick="closeMenu();toggleMusic()"><div class="mi-icon">🎵</div><div class="mi-label">Musik</div></div>
       <div class="menu-item glass" onclick="closeMenu();showSettings()"><div class="mi-icon">⚙️</div><div class="mi-label">Setting</div></div>
-      <div class="menu-item glass" onclick="quitToHome()"><div class="mi-icon">🏠</div><div class="mi-label">Beranda</div></div>
+      <div id="menu-home-btn" class="menu-item glass" onclick="quitToHome()"><div class="mi-icon">🏠</div><div class="mi-label">Beranda</div></div>
     </div>
     <button class="ov-btn" onclick="closeMenu()">✕ Tutup</button>
   </div>
@@ -1723,7 +1819,14 @@ function mulaiVsBot(){
 function showOnlineChoice(){showScreen('online')}
 function showCreateRoom(){showScreen('create');createRoom()}
 function showJoinRoom(){document.getElementById('join-input').value='';document.getElementById('join-status').textContent='';showScreen('join')}
-function showGameMenu(){document.getElementById('o-menu').classList.add('show')}
+function showGameMenu(){
+  const homeBtn=document.getElementById('menu-home-btn');
+  if(homeBtn){
+    const isRestricted=(gameMode==='bot'&&!!_currentOpp)||gameMode==='online';
+    homeBtn.style.display=isRestricted?'none':'';
+  }
+  document.getElementById('o-menu').classList.add('show');
+}
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
 function quitToHome(){clearTimeout(_passNudgeTimer);['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();_stopOppChat();closeChatPanels?.();_clearChat?.();showScreen('home');}
@@ -1871,8 +1974,10 @@ function renderBoard(){
   // Game mode badge
   const badge=document.getElementById('game-mode-lbl');
   if(badge){
-    const modes={bot:`🤖 Bot ${'⭐'.repeat(botLevel)}`,pass:'👥 2 Pemain',online:'🌐 Online',horde:'⚔️ Horde'};
-    badge.textContent=modes[isHordeMode?'horde':gameMode]||'♟ Catur';
+    if(isHordeMode){badge.textContent='⚔️ Horde';}
+    else if(gameMode==='bot'&&_currentOpp){badge.textContent=_ratingToLabel(_currentOpp.rating)+' · WR '+_currentOpp.winRate+'%';}
+    else if(gameMode==='bot'){badge.textContent='🤖 Bot '+('⭐'.repeat(botLevel));}
+    else{const modes={pass:'👥 2 Pemain',online:'🌐 Online'};badge.textContent=modes[gameMode]||'♟ Catur';}
   }
 }
 
@@ -2031,9 +2136,27 @@ function executeMove(mv){
   if(gameMode==='bot'&&gs.turn!==myColor&&!gs.gameOver){
     clearTimeout(thinkTimer);
     const topCard=document.getElementById('p-top');topCard?.classList.add('thinking');
-    const botDelay=_currentOpp
-      ?((_currentOpp.thinkMin||800)+Math.random()*((_currentOpp.thinkMax||4000)-(_currentOpp.thinkMin||800)))
-      :(300+Math.random()*500);
+    const _mc=(moveHistory||[]).length;
+    const _phase=_mc<14?'opening':_mc<40?'middle':'endgame';
+    let botDelay;
+    if(_currentOpp){
+      const _instant=Math.random()<(_phase==='opening'?0.70:_phase==='middle'?0.50:0.30);
+      if(_instant){
+        botDelay=80+Math.random()*250;
+      } else if(_phase==='opening'){
+        botDelay=180+Math.random()*700;
+      } else if(_phase==='middle'){
+        const mn=Math.min(800,(_currentOpp.thinkMin||800)*0.45);
+        const mx=Math.min(3200,(_currentOpp.thinkMax||4000)*0.55);
+        botDelay=mn+Math.random()*(mx-mn);
+      } else {
+        const mn=Math.min(900,(_currentOpp.thinkMin||800)*0.6);
+        const mx=_currentOpp.thinkMax||4000;
+        botDelay=mn+Math.random()*(mx-mn);
+      }
+    } else {
+      botDelay=150+Math.random()*500;
+    }
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
       const mv2=getBotMoveWithPersonality(gs,gs.turn,botLevel);
@@ -2426,11 +2549,14 @@ function startVsBot(level,oppProfile){
         if(userProfile.photo){avBot.innerHTML=`<img src="${userProfile.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
         else{avBot.innerHTML='';const cv=document.createElement('canvas');cv.width=36;cv.height=36;cv.style.cssText='width:36px;height:36px;border-radius:50%;display:block';try{(_EMOJIS||_CHIBI_EMOJIS)[userProfile.avatar??0]?.d(cv.getContext('2d'),36);}catch(e){}avBot.appendChild(cv);}
       }
+      // Apply border rings in-game
+      if(avBot) applyBorderToEl(avBot, getUserBorderIdx());
+      if(avTop && oppProfile) applyBorderToEl(avTop, getTitleIdxByRating(oppProfile.rating));
       // Show ELO & level badges for both players in-game
       const eloTop=document.getElementById('elo-top');
       const eloBot=document.getElementById('elo-bot');
       if(eloTop){eloTop.textContent='⭐ '+oppProfile.rating+' · '+_ratingToLabel(oppProfile.rating);eloTop.style.display='block';}
-      if(eloBot){const myRating=userProfile.rating||1200;eloBot.textContent='⭐ '+myRating+' · '+_ratingToLabel(myRating);eloBot.style.display='block';}
+      if(eloBot){const myRating=userProfile.rating??0;eloBot.textContent='⭐ '+myRating+' · '+_ratingToLabel(myRating);eloBot.style.display='block';}
       // Show game mode badge
       const badge=document.getElementById('game-mode-lbl');
       if(badge)badge.textContent='🎲 Random Match';
@@ -2443,6 +2569,9 @@ function startVsBot(level,oppProfile){
       const eloBot=document.getElementById('elo-bot');
       if(eloTop)eloTop.style.display='none';
       if(eloBot)eloBot.style.display='none';
+      // Apply player border ring to bottom avatar in bot mode
+      const avBotEl=document.getElementById('av-bot');
+      if(avBotEl) applyBorderToEl(avBotEl, getUserBorderIdx());
     }
     _clearChat?.();closeChatPanels?.();
     _addChatMsg?.({type:'sys',content:'Game dimulai! Chat bareng lawan di sini 💬',ts:Date.now()});
@@ -2734,6 +2863,10 @@ function replayGoto(idx){
   const d=_analysisData[_replayIdx];
   const stateAfter=applyMove(d.state,d.move);
   renderAnalysisBoard(stateAfter,d.move,d.rc);
+  const _destCell=d.state.board[d.move.tr][d.move.tc];
+  const _isCap=(_destCell!==null&&_destCell!==undefined)||!!d.move.ep;
+  playSound(_isCap?'capture':d.move.castle?'castle':'move');
+  if(isInCheck(stateAfter,stateAfter.turn))setTimeout(()=>playSound('check'),200);
   const pc=_anPcName(d.state.board[d.move.fr][d.move.fc]);
   const who=d.state.turn==='w'?'⬜ Putih':'⬛ Hitam';
   if(lbl)lbl.textContent=(_replayIdx+1)+'. '+who+': '+pc+' '+_AN_F[d.move.fc]+(8-d.move.fr)+'→'+_AN_F[d.move.tc]+(8-d.move.tr)+' '+d.re;
@@ -3544,7 +3677,7 @@ userProfile.name=userProfile.name||'Pemain';
 if(typeof userProfile.avatar!=='number')userProfile.avatar=0;
 userProfile.country=userProfile.country||'🇮🇩 Indonesia';
 userProfile.photo=userProfile.photo||null;
-userProfile.rating=userProfile.rating||(1000+Math.floor(Math.random()*400));
+if(userProfile.rating==null)userProfile.rating=0;
 
 function saveProfile(){
   const name=document.getElementById('prof-name-input').value.trim()||'Pemain';
@@ -3582,30 +3715,113 @@ function renderProfileAvatar(){
 }
 
 function buildProfileUI(){
-  const grid=document.getElementById('prof-avatar-grid');
-  if(!grid)return;
-  grid.innerHTML='';
-  AVATARS.forEach(av=>{
-    const el=document.createElement('div');
-    el.className='av-opt'+(userProfile.avatar===av&&!userProfile.photo?' selected':'');
-    el.title=(_EMOJIS||_CHIBI_EMOJIS)[av]?.n||('Chibi #'+av);
-    const cv=document.createElement('canvas');cv.width=38;cv.height=38;
-    cv.style.cssText='width:38px;height:38px;border-radius:50%;display:block';
-    try{(_EMOJIS||_CHIBI_EMOJIS)[av]?.d(cv.getContext('2d'),38);}catch(e){}
-    el.appendChild(cv);
-    el.onclick=()=>{
-      userProfile.avatar=av;
-      userProfile.photo=null;
-      grid.querySelectorAll('.av-opt').forEach(x=>x.classList.remove('selected'));
-      el.classList.add('selected');
-      renderProfileAvatar();
-    };
-    grid.appendChild(el);
-  });
   document.getElementById('prof-name-input').value=userProfile.name;
   const sel=document.getElementById('prof-country-select');
   [...sel.options].forEach(o=>o.selected=o.value===userProfile.country);
   renderProfileAvatar();
+}
+
+// ═══════════════════════════════════════
+// BORDER SYSTEM
+// ═══════════════════════════════════════
+// Maps a player's ELO rating to a title index (0-17)
+function getTitleIdxByRating(rating){
+  const r=rating??0;
+  const mins=[0,300,500,680,860,1050,1200,1360,1500,1650,1800,1950,2100,2280,2450,2620,2800,2980];
+  let idx=0;for(let i=0;i<mins.length;i++){if(r>=mins[i])idx=i;else break;}
+  return idx;
+}
+// Returns user's current title index based on XP level
+function getUserTitleIdx(){
+  const d=getPlayerData();return getLevelTitleIdx(getLevel(d.xp||0));
+}
+// Returns user's chosen border (capped by unlocked title)
+function getUserBorderIdx(){
+  const maxIdx=getUserTitleIdx();
+  const saved=typeof userProfile.border==='number'?userProfile.border:0;
+  return Math.min(saved,maxIdx);
+}
+// Apply a border ring (data-border attr) to an element
+function applyBorderToEl(el,borderIdx){
+  if(!el)return;
+  el.setAttribute('data-border',String(Math.max(0,Math.min(17,borderIdx))));
+}
+// Remove border from element
+function removeBorderFromEl(el){if(el)el.removeAttribute('data-border');}
+
+// ── Avatar Picker Modal ──────────────────
+function openAvatarPicker(){
+  const ov=document.getElementById('av-pick-ov');if(!ov)return;
+  const grid=document.getElementById('av-pick-grid');
+  if(grid&&!grid.dataset.built){
+    grid.innerHTML='';
+    AVATARS.forEach(av=>{
+      const item=document.createElement('div');
+      item.className='pick-av-item'+(userProfile.avatar===av&&!userProfile.photo?' selected':'');
+      const cv=document.createElement('canvas');cv.width=44;cv.height=44;
+      cv.style.cssText='width:44px;height:44px;border-radius:50%;display:block';
+      try{(_EMOJIS||_CHIBI_EMOJIS)[av]?.d(cv.getContext('2d'),44);}catch(e){}
+      item.appendChild(cv);
+      item.onclick=()=>{
+        userProfile.avatar=av;userProfile.photo=null;
+        grid.querySelectorAll('.pick-av-item').forEach(x=>x.classList.remove('selected'));
+        item.classList.add('selected');
+        renderProfileAvatar();
+        localStorage.setItem('catur_profile',JSON.stringify(userProfile));
+      };
+      grid.appendChild(item);
+    });
+    grid.dataset.built='1';
+  }
+  ov.classList.add('show');
+}
+function closeAvatarPicker(){
+  const ov=document.getElementById('av-pick-ov');if(ov)ov.classList.remove('show');
+}
+
+// ── Border Picker Modal ──────────────────
+function openBorderPicker(){
+  const ov=document.getElementById('bd-pick-ov');if(!ov)return;
+  const grid=document.getElementById('bd-pick-grid');
+  const userTitleIdx=getUserTitleIdx();
+  const curBorder=getUserBorderIdx();
+  if(grid){
+    grid.innerHTML='';
+    BORDER_LABELS.forEach((lbl,i)=>{
+      const locked=i>userTitleIdx;
+      const selected=!locked&&i===curBorder;
+      const item=document.createElement('div');
+      item.className='pick-bd-item'+(selected?' selected':'')+(locked?' locked':'');
+      // Demo dot with border ring applied
+      const demo=document.createElement('div');
+      demo.className='pick-bd-demo';
+      demo.setAttribute('data-border',String(i));
+      demo.textContent='♟';
+      const info=document.createElement('div');info.style.flex='1';
+      const name=document.createElement('div');name.className='pick-bd-name';name.textContent=lbl;
+      const req=document.createElement('div');req.className='pick-bd-req';
+      req.textContent=locked?('🔒 Butuh title: '+LEVEL_TITLE_NAMES[i]):'✅ Terbuka';
+      info.appendChild(name);info.appendChild(req);
+      item.appendChild(demo);item.appendChild(info);
+      if(locked){
+        const lockIcon=document.createElement('span');lockIcon.className='pick-bd-lock';lockIcon.textContent='🔒';
+        item.appendChild(lockIcon);
+      } else {
+        item.onclick=()=>{
+          userProfile.border=i;
+          localStorage.setItem('catur_profile',JSON.stringify(userProfile));
+          grid.querySelectorAll('.pick-bd-item').forEach(x=>x.classList.remove('selected'));
+          item.classList.add('selected');
+          toast('✅ Bingkai dipakai: '+lbl);
+        };
+      }
+      grid.appendChild(item);
+    });
+  }
+  ov.classList.add('show');
+}
+function closeBorderPicker(){
+  const ov=document.getElementById('bd-pick-ov');if(ov)ov.classList.remove('show');
 }
 
 // ═══════════════════════════════════════
@@ -3856,9 +4072,12 @@ function _startMatchmakingAnimation(){
   }
   if(meName)meName.textContent=userProfile.name;
   if(meCountry)meCountry.textContent=userProfile.country;
-  if(meRating)meRating.textContent='⭐ '+(userProfile.rating||1200);
+  if(meRating)meRating.textContent='⭐ '+(userProfile.rating??0);
   const meLevel=document.getElementById('mm-me-level');
-  if(meLevel)meLevel.textContent=_ratingToLabel(userProfile.rating||1200);
+  if(meLevel)meLevel.textContent=_ratingToLabel(userProfile.rating??0);
+  // Apply player border to me-avatar in matchmaking
+  const meAvWrap=document.getElementById('mm-me-av');
+  if(meAvWrap){const bIdx=getUserBorderIdx();applyBorderToEl(meAvWrap,bIdx);}
 
   // Reset state
   const found=document.getElementById('mm-found-badge');
@@ -3951,6 +4170,9 @@ function _startMatchmakingAnimation(){
     const box=document.getElementById('mm-enemy-box');
     if(box){box.classList.remove('enemy');void box.offsetWidth;box.classList.add('enemy');}
     _renderMmAvatar(enAv,rand.avatar);
+    // Show border matching this random opponent's title during spin
+    const enAvWrapSpin=document.getElementById('mm-en-av');
+    if(enAvWrapSpin)applyBorderToEl(enAvWrapSpin,getTitleIdxByRating(rand.rating));
     if(enName)enName.textContent=rand.name;
     if(enCountry)enCountry.textContent=rand.country;
     if(enRating)enRating.textContent='⭐ '+rand.rating;
@@ -3966,6 +4188,9 @@ function _startMatchmakingAnimation(){
     } else {
       // Settle on matched opponent — staggered reveal (#22)
       _renderMmAvatar(enAv,_matchedOpponent.avatar);
+      // Apply opponent border based on their title rating
+      const enAvWrapFinal=document.getElementById('mm-en-av');
+      if(enAvWrapFinal)applyBorderToEl(enAvWrapFinal,getTitleIdxByRating(_matchedOpponent.rating));
       const box2=document.getElementById('mm-enemy-box');
       if(box2){box2.classList.remove('enemy');void box2.offsetWidth;box2.classList.add('enemy');}
       const _fi=el=>{if(!el)return;el.style.opacity='0';el.style.transition='opacity .45s';requestAnimationFrame(()=>requestAnimationFrame(()=>el.style.opacity='1'));};
@@ -4603,27 +4828,34 @@ function closeChatPanels(){closeChat();closeEmojiPicker();}
 // ═══════════════════════════════════════
 // ELO & XP SYSTEM (#1, #10)
 // ═══════════════════════════════════════
-const LEVEL_THRESHOLDS=[0,100,250,450,700,1000,1400,1850,2350,2900,3500,4200];
-const LEVEL_BADGES=['🌱 Pemula','♟ Pion','⚔️ Kavaleri','🏰 Benteng','♝ Gajah','♛ Ratu','👑 Raja','💫 Maestro','🌟 Grandmaster','🔱 Legendaris','💎 Elite','👾 Dewa Catur'];
+// 180-level system: 10 levels per title, 18 titles total
+// XP needed per level increases gradually (harder as you progress)
+const LEVEL_THRESHOLDS=(()=>{const t=[0];let xp=0;for(let i=1;i<=180;i++){xp+=Math.round(80+i*8+Math.floor(i/10)*15);t.push(xp);}return t;})();
+// 18 title names — same labels as _TITLES (ELO-based), applied here XP-based per 10 levels
+const LEVEL_TITLE_NAMES=['🐣 Kroco','🐥 Bocah Catur','👣 Pemula','🎮 Amatir','♟ Pion Sejati','🎯 Pemain','🔥 Pemain Aktif','⚔️ Pemain Tangguh','🏅 Semi Pro','💼 Profesional','🦁 Pro Elite','🧠 Ahli Strategi','🏆 Expert','👨‍🎓 Master Muda','👑 Master','💎 Master Elite','🌠 Grandmaster','⚡ Dewa Catur'];
+// Border names for picker (18 tiers, progressively cooler)
+const BORDER_LABELS=['⬜ Default','🔲 Garis Ganda','💙 Biru Muda','✨ Biru Berkilau','💚 Hijau','🌿 Hijau Bersinar','🧡 Oranye Api','❤️ Merah Membara','💜 Ungu Mistis','🔮 Ungu Kerajaan','🥇 Emas','🏆 Emas Bersinar','⭐ Emas Bergerak','🌈 Pelangi','💎 Berlian','🌌 Kosmik','🌠 Galaksi','⚡ Dewa'];
 const BOT_ELO=[0,800,1100,1450,1900,2400];
 function getPlayerData(){try{return JSON.parse(localStorage.getItem('catur_player_data')||'{}');}catch{return {};}}
 function savePlayerData(d){localStorage.setItem('catur_player_data',JSON.stringify(d));}
 function initPlayerData(){
   const d=getPlayerData();
-  if(!d.elo)d.elo=1200;if(!d.xp)d.xp=0;if(!d.games)d.games=0;
+  if(d.elo==null)d.elo=0;if(!d.xp)d.xp=0;if(!d.games)d.games=0;
   if(!d.wins)d.wins=0;if(!d.losses)d.losses=0;if(!d.draws)d.draws=0;
   savePlayerData(d);return d;
 }
 function getLevel(xp){
   let lv=1;
   for(let i=1;i<LEVEL_THRESHOLDS.length;i++){if(xp>=LEVEL_THRESHOLDS[i])lv=i+1;else break;}
-  return Math.min(lv,LEVEL_BADGES.length);
+  return Math.min(lv,180);
 }
-function getLevelBadge(lv){return LEVEL_BADGES[Math.min(lv-1,LEVEL_BADGES.length-1)];}
+function getLevelTitleIdx(lv){return Math.min(Math.floor((lv-1)/10),17);}
+function getLvInTitle(lv){return((lv-1)%10)+1;}
+function getLevelBadge(lv){return LEVEL_TITLE_NAMES[getLevelTitleIdx(lv)];}
 function getXpProgress(xp){
   const lv=getLevel(xp);
   const cur=LEVEL_THRESHOLDS[lv-1]||0;
-  const nxt=LEVEL_THRESHOLDS[Math.min(lv,LEVEL_THRESHOLDS.length-1)]||(xp+1000);
+  const nxt=LEVEL_THRESHOLDS[Math.min(lv,LEVEL_THRESHOLDS.length-1)]||(xp+2000);
   return {cur,nxt,xp,pct:Math.min(100,Math.round((xp-cur)/(nxt-cur)*100))};
 }
 function calcEloChange(myElo,oppElo,result){
@@ -4645,8 +4877,8 @@ function _updateRandomRating(result){
   }else{
     change=Math.floor(Math.random()*5)-2;
   }
-  const oldTitle=_ratingToLabel(userProfile.rating||1200);
-  userProfile.rating=Math.max(100,(userProfile.rating||1200)+change);
+  const oldTitle=_ratingToLabel(userProfile.rating??0);
+  userProfile.rating=Math.max(0,(userProfile.rating??0)+change);
   try{localStorage.setItem('catur_user_profile',JSON.stringify(userProfile));}catch(e){}
   const newTitle=_ratingToLabel(userProfile.rating);
   // Tampilkan animasi promosi jika title naik (hanya saat menang/draw)
@@ -4696,10 +4928,17 @@ function updateAfterGame(result){
 function updateProfileStats(){
   const d=initPlayerData();
   const lv=getLevel(d.xp);
+  const titleIdx=getLevelTitleIdx(lv);
+  const lvIn=getLvInTitle(lv);
   const {cur,nxt,xp,pct}=getXpProgress(d.xp);
+  const wr=d.games>0?Math.round((d.wins/d.games)*100):0;
   const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   el('prof-elo-val',d.elo);el('prof-level-val',lv);
   el('prof-wins-val',d.wins||0);el('prof-games-val',d.games||0);
+  el('prof-losses-val',d.losses||0);
+  el('prof-wr-val',wr+'%');
+  el('prof-title-big',getLevelBadge(lv));
+  const lvInEl=document.getElementById('prof-lv-in-title');if(lvInEl)lvInEl.textContent=lvIn;
   el('prof-badge-lbl',getLevelBadge(lv));el('prof-xp-lbl',(xp-cur)+' / '+(nxt-cur)+' XP');
   const bar=document.getElementById('prof-xp-bar');if(bar)bar.style.width=pct+'%';
 }
@@ -4795,7 +5034,7 @@ function renderLeaderboard(){
   // Stat card
   const statEl=document.getElementById('lb-my-stat');
   if(statEl){
-    const myTitle=_ratingToLabel(userProfile.rating||1200);
+    const myTitle=_ratingToLabel(userProfile.rating??0);
     const badge=myTitle.split(' ')[0];
     const titleText=myTitle.split(' ').slice(1).join(' ');
     statEl.innerHTML=`
@@ -4803,7 +5042,7 @@ function renderLeaderboard(){
       <div style="font-size:18px;font-weight:900;color:var(--gold);margin-bottom:2px">${titleText}</div>
       <div style="font-size:12px;color:var(--txt2);margin-bottom:14px">Title kamu sekarang</div>
       <div class="lb-stat-grid">
-        <div class="lb-stat-item"><div class="lb-stat-val">${d.elo||1200}</div><div class="lb-stat-lbl">ELO</div></div>
+        <div class="lb-stat-item"><div class="lb-stat-val">${d.elo||0}</div><div class="lb-stat-lbl">ELO</div></div>
         <div class="lb-stat-item"><div class="lb-stat-val" style="color:#4ade80">${d.wins||0}</div><div class="lb-stat-lbl">Menang</div></div>
         <div class="lb-stat-item"><div class="lb-stat-val" style="color:#f87171">${d.losses||0}</div><div class="lb-stat-lbl">Kalah</div></div>
         <div class="lb-stat-item"><div class="lb-stat-val" style="color:var(--txt2)">${d.draws||0}</div><div class="lb-stat-lbl">Seri</div></div>
@@ -4839,7 +5078,7 @@ function renderLeaderboard(){
   // Peak rating
   const peakEl=document.getElementById('lb-peak-info');
   if(peakEl){
-    const allElos=[d.elo||1200,...hist.map(g=>g.elo||0)].filter(e=>e>0);
+    const allElos=[d.elo||0,...hist.map(g=>g.elo||0)].filter(e=>e>=0);
     const peak=Math.max(...allElos);
     const peakTitle=_ratingToLabel(peak);
     const peakBadge=peakTitle.split(' ')[0];
@@ -4856,7 +5095,7 @@ function renderHistoryScreen(){
   const hist=getGameHistory(),d=initPlayerData();
   const sumEl=document.getElementById('hist-summary');
   if(sumEl)sumEl.innerHTML=`
-    <div class="hist-sum-box"><div class="hist-sum-val">${d.elo||1200}</div><div class="hist-sum-lbl">ELO</div></div>
+    <div class="hist-sum-box"><div class="hist-sum-val">${d.elo||0}</div><div class="hist-sum-lbl">ELO</div></div>
     <div class="hist-sum-box"><div class="hist-sum-val">${d.wins||0}</div><div class="hist-sum-lbl">Menang</div></div>
     <div class="hist-sum-box"><div class="hist-sum-val">${d.losses||0}</div><div class="hist-sum-lbl">Kalah</div></div>
     <div class="hist-sum-box"><div class="hist-sum-val">${d.draws||0}</div><div class="hist-sum-lbl">Seri</div></div>`;
@@ -4885,7 +5124,7 @@ function renderHistoryInAnalysis(){
   const modeNames={bot:'🤖 Bot',pass:'👥 P&P',random:'🎲 Random',online:'🌐 Online'};
   const d=initPlayerData();
   listEl.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px">
-    <div class="prof-stat"><div class="prof-stat-val">${d.elo||1200}</div><div class="prof-stat-lbl">ELO</div></div>
+    <div class="prof-stat"><div class="prof-stat-val">${d.elo||0}</div><div class="prof-stat-lbl">ELO</div></div>
     <div class="prof-stat"><div class="prof-stat-val">${d.wins||0}W/${d.losses||0}L/${d.draws||0}D</div><div class="prof-stat-lbl">Statistik</div></div>
   </div>`+hist.map(g=>{
     const cls=g.result==='win'?'win':g.result==='loss'?'loss':'draw';
