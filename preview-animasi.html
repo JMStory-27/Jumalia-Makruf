@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎮 Pilih Animasi Naik Title</title>
+<style>
+:root{
+  --bg:#0a0a14;--card:#12121e;--card2:#1a1a2e;--gold:#d4af37;--gold2:#ffe066;
+  --txt:#f0eaff;--txt2:#8a82aa;--rad:16px;
+  --c1:#ff6b9d;--c2:#a855f7;--c3:#06b6d4;--c4:#22c55e;--c5:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+canvas#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── HEADER ── */
+.header{position:relative;z-index:10;text-align:center;padding:36px 20px 20px}
+.header h1{font-size:clamp(22px,5vw,40px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+.header p{color:var(--txt2);margin-top:8px;font-size:14px}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.filter-btn{padding:6px 16px;border-radius:20px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:var(--txt2);font-size:12px;cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:var(--gold);border-color:var(--gold);color:#000;font-weight:700}
+
+/* ── GRID ── */
+.grid{position:relative;z-index:10;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:20px;max-width:1100px;margin:0 auto}
+
+/* ── CARD ── */
+.card{border-radius:var(--rad);border:1.5px solid rgba(255,255,255,.08);background:var(--card);cursor:pointer;overflow:hidden;transition:transform .22s,box-shadow .22s,border-color .22s;position:relative}
+.card:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,.5);border-color:rgba(212,175,55,.35)}
+.card.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold),0 8px 30px rgba(212,175,55,.3)}
+.card-preview{width:100%;height:110px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--card2)}
+.card-badge{position:absolute;top:7px;right:7px;font-size:10px;padding:2px 7px;border-radius:8px;font-weight:700;color:#fff}
+.card-body{padding:10px 12px 12px}
+.card-num{font-size:10px;color:var(--txt2);margin-bottom:2px}
+.card-title{font-size:13px;font-weight:700;color:var(--txt);line-height:1.3}
+.card-cat{font-size:10px;color:var(--txt2);margin-top:3px}
+.card-btn{margin-top:9px;width:100%;padding:7px;border-radius:10px;border:none;background:rgba(212,175,55,.15);color:var(--gold);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s}
+.card-btn:hover{background:var(--gold);color:#000}
+.card.selected .card-btn{background:var(--gold);color:#000}
+.selected-badge{position:absolute;top:7px;left:7px;font-size:11px;background:var(--gold);color:#000;border-radius:50%;width:20px;height:20px;display:none;align-items:center;justify-content:center;font-weight:900;z-index:5}
+.card.selected .selected-badge{display:flex}
+
+/* ── FLOATING SUMMARY ── */
+.summary-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,10,20,.95);backdrop-filter:blur(12px);border-top:1px solid rgba(212,175,55,.25);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;transform:translateY(100%);transition:transform .3s}
+.summary-bar.show{transform:translateY(0)}
+.summary-txt{font-size:13px;color:var(--txt2)}
+.summary-txt span{color:var(--gold);font-weight:700}
+.summary-picks{display:flex;flex-wrap:wrap;gap:6px;flex:1;max-height:52px;overflow:hidden}
+.pick-tag{padding:3px 10px;border-radius:10px;background:rgba(212,175,55,.15);color:var(--gold);font-size:11px;border:1px solid rgba(212,175,55,.3)}
+.done-btn{padding:10px 22px;border-radius:12px;border:none;background:var(--gold);color:#000;font-weight:800;font-size:14px;cursor:pointer;white-space:nowrap;transition:transform .15s}
+.done-btn:hover{transform:scale(1.04)}
+
+/* ── OVERLAY FULLSCREEN ── */
+.overlay{position:fixed;inset:0;z-index:500;background:#000;display:none;align-items:center;justify-content:center;flex-direction:column}
+.overlay.show{display:flex}
+.ov-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:20px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
+.ov-stage{width:100%;max-width:420px;height:100vh;max-height:600px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ov-label{position:absolute;bottom:30px;left:0;right:0;text-align:center;z-index:20}
+.ov-label h2{font-size:22px;font-weight:900;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+.ov-label p{color:rgba(255,255,255,.6);font-size:13px;margin-top:6px}
+.ov-bar{position:absolute;bottom:0;left:0;height:3px;background:var(--gold);transition:width .1s linear;z-index:20}
+.ov-btns{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:12px;z-index:30;opacity:0;transition:opacity .3s;pointer-events:none}
+.ov-btns.show{opacity:1;pointer-events:all}
+.ov-select-btn{padding:14px 28px;border-radius:14px;border:none;background:var(--gold);color:#000;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 4px 20px rgba(212,175,55,.5)}
+.ov-replay-btn{padding:14px 22px;border-radius:14px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font-weight:700;font-size:16px;cursor:pointer}
+
+/* ────────────────────────────────────────────────
+   MINI PREVIEW ANIMATIONS (card previews)
+──────────────────────────────────────────────── */
+
+/* 1 Crown Drop */
+.anim-crown{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.anim-crown .crown{font-size:44px;animation:crownBounce 2s ease-in-out infinite}
+@keyframes crownBounce{0%,100%{transform:translateY(-8px);filter:drop-shadow(0 0 12px gold)}50%{transform:translateY(4px);filter:drop-shadow(0 0 25px #ffd700)}}
+.anim-crown .sparkle{position:absolute;font-size:12px;animation:sparkleOut 1.5s ease-in-out infinite}
+.anim-crown .s1{top:15px;left:20px;animation-delay:.2s}.anim-crown .s2{top:10px;right:25px;animation-delay:.5s}.anim-crown .s3{bottom:15px;left:30px;animation-delay:.8s}.anim-crown .s4{bottom:20px;right:20px;animation-delay:1.1s}
+@keyframes sparkleOut{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.3)}}
+
+/* 2 Supernova */
+.anim-nova{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.nova-core{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd700);animation:novaCore 1.8s ease-in-out infinite;position:relative;z-index:2}
+@keyframes novaCore{0%,100%{transform:scale(1);box-shadow:0 0 10px #ffd700}50%{transform:scale(1.5);box-shadow:0 0 40px #ffd700,0 0 60px rgba(255,215,0,.5)}}
+.nova-ring{position:absolute;border-radius:50%;border:2px solid rgba(255,215,0,.5);animation:novaRing 1.8s ease-in-out infinite}
+.nova-ring:nth-child(2){width:60px;height:60px;animation-delay:.2s}
+.nova-ring:nth-child(3){width:90px;height:90px;animation-delay:.4s;border-color:rgba(168,85,247,.5)}
+.nova-ring:nth-child(4){width:120px;height:120px;animation-delay:.6s;border-color:rgba(255,107,157,.3)}
+@keyframes novaRing{0%{transform:scale(.3);opacity:1}100%{transform:scale(1);opacity:0}}
+
+/* 3 Lightning Crown */
+.anim-lightning{position:relative;width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;overflow:hidden}
+.lightning-bolt{position:absolute;top:0;left:50%;width:3px;background:linear-gradient(180deg,#fff,#a855f7,transparent);transform:translateX(-50%);border-radius:2px;animation:boltFlash 1.5s ease-in-out infinite}
+@keyframes boltFlash{0%,100%{height:0;opacity:0}30%{height:60%;opacity:1}60%{height:90%;opacity:.7}80%{height:50%;opacity:.3}}
+.lightning-crown2{font-size:36px;z-index:2;animation:lcPulse 1.5s ease-in-out infinite}
+@keyframes lcPulse{0%,100%{filter:drop-shadow(0 0 5px #a855f7)}50%{filter:drop-shadow(0 0 20px #a855f7) drop-shadow(0 0 40px #fff)}}
+
+/* 4 Aura Explosion */
+.anim-aura{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.aura-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#d4af37,#ff6b9d);display:flex;align-items:center;justify-content:center;font-size:22px;z-index:2;position:relative}
+.aura-ring-a{position:absolute;border-radius:50%;animation:auraExpand 2s ease-out infinite}
+.aura-ring-a:nth-child(2){width:55px;height:55px;border:2px solid rgba(212,175,55,.8)}
+.aura-ring-a:nth-child(3){width:70px;height:70px;border:2px solid rgba(168,85,247,.6);animation-delay:.4s}
+.aura-ring-a:nth-child(4){width:90px;height:90px;border:1.5px solid rgba(255,107,157,.4);animation-delay:.8s}
+@keyframes auraExpand{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.4);opacity:0}}
+
+/* 5 Sakura Storm */
+.anim-sakura{position:relative;width:100%;height:100%;overflow:hidden}
+.sakura-petal{position:absolute;font-size:14px;animation:sakuraFall linear infinite}
+.sakura-petal:nth-child(1){left:10%;animation-duration:3s;animation-delay:0s}
+.sakura-petal:nth-child(2){left:30%;animation-duration:2.5s;animation-delay:.5s}
+.sakura-petal:nth-child(3){left:50%;animation-duration:3.5s;animation-delay:1s}
+.sakura-petal:nth-child(4){left:70%;animation-duration:2.8s;animation-delay:1.5s}
+.sakura-petal:nth-child(5){left:85%;animation-duration:3.2s;animation-delay:.3s}
+@keyframes sakuraFall{0%{top:-20px;transform:rotate(0deg) translateX(0);opacity:1}100%{top:120px;transform:rotate(360deg) translateX(20px);opacity:.2}}
+.sakura-title{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;color:var(--gold);text-shadow:0 0 10px var(--gold)}
+
+/* 6 Golden Rain */
+.anim-rain{position:relative;width:100%;height:100%;overflow:hidden}
+.rain-coin{position:absolute;top:-20px;font-size:13px;animation:rainFall linear infinite}
+.rain-coin:nth-child(1){left:8%;animation-duration:1.8s;animation-delay:0s}
+.rain-coin:nth-child(2){left:22%;animation-duration:2.2s;animation-delay:.3s}
+.rain-coin:nth-child(3){left:40%;animation-duration:1.5s;animation-delay:.7s}
+.rain-coin:nth-child(4){left:58%;animation-duration:2s;animation-delay:.2s}
+.rain-coin:nth-child(5){left:72%;animation-duration:1.7s;animation-delay:1s}
+.rain-coin:nth-child(6){left:88%;animation-duration:2.3s;animation-delay:.5s}
+@keyframes rainFall{0%{top:-20px;opacity:1}100%{top:130px;opacity:.5}}
+.rain-counter{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;font-weight:700;color:var(--gold);animation:countUp 2s ease-in-out infinite}
+@keyframes countUp{0%,20%{content:''}0%{opacity:0}10%,90%{opacity:1}100%{opacity:0}}
+
+/* 7 Star Constellation */
+.anim-stars{position:relative;width:100%;height:100%;overflow:hidden}
+.star-dot{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;animation:starTwinkle ease-in-out infinite}
+.star-line{position:absolute;background:rgba(255,255,255,.2);transform-origin:left center;animation:lineFade 2.5s ease-in-out infinite}
+@keyframes starTwinkle{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(2);opacity:1}}
+@keyframes lineFade{0%,100%{opacity:0}50%{opacity:.4}}
+
+/* 8 Crystal Shatter */
+.anim-crystal{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.crystal-shard{position:absolute;font-size:10px;animation:shardFloat ease-in-out infinite}
+.crystal-core2{font-size:38px;animation:crystalPulse 2s ease-in-out infinite;z-index:2;position:relative}
+@keyframes crystalPulse{0%,100%{filter:drop-shadow(0 0 8px #06b6d4);transform:scale(1)}50%{filter:drop-shadow(0 0 25px #06b6d4) drop-shadow(0 0 50px #a855f7);transform:scale(1.1)}}
+@keyframes shardFloat{0%{transform:translate(0,0) rotate(0deg);opacity:1}50%{transform:translate(var(--tx,15px),var(--ty,-15px)) rotate(180deg);opacity:.7}100%{transform:translate(calc(var(--tx,15px)*2),calc(var(--ty,-15px)*2)) rotate(360deg);opacity:0}}
+
+/* 9 Hologram Scan */
+.anim-holo{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.holo-scanline{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#06b6d4,transparent);animation:holoScan 2s linear infinite;z-index:5}
+@keyframes holoScan{0%{top:-5px;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:115px;opacity:0}}
+.holo-avatar{width:44px;height:44px;border-radius:50%;background:rgba(6,182,212,.2);border:2px solid #06b6d4;display:flex;align-items:center;justify-content:center;font-size:22px;animation:holoPulse 2s ease-in-out infinite}
+@keyframes holoPulse{0%,100%{box-shadow:0 0 10px #06b6d4}50%{box-shadow:0 0 30px #06b6d4,0 0 60px rgba(6,182,212,.3)}}
+.holo-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(6,182,212,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,.05) 1px,transparent 1px);background-size:15px 15px}
+
+/* 10 Trophy Room */
+.anim-trophy{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.trophy-glow{font-size:44px;animation:trophySpin 3s ease-in-out infinite;position:relative;z-index:2}
+@keyframes trophySpin{0%,100%{transform:rotate(-5deg) scale(1);filter:drop-shadow(0 0 10px #ffd700)}50%{transform:rotate(5deg) scale(1.1);filter:drop-shadow(0 0 30px #ffd700) drop-shadow(0 0 60px rgba(255,215,0,.5))}}
+.trophy-ray{position:absolute;width:2px;background:linear-gradient(180deg,rgba(255,215,0,.6),transparent);transform-origin:bottom center;animation:rayRotate 3s linear infinite}
+@keyframes rayRotate{from{transform:rotate(var(--start,0deg)) scaleY(1)}to{transform:rotate(calc(var(--start,0deg) + 360deg)) scaleY(1)}}
+
+/* 11 Matrix Rain */
+.anim-matrix{position:relative;width:100%;height:100%;overflow:hidden;background:#000;font-family:monospace}
+.matrix-col{position:absolute;top:-20px;font-size:10px;color:#00ff41;white-space:nowrap;display:flex;flex-direction:column;gap:2px;animation:matrixDrop linear infinite}
+@keyframes matrixDrop{0%{top:-80px;opacity:0}10%{opacity:1}80%{opacity:.8}100%{top:130px;opacity:0}}
+
+/* 12 Fireworks */
+.anim-fireworks{position:relative;width:100%;height:100%;overflow:hidden}
+.firework-star{position:absolute;width:4px;height:4px;border-radius:50%;animation:fwExplode ease-out infinite}
+@keyframes fwExplode{0%{transform:translate(0,0) scale(0);opacity:1}100%{transform:translate(var(--fx,20px),var(--fy,-30px)) scale(1);opacity:0}}
+
+/* 13 Dragon */
+.anim-dragon{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dragon-body{font-size:42px;animation:dragonFly 3s ease-in-out infinite;z-index:2;position:relative}
+@keyframes dragonFly{0%,100%{transform:translate(0,0) rotate(-5deg) scale(1)}25%{transform:translate(15px,-10px) rotate(5deg) scale(1.05)}75%{transform:translate(-15px,5px) rotate(-3deg) scale(.97)}}
+.dragon-fire{position:absolute;font-size:14px;animation:firePuff ease-in-out infinite}
+.dragon-fire:nth-child(2){animation-delay:.3s;font-size:12px}
+.dragon-fire:nth-child(3){animation-delay:.6s;font-size:10px}
+@keyframes firePuff{0%,100%{opacity:0;transform:scale(.5) translateX(0)}50%{opacity:1;transform:scale(1.2) translateX(20px)}}
+
+/* 14 Evolution */
+.anim-evolve{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.evolve-flash{position:absolute;inset:0;background:radial-gradient(circle,rgba(168,85,247,.8),transparent);animation:evolveFlash 3s ease-in-out infinite}
+@keyframes evolveFlash{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.6;transform:scale(1.2)}}
+.evolve-char{font-size:36px;z-index:2;position:relative;animation:evolveChar 3s ease-in-out infinite}
+@keyframes evolveChar{0%,30%{filter:brightness(1) drop-shadow(0 0 0 transparent)}40%,60%{filter:brightness(5) drop-shadow(0 0 20px #fff)}70%,100%{filter:brightness(1.5) drop-shadow(0 0 10px #a855f7)}}
+
+/* 15 Beat Drop */
+.anim-beat{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.beat-note{position:absolute;font-size:14px;animation:noteFloat ease-in-out infinite}
+.beat-circle{width:50px;height:50px;border-radius:50%;background:radial-gradient(circle,#1a0033,transparent);border:2px solid #a855f7;animation:beatPulse .6s ease-in-out infinite alternate}
+@keyframes beatPulse{from{transform:scale(1);box-shadow:0 0 10px #a855f7}to{transform:scale(1.3);box-shadow:0 0 40px #a855f7,0 0 80px rgba(168,85,247,.4)}}
+@keyframes noteFloat{0%,100%{transform:translateY(0) rotate(0deg);opacity:.6}50%{transform:translateY(-20px) rotate(20deg);opacity:1}}
+
+/* 16 Garuda / Wings */
+.anim-garuda{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.garuda-main{font-size:40px;animation:garudaFlap 1s ease-in-out infinite;z-index:2;position:relative}
+@keyframes garudaFlap{0%,100%{transform:scaleX(1) translateY(0)}50%{transform:scaleX(1.1) translateY(-5px)}}
+.garuda-glow{position:absolute;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,0,.3),transparent);animation:garudaGlow 1s ease-in-out infinite}
+@keyframes garudaGlow{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.5);opacity:1}}
+
+/* 17 Time Rewind */
+.anim-time{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.clock-face{width:52px;height:52px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:26px;position:relative;animation:clockGlow 2s ease-in-out infinite}
+@keyframes clockGlow{0%,100%{box-shadow:0 0 10px var(--gold);border-color:var(--gold)}50%{box-shadow:0 0 30px var(--gold),0 0 50px rgba(212,175,55,.4);border-color:var(--gold2)}}
+.clock-hand{position:absolute;width:2px;background:var(--gold);transform-origin:bottom center;bottom:50%;left:50%;margin-left:-1px;animation:handRewind 2s linear infinite reverse}
+@keyframes handRewind{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* 18 Slot Machine */
+.anim-slot{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+.slot-reel{width:26px;height:50px;overflow:hidden;border-radius:6px;background:rgba(0,0,0,.5);border:1.5px solid var(--gold)}
+.slot-inner{display:flex;flex-direction:column;animation:reelSpin 1.5s linear infinite}
+.slot-inner span{height:25px;display:flex;align-items:center;justify-content:center;font-size:14px}
+@keyframes reelSpin{0%{transform:translateY(0)}100%{transform:translateY(-75px)}}
+.slot-reel:nth-child(2) .slot-inner{animation-delay:.2s}
+.slot-reel:nth-child(3) .slot-inner{animation-delay:.4s}
+
+/* 19 Meteor Strike */
+.anim-meteor{position:relative;width:100%;height:100%;overflow:hidden}
+.meteor-obj{position:absolute;top:-20px;right:-20px;font-size:28px;animation:meteorFall 2.5s ease-in infinite}
+@keyframes meteorFall{0%{transform:translate(0,0) rotate(-45deg);opacity:1}70%{opacity:1}80%{transform:translate(-120px,120px) rotate(-45deg);opacity:1}90%{transform:translate(-130px,130px) rotate(-45deg);opacity:0}100%{transform:translate(-130px,130px) rotate(-45deg);opacity:0}}
+.meteor-crater{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:14px;opacity:0;animation:craterAppear 2.5s ease-in infinite}
+@keyframes craterAppear{0%,70%{opacity:0}80%,100%{opacity:1}}
+.meteor-trail{position:absolute;width:2px;background:linear-gradient(180deg,transparent,rgba(255,165,0,.8));transform:rotate(45deg);animation:trailFall 2.5s ease-in infinite}
+
+/* 20 Power Level */
+.anim-power{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.power-label{font-size:10px;color:var(--txt2);font-weight:700}
+.power-bar-wrap{width:80%;height:10px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid rgba(255,255,255,.2)}
+.power-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#22c55e,#ffd700,#ff6b9d);animation:powerFill 2.5s ease-in-out infinite}
+@keyframes powerFill{0%{width:0%;filter:brightness(1)}70%{width:95%;filter:brightness(1)}80%{width:100%;filter:brightness(2)}85%{width:100%;filter:brightness(3)}90%,100%{width:0%;filter:brightness(1)}}
+.power-num{font-size:18px;font-weight:900;color:var(--gold);animation:powerCount 2.5s ease-in-out infinite}
+@keyframes powerCount{0%{opacity:.3;transform:scale(1)}70%{opacity:1;transform:scale(1)}85%{transform:scale(1.5);color:#fff}100%{transform:scale(1);opacity:.3}}
+
+/* CATEGORIES badge colors */
+.cat-cinematic{background:#a855f7}.cat-energi{background:#06b6d4}.cat-partikel{background:#22c55e}
+.cat-sinematik{background:#f59e0b}.cat-gacha{background:#ff6b9d}.cat-lokal{background:#ef4444}
+.cat-musik{background:#8b5cf6}.cat-scifi{background:#0ea5e9}.cat-reward{background:#d97706}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<div class="header">
+  <h1>🎮 Pilih Animasi Naik Title</h1>
+  <p>Klik kartu untuk lihat preview penuh · Pilih beberapa favoritmu</p>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterCards('all',this)">Semua (50)</button>
+    <button class="filter-btn" onclick="filterCards('Naik Title',this)">🏆 Naik Title</button>
+    <button class="filter-btn" onclick="filterCards('Energi',this)">⚡ Energi</button>
+    <button class="filter-btn" onclick="filterCards('Partikel',this)">✨ Partikel</button>
+    <button class="filter-btn" onclick="filterCards('Sinematik',this)">🎭 Sinematik</button>
+    <button class="filter-btn" onclick="filterCards('Gacha',this)">🎰 Gacha</button>
+    <button class="filter-btn" onclick="filterCards('Lokal',this)">🇮🇩 Lokal</button>
+    <button class="filter-btn" onclick="filterCards('Musik',this)">🎵 Musik</button>
+    <button class="filter-btn" onclick="filterCards('Sci-Fi',this)">🔬 Sci-Fi</button>
+    <button class="filter-btn" onclick="filterCards('Reward',this)">🏅 Reward</button>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="summary-bar" id="summaryBar">
+  <div>
+    <div class="summary-txt">Dipilih: <span id="pickCount">0</span></div>
+    <div class="summary-picks" id="pickList"></div>
+  </div>
+  <button class="done-btn" onclick="copySelected()">📋 Salin Pilihan</button>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay">
+  <button class="ov-close" onclick="closeOverlay()">✕</button>
+  <div class="ov-stage" id="ovStage"></div>
+  <div class="ov-label">
+    <h2 id="ovTitle"></h2>
+    <p id="ovDesc"></p>
+  </div>
+  <div class="ov-bar" id="ovBar" style="width:0%"></div>
+  <div class="ov-btns" id="ovBtns">
+    <button class="ov-replay-btn" onclick="replayOverlay()">🔁 Putar Ulang</button>
+    <button class="ov-select-btn" onclick="selectFromOverlay()">✅ Pilih Ini!</button>
+  </div>
+</div>
+
+<script>
+// ── STAR BACKGROUND ──
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;stars=Array.from({length:180},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.5+.3,s:Math.random()*.5+.1,o:Math.random()}))}
+function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.o+=s.s*.01;if(s.o>1)s.o=0;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${.2+s.o*.8})`;ctx.fill()})}
+window.addEventListener('resize',resizeCanvas);resizeCanvas();setInterval(drawStars,50);
+
+// ── ANIMATION DATA ──
+const anims = [
+  // ── NAIK TITLE ──
+  {id:1,title:"Crown Drop",cat:"Naik Title",desc:"Mahkota emas jatuh dari atas, sparkle meledak, namamu dimahkotai",preview:"crown",color:"#d4af37",icon:"👑"},
+  {id:2,title:"Supernova Burst",cat:"Naik Title",desc:"Ledakan cahaya dari tengah layar, partikel membentuk title baru",preview:"nova",color:"#a855f7",icon:"💥"},
+  {id:3,title:"Throne Room",cat:"Naik Title",desc:"Takhta emas muncul, karakter duduk di singgasana, confetti emas",preview:"trophy",color:"#f59e0b",icon:"🪑"},
+  {id:4,title:"Title Forge",cat:"Naik Title",desc:"Judul baru ditempa seperti besi panas, percikan api berhamburan",preview:"meteor",color:"#ef4444",icon:"⚔️"},
+  {id:5,title:"Chess Board Transform",cat:"Naik Title",desc:"Papan catur berputar 360°, setiap kotak berubah menjadi emas",preview:"crystal",color:"#d4af37",icon:"♟️"},
+  {id:6,title:"Knight Parade",cat:"Naik Title",desc:"Barisan kuda catur berjalan membawa banner title baru",preview:"garuda",color:"#8b5cf6",icon:"🐴"},
+  {id:7,title:"Time Rewind",cat:"Naik Title",desc:"Jam berputar mundur cepat, berhenti di momen naik title dengan efek glitch",preview:"time",color:"#06b6d4",icon:"⏰"},
+  {id:8,title:"Meteor Strike",cat:"Naik Title",desc:"Meteor emas jatuh ke layar, dari kawah muncul title baru berkilau",preview:"meteor",color:"#f97316",icon:"☄️"},
+  {id:9,title:"Achievement Mega",cat:"Naik Title",desc:"Spotlight menyinari avatar, announcer text muncul dengan animasi épic",preview:"trophy",color:"#22c55e",icon:"🎯"},
+  {id:10,title:"Card Flip Reveal",cat:"Gacha",desc:"Kartu berputar mengungkap border baru + title dengan efek shimmer",preview:"crystal",color:"#ec4899",icon:"🃏"},
+  // ── ENERGI ──
+  {id:11,title:"Lightning Crown",cat:"Energi",desc:"Kilat menyambar dari atas, membentuk mahkota di sekitar avatar",preview:"lightning",color:"#a855f7",icon:"⚡"},
+  {id:12,title:"Aura Explosion",cat:"Energi",desc:"Aura warna tier baru meledak keluar dari avatar membentuk border",preview:"aura",color:"#d4af37",icon:"🔆"},
+  {id:13,title:"Power Level",cat:"Energi",desc:"Bar power naik sambil gemetar, meledak saat mencapai MAX",preview:"power",color:"#22c55e",icon:"📊"},
+  {id:14,title:"Energy Absorption",cat:"Energi",desc:"Semua bintang terbang ke arah avatar, diabsorb, power muncul",preview:"nova",color:"#0ea5e9",icon:"🌀"},
+  {id:15,title:"Plasma Ring",cat:"Energi",desc:"Cincin plasma berputar makin cepat lalu meledak membentuk title",preview:"aura",color:"#8b5cf6",icon:"💫"},
+  // ── PARTIKEL ──
+  {id:16,title:"Sakura Storm",cat:"Partikel",desc:"Kelopak bunga beterbangan membentuk nama title baru di udara",preview:"sakura",color:"#ec4899",icon:"🌸"},
+  {id:17,title:"Star Constellation",cat:"Partikel",desc:"Bintang-bintang membentuk konstelasi yang jadi simbol title baru",preview:"stars",color:"#eab308",icon:"⭐"},
+  {id:18,title:"Golden Rain",cat:"Partikel",desc:"Hujan koin emas dari langit selama 10 detik, counter coins naik",preview:"rain",color:"#d4af37",icon:"🪙"},
+  {id:19,title:"Crystal Shatter",cat:"Partikel",desc:"Kristal besar pecah menjadi ribuan partikel membentuk badge baru",preview:"crystal",color:"#06b6d4",icon:"💎"},
+  {id:20,title:"Fireflies Dance",cat:"Partikel",desc:"Kunang-kunang membentuk angka rating dan title baru di malam hari",preview:"aura",color:"#84cc16",icon:"🔆"},
+  // ── SINEMATIK ──
+  {id:21,title:"Evolution Sequence",cat:"Sinematik",desc:"Avatar berevolusi dari bentuk lemah ke kuat seperti Pokémon",preview:"evolve",color:"#a855f7",icon:"🦋"},
+  {id:22,title:"Hall of Fame",cat:"Sinematik",desc:"Avatar berjalan masuk ke Aula Kehormatan dan namanya terukir",preview:"trophy",color:"#f59e0b",icon:"🏛️"},
+  {id:23,title:"Boss Defeated",cat:"Sinematik",desc:"Animasi bos game kalah, user berdiri victorious dengan title baru",preview:"nova",color:"#ef4444",icon:"⚔️"},
+  {id:24,title:"Anime Cutscene",cat:"Sinematik",desc:"Animasi bergaya anime dengan pose epic dan efek speed lines",preview:"evolve",color:"#ec4899",icon:"🎌"},
+  {id:25,title:"Dragon Ascend",cat:"Sinematik",desc:"Naga emas terbang melingkari avatar, menyemburkan api, menghilang",preview:"dragon",color:"#f97316",icon:"🐉"},
+  // ── GACHA ──
+  {id:26,title:"Mystery Box Open",cat:"Gacha",desc:"Kotak misterius bergetar, terbuka, keluar cahaya dan badge baru",preview:"crystal",color:"#8b5cf6",icon:"📦"},
+  {id:27,title:"Slot Machine",cat:"Gacha",desc:"Simbol-simbol berputar, berhenti satu per satu, match = title baru",preview:"slot",color:"#d4af37",icon:"🎰"},
+  {id:28,title:"Scratch Card",cat:"Gacha",desc:"Layar seperti kartu gosokan, tap untuk reveal title baru",preview:"crystal",color:"#22c55e",icon:"🎟️"},
+  {id:29,title:"Capsule Machine",cat:"Gacha",desc:"Kapsul mesin gachapon keluar, pecah, badge keluar berkilau",preview:"meteor",color:"#ec4899",icon:"🎪"},
+  {id:30,title:"Roulette Reveal",cat:"Gacha",desc:"Roda berputar cepat, berhenti di title baru dengan efek cahaya",preview:"slot",color:"#f97316",icon:"🎡"},
+  // ── LOKAL ──
+  {id:31,title:"Batik Unfurl",cat:"Lokal",desc:"Pattern batik menggulung keluar membungkus layar, title muncul",preview:"sakura",color:"#b45309",icon:"🎨"},
+  {id:32,title:"Wayang Reveal",cat:"Lokal",desc:"Siluet wayang bergerak, cerita singkat kenaikan level, title muncul",preview:"dragon",color:"#92400e",icon:"🎭"},
+  {id:33,title:"Garuda Ascend",cat:"Lokal",desc:"Burung Garuda terbang ke atas membawa banner title baru",preview:"garuda",color:"#dc2626",icon:"🦅"},
+  {id:34,title:"Volcano Erupt",cat:"Lokal",desc:"Gunung berapi meletus, lavanya membentuk nama title",preview:"meteor",color:"#ea580c",icon:"🌋"},
+  {id:35,title:"Kapal Layar",cat:"Lokal",desc:"Kapal berlayar ke cakrawala, bendera dengan title baru berkibar",preview:"garuda",color:"#1d4ed8",icon:"⛵"},
+  // ── MUSIK ──
+  {id:36,title:"Beat Drop Title",cat:"Musik",desc:"Layar gelap, bass drop, title muncul dengan shake + flash epic",preview:"beat",color:"#7c3aed",icon:"🎵"},
+  {id:37,title:"Orchestra Swell",cat:"Musik",desc:"Notasi musik beterbangan membentuk judul saat crescendo",preview:"sakura",color:"#9333ea",icon:"🎻"},
+  {id:38,title:"DJ Spin Reveal",cat:"Musik",desc:"Piringan hitam berputar, jarum menyentuh, musik mulai, title muncul",preview:"slot",color:"#6d28d9",icon:"🎧"},
+  {id:39,title:"Festival Stage",cat:"Musik",desc:"User naik ke panggung festival, sorot lampu, penonton cheering",preview:"trophy",color:"#c026d3",icon:"🎤"},
+  {id:40,title:"Drumroll Countdown",cat:"Musik",desc:"Drumroll 5 detik, suspense, lalu BOOM! title reveal dramatis",preview:"power",color:"#a21caf",icon:"🥁"},
+  // ── SCI-FI ──
+  {id:41,title:"Hologram Scan",cat:"Sci-Fi",desc:"Scanner holografik turun menganalisis user, output = title baru",preview:"holo",color:"#06b6d4",icon:"📡"},
+  {id:42,title:"Matrix Rain",cat:"Sci-Fi",desc:"Hujan karakter hijau ala Matrix membentuk nama title",preview:"matrix",color:"#16a34a",icon:"💻"},
+  {id:43,title:"Robot Assembly",cat:"Sci-Fi",desc:"Bagian-bagian robot terakit satu per satu membentuk simbol title",preview:"crystal",color:"#64748b",icon:"🤖"},
+  {id:44,title:"Warp Speed",cat:"Sci-Fi",desc:"Efek perjalanan hyperspeed bintang, berhenti di title baru",preview:"nova",color:"#0ea5e9",icon:"🚀"},
+  {id:45,title:"Circuit Board",cat:"Sci-Fi",desc:"Jalur sirkuit menyala satu per satu membentuk pola title",preview:"holo",color:"#10b981",icon:"⚙️"},
+  // ── REWARD ──
+  {id:46,title:"Trophy Room Tour",cat:"Reward",desc:"Kamera bergerak di ruang trofi, zoom ke trofi baru yang berkilau",preview:"trophy",color:"#d97706",icon:"🏆"},
+  {id:47,title:"Achievement Wall",cat:"Reward",desc:"Dinding achievement, kaca pecah, achievement baru terungkap",preview:"crystal",color:"#b45309",icon:"🏅"},
+  {id:48,title:"Reward Waterfall",cat:"Reward",desc:"Border, badge, XP, rating semua jatuh bersama seperti waterfall",preview:"rain",color:"#0891b2",icon:"🌊"},
+  {id:49,title:"Pedestal Rise",cat:"Reward",desc:"Pedestal naik dari bawah tanah membawa border + badge baru berkilau",preview:"trophy",color:"#7c3aed",icon:"🗿"},
+  {id:50,title:"Fireworks Grand",cat:"Reward",desc:"Kembang api 10 detik, puncaknya membentuk namamu di langit malam",preview:"fireworks",color:"#dc2626",icon:"🎆"},
+];
+
+let selected = new Set();
+let currentAnimId = null;
+let ovTimer = null;
+let ovBarTimer = null;
+
+// ── BUILD CARDS ──
+function buildCards(filter){
+  const grid = document.getElementById('grid');
+  grid.innerHTML='';
+  const items = filter==='all' ? anims : anims.filter(a=>a.cat===filter);
+  items.forEach(a=>{
+    const card = document.createElement('div');
+    card.className='card'+(selected.has(a.id)?' selected':'');
+    card.dataset.cat=a.cat;
+    card.dataset.id=a.id;
+    card.innerHTML=`
+      <div class="selected-badge">✓</div>
+      <div class="card-preview" style="background:${a.color}18" id="prev-${a.id}">
+        ${buildMiniAnim(a)}
+        <span class="card-badge" style="background:${a.color}">${a.cat}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-num">#${String(a.id).padStart(2,'0')}</div>
+        <div class="card-title">${a.icon} ${a.title}</div>
+        <div class="card-cat">${a.desc.substring(0,55)}…</div>
+        <button class="card-btn" onclick="openOverlay(${a.id},event)">${selected.has(a.id)?'✅ Dipilih':'▶ Lihat Preview'}</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function buildMiniAnim(a){
+  switch(a.preview){
+    case'crown': return`<div class="anim-crown"><span class="sparkle s1">✨</span><span class="sparkle s2">⭐</span><span class="sparkle s3">✨</span><span class="sparkle s4">⭐</span><span class="crown">👑</span></div>`;
+    case'nova': return`<div class="anim-nova"><div class="nova-ring"></div><div class="nova-ring"></div><div class="nova-ring"></div><div class="nova-core"></div></div>`;
+    case'lightning': return`<div class="anim-lightning"><div class="lightning-bolt"></div><span class="lightning-crown2">👑</span></div>`;
+    case'aura': return`<div class="anim-aura"><div class="aura-ring-a"></div><div class="aura-ring-a"></div><div class="aura-ring-a"></div><div class="aura-avatar">♟️</div></div>`;
+    case'sakura': return`<div class="anim-sakura"><span class="sakura-petal">🌸</span><span class="sakura-petal">🌸</span><span class="sakura-petal">🌺</span><span class="sakura-petal">🌸</span><span class="sakura-petal">✿</span><div class="sakura-title">TITLE BARU</div></div>`;
+    case'rain': return`<div class="anim-rain"><span class="rain-coin">🪙</span><span class="rain-coin">🪙</span><span class="rain-coin">💰</span><span class="rain-coin">🪙</span><span class="rain-coin">🪙</span><span class="rain-coin">💰</span><div class="rain-counter">+500 KOIN</div></div>`;
+    case'stars': return buildStarsMini();
+    case'crystal': return`<div class="anim-crystal"><span class="crystal-shard" style="--tx:-25px;--ty:-20px;top:30%;left:30%">💠</span><span class="crystal-shard" style="--tx:25px;--ty:-25px;top:25%;right:25%">🔷</span><span class="crystal-shard" style="--tx:-20px;--ty:20px;bottom:30%;left:35%">💎</span><span class="crystal-core2">💎</span></div>`;
+    case'holo': return`<div class="anim-holo"><div class="holo-grid"></div><div class="holo-scanline"></div><div class="holo-avatar">♟️</div></div>`;
+    case'matrix': return buildMatrix();
+    case'fireworks': return buildFireworks();
+    case'dragon': return`<div class="anim-dragon"><span class="dragon-fire" style="left:55%;top:40%">🔥</span><span class="dragon-fire" style="left:60%;top:45%">🔥</span><span class="dragon-fire" style="left:65%;top:50%">🔥</span><span class="dragon-body">🐉</span></div>`;
+    case'evolve': return`<div class="anim-evolve"><div class="evolve-flash"></div><span class="evolve-char">⚔️</span></div>`;
+    case'beat': return`<div class="anim-beat"><span class="beat-note" style="top:10%;left:10%;animation-delay:0s">🎵</span><span class="beat-note" style="top:15%;right:10%;animation-delay:.3s">🎶</span><span class="beat-note" style="bottom:15%;left:20%;animation-delay:.6s">🎵</span><div class="beat-circle"></div></div>`;
+    case'garuda': return`<div class="anim-garuda"><div class="garuda-glow"></div><span class="garuda-main">🦅</span></div>`;
+    case'time': return`<div class="anim-time"><div class="clock-face"><span>⏰</span><div class="clock-hand" style="height:16px"></div><div class="clock-hand" style="height:10px;animation-duration:.5s"></div></div></div>`;
+    case'slot': return`<div class="anim-slot"><div class="slot-reel"><div class="slot-inner"><span>👑</span><span>⚔️</span><span>💎</span><span>🏆</span></div></div><div class="slot-reel"><div class="slot-inner"><span>🌟</span><span>👑</span><span>🏆</span><span>💎</span></div></div><div class="slot-reel"><div class="slot-inner"><span>💎</span><span>🌟</span><span>👑</span><span>⚔️</span></div></div></div>`;
+    case'meteor': return`<div class="anim-meteor"><div class="meteor-trail" style="width:3px;height:60px;top:10px;right:25px"></div><span class="meteor-obj">☄️</span><span class="meteor-crater">💥</span></div>`;
+    case'power': return`<div class="anim-power"><div class="power-label">POWER LEVEL</div><div class="power-bar-wrap"><div class="power-bar-fill"></div></div><div class="power-num">MAX!</div></div>`;
+    default: return`<div style="font-size:38px;display:flex;align-items:center;justify-content:center;height:100%">${a.icon}</div>`;
+  }
+}
+
+function buildStarsMini(){
+  let html='<div class="anim-stars">';
+  const pts=[[15,20],[40,15],[65,25],[85,40],[70,65],[45,80],[20,70],[30,45],[60,50],[80,20]];
+  pts.forEach((p,i)=>{html+=`<div class="star-dot" style="left:${p[0]}%;top:${p[1]}%;animation-duration:${1.5+i*.3}s;animation-delay:${i*.1}s"></div>`;});
+  html+='</div>';return html;
+}
+
+function buildMatrix(){
+  let html='<div class="anim-matrix">';
+  const chars='アイウエオカキクケコサシスセソ01アイウタイトル';
+  for(let i=0;i<8;i++){
+    const col=Math.floor(Math.random()*6)*18+5;
+    const dur=1.5+Math.random();
+    const delay=Math.random()*2;
+    const c=chars.slice(i*3,(i+1)*3)||'アBCD';
+    html+=`<div class="matrix-col" style="left:${col}px;animation-duration:${dur}s;animation-delay:${delay}s">${c.split('').join('<br>')}</div>`;
+  }
+  html+='</div>';return html;
+}
+
+function buildFireworks(){
+  let html='<div class="anim-fireworks">';
+  const colors=['#ff6b9d','#ffd700','#a855f7','#06b6d4','#22c55e'];
+  for(let i=0;i<25;i++){
+    const cx=20+Math.random()*60;const cy=20+Math.random()*60;
+    const angle=Math.random()*360;const dist=20+Math.random()*30;
+    const fx=Math.cos(angle*Math.PI/180)*dist;const fy=Math.sin(angle*Math.PI/180)*dist;
+    const c=colors[i%colors.length];const dur=1+Math.random();const delay=Math.random()*2;
+    html+=`<div class="firework-star" style="left:${cx}%;top:${cy}%;background:${c};--fx:${fx}px;--fy:${fy}px;animation-duration:${dur}s;animation-delay:${delay}s"></div>`;
+  }
+  html+='</div>';return html;
+}
+
+// ── FILTER ──
+function filterCards(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildCards(cat);
+}
+
+// ── OVERLAY ──
+function openOverlay(id, e){
+  e&&e.stopPropagation();
+  currentAnimId=id;
+  const a=anims.find(x=>x.id===id);
+  const ov=document.getElementById('overlay');
+  const stage=document.getElementById('ovStage');
+  document.getElementById('ovTitle').textContent=`${a.icon} ${a.title}`;
+  document.getElementById('ovDesc').textContent=a.desc;
+  document.getElementById('ovBtns').classList.remove('show');
+  stage.innerHTML=buildFullAnim(a);
+  ov.classList.add('show');
+  document.body.style.overflow='hidden';
+  startOverlayTimer();
+}
+
+function buildFullAnim(a){
+  const base=buildMiniAnim(a);
+  const scaled=`<div style="transform:scale(2.5);transform-origin:center">${base}</div>`;
+  return`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,${a.color}22,transparent 70%)">${scaled}</div>`;
+}
+
+function startOverlayTimer(){
+  clearInterval(ovBarTimer);
+  const bar=document.getElementById('ovBar');
+  const btns=document.getElementById('ovBtns');
+  bar.style.width='0%';
+  bar.style.transition='none';
+  let p=0;
+  ovBarTimer=setInterval(()=>{
+    p+=.5;
+    bar.style.transition='width .1s linear';
+    bar.style.width=Math.min(p*10,100)+'%';
+    if(p>=10){clearInterval(ovBarTimer);btns.classList.add('show');}
+  },100);
+}
+
+function replayOverlay(){
+  const a=anims.find(x=>x.id===currentAnimId);
+  const stage=document.getElementById('ovStage');
+  document.getElementById('ovBtns').classList.remove('show');
+  stage.innerHTML=buildFullAnim(a);
+  startOverlayTimer();
+}
+
+function closeOverlay(){
+  document.getElementById('overlay').classList.remove('show');
+  document.body.style.overflow='';
+  clearInterval(ovBarTimer);
+  currentAnimId=null;
+}
+
+function selectFromOverlay(){
+  if(!currentAnimId) return;
+  toggleSelect(currentAnimId);
+  closeOverlay();
+  buildCards(document.querySelector('.filter-btn.active')?.textContent.includes('Semua') ? 'all' : document.querySelector('.filter-btn.active')?.textContent.trim().replace(/^[^\s]+\s/,''));
+}
+
+function toggleSelect(id){
+  if(selected.has(id)) selected.delete(id);
+  else selected.add(id);
+  updateSummary();
+}
+
+function updateSummary(){
+  const bar=document.getElementById('summaryBar');
+  document.getElementById('pickCount').textContent=selected.size;
+  const list=document.getElementById('pickList');
+  list.innerHTML=[...selected].map(id=>{const a=anims.find(x=>x.id===id);return`<span class="pick-tag">${a.icon} #${id}</span>`;}).join('');
+  if(selected.size>0) bar.classList.add('show');
+  else bar.classList.remove('show');
+}
+
+function copySelected(){
+  if(selected.size===0) return;
+  const txt=[...selected].map(id=>{const a=anims.find(x=>x.id===id);return`#${id} ${a.icon} ${a.title} [${a.cat}]`;}).join('\n');
+  navigator.clipboard.writeText('Animasi pilihanku:\n'+txt).then(()=>{
+    const btn=document.querySelector('.done-btn');
+    const orig=btn.textContent;btn.textContent='✅ Disalin!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }).catch(()=>alert('Pilihanmu:\n'+txt));
+}
+
+// Click card to open overlay
+document.addEventListener('click',e=>{
+  const card=e.target.closest('.card');
+  if(card&&!e.target.closest('.card-btn')){
+    openOverlay(parseInt(card.dataset.id));
+  }
+});
+
+// ESC to close
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlay();});
+
+// Init
+buildCards('all');
+</script>
+</body>
+</html>
