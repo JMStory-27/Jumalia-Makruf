@@ -161,8 +161,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .player-avatar.active-turn{border-color:var(--gold);box-shadow:0 0 12px rgba(212,175,55,.5);animation:turnPulse 1.5s ease-in-out infinite}
 /* When data-border is applied, remove old static border so tier border shows cleanly */
 .player-avatar[data-border]{border:none !important;}
-/* When active-turn + data-border coexist, use outline so turnPulse doesn't overwrite the tier glow */
-.player-avatar[data-border].active-turn{animation:none !important;box-shadow:none !important;outline:2.5px solid var(--gold);outline-offset:3px;border:none !important;}
+/* When active-turn + data-border coexist, keep border animation alive — show turn via outline only */
+.player-avatar[data-border].active-turn{border:none !important;outline:2.5px solid var(--gold);outline-offset:3px;}
 @keyframes turnPulse{0%,100%{box-shadow:0 0 8px rgba(212,175,55,.4)}50%{box-shadow:0 0 20px rgba(212,175,55,.7)}}
 .player-name{font-size:13px;font-weight:700;color:var(--txt)}
 .player-caps{font-size:12px;color:var(--txt2);line-height:1.2}
@@ -332,8 +332,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .mm-avatar-wrap{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;border:2px solid var(--card-b);background:rgba(0,0,0,.3);position:relative;flex-shrink:0}
 .mm-avatar-wrap.me-av{border-color:var(--gold);box-shadow:0 0 14px rgba(212,175,55,.35)}
 .mm-avatar-wrap.en-av{border-color:rgba(255,100,100,.5);box-shadow:0 0 14px rgba(255,80,80,.2)}
-/* Remove old static border when tier border (data-border) is active */
-.mm-avatar-wrap[data-border]{border:none !important;box-shadow:none}
+/* Remove old static border when tier border (data-border) is active — keep glow from [data-border="X"] */
+.mm-avatar-wrap[data-border]{border:none !important;}
 .mm-player-box .mm-av-img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .mm-name{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mm-country{font-size:11px;color:var(--txt2);text-align:center}
@@ -361,6 +361,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .profile-card{padding:16px;border-radius:var(--rad);border:1px solid var(--card-b);background:var(--card);display:flex;flex-direction:column;gap:14px;margin-bottom:14px}
 .prof-top{display:flex;align-items:center;gap:14px}
 .prof-main-avatar{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:38px;cursor:pointer;position:relative;flex-shrink:0;overflow:hidden}
+/* Strip static gold border when an animated tier border is active — box-shadow glow is never clipped by overflow:hidden */
+.prof-main-avatar[data-border]{border:none !important;}
 .prof-main-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .prof-main-avatar .edit-badge{position:absolute;bottom:0;right:0;background:var(--gold);color:#1a0800;font-size:10px;font-weight:700;padding:2px 5px;border-radius:6px}
 .prof-main-info{flex:1;display:flex;flex-direction:column;gap:6px}
@@ -1178,7 +1180,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div class="mm-dot"></div><div class="mm-dot"></div><div class="mm-dot"></div>
     </div>
     <div class="mm-found-badge" id="mm-found-badge">✅ Lawan Ditemukan! Memulai permainan...</div>
-    <div class="mm-online-count" id="mm-online-txt">🟢 <span id="mm-online-num">247</span> pemain online sekarang</div>
+    <div class="mm-online-count" id="mm-online-txt">🟢 <span id="mm-online-num">1247</span> pemain online sekarang</div>
     <button class="mm-cancel-btn" id="mm-cancel-btn" onclick="cancelMatchmaking()">✕ Batalkan</button>
   </div>
 </div>
@@ -1334,6 +1336,25 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <button class="btn-tut" onclick="tutPrev()">← Sebelumnya</button>
       <button id="tut-next-btn" class="btn-tut next" onclick="tutNext()">Selanjutnya →</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ MODE LATIHAN SCREEN ══ -->
+<div id="s-latihan" class="screen">
+  <div class="scr-header">
+    <div class="back-btn" onclick="backHome()">←</div>
+    <div class="scr-title">🎓 Mode Latihan</div>
+  </div>
+  <div class="lt-inner" id="lt-inner-wrap" style="overflow-y:auto;max-height:calc(100vh - 60px);padding:16px 16px 90px">
+    <div class="lt-progress" id="lt-progress"></div>
+    <div id="lt-lesson-content"></div>
+    <div class="lt-nav" id="lt-nav" style="padding-top:4px">
+      <button class="lt-btn lt-btn-prev" id="lt-btn-prev" onclick="latihanPrev()">← Sebelumnya</button>
+      <button class="lt-btn lt-btn-next" id="lt-btn-next" onclick="latihanNext()">Selanjutnya →</button>
+    </div>
+    <button id="lt-start-btn" onclick="startPracticeGame()" style="display:none;margin-top:12px;width:100%;padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,#4ade80,#22c55e);color:#000;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.3px;box-shadow:0 4px 20px rgba(74,222,128,.35)">
+      🎓 Mulai Latihan vs Bot — Gratis tanpa XP!
+    </button>
   </div>
 </div>
 
@@ -1502,8 +1523,7 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
       <div class="menu-item glass" onclick="closeMenu();confirmReset()"><div class="mi-icon">🔄</div><div class="mi-label">Ulangi</div></div>
       <div class="menu-item glass" onclick="closeMenu();doResign()"><div class="mi-icon">🏳️</div><div class="mi-label">Menyerah</div></div>
       <div class="menu-item glass" onclick="closeMenu();toggleMusic()"><div class="mi-icon">🎵</div><div class="mi-label">Musik</div></div>
-      <div class="menu-item glass" onclick="closeMenu();showSettings()"><div class="mi-icon">⚙️</div><div class="mi-label">Setting</div></div>
-      <div id="menu-home-btn" class="menu-item glass" onclick="quitToHome()"><div class="mi-icon">🏠</div><div class="mi-label">Beranda</div></div>
+      <div id="menu-home-btn" class="menu-item glass" onclick="closeMenu();quitToHome()" style="display:none"><div class="mi-icon">🏠</div><div class="mi-label">Beranda</div></div>
     </div>
     <button class="ov-btn" onclick="closeMenu()">✕ Tutup</button>
   </div>
@@ -1703,7 +1723,8 @@ cfg.comment=false;
 function saveCfg(){localStorage.setItem('catur_cfg3',JSON.stringify(cfg))}
 
 let gameMode=null,botLevel=1,myColor='w',roomCode=null,roomRef=null,roomListener=null;
-let isHordeMode=false;
+let isPracticeMode=false;
+let _resignFlag=false; // true when player manually resigns — skips XP gain
 let selectedLevel=null;
 
 // ═══════════════════════════════════════
@@ -1951,14 +1972,14 @@ function showJoinRoom(){document.getElementById('join-input').value='';document.
 function showGameMenu(){
   const homeBtn=document.getElementById('menu-home-btn');
   if(homeBtn){
-    const isRestricted=(gameMode==='bot'&&!!_currentOpp)||gameMode==='online';
-    homeBtn.style.display=isRestricted?'none':'';
+    // Beranda button only visible when game is fully over
+    homeBtn.style.display=(gs&&gs.gameOver)?'':'none';
   }
   document.getElementById('o-menu').classList.add('show');
 }
 function closeMenu(){document.getElementById('o-menu').classList.remove('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
-function quitToHome(){clearTimeout(_passNudgeTimer);['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();_stopOppChat();closeChatPanels?.();_clearChat?.();showScreen('home');}
+function quitToHome(){clearTimeout(_passNudgeTimer);['o-gameover','o-draw','o-menu','o-resign','o-analysis','o-pass-device'].forEach(id=>closeOverlay(id));stopMusic();cancelRoom();_stopOppChat();closeChatPanels?.();_clearChat?.();isPracticeMode=false;_resignFlag=false;showScreen('home');}
 function dismissPassOverlay(){document.getElementById('o-pass-device').classList.remove('show');}
 let _passNudgeTimer=null;
 function _resetPassNudge(){
@@ -2103,7 +2124,7 @@ function renderBoard(){
   // Game mode badge
   const badge=document.getElementById('game-mode-lbl');
   if(badge){
-    if(isHordeMode){badge.textContent='⚔️ Horde';}
+    if(isPracticeMode){badge.textContent='🎓 Latihan';}
     else if(gameMode==='bot'&&_currentOpp){badge.textContent=_ratingToLabel(_currentOpp.rating)+' · WR '+_currentOpp.winRate+'%';}
     else if(gameMode==='bot'){badge.textContent='🤖 Bot '+('⭐'.repeat(botLevel));}
     else{const modes={pass:'👥 2 Pemain',online:'🌐 Online'};badge.textContent=modes[gameMode]||'♟ Catur';}
@@ -2296,6 +2317,32 @@ function executeMove(mv){
           const didCheck=isInCheck(gs,myColor);
           if(didCheck){setTimeout(()=>_showOppChat('check'),400);}
           else if(Math.random()<0.10){setTimeout(()=>_showOppChat('emote'),600+Math.random()*800);}
+        }
+        // ── Bot surrender: 15% chance when game is long + bot losing badly ──────
+        if(!gs.gameOver&&gameMode==='bot'){
+          const _ev=evaluate(gs);
+          const _playerAdv=myColor==='w'?_ev:-_ev; // positive = player winning
+          const _mc=(moveHistory||[]).length;
+          // Conditions: player has big advantage (>350 cp) AND game is not too early (>25 moves)
+          // OR game is very long (>60 moves) AND player still ahead
+          const _botLosing=_playerAdv>350;
+          const _longGame=_mc>60&&_playerAdv>150;
+          if((_botLosing||_longGame)&&Math.random()<0.15){
+            const _delay=1800+Math.random()*2500;
+            setTimeout(()=>{
+              if(!gs||gs.gameOver)return; // game already ended, skip
+              gs.gameOver=true;gs.result=myColor;
+              const _oppName=_currentOpp?_currentOpp.name:'Lawan';
+              // Show surrender emoji animation
+              const _flag=document.createElement('div');
+              _flag.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:80px;z-index:900;animation:emojiUp 1.5s ease-out forwards;pointer-events:none';
+              _flag.textContent='🏳️';document.body.appendChild(_flag);setTimeout(()=>_flag.remove(),1600);
+              toast('🏳️ '+_oppName+' menyerah! Kamu menang!');
+              if(_oppChatActive&&_currentOpp)_showOppChat('losing');
+              renderBoard();
+              setTimeout(()=>showGameOver(myColor),1800);
+            },_delay);
+          }
         }
       }
       else{gs.gameOver=true;renderBoard();showGameOver(gs.turn==='w'?'b':'w');}
@@ -2659,7 +2706,7 @@ function startVsBot(level,oppProfile){
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   _stopOppChat();
   try{
-    gameMode='bot';botLevel=level;isHordeMode=false;
+    gameMode='bot';botLevel=level;
     myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
     flipped=myColor==='b';
     gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
@@ -2758,7 +2805,7 @@ function startPassPlay(){
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   try{
-    gameMode='pass';myColor='w';flipped=false;isHordeMode=false;
+    gameMode='pass';myColor='w';flipped=false;isPracticeMode=false;
     gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
     initBoardDOM();renderBoard();
     setPlayerNames('Pemain 2 (Hitam)','Pemain 1 (Putih)','b','w');
@@ -2769,27 +2816,151 @@ function startPassPlay(){
     _resetPassNudge();
   }catch(e){toast('Error: '+e.message);console.error(e);}
 }
-function startHorde(){
+function restartSameMode(){
+  ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
+  const noXp=document.getElementById('lt-noxp-note');if(noXp)noXp.remove();
+  if(isPracticeMode)startPracticeGame();
+  else if(gameMode==='bot')startVsBot(botLevel);
+  else if(gameMode==='pass')startPassPlay();
+  else quitToHome();
+}
+
+// ═══════════════════════════════════════
+// MODE LATIHAN (PRACTICE / TUTORIAL MODE)
+// ═══════════════════════════════════════
+let _latihanIdx=0;
+const _LATIHAN_LESSONS=[
+  {icon:'♟',name:'Pion',sym:'PAWN',color:'rgba(74,222,128,.12)',accent:'#4ade80',
+   desc:'Pion adalah prajurit terdepan. Bergerak maju 1 kotak, atau 2 kotak dari posisi awal. Memakan secara diagonal ke depan. Kalau Pion sampai baris terakhir — ia bisa naik jadi Menteri, Benteng, Gajah, atau Kuda!',
+   tips:['⬆️ Maju 1 kotak. Di posisi awal bisa maju 2 kotak sekaligus','↗️ Makan hanya diagonal ke depan (1 kotak)','⭐ Sampai ujung papan → pilih buah baru (Promosi)!'],pr:4,pc:4},
+  {icon:'♞',name:'Kuda',sym:'KNIGHT',color:'rgba(132,204,22,.12)',accent:'#84cc16',
+   desc:'Kuda bergerak membentuk huruf L — melangkah 2 kotak ke satu arah, lalu 1 kotak ke samping. Kuda adalah satu-satunya buah yang bisa melompati buah lain di papan!',
+   tips:['🐴 Gerak huruf "L": 2 lurus + 1 menyamping (atau sebaliknya)','🦘 Satu-satunya buah yang bisa melompati buah lain','⚠️ Di tepi papan gerakan jadi lebih terbatas — taruh di tengah'],pr:4,pc:3},
+  {icon:'♝',name:'Gajah',sym:'BISHOP',color:'rgba(251,191,36,.12)',accent:'#fbbf24',
+   desc:'Gajah bergerak diagonal ke segala arah, sejauh apapun selama tidak terhalangi buah lain. Kamu punya 2 Gajah — satu selalu di kotak terang, satu di kotak gelap. Mereka tidak pernah bertemu!',
+   tips:['↗️ Gerak diagonal ke 4 arah, sejauh mungkin tanpa hambatan','🔲 Selalu tetap di warna kotak yang sama sampai akhir','💡 Makin terbuka papannya (sedikit Pion), Gajah makin kuat'],pr:4,pc:3},
+  {icon:'♜',name:'Benteng',sym:'ROOK',color:'rgba(96,165,250,.12)',accent:'#60a5fa',
+   desc:'Benteng bergerak lurus — horizontal dan vertikal — sejauh apapun. Di akhir permainan, Benteng sangat kuat karena papan lebih terbuka dan sedikit buah menghalangi!',
+   tips:['➡️ Gerak lurus (atas/bawah/kiri/kanan) sejauh apapun','🏰 Dua Benteng yang saling melindungi satu sama lain sangat tangguh','🔑 Taruh Benteng di baris/kolom terbuka (tidak ada Pion yang menghalangi)'],pr:4,pc:3},
+  {icon:'♛',name:'Menteri',sym:'QUEEN',color:'rgba(168,85,247,.12)',accent:'#a855f7',
+   desc:'Menteri adalah buah TERKUAT di papan! Ia bisa bergerak ke semua 8 arah — diagonal, horizontal, dan vertikal — sejauh apapun. Ia menggabungkan kekuatan Gajah dan Benteng sekaligus.',
+   tips:['♛ Kombinasi Gajah + Benteng: diagonal + lurus, semua arah','⚡ Buah paling berharga setelah Raja — jaga baik-baik!','💡 Jangan buru-buru keluarkan Menteri di awal — bisa diserang dan dipaksa mundur'],pr:4,pc:3},
+  {icon:'♚',name:'Raja',sym:'KING',color:'rgba(248,113,113,.12)',accent:'#f87171',
+   desc:'Raja adalah buah paling penting! Ia hanya bisa bergerak 1 kotak ke segala arah. Jika Raja kamu diserang dan tidak bisa kabur ke mana pun — itulah SKAK MAT — dan permainan selesai!',
+   tips:['👑 Bergerak 1 kotak ke semua 8 arah di sekitarnya','🛡️ Lindungi Raja di belakang Pion, terutama di awal permainan','🏰 Rokade: Raja bergerak 2 kotak ke samping, Benteng pindah ke sisinya — untuk berlindung']}
+];
+
+function showLatihan(){
+  _latihanIdx=0;
+  buildProfileUI?.();
+  showScreen('latihan');
+  _renderLatihanLesson(0);
+}
+function latihanPrev(){if(_latihanIdx>0){_latihanIdx--;_renderLatihanLesson(_latihanIdx);}}
+function latihanNext(){if(_latihanIdx<_LATIHAN_LESSONS.length-1){_latihanIdx++;_renderLatihanLesson(_latihanIdx);}}
+
+function startPracticeGame(){
   clearTimeout(thinkTimer);thinkTimer=null;
   if(_hintWorker){_hintWorker.terminate();_hintWorker=null;}
   if(_hintTimer){clearTimeout(_hintTimer);_hintTimer=null;}
   try{
-    gameMode='bot';botLevel=2;isHordeMode=true;myColor='w';flipped=false;
-    gs=newGS(true);moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
+    isPracticeMode=true;
+    gameMode='bot';botLevel=1;
+    myColor=cfg.color==='alt'?(Math.random()<.5?'w':'b'):cfg.color;
+    flipped=myColor==='b';
+    gs=newGS();moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
     initBoardDOM();renderBoard();
-    setPlayerNames('Bot (Hitam — Normal)','Kamu (Putih — 32 Pion!)','b','w');
+    const topC=myColor==='w'?'b':'w';
+    setPlayerNames('Bot (Mudah)','Kamu',topC,myColor);
     _clearChat?.();closeChatPanels?.();
-    _addChatMsg?.({type:'sys',content:'Mode Horde! Tantang bot di sini ⚔️',ts:Date.now()});
-    showScreen('game');if(cfg.musicOn)playMusicTrack(1);
-    setTimeout(()=>toast('⚔️ Mode Horde! 32 pion vs buah normal'),300);
+    _addChatMsg?.({type:'sys',content:'🎓 Mode Latihan dimulai! Santai saja — eksplor semua gerakan. Tidak ada XP.',ts:Date.now()});
+    showScreen('game');if(cfg.musicOn)playMusicTrack(cfg.musicTrack);
+    setTimeout(()=>toast('🎓 Mode Latihan — tidak ada XP, bebas eksplor!'),400);
   }catch(e){toast('Error: '+e.message);console.error(e);}
 }
-function restartSameMode(){
-  ['o-gameover','o-draw'].forEach(id=>closeOverlay(id));
-  if(isHordeMode)startHorde();
-  else if(gameMode==='bot')startVsBot(botLevel);
-  else if(gameMode==='pass')startPassPlay();
-  else quitToHome();
+
+let _ltShowMoves=true;
+function _renderLatihanLesson(idx){
+  const total=_LATIHAN_LESSONS.length;
+  const lesson=_LATIHAN_LESSONS[idx];
+  const prog=document.getElementById('lt-progress');
+  if(prog){prog.innerHTML='';for(let i=0;i<total;i++){const d=document.createElement('div');d.className='lt-prog-dot'+(i<idx?' done':i===idx?' active':'');prog.appendChild(d);}}
+  const content=document.getElementById('lt-lesson-content');
+  if(!content)return;
+  content.innerHTML=`
+  <div class="lt-lesson-card glass" style="background:${lesson.color};border-color:${lesson.accent}55">
+    <div class="lt-piece-row">
+      <div class="lt-piece-icon" style="background:${lesson.accent}22;border:1.5px solid ${lesson.accent}55">${lesson.icon}</div>
+      <div>
+        <div class="lt-piece-name" style="color:${lesson.accent}">${lesson.name}</div>
+        <div class="lt-piece-sym">${lesson.sym}</div>
+        <div class="lt-no-xp">🎓 Mode Latihan — tanpa XP</div>
+      </div>
+    </div>
+    <div class="lt-desc">${lesson.desc}</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:.7px;color:${lesson.accent};opacity:.65;margin-bottom:6px;text-transform:uppercase">Papan Interaktif — ketuk buah untuk lihat/sembunyikan langkah</div>
+    <div id="lt-mini-board" class="lt-board"></div>
+    <div class="lt-tips">${lesson.tips.map(t=>`<div class="lt-tip"><div class="lt-tip-dot" style="background:${lesson.accent}"></div><span>${t}</span></div>`).join('')}</div>
+  </div>
+  <div style="text-align:center;font-size:11px;color:rgba(255,255,255,.35);padding:2px 0">${idx+1} dari ${total} materi</div>`;
+  _ltShowMoves=true;
+  _buildLatihanBoard(lesson);
+  const prev=document.getElementById('lt-btn-prev');
+  const next=document.getElementById('lt-btn-next');
+  const startBtn=document.getElementById('lt-start-btn');
+  const isLast=idx===total-1;
+  if(prev){prev.style.opacity=idx===0?'0.3':'1';prev.style.pointerEvents=idx===0?'none':'';}
+  if(next){next.style.display=isLast?'none':'flex';}
+  if(startBtn){startBtn.style.display=isLast?'flex':'none';}
+  const inner=document.getElementById('lt-inner-wrap');if(inner)inner.scrollTop=0;
+}
+
+function _buildLatihanBoard(lesson){
+  const board=document.getElementById('lt-mini-board');
+  if(!board)return;
+  board.innerHTML='';
+  const pr=lesson.pr,pc=lesson.pc,pIcon=lesson.icon,accent=lesson.accent;
+  const moves=_getLatihanMoves(lesson);
+  const moveSet=new Set(moves.map(([r,c])=>r+','+c));
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const sq=document.createElement('div');
+      sq.className='lt-sq '+((r+c)%2===0?'light':'dark');
+      if(r===pr&&c===pc){
+        sq.classList.add('piece');
+        sq.textContent=pIcon;
+        sq.style.fontSize='18px';
+        sq.style.cursor='pointer';
+        sq.title='Ketuk untuk lihat/sembunyikan langkah';
+        sq.onclick=()=>{_ltShowMoves=!_ltShowMoves;_buildLatihanBoard(lesson);};
+      } else if(_ltShowMoves&&moveSet.has(r+','+c)){
+        sq.classList.add('move');
+      }
+      board.appendChild(sq);
+    }
+  }
+}
+
+function _getLatihanMoves(lesson){
+  const moves=[];
+  const pr=lesson.pr,pc=lesson.pc,name=lesson.name;
+  if(name==='Pion'){
+    if(pr-1>=0)moves.push([pr-1,pc]);
+    if(pr===4)moves.push([pr-2,pc]);
+    if(pr-1>=0&&pc-1>=0)moves.push([pr-1,pc-1]);
+    if(pr-1>=0&&pc+1<8)moves.push([pr-1,pc+1]);
+  } else if(name==='Kuda'){
+    [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr,dc])=>{const nr=pr+dr,nc=pc+dc;if(nr>=0&&nr<8&&nc>=0&&nc<8)moves.push([nr,nc]);});
+  } else if(name==='Gajah'){
+    [[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([dr,dc])=>{let r=pr+dr,c=pc+dc;while(r>=0&&r<8&&c>=0&&c<8){moves.push([r,c]);r+=dr;c+=dc;}});
+  } else if(name==='Benteng'){
+    [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{let r=pr+dr,c=pc+dc;while(r>=0&&r<8&&c>=0&&c<8){moves.push([r,c]);r+=dr;c+=dc;}});
+  } else if(name==='Menteri'){
+    [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{let r=pr+dr,c=pc+dc;while(r>=0&&r<8&&c>=0&&c<8){moves.push([r,c]);r+=dr;c+=dc;}});
+  } else if(name==='Raja'){
+    [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc])=>{const nr=pr+dr,nc=pc+dc;if(nr>=0&&nr<8&&nc>=0&&nc<8)moves.push([nr,nc]);});
+  }
+  return moves;
 }
 
 // ═══════════════════════════════════════
@@ -2806,10 +2977,19 @@ function showGameOver(result){
   document.getElementById('go-icon').textContent=icon;
   document.getElementById('go-title').textContent=title;
   document.getElementById('go-sub').textContent=sub;
-  // ELO & XP update (bot/random match only)
-  if(gameMode==='bot'){
+  // ELO & XP update (bot/random match only — not in practice mode)
+  if(gameMode==='bot'&&!isPracticeMode){
     const r=isDraw?'draw':myWin?'win':'loss';
     try{updateAfterGame(r);}catch(e){}
+  } else if(isPracticeMode){
+    const statsEl=document.getElementById('go-stats');if(statsEl)statsEl.style.display='none';
+    const xpWrap=document.getElementById('go-xp-bar-wrap');if(xpWrap)xpWrap.style.display='none';
+    const subEl=document.getElementById('go-sub');
+    if(subEl&&!isDraw){subEl.textContent=(myWin?'Bagus! Terus berlatih untuk makin jago! 💪':'Jangan nyerah — latihan terus, kamu pasti bisa! 🌟');}
+    const noXpNote=document.createElement('div');
+    noXpNote.style.cssText='margin:8px auto;padding:6px 14px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.35);border-radius:12px;font-size:11px;color:#fca5a5;text-align:center;max-width:260px';
+    noXpNote.textContent='🎓 Mode Latihan — XP & ELO tidak berubah';
+    const goIcon=document.getElementById('go-icon');if(goIcon&&goIcon.parentNode&&!document.getElementById('lt-noxp-note')){noXpNote.id='lt-noxp-note';goIcon.parentNode.insertBefore(noXpNote,goIcon.nextSibling);}
   }
   document.getElementById('o-gameover').classList.add('show');
   playSound('end');stopMusic();
@@ -2841,6 +3021,7 @@ function doResignStyle(style){
   const el=document.createElement('div');
   el.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:80px;z-index:900;animation:emojiUp 1.5s ease-out forwards;pointer-events:none';
   el.textContent=emoji;document.body.appendChild(el);setTimeout(()=>el.remove(),1500);
+  _resignFlag=true; // player resigned — ELO drops but XP stays same
   gs.gameOver=true;gs.result=myColor==='w'?'b':'w';
   const winner=gs.result==='w'?'Putih':'Hitam';
   toast(emoji+' Kamu '+msgs[style]+'. '+winner+' menang!');
@@ -3135,7 +3316,7 @@ function doJoinRoom(){
   });
 }
 function startOnlineGame(myCol){
-  gameMode='online';myColor=myCol;flipped=myCol==='b';isHordeMode=false;
+  gameMode='online';myColor=myCol;flipped=myCol==='b';isPracticeMode=false;
   moveHistory=[];gameSnapshots=[];positionHist={};lastMove=null;hintMove=null;selected=null;legalFromSel=[];
   initBoardDOM();
   setPlayerNames(myCol==='b'?'Lawan (Putih)':'Lawan (Hitam)',myCol==='w'?'Kamu (Putih)':'Kamu (Hitam)',myCol==='b'?'w':'b',myCol);
@@ -3846,6 +4027,8 @@ function renderProfileAvatar(){
     try{(_EMOJIS||_CHIBI_EMOJIS)[userProfile.avatar??0]?.d(cv.getContext('2d'),68);}catch(e){}
     disp.appendChild(cv);
   }
+  // Apply animated tier border to profile avatar
+  applyBorderToEl(mainAv,getUserBorderIdx());
 }
 
 function buildProfileUI(){
@@ -3979,6 +4162,9 @@ function openBorderPicker(){
           // Update in-game board frame
           const bsw=document.getElementById('board-shadow-wrap');
           if(bsw)bsw.setAttribute('data-tier',String(i));
+          // Immediately reflect new border on profile avatar
+          const profAv=document.getElementById('prof-main-av');
+          if(profAv)applyBorderToEl(profAv,i);
           toast('✅ Bingkai '+BORDER_BADGES[i]+' dipakai: '+lbl);
         };
       }
@@ -4214,7 +4400,7 @@ const _TIER_CHAT={
 // ═══════════════════════════════════════
 // MATCHMAKING SYSTEM
 // ═══════════════════════════════════════
-let _mmTimer=null,_mmCycleTimer=null,_mmChatTimer=null,_mmActive=false;
+let _mmTimer=null,_mmCycleTimer=null,_mmChatTimer=null,_mmActive=false,_mmOnlineInterval=null;
 let _matchedOpponent=null;
 
 function showMatchmaking(){
@@ -4229,6 +4415,7 @@ function cancelMatchmaking(){
   _mmActive=false;
   clearTimeout(_mmTimer);clearTimeout(_mmCycleTimer);clearTimeout(_mmChatTimer);
   _mmTimer=null;_mmCycleTimer=null;
+  clearInterval(_mmOnlineInterval);_mmOnlineInterval=null;
   backHome();
 }
 
@@ -4282,9 +4469,18 @@ function _startMatchmakingAnimation(){
   const _wrReset=document.getElementById('mm-en-winrate');
   if(_wrReset){_wrReset.style.display='none';_wrReset.style.opacity='0';}
 
-  // Random online count
+  // Online count — always 1000+, updates every 2 seconds
+  clearInterval(_mmOnlineInterval);
+  let _mmOnlineBase=1000+Math.floor(Math.random()*500);
   const onlineNum=document.getElementById('mm-online-num');
-  if(onlineNum)onlineNum.textContent=200+Math.floor(Math.random()*300);
+  if(onlineNum)onlineNum.textContent=_mmOnlineBase;
+  _mmOnlineInterval=setInterval(()=>{
+    const el=document.getElementById('mm-online-num');
+    if(!el){clearInterval(_mmOnlineInterval);return;}
+    const delta=Math.floor(Math.random()*150)-70;
+    _mmOnlineBase=Math.max(1000,Math.min(1900,_mmOnlineBase+delta));
+    el.textContent=_mmOnlineBase;
+  },2000);
 
   // Pick final opponent (chosen upfront) — dynamic 80-unique-name pool
   const pool=_buildPool();
@@ -5086,7 +5282,9 @@ function updateAfterGame(result){
   const titleGap=Math.max(0,oppTitleIdx-myTitleIdx);
   const upsetMultiplier=result==='win'&&titleGap>0?1+titleGap*0.5:1;
   const baseXp=result==='win'?(40+botLevel*15):result==='draw'?20:10;
-  const xpGain=Math.round(baseXp*upsetMultiplier)+(result==='win'&&titleGap>=2?titleGap*10:0);
+  // Resign: ELO drops but XP stays the same (no reward for giving up)
+  const xpGain=_resignFlag?0:Math.round(baseXp*upsetMultiplier)+(result==='win'&&titleGap>=2?titleGap*10:0);
+  _resignFlag=false; // reset flag after use
   d.xp+=xpGain;d.games++;
   if(result==='win')d.wins++;else if(result==='loss')d.losses++;else d.draws++;
   const newLv=getLevel(d.xp);
