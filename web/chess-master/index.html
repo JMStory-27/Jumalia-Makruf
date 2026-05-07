@@ -159,6 +159,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .player-card{width:100%;padding:8px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative}
 .player-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid var(--card-b)}
 .player-avatar.active-turn{border-color:var(--gold);box-shadow:0 0 12px rgba(212,175,55,.5);animation:turnPulse 1.5s ease-in-out infinite}
+/* When data-border is applied, remove old static border so tier border shows cleanly */
+.player-avatar[data-border]{border:none !important;}
 @keyframes turnPulse{0%,100%{box-shadow:0 0 8px rgba(212,175,55,.4)}50%{box-shadow:0 0 20px rgba(212,175,55,.7)}}
 .player-name{font-size:13px;font-weight:700;color:var(--txt)}
 .player-caps{font-size:12px;color:var(--txt2);line-height:1.2}
@@ -328,6 +330,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .mm-avatar-wrap{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;border:2px solid var(--card-b);background:rgba(0,0,0,.3);position:relative;flex-shrink:0}
 .mm-avatar-wrap.me-av{border-color:var(--gold);box-shadow:0 0 14px rgba(212,175,55,.35)}
 .mm-avatar-wrap.en-av{border-color:rgba(255,100,100,.5);box-shadow:0 0 14px rgba(255,80,80,.2)}
+/* Remove old static border when tier border (data-border) is active */
+.mm-avatar-wrap[data-border]{border:none !important;box-shadow:none}
 .mm-player-box .mm-av-img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .mm-name{font-size:13px;font-weight:700;color:var(--txt);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mm-country{font-size:11px;color:var(--txt2);text-align:center}
@@ -802,14 +806,14 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#404040" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- WHITE KNIGHT — separate overlapping fills guarantee no transparency gaps -->
+<!-- WHITE KNIGHT — separate fills with same-colour stroke bleed to eliminate antialiasing gaps -->
 <g id="wN">
-  <!-- Fill 1: main body -->
-  <path fill="#fff" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <!-- Fill 2: head — starts at 21,17 (inside body) then line to 24,18 to guarantee overlap -->
-  <path fill="#fff" stroke="none" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
-  <!-- Fill 3: front leg area — overlaps fill 2 -->
-  <path fill="#fff" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Fill 1: main body — stroke bleeds outward to seal any gap -->
+  <path fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <!-- Fill 2: head — starts at 21,17 (inside body) + stroke bleed -->
+  <path fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
+  <!-- Fill 3: front leg area — stroke bleed -->
+  <path fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
   <!-- Outline strokes -->
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#404040" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
@@ -860,14 +864,14 @@ body.night::before{background:radial-gradient(ellipse 120% 80% at 15% 60%,rgba(2
   <line x1="22.5" y1="11" x2="22.5" y2="26" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
   <line x1="15" y1="18.5" x2="30" y2="18.5" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
 </g>
-<!-- BLACK KNIGHT — separate overlapping fills guarantee no transparency gaps -->
+<!-- BLACK KNIGHT — separate fills with same-colour stroke bleed to eliminate antialiasing gaps -->
 <g id="bN">
-  <!-- Fill 1: main body -->
-  <path fill="#111" stroke="none" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
-  <!-- Fill 2: head — starts at 21,17 (inside body) then line to 24,18 to guarantee overlap -->
-  <path fill="#111" stroke="none" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
-  <!-- Fill 3: front leg area — overlaps fill 2 -->
-  <path fill="#111" stroke="none" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
+  <!-- Fill 1: main body — stroke bleeds outward to seal any gap -->
+  <path fill="#111" stroke="#111" stroke-width="2" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
+  <!-- Fill 2: head — starts at 21,17 (inside body) + stroke bleed -->
+  <path fill="#111" stroke="#111" stroke-width="2" stroke-linejoin="round" d="M 21,17 L 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 L 21,17 Z"/>
+  <!-- Fill 3: front leg area — stroke bleed -->
+  <path fill="#111" stroke="#111" stroke-width="2" stroke-linejoin="round" d="M 9,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,27 C 13,29 11,31 9.958,30.06 Z"/>
   <!-- Outline strokes -->
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 Z"/>
   <path fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10.56,27.79 9.9,29.51 9,29 C 8.3,28.5 8.61,26.5 9.5,25 L 11,22 C 13.3,20.5 13.5,19.5 14,19 C 15,17.5 16,18.5 16,18.5 Z"/>
@@ -4930,8 +4934,8 @@ const LEVEL_THRESHOLDS=(()=>{const t=[0];let xp=0;for(let i=1;i<=180;i++){xp+=Ma
 const LEVEL_TITLE_NAMES=['🐣 Kroco','🐥 Bocah Catur','👣 Pemula','🎮 Amatir','♟ Pion Sejati','🎯 Pemain','🔥 Pemain Aktif','⚔️ Pemain Tangguh','🏅 Semi Pro','💼 Profesional','🦁 Pro Elite','🧠 Ahli Strategi','🏆 Expert','👨‍🎓 Master Muda','👑 Master','💎 Master Elite','🌠 Grandmaster','⚡ Dewa Catur'];
 // Border names for picker (18 tiers, progressively cooler)
 const BORDER_LABELS=['⬜ Default','🔲 Garis Ganda','💙 Biru Muda','✨ Biru Berkilau','💚 Hijau','🌿 Hijau Bersinar','🧡 Oranye Api','❤️ Merah Membara','💜 Ungu Mistis','🔮 Ungu Kerajaan','🥇 Emas','🏆 Emas Bersinar','⭐ Emas Bergerak','🌈 Pelangi','💎 Berlian','🌌 Kosmik','🌠 Galaksi','⚡ Dewa'];
-const BORDER_BADGES=['🥄','🐥','🐢','🎪','🏇','🎯','🔥','⚔️','🧙','🔮','👑','🏆','🌟','🦄','💎','🚀','🌌','⚡'];
-const BORDER_CHIBI=['🐣','🐥','🤺','🗡️','🌿','🌲','🔥','❤️‍🔥','🌸','💜','⭐','🏅','✨','🌈','❄️','🌀','🌠','👑'];
+const BORDER_BADGES=['🥄','🐥','🐢','🎪','🏇','🎯','🔥','🩸','🧙','🔮','👑','🏆','🌟','🦄','💎','🚀','🌌','⚡'];
+const BORDER_CHIBI=['🐣','🐥','🤺','🔵','🌿','🌲','🔥','💢','🌸','💜','⭐','🏅','✨','🌈','❄️','🌀','🌠','👑'];
 const BORDER_FLOATERS=[
   ['💩'],['✦','✧'],['💧','✦'],['💫','🌊'],['🍃','✨'],['🌲','🍃','✨'],
   ['🔥','✨'],['❤️‍🔥','💥'],['💜','🌸'],['🔮','💫'],['⭐','💛'],['🏅','⭐','💛'],
