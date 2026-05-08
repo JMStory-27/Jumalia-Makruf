@@ -970,8 +970,7 @@ function _ownerCreatePanel(){
     var pd={};try{pd=JSON.parse(localStorage.getItem('catur_player_data')||'{}');}catch(ex){}
     pd.xp=(pd.xp||0)+parseInt(e);
     localStorage.setItem('catur_player_data',JSON.stringify(pd));
-    alert('✅ XP +'+parseInt(e)+'
-Total: '+pd.xp.toLocaleString());
+    alert('✅ XP +'+parseInt(e)+'\nTotal: '+pd.xp.toLocaleString());
     _ownerRefresh();
   }));
 
@@ -993,8 +992,7 @@ Total: '+pd.xp.toLocaleString());
     prof.rating=9999;prof.border=17;
     localStorage.setItem('catur_profile',JSON.stringify(prof));
     if(window.userProfile){window.userProfile.rating=9999;window.userProfile.border=17;}
-    alert('✅ Stats dimaximalkan!
-Level 180, ELO 9999, Win 1.000.000, Kalah 0');
+    alert('✅ Stats dimaximalkan!\nLevel 180, ELO 9999, Win 1.000.000, Kalah 0');
     _ownerRefresh();
   }));
 
@@ -1052,11 +1050,8 @@ Level 180, ELO 9999, Win 1.000.000, Kalah 0');
         return (i+1)+'. '+new Date(g.date).toLocaleDateString('id')+
           ' | '+(g.mode||'?')+' | '+(g.result||'?')+
           (g.eloChange?(' | ELO '+(g.eloChange>0?'+':'')+g.eloChange):'');
-      }).join('
-');
-      alert('10 Game Terakhir:
-
-'+txt);
+      }).join('\n');
+      alert('10 Game Terakhir:\n\n'+txt);
     }catch(e){alert('Error: '+e.message);}
   }));
 
@@ -1090,11 +1085,7 @@ Level 180, ELO 9999, Win 1.000.000, Kalah 0');
         var r=rooms[c];
         if(r.players){if(r.players.w)players++;if(r.players.b)players++;}
       });
-      alert('🎮 Statistik Online:
-
-Total room: '+codes.length+'
-Room aktif: '+active.length+'
-Estimasi pemain: '+players);
+      alert('🎮 Statistik Online:\n\nTotal room: '+codes.length+'\nRoom aktif: '+active.length+'\nEstimasi pemain: '+players);
     });
   }));
 
@@ -1121,7 +1112,7 @@ Estimasi pemain: '+players);
         html+='<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.08)">'+
           '🎮 <b>'+c+'</b> ('+ago+')<br>'+
           '♕ Putih: '+pw+' | ♚ Hitam: '+pb+
-          ' <span onclick="window._ownerWatchRoom(''+c+'')" style="color:#38bdf8;cursor:pointer;text-decoration:underline"> [Tonton]</span>'+
+          ' <span onclick="window._ownerWatchRoom(\''+c+'\')" style="color:#38bdf8;cursor:pointer;text-decoration:underline"> [Tonton]</span>'+
           '</div>';
       });
       rl.innerHTML=html;
@@ -1201,11 +1192,8 @@ Estimasi pemain: '+players);
     var keys=[];
     for(var i=0;i<localStorage.length;i++) keys.push(localStorage.key(i));
     var txt=keys.filter(function(k){return k.includes('catur')||k.includes('chess')||k.includes('owner');})
-      .map(function(k){return k+': '+(localStorage.getItem(k)||'').slice(0,50);}).join('
-');
-    alert('Data lokal:
-
-'+txt);
+      .map(function(k){return k+': '+(localStorage.getItem(k)||'').slice(0,50);}).join('\n');
+    alert('Data lokal:\n\n'+txt);
   }));
 
   panel.appendChild(_ownerBtn('♻ Reset SEMUA Data Lokal', '#f87171', function(){
