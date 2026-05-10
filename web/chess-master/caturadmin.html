@@ -1843,10 +1843,10 @@ window.addEventListener('load', function(){
         <button class="prof-pick-btn" onclick="openAvatarPicker()">🎭 Pilih Avatar</button>
         <button class="prof-pick-btn" onclick="openBorderPicker()">🖼 Pilih Bingkai</button>
       </div>
-      <label class="prof-upload-btn" for="prof-photo-input" style="cursor:pointer">
+      <label class="prof-upload-btn" style="cursor:pointer;position:relative;overflow:hidden">
         📷 Upload Foto Sendiri
+        <input type="file" id="prof-photo-input" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="handleProfilePhoto(this)">
       </label>
-      <input type="file" id="prof-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)">
       <button class="prof-save-btn" onclick="saveProfile()">💾 Simpan Profil</button>
       <div class="prof-title-card">
         <div id="prof-title-big" class="prof-title-big">🐣 Kroco</div>
@@ -2958,7 +2958,15 @@ function executeMove(mv){
     thinkTimer=setTimeout(()=>{
       topCard?.classList.remove('thinking');
       const _bSnap=cloneGS(gs),_bTurn=gs.turn;
+      // Fallback: force random move if async worker doesn't respond in 5s
+      let _tMoved=false;
+      const _tFb=setTimeout(()=>{
+        if(_tMoved||!gs||gs.gameOver||gs.turn===myColor)return;
+        const _tmvs=legalMoves(gs,gs.turn);
+        if(_tmvs&&_tmvs.length){_tMoved=true;executeMove(_tmvs[Math.floor(Math.random()*_tmvs.length)]);}
+      },5000);
       _getBotMoveAsync(_bSnap,_bTurn,botLevel,(mv2)=>{
+        clearTimeout(_tFb);_tMoved=true;
         if(gs.gameOver||gameMode!=='bot'||gs.turn!==_bTurn)return;
         if(mv2){
           executeMove(mv2);
@@ -3442,9 +3450,22 @@ function startVsBot(level,oppProfile){
       if(badge)badge.textContent='🎲 Random Match';
       // Start opponent chat
       setTimeout(()=>_startOppChat(oppProfile),1200);
+      // Hide hint/undo so opponent doesn't look like a bot
+      const _hb=document.getElementById('btn-hint'),_ub=document.getElementById('btn-undo');
+      if(_hb)_hb.style.setProperty('display','none','important');
+      if(_ub)_ub.style.setProperty('display','none','important');
+      // Suppress bot-thinking bubble in random match
+      const _bb=document.getElementById('bot-bubble');
+      if(_bb)_bb.style.setProperty('display','none','important');
     } else {
       const ln=['','Mudah','Sedang','Sulit','Super Sulit','Grandmaster'][level]||'';
       setPlayerNames('Bot ('+ln+')',myColor==='w'?'Kamu (Putih)':'Kamu (Hitam)',topC,myColor);
+      // Restore hint/undo/bot-bubble for normal bot mode
+      const _hbN=document.getElementById('btn-hint'),_ubN=document.getElementById('btn-undo');
+      if(_hbN)_hbN.style.removeProperty('display');
+      if(_ubN)_ubN.style.removeProperty('display');
+      const _bbN=document.getElementById('bot-bubble');
+      if(_bbN)_bbN.style.removeProperty('display');
       const eloTop=document.getElementById('elo-top');
       const eloBot=document.getElementById('elo-bot');
       if(eloTop)eloTop.style.display='none';
@@ -3471,7 +3492,7 @@ function doBotMove(){
     if(_moved||!gs||gs.gameOver||gs.turn===myColor)return;
     const _mvs=legalMoves(gs,gs.turn);
     if(_mvs&&_mvs.length){_moved=true;executeMove(_mvs[Math.floor(Math.random()*_mvs.length)]);}
-  },9500);
+  },4000);
   _getBotMoveAsync(_snapGS,_snapTurn,botLevel,(mv)=>{
     clearTimeout(_fbTimer);_moved=true;
     if(!gs||gs.gameOver||gs.turn===myColor)return;
