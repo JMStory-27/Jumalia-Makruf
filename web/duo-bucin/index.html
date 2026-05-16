@@ -802,9 +802,23 @@ function showSetup() {
 }
 
 function listenForPartner() {
-  db.ref(`pairing/${myCode}`).on('value', snap => {
+  // Hapus data pairing LAMA dulu agar listener tidak tembak data sisa session sebelumnya
+  db.ref(`pairing/${myCode}`).remove();
+
+  const pairingRef = db.ref(`pairing/${myCode}`);
+  const onPairing = pairingRef.on('value', snap => {
     const val = snap.val();
     if (!val || !val.partnerCode) return;
+
+    // Tolak data pairing yang lebih dari 5 menit (basi/sisa session lama)
+    if (val.ts && Date.now() - val.ts > 5 * 60 * 1000) {
+      pairingRef.remove();
+      return;
+    }
+
+    // Detach listener SEBELUM enterApp() agar tidak tembak ulang
+    pairingRef.off('value', onPairing);
+
     // Partner joined us!
     partnerCode = val.partnerCode;
     partnerName = val.partnerName || 'Pasangan';
@@ -815,9 +829,12 @@ function listenForPartner() {
     localStorage.setItem('partnerCode', partnerCode);
     localStorage.setItem('myRole', myRole);
     // Clean up pairing entry
-    db.ref(`pairing/${myCode}`).remove();
+    pairingRef.remove();
     toast('💕 Pasangan bergabung! Terhubung~');
-    enterApp();
+
+    // Tunda sedikit agar touch event di setup screen selesai dulu
+    // (mencegah jari user mengenai tombol di app screen yang baru muncul)
+    setTimeout(() => enterApp(), 350);
   });
 }
 
@@ -1012,18 +1029,23 @@ function listenRoom() {
     updatePartnerMarker();
     updateDistance();
   });
-  // Listen for control signals
+  // Listen for control signals — hanya proses event yang dikirim SETELAH kita connect
+  // (mencegah replay event lama: love/poke dari session sebelumnya)
+  const listenSince = Date.now();
   db.ref(`rooms/${roomId}/control`).on('child_added', snap => {
     const val = snap.val();
     if (!val || val.to !== myCode) return;
     snap.ref.remove();
+    // Skip event lama (lebih dari 10 detik sebelum kita connect)
+    if (val.ts && val.ts < listenSince - 10000) return;
     handleControl(val);
   });
-  // Listen for WebRTC signals
+  // Listen for WebRTC signals — sama, filter event lama
   db.ref(`rooms/${roomId}/webrtc/${myCode}`).on('child_added', snap => {
     const val = snap.val();
     if (!val) return;
     snap.ref.remove();
+    if (val.ts && val.ts < listenSince - 10000) return;
     handleWebRTCSignal(val);
   });
   // Listen for messages
