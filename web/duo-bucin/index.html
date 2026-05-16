@@ -10,1932 +10,1952 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
-  --pink:#FF8FAB;--pinkl:#FFD6E0;--pinkd:#E05A7A;
-  --blue:#5BAAED;--bluel:#C8E6FF;--blued:#2E7CC4;
-  --bg:#FFF5F7;--card:#fff;--text:#5A3040;--textl:#9A7080;
-  --green:#4ade80;--orange:#fb923c
+  --pink:#FF8FAB;--pinkl:#FFD6E0;--pinkd:#D63663;
+  --blue:#5BAAED;--bluel:#C8E6FF;--blued:#1E5FAD;
+  --purple:#A855F7;--green:#22C55E;--orange:#FB923C;
+  --bg:#FFF5F7;--card:rgba(255,255,255,0.97);--text:#4A2040;--textl:#9A7080;
+  --shadow:0 8px 32px rgba(255,105,180,0.15);--rad:20px
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}
-.screen{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);transition:opacity .3s,transform .3s;z-index:10}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(160deg,#FFF0F5,#FFF5FA 50%,#F0F8FF);color:var(--text)}
+
+/* ===== KEYFRAMES ===== */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.35)}28%{transform:scale(1)}42%{transform:scale(1.35)}56%{transform:scale(1)}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes spinRev{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+@keyframes wiggle{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(6deg) translateY(-10px)}}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(0) rotate(0)}50%{opacity:1;transform:scale(1) rotate(180deg)}}
+@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+@keyframes wave{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1.5)}}
+@keyframes routeFlow{to{stroke-dashoffset:-20}}
+@keyframes pLoader{from{width:0}to{width:100%}}
+@keyframes particlePop{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-70px) scale(0);opacity:0}}
+@keyframes rotate3D{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+/* Female border – Rose Gold Floral */
+@keyframes femSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes femGlow{0%,100%{box-shadow:0 0 10px #FF69B4,0 0 22px rgba(255,105,180,.5)}50%{box-shadow:0 0 22px #FF1493,0 0 44px rgba(255,20,147,.7),0 0 66px rgba(255,105,180,.3)}}
+/* Male border – Neon Galaxy */
+@keyframes maleSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes maleGlow{0%,100%{box-shadow:0 0 10px #00f0ff,0 0 22px rgba(0,240,255,.5)}33%{box-shadow:0 0 18px #9333ea,0 0 36px rgba(147,51,234,.6)}66%{box-shadow:0 0 14px #5BAAED,0 0 28px rgba(91,170,237,.6)}}
+
+/* ===== BORDER SYSTEM (padding+background approach – reliable) ===== */
+.av-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0}
+.av-wrap.fem{animation:femSpin 4s linear infinite}
+.av-wrap.fem{background:conic-gradient(#FF69B4 0,#FFD700 30deg,#FF8C94 60deg,#FF1493 90deg,#FFC0CB 120deg,#FFD700 150deg,#FF69B4 180deg,#FF8C94 210deg,#FFC0CB 240deg,#FF1493 270deg,#FFD700 300deg,#FF69B4 360deg)}
+.av-wrap.male{animation:maleSpin 3s linear infinite}
+.av-wrap.male{background:conic-gradient(#00f0ff 0,#5BAAED 60deg,#9333ea 120deg,#ff00ff 180deg,#5BAAED 240deg,#00f0ff 300deg,#9333ea 360deg)}
+.av-gap{border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.av-wrap.fem .av-gap{animation:femGlow 2s ease-in-out infinite}
+.av-wrap.male .av-gap{animation:maleGlow 2.5s ease-in-out infinite}
+.av-pic{border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFD6E0,#C8E6FF);user-select:none}
+.av-pic img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+/* Sizes */
+.av-wrap.sm{width:56px;height:56px;padding:3px}.av-wrap.sm .av-gap{width:50px;height:50px;padding:2px}.av-wrap.sm .av-pic{width:46px;height:46px;font-size:22px}
+.av-wrap.md{width:72px;height:72px;padding:3px}.av-wrap.md .av-gap{width:66px;height:66px;padding:2px}.av-wrap.md .av-pic{width:62px;height:62px;font-size:28px}
+.av-wrap.lg{width:90px;height:90px;padding:4px}.av-wrap.lg .av-gap{width:82px;height:82px;padding:3px}.av-wrap.lg .av-pic{width:76px;height:76px;font-size:34px}
+.av-wrap.xl{width:110px;height:110px;padding:4px}.av-wrap.xl .av-gap{width:102px;height:102px;padding:3px}.av-wrap.xl .av-pic{width:96px;height:96px;font-size:42px}
+
+/* ===== SCREENS ===== */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;transition:opacity .3s,transform .3s;z-index:10}
 .screen.hidden{opacity:0;pointer-events:none;transform:translateY(20px)}
 
-/* ===== ANIMATIONS ===== */
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-@keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-20px)}60%{transform:translateY(-10px)}}
-@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.3)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes fadeIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
-@keyframes wave{0%,100%{transform:scaleY(0.5)}50%{transform:scaleY(1.5)}}
-@keyframes ripple{to{transform:scale(4);opacity:0}}
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-@keyframes spinReverse{from{transform:rotate(360deg)}to{transform:rotate(0)}}
-@keyframes dash{to{stroke-dashoffset:0}}
-@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
-@keyframes routeDash{to{stroke-dashoffset:-20}}
+/* Splash */
+#splash{background:linear-gradient(160deg,#FFF0F5,#F8E8FF 50%,#E8F4FF);align-items:center;justify-content:center;gap:16px;overflow:hidden}
+.splash-bg{position:absolute;font-size:220px;opacity:.05;animation:heartbeat 2s ease-in-out infinite;pointer-events:none}
+.splash-logo{font-size:72px;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(255,105,180,.6));position:relative;z-index:1}
+.splash-title{font-size:30px;font-weight:900;background:linear-gradient(135deg,#FF1493,#FF8FAB,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;z-index:1}
+.splash-sub{font-size:14px;color:var(--textl);text-align:center;z-index:1}
+.splash-loader{width:70px;height:5px;background:rgba(255,105,180,.2);border-radius:5px;overflow:hidden;z-index:1}
+.splash-loader-bar{height:100%;background:linear-gradient(90deg,#FF69B4,#9333ea);border-radius:5px;animation:pLoader 2s ease-out forwards}
+.particles-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.sparkle{position:absolute;font-size:16px;opacity:0;animation:sparkle 3s ease-in-out infinite}
+.chibi-splash{display:flex;align-items:flex-end;gap:24px;z-index:1}
+.chibi{display:flex;flex-direction:column;align-items:center;animation:wiggle 2s ease-in-out infinite}
+.chibi-boy{animation-delay:1.1s}
+.chibi-face{font-size:42px;line-height:1}
+.chibi-body{font-size:30px;line-height:1}
+.chibi-name{font-size:10px;font-weight:700;color:var(--textl);margin-top:2px;letter-spacing:.5px}
+.chibi-heart{font-size:30px;animation:heartbeat 1.2s ease-in-out infinite;align-self:center;margin-bottom:20px}
 
-/* ===== FEMALE BORDER — Premium Floral Rose Gold ===== */
-@keyframes femSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes femInner{0%{transform:rotate(360deg)}100%{transform:rotate(0deg)}}
-@keyframes femGlow{
-  0%,100%{box-shadow:0 0 8px rgba(255,105,180,.6),0 0 16px rgba(255,105,180,.3),inset 0 0 6px rgba(255,182,193,.2)}
-  50%{box-shadow:0 0 16px rgba(255,20,147,.8),0 0 32px rgba(255,105,180,.4),inset 0 0 10px rgba(255,182,193,.3)}
-}
-@keyframes femPetals{
-  0%{background-position:0% 0%}
-  50%{background-position:100% 100%}
-  100%{background-position:0% 0%}
-}
+/* Setup */
+#setup{background:linear-gradient(160deg,#FFF0F5,#F8E8FF 50%,#E8F4FF);align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.setup-card{background:var(--card);border-radius:24px;padding:26px 22px;box-shadow:var(--shadow);width:100%;max-width:360px;animation:fadeIn .5s ease;border:1px solid rgba(255,182,193,.3)}
+.setup-title{font-size:22px;font-weight:900;text-align:center;margin-bottom:4px;background:linear-gradient(135deg,#FF1493,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.setup-sub{font-size:13px;text-align:center;color:var(--textl);margin-bottom:20px}
+.mycode-box{background:linear-gradient(135deg,#FFF0F5,#F0F8FF);border:2px dashed var(--pink);border-radius:16px;padding:14px;text-align:center;margin-bottom:18px;position:relative}
+.mycode-lbl{font-size:11px;color:var(--textl);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.mycode-val{font-size:36px;font-weight:900;letter-spacing:8px;background:linear-gradient(135deg,#FF1493,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.mycode-hint{font-size:11px;color:var(--textl);margin-top:4px}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--pinkl);border:none;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--pinkd);cursor:pointer}
+.lbl{font-size:12px;font-weight:700;color:var(--textl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.inp{width:100%;padding:12px 16px;border:2px solid #FFD6E0;border-radius:14px;font-size:15px;background:#FFF8FA;color:var(--text);outline:none;transition:border-color .2s;margin-bottom:14px;font-family:inherit}
+.inp:focus{border-color:var(--pink);background:#fff}
+.inp::placeholder{color:#C8A0B0}
+.gender-row{display:flex;gap:10px;margin-bottom:14px}
+.gender-btn{flex:1;padding:12px;border-radius:14px;border:2px solid #FFD6E0;background:#FFF8FA;font-size:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.gender-btn span{font-size:11px;font-weight:700;color:var(--textl)}
+.gender-btn.af{border-color:var(--pinkd);background:linear-gradient(135deg,#FFD6E0,#FFF0F5)}
+.gender-btn.am{border-color:var(--blued);background:linear-gradient(135deg,#C8E6FF,#F0F8FF)}
+.btn{padding:13px 20px;border-radius:16px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit}
+.btn:active{transform:scale(.95)}
+.btn-primary{background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff;box-shadow:0 4px 16px rgba(255,20,147,.3);width:100%}
+.btn-sm{padding:9px 14px;font-size:13px;border-radius:12px}
+.btn-blue{background:linear-gradient(135deg,#5BAAED,#2E7CC4);color:#fff;box-shadow:0 4px 12px rgba(91,170,237,.3)}
+.btn-purple{background:linear-gradient(135deg,#A855F7,#7C3AED);color:#fff}
+.btn-green{background:linear-gradient(135deg,#22C55E,#16A34A);color:#fff}
+.btn-orange{background:linear-gradient(135deg,#FB923C,#EA580C);color:#fff}
+.btn-red{background:linear-gradient(135deg,#EF4444,#B91C1C);color:#fff}
+.btn-ghost{background:rgba(255,143,171,.12);color:var(--pinkd);border:2px solid var(--pinkl)}
+.divider{display:flex;align-items:center;gap:10px;color:var(--textl);font-size:12px;margin:14px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#FFD6E0}
+.waiting-box{text-align:center;padding:16px;background:linear-gradient(135deg,#FFF0F5,#F0F8FF);border:2px dashed var(--pink);border-radius:16px;animation:pulse 2s ease-in-out infinite}
+.waiting-box .ico{font-size:28px;margin-bottom:4px}
+.waiting-box .txt{font-size:13px;color:var(--textl)}
 
-/* ===== MALE BORDER — Premium Neon Galaxy ===== */
-@keyframes maleSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes maleGlow{
-  0%,100%{box-shadow:0 0 10px rgba(91,170,237,.8),0 0 20px rgba(0,240,255,.4),0 0 40px rgba(46,124,196,.2)}
-  33%{box-shadow:0 0 15px rgba(147,51,234,.8),0 0 30px rgba(147,51,234,.4),0 0 50px rgba(91,170,237,.3)}
-  66%{box-shadow:0 0 12px rgba(0,240,255,.9),0 0 25px rgba(91,170,237,.5),0 0 45px rgba(46,124,196,.25)}
-}
-@keyframes maleInner{0%{transform:rotate(-360deg)}100%{transform:rotate(0deg)}}
-
-/* ===== AVATAR WRAPPERS ===== */
-.avatar-wrapper{position:relative;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* Female - large */
-.avatar-wrapper.fem,.avatar-wrapper.fem-lg{width:72px;height:72px}
-.avatar-wrapper.fem-lg{width:86px;height:86px}
-
-.avatar-wrapper.fem::before,.avatar-wrapper.fem-lg::before{
-  content:'';position:absolute;inset:-4px;border-radius:50%;
-  background:conic-gradient(
-    #FF69B4 0deg,#FFB6C1 30deg,#FFD700 60deg,#FF8C94 90deg,
-    #FF1493 120deg,#FFB6C1 150deg,#FFD700 180deg,
-    #FF69B4 210deg,#FFC0CB 240deg,#FF8C94 270deg,
-    #FF1493 300deg,#FFD700 330deg,#FF69B4 360deg
-  );
-  animation:femSpin 4s linear infinite;z-index:0
-}
-.avatar-wrapper.fem::after,.avatar-wrapper.fem-lg::after{
-  content:'';position:absolute;inset:-2px;border-radius:50%;
-  background:conic-gradient(
-    transparent 0deg,rgba(255,255,255,.8) 20deg,transparent 40deg,
-    rgba(255,255,255,.8) 100deg,transparent 120deg,
-    rgba(255,255,255,.8) 200deg,transparent 220deg,
-    rgba(255,255,255,.8) 300deg,transparent 320deg
-  );
-  animation:femInner 3s linear infinite;z-index:1
-}
-.avatar-wrapper.fem .avatar-inner,.avatar-wrapper.fem-lg .avatar-inner{
-  animation:femGlow 2s ease-in-out infinite
-}
-
-/* Male - large */
-.avatar-wrapper.male,.avatar-wrapper.male-lg{width:72px;height:72px}
-.avatar-wrapper.male-lg{width:86px;height:86px}
-
-.avatar-wrapper.male::before,.avatar-wrapper.male-lg::before{
-  content:'';position:absolute;inset:-4px;border-radius:50%;
-  background:conic-gradient(
-    #00f0ff 0deg,#5BAAED 45deg,#9333ea 90deg,
-    #2E7CC4 135deg,#00f0ff 180deg,
-    #5BAAED 225deg,#9333ea 270deg,#2E7CC4 315deg,#00f0ff 360deg
-  );
-  animation:maleSpin 2.5s linear infinite;z-index:0
-}
-.avatar-wrapper.male::after,.avatar-wrapper.male-lg::after{
-  content:'';position:absolute;inset:-1px;border-radius:50%;
-  background:conic-gradient(
-    rgba(0,240,255,.5) 0deg,transparent 30deg,
-    rgba(0,240,255,.5) 90deg,transparent 120deg,
-    rgba(0,240,255,.5) 180deg,transparent 210deg,
-    rgba(0,240,255,.5) 270deg,transparent 300deg
-  );
-  animation:maleInner 1.8s linear infinite;z-index:1
-}
-.avatar-wrapper.male .avatar-inner,.avatar-wrapper.male-lg .avatar-inner{
-  animation:maleGlow 2.5s ease-in-out infinite
-}
-
-/* Small avatar (markers) */
-.avatar-wrapper.fem-sm,.avatar-wrapper.male-sm{width:48px;height:48px}
-.avatar-wrapper.fem-sm::before{inset:-3px}
-.avatar-wrapper.male-sm::before{inset:-3px}
-.avatar-wrapper.fem-sm .avatar-inner,.avatar-wrapper.male-sm .avatar-inner{width:40px;height:40px;font-size:18px}
-
-.avatar-inner{
-  position:relative;z-index:2;
-  width:64px;height:64px;border-radius:50%;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;font-size:30px;
-  background:linear-gradient(135deg,#FFD6E0,#C8E6FF);
-  transition:transform .2s
-}
-.avatar-wrapper.fem-lg .avatar-inner,.avatar-wrapper.male-lg .avatar-inner{width:78px;height:78px;font-size:36px}
-.avatar-wrapper.fem-sm .avatar-inner,.avatar-wrapper.male-sm .avatar-inner{width:40px;height:40px;font-size:18px}
-.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-
-/* White ring between border and inner */
-.avatar-wrapper::before{background-clip:padding-box}
-.avatar-inner-ring{
-  position:absolute;inset:0;border-radius:50%;background:white;z-index:1;
-  transform:scale(0.91)
-}
-
-/* ===== SPLASH ===== */
-#splash{background:linear-gradient(135deg,#FFD6E0,#C8E6FF);justify-content:center;align-items:center;z-index:100}
-.splash-logo{font-size:90px;animation:heartbeat 1.5s infinite;display:block;text-align:center}
-.splash-title{font-size:26px;font-weight:900;background:linear-gradient(135deg,#FF69B4,#5BAAED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:16px;text-align:center;letter-spacing:1px}
-.splash-sub{font-size:13px;color:#9A7080;margin-top:8px;text-align:center}
-.splash-loader{margin-top:30px;width:80px;height:6px;background:#FFD6E0;border-radius:3px;overflow:hidden}
-.splash-bar{height:100%;background:linear-gradient(90deg,#FF8FAB,#5BAAED,#FF8FAB);border-radius:3px;animation:shimmer 1.5s infinite;background-size:200% 100%}
-
-/* ===== PAIRING ===== */
-#pairing{justify-content:center;align-items:center;padding:24px;background:linear-gradient(160deg,#FFF0F5,#F0F7FF)}
-.pair-card{background:white;border-radius:32px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(255,143,171,.25)}
-.pair-emoji{font-size:56px;text-align:center;display:block;animation:float 2s ease-in-out infinite;margin-bottom:12px}
-.pair-title{text-align:center;font-size:22px;font-weight:900;color:#FF69B4;margin-bottom:4px}
-.pair-sub{text-align:center;font-size:13px;color:var(--textl);margin-bottom:20px}
-.code-box{background:#FFF0F5;border-radius:18px;padding:18px;text-align:center;margin-bottom:18px;cursor:pointer;border:2px dashed #FFD6E0}
-.code-num{font-size:40px;font-weight:900;letter-spacing:8px;color:#FF69B4;font-family:monospace}
-.code-hint{font-size:11px;color:var(--textl);margin-top:4px}
-.pair-input{width:100%;border:2.5px solid #FFD6E0;border-radius:16px;padding:14px;font-size:28px;text-align:center;letter-spacing:6px;font-weight:900;color:#FF69B4;outline:none;background:#FFF5F8;font-family:monospace}
-.pair-input:focus{border-color:var(--pink)}
-.btn{width:100%;padding:16px;border:none;border-radius:18px;font-size:15px;font-weight:800;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;letter-spacing:.5px}
-.btn:active{transform:scale(.97)}
-.btn-pink{background:linear-gradient(135deg,var(--pink),#FF69B4);color:white;box-shadow:0 6px 20px rgba(255,105,180,.4)}
-.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blued));color:white;box-shadow:0 6px 20px rgba(91,170,237,.4)}
-.btn-outline{background:white;color:var(--pink);border:2.5px solid #FFD6E0}
-.btn-sm{padding:10px 20px;font-size:13px;width:auto;border-radius:14px}
-.divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#C0A0A8;font-size:13px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:#FFE0EA}
-.mt10{margin-top:10px}.mt16{margin-top:16px}
-
-/* ===== SETUP ===== */
-#setup{background:var(--bg)}
-.setup-hdr{background:linear-gradient(135deg,var(--pink),var(--blue));padding:40px 20px 24px;text-align:center}
-.setup-hdr h2{color:white;font-size:22px;font-weight:900}
-.setup-hdr p{color:rgba(255,255,255,.8);font-size:13px;margin-top:4px}
-.setup-body{flex:1;overflow-y:auto;padding:16px}
-.setup-card{background:white;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 2px 12px rgba(255,143,171,.1)}
-.setup-card-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;color:var(--text);margin-bottom:14px}
-.setup-card-icon{font-size:22px}
-.role-row{display:flex;gap:12px}
-.role-btn{flex:1;padding:16px 8px;border:2.5px solid #FFE0EA;border-radius:18px;background:white;cursor:pointer;text-align:center;transition:all .2s}
-.role-btn .re{font-size:36px;display:block;margin-bottom:6px}
-.role-btn .rl{font-size:12px;font-weight:700;color:var(--text)}
-.role-btn.sel-fem{border-color:var(--pink);background:#FFF0F5}
-.role-btn.sel-male{border-color:var(--blue);background:#F0F7FF}
-.perm-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #FFE0EA}
-.perm-row:last-child{border:none}
-.perm-ico{font-size:24px;width:36px;text-align:center}
-.perm-info{flex:1}
-.perm-name{font-size:14px;font-weight:700;color:var(--text)}
-.perm-desc{font-size:11px;color:var(--textl);margin-top:2px}
-.perm-st{font-size:22px}
-.name-input{width:100%;border:2.5px solid #FFD6E0;border-radius:16px;padding:14px;font-size:16px;color:var(--text);outline:none;background:#FFF5F8}
-.name-input:focus{border-color:var(--pink)}
-
-/* Avatar Upload */
-.avatar-upload-area{display:flex;flex-direction:column;align-items:center;gap:14px}
-.avatar-upload-preview{position:relative;cursor:pointer}
-.avatar-upload-btn{position:absolute;bottom:2px;right:2px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#FF69B4);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:10;box-shadow:0 2px 8px rgba(255,105,180,.5)}
-.avatar-upload-hint{font-size:12px;color:var(--textl);text-align:center}
-#avatar-file-input{display:none}
-
-/* ===== MAIN APP ===== */
-#app{display:flex;flex-direction:column}
-.app-bar{background:linear-gradient(135deg,var(--pink),var(--blue));padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.app-bar-title{color:white;font-size:17px;font-weight:900;letter-spacing:.5px}
-.app-bar-right{display:flex;align-items:center;gap:8px}
-.sdot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
-.sdot.offline{background:#f87171}
-.stext{color:rgba(255,255,255,.9);font-size:12px;font-weight:600}
-.app-bar-settings{color:white;font-size:20px;cursor:pointer;padding:4px}
+/* App */
+#app{background:transparent}
+.app-header{background:var(--card);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 16px rgba(255,105,180,.12);flex-shrink:0;backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,182,193,.2)}
+.hdr-user{display:flex;align-items:center;gap:8px}
+.hdr-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.conn-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:linear-gradient(135deg,#DCFCE7,#F0FFF4);color:#16A34A;display:flex;align-items:center;gap:4px}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 1.5s infinite}
+.conn-pill.off{background:linear-gradient(135deg,#FEE2E2,#FFF5F5);color:#DC2626}
+.conn-pill.off .conn-dot{background:#EF4444;animation:none}
+.hdr-names{font-size:11px;color:var(--textl);display:flex;align-items:center;gap:5px}
+.hdr-names span{font-weight:700;color:var(--text)}
 .app-content{flex:1;overflow:hidden;position:relative}
-.tab-page{position:absolute;inset:0;overflow-y:auto;padding:14px;display:none}
-.tab-page.active{display:block}
-.tab-page.no-pad{padding:0}
-.bnav{background:white;display:flex;border-top:1px solid #FFE0EA;flex-shrink:0;padding-bottom:max(0px,env(safe-area-inset-bottom));box-shadow:0 -4px 20px rgba(255,143,171,.15)}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px;cursor:pointer;transition:all .2s;position:relative}
-.ni-icon{font-size:22px;transition:transform .2s}
-.ni-label{font-size:10px;font-weight:700;color:#C0A0A8;margin-top:2px;transition:color .2s}
-.ni.active .ni-label{color:var(--pink)}
-.ni.active .ni-icon{transform:scale(1.2)}
-.nbadge{position:absolute;top:6px;right:18%;background:var(--pinkd);color:white;font-size:9px;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;padding:0 3px}
+.tab-pane{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .3s,transform .3s}
+.tab-pane.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.app-nav{background:var(--card);display:flex;align-items:center;justify-content:space-around;padding:8px 10px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 20px rgba(255,105,180,.1);flex-shrink:0;backdrop-filter:blur(20px);border-top:1px solid rgba(255,182,193,.2)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 16px;border-radius:14px;cursor:pointer;transition:all .2s;border:none;background:transparent;position:relative}
+.nav-ico{font-size:22px;transition:transform .2s}
+.nav-lbl{font-size:10px;font-weight:700;color:var(--textl);transition:color .2s}
+.nav-btn.active{background:linear-gradient(135deg,#FFD6E0,#EDE9FE)}
+.nav-btn.active .nav-ico{transform:scale(1.15)}
+.nav-btn.active .nav-lbl{color:var(--pinkd)}
+.notif-dot{position:absolute;top:4px;right:10px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid white;display:none}
+.notif-dot.show{display:block}
 
-/* ===== HOME TAB ===== */
-.partner-card{background:white;border-radius:26px;padding:20px;margin-bottom:14px;box-shadow:0 4px 20px rgba(255,143,171,.1);position:relative;overflow:hidden}
-.partner-card.fem-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,105,180,.15),transparent)}
-.partner-card.male-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(91,170,237,.15),transparent)}
-.pc-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.pc-info{flex:1;min-width:0}
-.pc-name{font-size:18px;font-weight:900;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pc-username{font-size:12px;color:var(--textl);margin-top:1px}
-.pc-status{font-size:12px;color:var(--textl);margin-top:4px;display:flex;align-items:center;gap:6px}
-.opill{display:inline-flex;align-items:center;gap:4px;background:#E8F5E9;color:#2E7D32;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700}
-.opill.off{background:#FFF0F0;color:#C62828}
-.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pc-stat{background:#FFF5F7;border-radius:16px;padding:12px}
-.pc-stat.blue-bg{background:#F0F7FF}
-.pcs-label{font-size:10px;color:var(--textl);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.pcs-val{font-size:16px;font-weight:900;color:var(--text);margin-top:5px;display:flex;align-items:center;gap:6px}
-.bat-bar{height:8px;border-radius:4px;background:#FFE0EA;overflow:hidden;margin-top:6px}
-.bat-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#4ade80,#22c55e);transition:width .5s}
-.bat-fill.low{background:linear-gradient(90deg,#f87171,#ef4444)}
-.my-card{background:linear-gradient(135deg,#FFF0F5,white);border-radius:26px;padding:18px;margin-bottom:14px;border:2px dashed #FFD6E0}
-.my-card-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.my-card-info{flex:1}
-.my-card-name{font-size:16px;font-weight:900;color:var(--text)}
-.my-card-sub{font-size:12px;color:var(--textl);margin-top:2px}
-.my-stats{display:flex;gap:10px}
-.my-stat{flex:1;background:white;border-radius:16px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(255,143,171,.1)}
-.my-stat-icon{font-size:24px}
-.my-stat-val{font-size:13px;font-weight:900;color:var(--text);margin-top:4px}
-.my-stat-label{font-size:10px;color:var(--textl)}
+/* Home Tab */
+.home-scroll{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border-radius:var(--rad);padding:16px;box-shadow:var(--shadow)}
+.sec-title{font-size:12px;font-weight:800;color:var(--textl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.couple-card{background:linear-gradient(135deg,rgba(255,240,245,.95),rgba(240,248,255,.95));display:flex;align-items:center;justify-content:space-around;padding:18px;border-radius:var(--rad);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.couple-card::before{content:'💕';position:absolute;font-size:120px;opacity:.05;animation:heartbeat 2.5s ease-in-out infinite;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.couple-mid{display:flex;flex-direction:column;align-items:center;gap:6px}
+.dist-pill{font-size:11px;font-weight:700;color:#fff;background:linear-gradient(135deg,#FF69B4,#FF1493);padding:4px 12px;border-radius:20px}
+.couple-heart{font-size:30px;animation:heartbeat 1.3s ease-in-out infinite}
+.uname{font-size:13px;font-weight:800;color:var(--text);text-align:center}
+.urole{font-size:11px;color:var(--textl);text-align:center}
+.chibi-deco{display:flex;align-items:center;justify-content:center;gap:18px;padding:6px 0}
+.chibi-deco .chibi{animation:wiggle 2.2s ease-in-out infinite}
+.chibi-deco .chibi-boy{animation-delay:1.1s}
+.chibi-deco .chibi-face{font-size:32px}
+.chibi-deco .chibi-body{font-size:24px}
+.chibi-deco .chibi-heart{font-size:24px;margin-bottom:12px}
+.actions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.act-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 6px;border-radius:16px;border:none;cursor:pointer;transition:all .2s;font-size:11px;font-weight:700;color:var(--text)}
+.act-btn:active{transform:scale(.93)}
+.act-btn .ico{font-size:26px}
+.act-rose{background:linear-gradient(135deg,#FFD6E0,#FFF0F5)}
+.act-blue{background:linear-gradient(135deg,#C8E6FF,#F0F8FF)}
+.act-purple{background:linear-gradient(135deg,#EDE9FE,#F5F3FF)}
+.act-green{background:linear-gradient(135deg,#DCFCE7,#F0FFF4)}
+.act-orange{background:linear-gradient(135deg,#FED7AA,#FFF7ED)}
+.act-yellow{background:linear-gradient(135deg,#FEF9C3,#FFFBEB)}
+.stat-row{display:flex;gap:10px}
+.stat-card{flex:1;background:var(--card);border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 12px rgba(255,105,180,.07)}
+.stat-ico{font-size:22px;margin-bottom:3px}
+.stat-val{font-size:18px;font-weight:900;color:var(--text)}
+.stat-lbl{font-size:10px;color:var(--textl)}
+.msg-row{display:flex;gap:8px;align-items:center}
+.msg-row .inp{flex:1;margin:0;font-size:14px}
 
-/* ===== MAP TAB — Advanced ===== */
-#tab-map{padding:0;display:none;flex-direction:column;height:100%}
-#tab-map.active{display:flex}
-.map-toolbar{
-  background:white;padding:8px 12px;
-  display:flex;align-items:center;gap:6px;
-  border-bottom:1px solid #FFE0EA;flex-shrink:0;
-  overflow-x:auto;-webkit-overflow-scrolling:touch;
-  scrollbar-width:none
-}
-.map-toolbar::-webkit-scrollbar{display:none}
-.map-layer-btn{
-  padding:6px 12px;border:1.5px solid #FFD6E0;border-radius:20px;
-  background:white;font-size:11px;font-weight:700;cursor:pointer;
-  color:var(--text);transition:all .15s;white-space:nowrap;flex-shrink:0
-}
-.map-layer-btn.active{background:linear-gradient(135deg,var(--pink),#FF69B4);color:white;border-color:var(--pink)}
-.map-sep{width:1px;height:20px;background:#FFE0EA;flex-shrink:0;margin:0 2px}
-.map-action-btn{
-  width:32px;height:32px;border:1.5px solid #FFD6E0;border-radius:10px;
-  background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;transition:all .15s
-}
-.map-action-btn:active{transform:scale(.93)}
-#leafmap{flex:1;min-height:200px;background:#E8F4FD}
+/* Map Tab */
+#map-pane{position:relative}
+#map{width:100%;flex:1}
+.map-top{position:absolute;top:0;left:0;right:0;z-index:1000;padding:10px;pointer-events:none;display:flex;flex-direction:column;gap:7px}
+.map-top>*{pointer-events:all}
+.map-search-wrap{position:relative}
+.map-search-row{display:flex;gap:7px}
+.map-search-inp{flex:1;padding:10px 14px;border-radius:14px;border:none;background:rgba(255,255,255,.96);box-shadow:0 4px 18px rgba(0,0,0,.13);font-size:14px;color:var(--text);outline:none;font-family:inherit;backdrop-filter:blur(10px)}
+.map-search-btn{padding:10px 14px;border-radius:14px;border:none;background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(255,20,147,.3)}
+.search-results{position:absolute;top:100%;left:0;right:0;margin-top:4px;background:rgba(255,255,255,.97);border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.13);overflow:hidden;max-height:200px;overflow-y:auto;display:none;z-index:100;backdrop-filter:blur(10px)}
+.search-results.show{display:block;animation:slideUp .2s ease}
+.sr-item{padding:11px 14px;font-size:13px;border-bottom:1px solid #f5f0f2;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text)}
+.sr-item:active{background:#FFF0F5}
+.sr-item:last-child{border-bottom:none}
+.sr-item .sri-ico{font-size:16px;flex-shrink:0}
+.layers-bar{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.layers-bar::-webkit-scrollbar{height:0}
+.lyr-btn{padding:6px 13px;border-radius:20px;border:none;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;color:var(--text);transition:all .2s;backdrop-filter:blur(8px)}
+.lyr-btn.active{background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff;box-shadow:0 2px 10px rgba(255,20,147,.3)}
+.map-toolbar{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;gap:6px;background:rgba(255,255,255,.96);padding:7px 12px;border-radius:24px;box-shadow:0 4px 20px rgba(0,0,0,.15);backdrop-filter:blur(10px)}
+.map-tbtn{font-size:20px;width:42px;height:42px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0}
+.map-tbtn:active{transform:scale(.88);background:#FFD6E0}
+.map-tbtn.active{background:linear-gradient(135deg,#FFD6E0,#EDE9FE)}
+.route-panel{position:absolute;bottom:65px;left:10px;right:10px;z-index:1000;background:rgba(255,255,255,.97);border-radius:16px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,.15);display:none;max-height:220px;overflow-y:auto;backdrop-filter:blur(10px)}
+.route-panel.show{display:block;animation:slideUp .3s ease}
+.route-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.route-stats{display:flex;gap:18px}
+.rstat{text-align:center}
+.rstat-val{font-size:18px;font-weight:900;color:var(--text)}
+.rstat-lbl{font-size:11px;color:var(--textl)}
+.route-modes{display:flex;gap:6px;margin-bottom:10px}
+.rmode-btn{flex:1;padding:7px;border-radius:10px;border:2px solid #FFD6E0;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;color:var(--text)}
+.rmode-btn.active{background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff;border-color:transparent}
+.route-step{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #f5f0f2;font-size:12px;color:var(--text)}
+.route-step:first-child{border-top:none}
+.rsi{font-size:16px;flex-shrink:0}
 
-/* Resizable info panel */
-.map-info-panel{
-  background:white;flex-shrink:0;
-  border-top:2px solid #FFE0EA;
-  max-height:220px;overflow:hidden;
-  transition:max-height .3s
-}
-.map-info-panel.collapsed{max-height:42px}
-.map-info-tabs{display:flex;border-bottom:1px solid #FFE0EA;position:relative}
-.map-info-tab{flex:1;padding:10px 4px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;color:var(--textl);border-bottom:2px solid transparent;transition:all .2s}
-.map-info-tab.active{color:var(--pink);border-bottom-color:var(--pink)}
-.map-collapse-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:8px;background:#FFF0F5;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
-.map-info-content{padding:12px;overflow-y:auto;max-height:160px}
-.map-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.map-stat{background:#FFF5F7;border-radius:12px;padding:10px;text-align:center}
-.map-stat.blue{background:#F0F7FF}
-.map-stat.green{background:#F0FFF4}
-.map-stat-val{font-size:16px;font-weight:900;color:var(--text)}
-.map-stat-label{font-size:9px;color:var(--textl);margin-top:3px;font-weight:600}
-.map-partner-detail{font-size:12px;line-height:1.8;color:var(--text)}
-.map-partner-detail b{font-weight:800}
-.map-addr-row{background:#FFF5F7;border-radius:12px;padding:10px;margin-bottom:8px;font-size:12px;color:var(--text)}
-.map-addr-label{font-size:10px;font-weight:700;color:var(--textl);margin-bottom:3px}
+/* Live Tab */
+#live-pane{background:#0a0a0a}
+.live-tabs{display:flex;background:#111;flex-shrink:0;border-bottom:1px solid #222}
+.ltab{flex:1;padding:12px;font-size:13px;font-weight:700;color:#666;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s}
+.ltab.active{color:var(--pink);border-bottom-color:var(--pink)}
+.live-content{flex:1;position:relative;overflow:hidden}
+.lpanel{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center}
+.lpanel.active{display:flex}
 
-/* Leaflet overrides */
-.leaflet-control-zoom a{border-radius:8px!important;color:var(--pinkd)!important;font-weight:700!important}
-.leaflet-popup-content-wrapper{border-radius:18px!important;box-shadow:0 8px 30px rgba(0,0,0,.15)!important}
-.leaflet-popup-content{margin:14px 16px!important;font-size:13px!important}
-.leaflet-custom-marker{background:transparent!important;border:none!important}
-.leaflet-control-scale-line{border-color:var(--pink)!important;color:var(--pinkd)!important;font-size:10px!important}
+/* Camera panel */
+.cam-wrap{position:relative;width:100%;flex:1;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#partnerVideo{width:100%;height:100%;object-fit:cover}
+.cam-fs-overlay{position:absolute;inset:0;z-index:5;cursor:pointer;background:transparent}
+#myVideo{position:absolute;bottom:80px;right:12px;width:90px;height:120px;border-radius:12px;border:2px solid var(--pink);object-fit:cover;z-index:15;cursor:pointer}
+.cam-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;z-index:10;white-space:nowrap;text-align:center;max-width:85vw}
+.cam-controls{position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.75));display:flex;justify-content:center;gap:10px;z-index:10}
+.cbtn{padding:10px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s}
+.cbtn:active{transform:scale(.94)}
+.cbtn-pink{background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff;box-shadow:0 4px 12px rgba(255,20,147,.3)}
+.cbtn-dark{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.cbtn-red{background:linear-gradient(135deg,#EF4444,#B91C1C);color:#fff}
+.cam-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;height:100%;color:#666;text-align:center;padding:20px}
+.cam-placeholder .pico{font-size:60px;opacity:.4;animation:float 3s ease-in-out infinite}
+.cam-placeholder p{font-size:13px;color:#555;line-height:1.5}
 
-/* Rich popup */
-.map-popup{min-width:180px}
-.map-popup-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.map-popup-name{font-size:15px;font-weight:900;color:var(--text)}
-.map-popup-username{font-size:11px;color:var(--textl)}
-.map-popup-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.map-popup-cell{background:#FFF5F7;border-radius:10px;padding:8px;text-align:center}
-.map-popup-cell.blue{background:#F0F7FF}
-.map-popup-val{font-size:14px;font-weight:800;color:var(--text)}
-.map-popup-key{font-size:10px;color:var(--textl);margin-top:2px}
-.map-popup-addr{background:#FFF5F7;border-radius:10px;padding:8px;margin-top:6px;font-size:11px;color:var(--text);line-height:1.5}
-.map-popup-actions{display:flex;gap:6px;margin-top:10px}
-.map-popup-btn{flex:1;padding:8px;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;transition:transform .1s}
-.map-popup-btn:active{transform:scale(.97)}
-.map-popup-btn-pink{background:linear-gradient(135deg,#FF8FAB,#FF69B4);color:white}
-.map-popup-btn-blue{background:linear-gradient(135deg,#5BAAED,#2E7CC4);color:white}
+/* Screen share panel */
+.screen-wrap{position:relative;width:100%;flex:1;background:#0d0d0d;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#screenVideo{width:100%;height:100%;object-fit:contain;cursor:crosshair}
+.touch-ripple{position:absolute;width:44px;height:44px;border-radius:50%;border:3px solid #FF69B4;background:rgba(255,105,180,.25);pointer-events:none;display:none;z-index:20;transform:translate(-50%,-50%)}
+.screen-controls{position:absolute;bottom:0;left:0;right:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.8));display:flex;justify-content:center;gap:10px;z-index:10}
+.screen-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;height:100%;color:#666;text-align:center;padding:20px}
+.screen-placeholder .pico{font-size:56px;opacity:.4;animation:float 3s ease-in-out infinite}
+.screen-placeholder p{font-size:13px;color:#555;line-height:1.5}
+.screen-info{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;z-index:10;white-space:nowrap}
 
-/* ===== CAMERA TAB ===== */
-.cam-frame{border-radius:24px;overflow:hidden;background:#1a1a2e;aspect-ratio:3/4;position:relative;max-height:340px}
-.cam-video{width:100%;height:100%;object-fit:cover}
-.cam-overlay-btns{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:16px}
-.cam-pill{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:white;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px}
-.cam-live-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:pulse 1s infinite}
-.cam-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,.5);gap:12px;text-align:center;padding:20px}
-.cam-placeholder-ico{font-size:64px}
-.cam-ctrl-row{display:flex;gap:12px;margin-top:12px}
-.cam-ctrl-btn{flex:1;padding:14px;border:none;border-radius:18px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s}
-.cam-ctrl-btn:active{transform:scale(.97)}
-.cam-btn{width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:transform .15s}
-.cam-btn:active{transform:scale(.9)}
-.cam-btn-red{background:#ef4444}
-.cam-btn-white{background:rgba(255,255,255,.9)}
-.cam-btn-pink{background:#FF69B4}
+/* Control Tab */
+.ctrl-scroll{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(160deg,#FFF0F5,#F0F8FF)}
+.ctrl-card{background:var(--card);border-radius:var(--rad);padding:16px;box-shadow:var(--shadow)}
+.ctrl-title{font-size:12px;font-weight:800;color:var(--textl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ctrl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cg-btn{padding:14px;border-radius:16px;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#fff;transition:all .2s;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.cg-btn:active{transform:scale(.93)}
+.cg-btn .ico{font-size:26px}
+.cg-pink{background:linear-gradient(135deg,#FF69B4,#D63663)}
+.cg-blue{background:linear-gradient(135deg,#5BAAED,#2E7CC4)}
+.cg-purple{background:linear-gradient(135deg,#A855F7,#7C3AED)}
+.cg-green{background:linear-gradient(135deg,#22C55E,#16A34A)}
+.cg-orange{background:linear-gradient(135deg,#FB923C,#EA580C)}
+.cg-teal{background:linear-gradient(135deg,#14B8A6,#0F766E)}
+.cg-red{background:linear-gradient(135deg,#EF4444,#B91C1C)}
+.cg-gold{background:linear-gradient(135deg,#F59E0B,#D97706)}
+.wake-btn{background:linear-gradient(135deg,#FF0080,#FF6B35,#FFBE0B);width:100%;padding:18px;border-radius:20px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font-size:15px;font-weight:800;box-shadow:0 8px 28px rgba(255,0,128,.35);transition:all .2s;animation:glow 2s ease-in-out infinite;font-family:inherit}
+.wake-btn:active{transform:scale(.95)}
+.wake-btn .ico{font-size:28px;animation:heartbeat 1.2s ease-in-out infinite}
+.sett-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #FFD6E0}
+.sett-row:last-child{border-bottom:none}
+.sett-lbl{font-size:14px;font-weight:600;color:var(--text)}
+.sett-val{font-size:12px;color:var(--textl)}
+.toggle{width:44px;height:24px;border-radius:12px;background:#FFD6E0;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:linear-gradient(135deg,#FF69B4,#FF1493)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+.toggle.on::after{transform:translateX(20px)}
 
-/* ===== VIDEO CALL ===== */
-#vc-overlay{position:fixed;inset:0;background:#0a0a1a;z-index:200;flex-direction:column;display:none}
-#vc-overlay.show{display:flex}
-.vc-remote{flex:1;position:relative;background:#111}
-.vc-remote video{width:100%;height:100%;object-fit:cover}
-.vc-local-wrap{position:absolute;top:16px;right:16px;width:90px;height:130px;border-radius:16px;overflow:hidden;border:2.5px solid white;box-shadow:0 4px 16px rgba(0,0,0,.5)}
-.vc-local-wrap video{width:100%;height:100%;object-fit:cover}
-.vc-top-info{position:absolute;top:20px;left:16px}
-.vc-pname{color:white;font-size:18px;font-weight:800}
-.vc-dur{color:rgba(255,255,255,.7);font-size:13px;margin-top:3px}
-.vc-ctrls{padding:20px;display:flex;justify-content:center;gap:20px;background:rgba(10,10,26,.95);flex-shrink:0}
-.vc-btn{width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
-.vc-btn:active{transform:scale(.9)}
-.vc-btn-end{background:#ef4444;box-shadow:0 4px 20px rgba(239,68,68,.5)}
-.vc-btn-mute{background:rgba(255,255,255,.15)}
-.vc-btn-vid{background:rgba(255,255,255,.15)}
-.vc-calling{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a1a}
-.vc-c-avatar{font-size:80px;animation:pulse 1.5s infinite}
-.vc-c-name{color:white;font-size:22px;font-weight:800;margin-top:16px}
-.vc-c-status{color:rgba(255,255,255,.6);font-size:14px;margin-top:8px;animation:pulse 2s infinite}
+/* Toast */
+#toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,10,30,.92);color:#fff;padding:11px 20px;border-radius:20px;font-size:14px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;white-space:nowrap;backdrop-filter:blur(10px);max-width:88vw;text-align:center;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ===== INCOMING CALL ===== */
-#incall-overlay{position:fixed;inset:0;background:linear-gradient(160deg,#1a0a2e,#0a1a2e);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center}
-#incall-overlay.show{display:flex}
-.ic-avatar{font-size:90px;animation:heartbeat 1.5s infinite}
-.ic-name{color:white;font-size:24px;font-weight:800;margin-top:20px}
-.ic-status{color:rgba(255,255,255,.6);font-size:14px;margin-top:8px}
-.ic-waves{display:flex;gap:5px;margin:20px 0}
-.ic-wave{width:4px;height:28px;border-radius:2px;background:rgba(255,255,255,.4);animation:wave 1.2s infinite}
-.ic-wave:nth-child(2){animation-delay:.15s}.ic-wave:nth-child(3){animation-delay:.3s}
-.ic-wave:nth-child(4){animation-delay:.45s}.ic-wave:nth-child(5){animation-delay:.6s}
-.ic-btns{display:flex;gap:40px;margin-top:10px}
-.ic-btn{width:70px;height:70px;border-radius:50%;border:none;cursor:pointer;font-size:28px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
-.ic-btn:active{transform:scale(.9)}
-.ic-ans{background:#4ade80;box-shadow:0 8px 30px rgba(74,222,128,.5)}
-.ic-dec{background:#ef4444;box-shadow:0 8px 30px rgba(239,68,68,.5)}
+/* Modal */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:flex;align-items:flex-end;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.mbg.show{opacity:1;pointer-events:all}
+.modal{background:var(--card);border-radius:28px 28px 0 0;padding:22px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s}
+.mbg.show .modal{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;border-radius:4px;background:#FFD6E0;margin:0 auto 18px}
+.modal-title{font-size:18px;font-weight:900;margin-bottom:14px;text-align:center;background:linear-gradient(135deg,#FF1493,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-/* ===== RING OVERLAY ===== */
-#ring-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:310;display:none;align-items:flex-end;backdrop-filter:blur(10px)}
-#ring-overlay.show{display:flex}
-.ring-card{background:white;border-radius:30px 30px 0 0;padding:30px 24px;width:100%;animation:slideUp .4s ease;text-align:center}
-.ring-card-emo{font-size:60px;animation:bounce 1s infinite;display:block;margin-bottom:14px}
-.ring-card-title{font-size:20px;font-weight:900;color:var(--text)}
-.ring-card-sub{font-size:13px;color:var(--textl);margin:8px 0 20px}
-.ring-actions{display:flex;gap:12px}
+/* Fullscreen video */
+#fsModal{position:fixed;inset:0;background:#000;z-index:9500;display:none;align-items:center;justify-content:center;flex-direction:column}
+#fsModal.show{display:flex}
+#fsVideo{width:100%;height:100%;object-fit:contain}
+.fs-close{position:absolute;top:env(safe-area-inset-top,16px);right:16px;margin-top:8px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:18px;cursor:pointer;z-index:1;display:flex;align-items:center;justify-content:center}
 
-/* ===== FORCE MESSAGE ===== */
-#msg-overlay{position:fixed;inset:0;background:linear-gradient(135deg,rgba(255,105,180,.92),rgba(91,170,237,.92));z-index:310;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(20px)}
-#msg-overlay.show{display:flex}
-.msg-card{background:white;border-radius:32px;padding:32px 24px;width:100%;max-width:340px;text-align:center;animation:fadeIn .4s ease;box-shadow:0 20px 60px rgba(255,105,180,.3)}
-.msg-card-emo{font-size:64px;display:block;animation:heartbeat 1.5s infinite;margin-bottom:14px}
-.msg-card-from{font-size:11px;color:var(--textl);font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.msg-card-text{font-size:20px;font-weight:900;color:var(--text);margin:12px 0;line-height:1.4}
-.msg-card-sub{font-size:12px;color:var(--textl)}
+/* Leaflet popup */
+.leaflet-popup-content-wrapper{border-radius:16px!important;box-shadow:0 8px 32px rgba(255,105,180,.25)!important;border:2px solid #FFD6E0!important;padding:0!important;overflow:hidden}
+.leaflet-popup-content{margin:0!important}
+.leaflet-popup-tip{background:#fff!important}
+.popup-card{padding:14px;min-width:200px}
+.popup-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.popup-av{width:44px;height:44px;border-radius:50%;font-size:24px;display:flex;align-items:center;justify-content:center;border:2px solid var(--pink)}
+.popup-name{font-size:14px;font-weight:800;color:var(--text)}
+.popup-role{font-size:11px;color:var(--textl)}
+.popup-info{font-size:12px;color:var(--textl);margin:3px 0;display:flex;align-items:center;gap:5px}
+.popup-acts{display:flex;gap:8px;margin-top:10px}
+.popup-act{flex:1;padding:8px;border-radius:10px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.popup-act:active{transform:scale(.94)}
 
-/* ===== CONTROL TAB ===== */
-.ctrl-section{margin-bottom:16px}
-.ctrl-title{font-size:11px;font-weight:800;color:var(--textl);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ctrl-card{background:white;border-radius:22px;padding:18px;text-align:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,143,171,.1);transition:all .15s;position:relative;overflow:hidden;border:2px solid transparent}
-.ctrl-card:active{transform:scale(.97)}
-.ctrl-card.cp{background:linear-gradient(135deg,#FFF0F5,white);border-color:#FFD6E0}
-.ctrl-card.cb{background:linear-gradient(135deg,#F0F7FF,white);border-color:#C8E6FF}
-.ctrl-icon{font-size:38px;display:block;margin-bottom:8px}
-.ctrl-label{font-size:13px;font-weight:800;color:var(--text)}
-.ctrl-sub{font-size:11px;color:var(--textl);margin-top:3px}
-.ctrl-full{background:white;border-radius:22px;padding:18px;box-shadow:0 4px 16px rgba(255,143,171,.1);margin-bottom:14px}
-.msg-textarea{width:100%;border:2.5px solid #FFD6E0;border-radius:16px;padding:12px;font-size:14px;color:var(--text);outline:none;resize:none;height:80px;font-family:inherit;background:#FFF5F8}
-.msg-textarea:focus{border-color:var(--pink)}
-.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.preset{background:#FFF0F5;border:2px solid #FFD6E0;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:#FF69B4;cursor:pointer;transition:all .15s;white-space:nowrap}
-.preset:active{background:var(--pink);color:white;border-color:var(--pink)}
-
-/* ===== SETTINGS PANEL ===== */
-#settings-panel{position:fixed;inset:0;z-index:180;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:none;align-items:flex-end}
-#settings-panel.show{display:flex}
-.settings-card{background:var(--bg);border-radius:30px 30px 0 0;padding:0;width:100%;max-height:90vh;overflow-y:auto;animation:slideUp .3s ease}
-.settings-hdr{background:linear-gradient(135deg,var(--pink),var(--blue));padding:20px 20px 16px;border-radius:30px 30px 0 0;display:flex;align-items:center;justify-content:space-between}
-.settings-hdr h3{color:white;font-size:18px;font-weight:900}
-.settings-close{color:white;font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
-.settings-body{padding:16px}
-.settings-section{background:white;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(255,143,171,.1)}
-.settings-section-title{font-size:13px;font-weight:800;color:var(--textl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #FFE0EA}
-.settings-row:last-child{border:none}
-.settings-row-label{font-size:14px;font-weight:700;color:var(--text)}
-.settings-row-sub{font-size:11px;color:var(--textl);margin-top:2px}
-.settings-input{border:2px solid #FFD6E0;border-radius:12px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;background:#FFF5F8;width:100%;margin-top:8px}
-.settings-input:focus{border-color:var(--pink)}
-
-/* ===== TOAST & MISC ===== */
-#toast{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:rgba(90,48,64,.92);color:white;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:700;z-index:500;white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;backdrop-filter:blur(10px);max-width:90vw;overflow:hidden;text-overflow:ellipsis}
-#toast.show{opacity:1}
-.flex-row{display:flex;gap:10px}.row-between{display:flex;align-items:center;justify-content:space-between}
-.section-card{background:white;border-radius:22px;padding:16px;box-shadow:0 4px 16px rgba(255,143,171,.1);margin-bottom:14px}
-.section-title{font-size:14px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.chip{background:#FFF0F5;border-radius:12px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--pink)}
-.chip.blue{background:#F0F7FF;color:var(--blue)}
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);animation:ripple .6s linear;pointer-events:none}
-canvas{display:none}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#FFD6E0;border-radius:4px}
 </style>
 </head>
 <body>
 
-<!-- ===== SPLASH ===== -->
+<!-- ═══ SPLASH ═══ -->
 <div class="screen" id="splash">
-  <span class="splash-logo">💕</span>
+  <div class="particles-wrap" id="particles"></div>
+  <div class="splash-bg">💕</div>
+  <div class="splash-logo">💑</div>
   <div class="splash-title">Duo Bucin Love</div>
-  <div class="splash-sub">Terhubung selamanya, dimanapun berada 🌸</div>
-  <div class="splash-loader"><div class="splash-bar"></div></div>
-</div>
-
-<!-- ===== PAIRING ===== -->
-<div class="screen hidden" id="pairing">
-  <div class="pair-card">
-    <span class="pair-emoji">💑</span>
-    <div class="pair-title">Duo Bucin Love 💕</div>
-    <div class="pair-sub">Masukkan kode 6 digit pasanganmu untuk terhubung</div>
-    <div class="code-box" onclick="copyRoomCode()" title="Ketuk untuk salin">
-      <div class="code-num" id="my-code">------</div>
-      <div class="code-hint">📋 Kode Unikmu · Ketuk untuk salin</div>
+  <div class="splash-sub">Selalu Terhubung, Selalu Bersama 🌸</div>
+  <div class="chibi-splash">
+    <div class="chibi">
+      <div class="chibi-face">🥺</div>
+      <div class="chibi-body">👗</div>
+      <div class="chibi-name">sayang</div>
     </div>
-    <div class="divider">masukkan kode pasangan</div>
-    <input class="pair-input" id="partner-code-input" type="number" maxlength="6" placeholder="000000" oninput="this.value=this.value.slice(0,6)">
-    <div class="mt10">
-      <button class="btn btn-pink" onclick="joinRoom()">💕 Hubungkan dengan Pasangan</button>
-    </div>
-    <div class="mt10">
-      <button class="btn btn-outline" onclick="refreshRoomCode()">🔄 Buat Kode Baru</button>
+    <div class="chibi-heart">💕</div>
+    <div class="chibi chibi-boy">
+      <div class="chibi-face">🥹</div>
+      <div class="chibi-body">👕</div>
+      <div class="chibi-name">bucin</div>
     </div>
   </div>
+  <div class="splash-loader"><div class="splash-loader-bar"></div></div>
 </div>
 
-<!-- ===== SETUP ===== -->
+<!-- ═══ SETUP ═══ -->
 <div class="screen hidden" id="setup">
-  <div class="setup-hdr">
-    <h2>✨ Selamat Datang! ✨</h2>
-    <p>Atur profilmu sebelum memulai 💕</p>
-  </div>
-  <div class="setup-body">
-
-    <!-- Avatar Upload -->
-    <div class="setup-card">
-      <div class="setup-card-title"><span class="setup-card-icon">📸</span> Foto Profilmu</div>
-      <div class="avatar-upload-area">
-        <div class="avatar-upload-preview" id="setup-avatar-preview" onclick="triggerAvatarUpload()">
-          <div class="avatar-wrapper fem-lg" id="setup-avatar-wrapper">
-            <div class="avatar-inner" id="setup-avatar-inner">🌸</div>
-          </div>
-          <button class="avatar-upload-btn">📷</button>
-        </div>
-        <div class="avatar-upload-hint">Ketuk untuk upload foto dari galeri<br><small>Foto akan ditampilkan ke pasangan dengan border animasi</small></div>
-      </div>
-      <input type="file" id="avatar-file-input" accept="image/*" onchange="handleAvatarUpload(event)">
-      <canvas id="avatar-canvas" width="200" height="200" style="display:none"></canvas>
+  <div class="setup-card" id="setupCard">
+    <div class="setup-title">💕 Duo Bucin Love</div>
+    <div class="setup-sub">Hubungkan dirimu dengan pasanganmu</div>
+    <div class="mycode-box">
+      <div class="mycode-lbl">Kode Kamu</div>
+      <div class="mycode-val" id="myCodeDisplay">------</div>
+      <div class="mycode-hint">Bagikan kode ini ke pasanganmu 💌</div>
+      <button class="copy-btn" onclick="copyMyCode()">📋 Salin</button>
     </div>
-
-    <!-- Nama & Username -->
-    <div class="setup-card">
-      <div class="setup-card-title"><span class="setup-card-icon">✏️</span> Nama & Username</div>
-      <input class="name-input" id="my-name-input" type="text" placeholder="Nama panggilanmu e.g. Sayang 🌸" maxlength="20">
-      <input class="name-input mt10" id="my-username-input" type="text" placeholder="Username e.g. bucin_girl (tanpa @)" maxlength="20" style="margin-top:10px">
+    <label class="lbl">Nama Kamu</label>
+    <input class="inp" id="nameInp" placeholder="Nama / Panggilan sayang..." type="text" maxlength="20" oninput="onNameInput()">
+    <label class="lbl">Jenis Kelamin</label>
+    <div class="gender-row">
+      <button class="gender-btn" id="gBtn-f" onclick="setGender('female')">🌸<span>Cewek</span></button>
+      <button class="gender-btn" id="gBtn-m" onclick="setGender('male')">⚡<span>Cowok</span></button>
     </div>
-
-    <!-- Gender & Border -->
-    <div class="setup-card">
-      <div class="setup-card-title"><span class="setup-card-icon">🎨</span> Jenis Kelamin & Border Animasi</div>
-      <div class="role-row">
-        <div class="role-btn" id="role-fem" onclick="selectGender('fem')">
-          <span class="re">🌸</span>
-          <span class="rl">Perempuan</span>
-          <div style="font-size:10px;color:var(--pink);margin-top:6px;font-weight:700">✨ Border Floral Rose Gold</div>
-          <div style="margin-top:8px">
-            <div class="avatar-wrapper fem" style="margin:0 auto">
-              <div class="avatar-inner" style="width:40px;height:40px;font-size:18px">🌸</div>
-            </div>
-          </div>
-        </div>
-        <div class="role-btn" id="role-male" onclick="selectGender('male')">
-          <span class="re">💙</span>
-          <span class="rl">Laki-laki</span>
-          <div style="font-size:10px;color:var(--blue);margin-top:6px;font-weight:700">⚡ Border Neon Galaxy</div>
-          <div style="margin-top:8px">
-            <div class="avatar-wrapper male" style="margin:0 auto">
-              <div class="avatar-inner" style="width:40px;height:40px;font-size:18px">💙</div>
-            </div>
-          </div>
-        </div>
+    <div class="divider">— atau masukkan kode pasanganmu —</div>
+    <label class="lbl">Kode Pasangan (mereka yang bagikan)</label>
+    <input class="inp" id="partnerCodeInp" placeholder="Masukkan kode 6 digit..." maxlength="6" style="text-transform:uppercase;letter-spacing:4px;font-size:20px;text-align:center">
+    <button class="btn btn-primary" onclick="joinAsGuest()" id="joinBtn">💕 Hubungkan Pasangan</button>
+    <div id="waitingBox" style="display:none;margin-top:14px">
+      <div class="waiting-box">
+        <div class="ico" id="waitingIcon">⏳</div>
+        <div class="txt" id="waitingTxt">Menunggu pasangan bergabung...</div>
       </div>
     </div>
-
-    <!-- Permissions -->
-    <div class="setup-card">
-      <div class="setup-card-title"><span class="setup-card-icon">🔐</span> Izin Akses</div>
-      <div class="perm-row">
-        <div class="perm-ico">📍</div>
-        <div class="perm-info"><div class="perm-name">Lokasi Real-time</div><div class="perm-desc">Bagikan lokasimu ke pasangan tanpa delay</div></div>
-        <div class="perm-st" id="perm-loc-st">⚪</div>
-      </div>
-      <div class="perm-row">
-        <div class="perm-ico">📷</div>
-        <div class="perm-info"><div class="perm-name">Kamera & Mikrofon</div><div class="perm-desc">Untuk video call dan lihat pasangan</div></div>
-        <div class="perm-st" id="perm-cam-st">⚪</div>
-      </div>
-      <div class="perm-row">
-        <div class="perm-ico">🔋</div>
-        <div class="perm-info"><div class="perm-name">Status Baterai</div><div class="perm-desc">Share info baterai ke pasangan</div></div>
-        <div class="perm-st" id="perm-bat-st">⚪</div>
-      </div>
-      <div class="mt16">
-        <button class="btn btn-outline" onclick="requestAllPerms()">🔓 Izinkan Semua Akses</button>
-      </div>
-    </div>
-
-    <button class="btn btn-pink" onclick="finishSetup()">🚀 Mulai Duo Bucin Love!</button>
-    <div style="height:20px"></div>
   </div>
 </div>
 
-<!-- ===== MAIN APP ===== -->
+<!-- ═══ APP ═══ -->
 <div class="screen hidden" id="app">
-  <div class="app-bar">
-    <div class="app-bar-title">💕 Duo Bucin</div>
-    <div class="app-bar-right">
-      <div class="sdot" id="conn-dot"></div>
-      <div class="stext" id="conn-text">Terhubung</div>
-      <div class="app-bar-settings" onclick="openSettings(); playSound('pop')">⚙️</div>
+  <!-- Header -->
+  <div class="app-header">
+    <div class="hdr-user" id="hdrMe">
+      <div class="av-wrap sm" id="hdrMeWrap">
+        <div class="av-gap"><div class="av-pic" id="hdrMePic">🥺</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-size:12px;font-weight:800;color:var(--text)" id="hdrMyName">Aku</span>
+        <span style="font-size:10px;color:var(--textl)" id="hdrMyRole">—</span>
+      </div>
+    </div>
+    <div class="hdr-mid">
+      <div class="conn-pill off" id="connPill"><div class="conn-dot"></div><span id="connTxt">Terputus</span></div>
+      <div class="hdr-names"><span id="hdrPairName">Pasangan</span><span>💕</span><span id="hdrMyNameSmall">Aku</span></div>
+    </div>
+    <div class="hdr-user" style="flex-direction:row-reverse" id="hdrPartner">
+      <div class="av-wrap sm" id="hdrPartnerWrap">
+        <div class="av-gap"><div class="av-pic" id="hdrPartnerPic">🥹</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end">
+        <span style="font-size:12px;font-weight:800;color:var(--text)" id="hdrPartnerName">Pasangan</span>
+        <span style="font-size:10px;color:var(--textl)" id="hdrPartnerRole">—</span>
+      </div>
     </div>
   </div>
 
+  <!-- Content -->
   <div class="app-content">
 
     <!-- HOME TAB -->
-    <div class="tab-page active" id="tab-home">
-
-      <!-- Partner Card -->
-      <div class="partner-card fem-card" id="partner-main-card">
-        <div class="pc-top">
-          <div class="avatar-wrapper fem-lg" id="partner-avatar-wrapper">
-            <div class="avatar-inner" id="partner-avatar-inner">💝</div>
-          </div>
-          <div class="pc-info">
-            <div class="pc-name" id="partner-name-display">Menunggu Pasangan...</div>
-            <div class="pc-username" id="partner-username-display">@bucin_partner</div>
-            <div class="pc-status">
-              <span class="opill off" id="partner-online-pill">⚪ Offline</span>
+    <div class="tab-pane active" id="pane-home">
+      <div class="home-scroll">
+        <!-- Couple card -->
+        <div class="couple-card">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div class="av-wrap lg" id="myAvatarWrap">
+              <div class="av-gap"><div class="av-pic" id="myAvatarPic">🥺</div></div>
             </div>
+            <div class="uname" id="myDisplayName">Aku</div>
+            <div class="urole" id="myDisplayRole">—</div>
+          </div>
+          <div class="couple-mid">
+            <div class="dist-pill" id="distPill">📍 —</div>
+            <div class="couple-heart">💕</div>
+            <div style="font-size:11px;color:var(--textl);text-align:center" id="connTimeTxt">Terhubung</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div class="av-wrap lg" id="partnerAvatarWrap">
+              <div class="av-gap"><div class="av-pic" id="partnerAvatarPic">🥹</div></div>
+            </div>
+            <div class="uname" id="partnerDisplayName">Pasangan</div>
+            <div class="urole" id="partnerDisplayRole">—</div>
           </div>
         </div>
-        <div class="pc-grid">
-          <div class="pc-stat">
-            <div class="pcs-label">🔋 Baterai</div>
-            <div class="pcs-val"><span id="p-battery-pct">--</span>%</div>
-            <div class="bat-bar"><div class="bat-fill" id="p-bat-bar" style="width:0%"></div></div>
-          </div>
-          <div class="pc-stat blue-bg">
-            <div class="pcs-label">📍 Jarak</div>
-            <div class="pcs-val" id="p-distance">-- km</div>
-          </div>
-          <div class="pc-stat">
-            <div class="pcs-label">⏱️ ETA</div>
-            <div class="pcs-val" id="p-eta">-- mnt</div>
-          </div>
-          <div class="pc-stat blue-bg">
-            <div class="pcs-label">🕐 Terakhir</div>
-            <div class="pcs-val" id="p-lastseen">--</div>
+        <!-- Chibi decoration -->
+        <div class="chibi-deco">
+          <div class="chibi"><div class="chibi-face">🥺</div><div class="chibi-body">👗</div></div>
+          <div class="chibi-heart">💕</div>
+          <div class="chibi chibi-boy"><div class="chibi-face">🥹</div><div class="chibi-body">👕</div></div>
+        </div>
+        <!-- Actions -->
+        <div class="card">
+          <div class="sec-title">⚡ Aksi Cepat</div>
+          <div class="actions-grid">
+            <button class="act-btn act-rose" onclick="doAction('buzz')"><div class="ico">🔔</div>Bunyikan HP</button>
+            <button class="act-btn act-blue" onclick="goLive('cam')"><div class="ico">📹</div>Liat Kamera</button>
+            <button class="act-btn act-purple" onclick="goLive('screen')"><div class="ico">📱</div>Liat Layar</button>
+            <button class="act-btn act-green" onclick="sendLove()"><div class="ico">💕</div>Kirim Cinta</button>
+            <button class="act-btn act-orange" onclick="openNav()"><div class="ico">🗺️</div>Peta</button>
+            <button class="act-btn act-yellow" onclick="openSettings()"><div class="ico">⚙️</div>Pengaturan</button>
           </div>
         </div>
-      </div>
-
-      <!-- My Card -->
-      <div class="my-card">
-        <div class="my-card-top">
-          <div class="avatar-wrapper fem-lg" id="my-avatar-wrapper">
-            <div class="avatar-inner" id="my-avatar-inner">🌸</div>
-          </div>
-          <div class="my-card-info">
-            <div class="my-card-name" id="my-name-display">Namaku</div>
-            <div class="my-card-sub" id="my-username-display">@username</div>
+        <!-- Stats -->
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-ico">📍</div><div class="stat-val" id="statDist">—</div><div class="stat-lbl">Jarak</div></div>
+          <div class="stat-card"><div class="stat-ico">🔋</div><div class="stat-val" id="statBatt">—</div><div class="stat-lbl">Baterai</div></div>
+          <div class="stat-card"><div class="stat-ico">🕐</div><div class="stat-val" id="statTime">—</div><div class="stat-lbl">Bersama</div></div>
+        </div>
+        <!-- Send message -->
+        <div class="card">
+          <div class="sec-title">💌 Kirim Pesan</div>
+          <div class="msg-row">
+            <input class="inp" id="msgInp" placeholder="Tulis pesan cinta..." type="text" maxlength="200">
+            <button class="btn btn-primary btn-sm" onclick="sendMsg()">📨</button>
           </div>
         </div>
-        <div class="my-stats">
-          <div class="my-stat">
-            <div class="my-stat-icon">🔋</div>
-            <div class="my-stat-val" id="my-battery-val">--%</div>
-            <div class="my-stat-label">Baterai</div>
-          </div>
-          <div class="my-stat">
-            <div class="my-stat-icon">📍</div>
-            <div class="my-stat-val" id="my-loc-status">Aktif</div>
-            <div class="my-stat-label">Lokasi</div>
-          </div>
-          <div class="my-stat">
-            <div class="my-stat-icon">📷</div>
-            <div class="my-stat-val" id="my-cam-status">Off</div>
-            <div class="my-stat-label">Kamera</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="section-card">
-        <div class="section-title">⚡ Aksi Cepat</div>
-        <div class="ctrl-grid">
-          <div class="ctrl-card cp" onclick="doRing(); playSound('ring')">
-            <span class="ctrl-icon">🔔</span>
-            <div class="ctrl-label">Bunyikan HP</div>
-            <div class="ctrl-sub">Panggil pasangan</div>
-          </div>
-          <div class="ctrl-card cb" onclick="startVideoCall(); playSound('pop')">
-            <span class="ctrl-icon">📞</span>
-            <div class="ctrl-label">Video Call</div>
-            <div class="ctrl-sub">Telepon sekarang</div>
-          </div>
-          <div class="ctrl-card cp" onclick="switchTab('tab-cam'); watchPartner(); playSound('pop')">
-            <span class="ctrl-icon">👀</span>
-            <div class="ctrl-label">Lihat Pasangan</div>
-            <div class="ctrl-sub">Kamera langsung</div>
-          </div>
-          <div class="ctrl-card cb" onclick="switchTab('tab-map'); playSound('pop')">
-            <span class="ctrl-icon">🗺️</span>
-            <div class="ctrl-label">Peta Canggih</div>
-            <div class="ctrl-sub">Lokasi real-time</div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- end home -->
-
-    <!-- MAP TAB — Advanced -->
-    <div class="tab-page no-pad" id="tab-map">
-      <div class="map-toolbar">
-        <button class="map-layer-btn active" id="btn-street" onclick="setLayer('street')">🗺️ Peta</button>
-        <button class="map-layer-btn" id="btn-satellite" onclick="setLayer('satellite')">🛰️ Satelit</button>
-        <button class="map-layer-btn" id="btn-hybrid" onclick="setLayer('hybrid')">🌍 Hybrid</button>
-        <button class="map-layer-btn" id="btn-terrain" onclick="setLayer('terrain')">⛰️ Terrain</button>
-        <button class="map-layer-btn" id="btn-dark" onclick="setLayer('dark')">🌙 Dark</button>
-        <div class="map-sep"></div>
-        <button class="map-action-btn" onclick="centerOnMe()" title="Lokasiku">📍</button>
-        <button class="map-action-btn" onclick="centerOnPartner()" title="Lokasi Pasangan">💕</button>
-        <button class="map-action-btn" onclick="fitBothOnMap()" title="Lihat Semua">👥</button>
-        <button class="map-action-btn" onclick="toggleMapFullscreen()" title="Fullscreen" id="map-fs-btn">⛶</button>
-      </div>
-      <div id="leafmap"></div>
-      <div class="map-info-panel" id="map-info-panel">
-        <div class="map-info-tabs">
-          <div class="map-info-tab active" id="mit-info" onclick="setMapInfoTab('info')">📊 Info</div>
-          <div class="map-info-tab" id="mit-partner" onclick="setMapInfoTab('partner')">💕 Pasangan</div>
-          <div class="map-info-tab" id="mit-me" onclick="setMapInfoTab('me')">📍 Posisiku</div>
-          <button class="map-collapse-btn" id="map-collapse-btn" onclick="toggleMapPanel()">▼</button>
-        </div>
-        <div class="map-info-content" id="map-info-content">
-          <div class="map-stat-row">
-            <div class="map-stat"><div class="map-stat-val" id="map-dist">--</div><div class="map-stat-label">Jarak</div></div>
-            <div class="map-stat blue"><div class="map-stat-val" id="map-eta">--</div><div class="map-stat-label">ETA</div></div>
-            <div class="map-stat green"><div class="map-stat-val" id="map-speed">--</div><div class="map-stat-label">km/h</div></div>
-          </div>
+        <!-- Floating emojis row -->
+        <div style="text-align:center;font-size:22px;letter-spacing:6px;padding:4px 0;animation:float 3s ease-in-out infinite">
+          🌸💕✨🌙⭐💫🎀🌹
         </div>
       </div>
     </div>
 
-    <!-- CAMERA TAB -->
-    <div class="tab-page" id="tab-cam">
-      <div class="cam-frame" id="cam-frame">
-        <video class="cam-video" id="partner-cam-video" autoplay playsinline muted style="display:none"></video>
-        <div class="cam-pill" id="cam-status-pill" style="display:none">
-          <div class="cam-live-dot"></div> LIVE
+    <!-- MAP TAB -->
+    <div class="tab-pane" id="pane-map">
+      <div id="map-pane" style="display:flex;flex-direction:column;flex:1;position:relative">
+        <div id="map"></div>
+        <div class="map-top">
+          <div class="map-search-wrap">
+            <div class="map-search-row">
+              <input class="map-search-inp" id="mapSearchInp" placeholder="🔍 Cari lokasi tujuan..." type="text" onkeydown="if(event.key==='Enter')searchLocation()">
+              <button class="map-search-btn" onclick="searchLocation()">🔍</button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+          <div class="layers-bar">
+            <button class="lyr-btn active" onclick="setLayer('street',this)">🗺️ Peta</button>
+            <button class="lyr-btn" onclick="setLayer('satellite',this)">🛰️ Satelit</button>
+            <button class="lyr-btn" onclick="setLayer('hybrid',this)">🌐 Hybrid</button>
+            <button class="lyr-btn" onclick="setLayer('terrain',this)">⛰️ Terrain</button>
+            <button class="lyr-btn" onclick="setLayer('dark',this)">🌙 Dark</button>
+          </div>
         </div>
-        <div class="cam-placeholder" id="cam-placeholder">
-          <div class="cam-placeholder-ico">👁️</div>
-          <div style="font-size:14px;font-weight:700">Lihat Pasangan</div>
-          <div style="font-size:12px;opacity:.7;margin-top:4px">Tekan tombol di bawah untuk<br>lihat kamera depan pasanganmu</div>
+        <div class="map-toolbar">
+          <button class="map-tbtn" title="Lokasiku" onclick="focusMe()">📍</button>
+          <button class="map-tbtn" title="Pasangan" onclick="focusPartner()">💕</button>
+          <button class="map-tbtn" title="Berdua" onclick="focusBoth()">👥</button>
+          <div style="width:1px;background:#FFD6E0;margin:4px 0"></div>
+          <button class="map-tbtn active" title="Navigasi" id="navToggleBtn" onclick="toggleRoutePanel()">🧭</button>
+          <button class="map-tbtn" title="Hapus Rute" onclick="clearRoute()">✕</button>
         </div>
-        <div class="cam-overlay-btns" id="cam-overlay-btns" style="display:none">
-          <button class="cam-btn cam-btn-red" onclick="stopWatchPartner(); playSound('pop')">🚫</button>
-          <button class="cam-btn cam-btn-white" onclick="playSound('pop')">🔄</button>
+        <div class="route-panel" id="routePanel">
+          <div class="route-hdr">
+            <div>
+              <div style="font-size:13px;font-weight:800;color:var(--text)">🧭 Rute ke Tujuan</div>
+              <div style="font-size:11px;color:var(--textl)" id="routeDestName">Pilih lokasi di peta atau cari dulu</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="toggleRoutePanel()">✕</button>
+          </div>
+          <div class="route-modes">
+            <button class="rmode-btn active" id="rmode-normal" onclick="setRouteMode('normal',this)">🚗 Jalan Biasa</button>
+            <button class="rmode-btn" id="rmode-shortcut" onclick="setRouteMode('shortcut',this)">🐀 Jalur Tikus</button>
+          </div>
+          <div class="route-stats" id="routeStats" style="display:none">
+            <div class="rstat"><div class="rstat-val" id="routeDist">—</div><div class="rstat-lbl">Jarak</div></div>
+            <div class="rstat"><div class="rstat-val" id="routeTime">—</div><div class="rstat-lbl">Estimasi</div></div>
+          </div>
+          <div id="routeSteps"></div>
         </div>
       </div>
-      <div class="cam-ctrl-row">
-        <button class="cam-ctrl-btn" style="background:linear-gradient(135deg,var(--pink),#FF69B4);color:white" onclick="watchPartner(); playSound('pop')">
-          👁️ Lihat Pasangan
-        </button>
-        <button class="cam-ctrl-btn" style="background:white;color:var(--blue);border:2px solid #C8E6FF" onclick="startVideoCall(); playSound('pop')">
-          📞 Video Call
-        </button>
+    </div>
+
+    <!-- LIVE TAB -->
+    <div class="tab-pane" id="pane-live">
+      <div class="live-tabs">
+        <div class="ltab active" onclick="setLiveTab('cam',this)" id="ltab-cam">📹 Kamera Pasangan</div>
+        <div class="ltab" onclick="setLiveTab('screen',this)" id="ltab-screen">📱 Layar Pasangan</div>
       </div>
-      <div class="section-card" style="margin-top:14px">
-        <div class="section-title">📷 Kameraku</div>
-        <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:#111">
-          <video id="my-cam-preview" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover"></video>
+      <div class="live-content">
+        <!-- Camera panel -->
+        <div class="lpanel active" id="lpanel-cam">
+          <div class="cam-wrap" id="camWrap">
+            <div class="cam-placeholder" id="camPlaceholder">
+              <div class="pico">📹</div>
+              <p>Tekan tombol di bawah untuk melihat kamera pasanganmu secara realtime 🎥</p>
+              <button class="cbtn cbtn-pink" onclick="requestCamera()">📹 Mulai Lihat Kamera</button>
+            </div>
+            <video id="partnerVideo" autoplay playsinline style="display:none;width:100%;height:100%;object-fit:cover"></video>
+            <video id="myVideo" autoplay muted playsinline style="display:none"></video>
+            <div class="cam-status" id="camStatus" style="display:none"></div>
+            <div class="cam-fs-overlay" id="camFsOverlay" onclick="openFullscreen('cam')" style="display:none"></div>
+            <div class="cam-controls" id="camControls" style="display:none">
+              <button class="cbtn cbtn-dark" onclick="openFullscreen('cam')">⛶ Layar Penuh</button>
+              <button class="cbtn cbtn-red" onclick="stopCamera()">⏹ Stop</button>
+            </div>
+          </div>
         </div>
-        <div class="cam-ctrl-row" style="margin-top:10px">
-          <button class="cam-ctrl-btn" style="background:white;color:var(--pink);border:2px solid #FFD6E0" onclick="startMyCam(); playSound('pop')">📷 Nyalakan</button>
-          <button class="cam-ctrl-btn" style="background:white;color:var(--textl);border:2px solid #FFE0EA" onclick="stopMyCam(); playSound('pop')">⛔ Matikan</button>
+        <!-- Screen share panel -->
+        <div class="lpanel" id="lpanel-screen">
+          <div class="screen-wrap" id="screenWrap">
+            <div class="screen-placeholder" id="screenPlaceholder">
+              <div class="pico">📱</div>
+              <p>Lihat layar pasanganmu secara realtime dan bisa klik untuk remote control 🖐️</p>
+              <div style="display:flex;gap:10px">
+                <button class="cbtn cbtn-pink" onclick="requestScreen()">📱 Lihat Layar</button>
+                <button class="cbtn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:10px 18px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer" onclick="shareMyScreen()">🖥️ Bagikan Layarku</button>
+              </div>
+            </div>
+            <video id="screenVideo" autoplay playsinline style="display:none"></video>
+            <div class="touch-ripple" id="touchRipple"></div>
+            <div class="screen-info" id="screenInfo" style="display:none"></div>
+            <div class="screen-controls" id="screenControls" style="display:none">
+              <button class="cbtn cbtn-dark" onclick="openFullscreen('screen')">⛶ Layar Penuh</button>
+              <button class="cbtn cbtn-red" onclick="stopScreen()">⏹ Stop</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- CONTROL TAB -->
-    <div class="tab-page" id="tab-ctrl">
-      <div class="ctrl-section">
-        <div class="ctrl-title">🔔 Kontrol Jarak Jauh</div>
-        <div class="ctrl-grid">
-          <div class="ctrl-card cp" onclick="doRing(); playSound('ring')">
-            <span class="ctrl-icon">📳</span>
-            <div class="ctrl-label">Bunyikan HP</div>
-            <div class="ctrl-sub">Deringing keras!</div>
-          </div>
-          <div class="ctrl-card cb" onclick="startVideoCall(); playSound('pop')">
-            <span class="ctrl-icon">📹</span>
-            <div class="ctrl-label">Video Call</div>
-            <div class="ctrl-sub">Telepon video</div>
-          </div>
-          <div class="ctrl-card cp" onclick="switchTab('tab-cam'); watchPartner(); playSound('pop')">
-            <span class="ctrl-icon">👀</span>
-            <div class="ctrl-label">Lihat Pasangan</div>
-            <div class="ctrl-sub">Live kamera</div>
-          </div>
-          <div class="ctrl-card cb" onclick="doCheckIn(); playSound('ding')">
-            <span class="ctrl-icon">🙋</span>
-            <div class="ctrl-label">Kamu Baik-Baik?</div>
-            <div class="ctrl-sub">Tanya kondisi</div>
-          </div>
+    <div class="tab-pane" id="pane-ctrl">
+      <div class="ctrl-scroll">
+        <!-- Wake phone - prominent -->
+        <div class="ctrl-card">
+          <div class="ctrl-title">⚡ Hidupkan HP Pasangan</div>
+          <button class="wake-btn" onclick="wakePartnerPhone()">
+            <div class="ico">📳</div>
+            Hidupkan HP Pasangan Sekarang
+          </button>
+          <div style="font-size:11px;color:var(--textl);text-align:center;margin-top:10px">Kirim sinyal + notifikasi ke HP pasangan meski layar mati</div>
         </div>
-      </div>
-
-      <!-- Force Message -->
-      <div class="ctrl-section">
-        <div class="ctrl-title">💌 Pesan Paksa Romantis</div>
-        <div class="ctrl-full">
-          <textarea class="msg-textarea" id="force-msg-input" placeholder="Tulis pesan romantis... 💕"></textarea>
-          <div class="presets">
-            <span class="preset" onclick="setPreset(this)">Aku sayang kamu 💕</span>
-            <span class="preset" onclick="setPreset(this)">Kangen banget 🥺</span>
-            <span class="preset" onclick="setPreset(this)">Kamu lagi ngapain? 👀</span>
-            <span class="preset" onclick="setPreset(this)">Aku lagi mikirin kamu 💭</span>
-            <span class="preset" onclick="setPreset(this)">Makan udah belum? 🍱</span>
-            <span class="preset" onclick="setPreset(this)">Pulang kapan sayang? 🏠</span>
-            <span class="preset" onclick="setPreset(this)">I love you to the moon 🌙</span>
-            <span class="preset" onclick="setPreset(this)">Miss you so much 😘</span>
-          </div>
-          <div class="mt10">
-            <button class="btn btn-pink" onclick="sendForceMessage(); playSound('swoosh')">💌 Kirim Sekarang!</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Battery -->
-      <div class="ctrl-section">
-        <div class="ctrl-title">🔋 Status Baterai Real-time</div>
-        <div class="section-card" style="margin-bottom:0">
+        <!-- Control buttons -->
+        <div class="ctrl-card">
+          <div class="ctrl-title">🎮 Kontrol Pasangan</div>
           <div class="ctrl-grid">
+            <button class="cg-btn cg-pink" onclick="doAction('buzz')"><div class="ico">🔔</div>Bunyikan HP</button>
+            <button class="cg-btn cg-blue" onclick="goLive('cam')"><div class="ico">📹</div>Kamera Live</button>
+            <button class="cg-btn cg-purple" onclick="goLive('screen')"><div class="ico">📱</div>Layar Mirror</button>
+            <button class="cg-btn cg-green" onclick="sendLove()"><div class="ico">💕</div>Kirim Cinta</button>
+            <button class="cg-btn cg-orange" onclick="doAction('poke')"><div class="ico">👉</div>Colek!</button>
+            <button class="cg-btn cg-teal" onclick="doAction('goodnight')"><div class="ico">🌙</div>Selamat Malam</button>
+          </div>
+        </div>
+        <!-- Settings -->
+        <div class="ctrl-card">
+          <div class="ctrl-title">⚙️ Pengaturan</div>
+          <div class="sett-row">
             <div>
-              <div class="pcs-label">Bateraiku</div>
-              <div class="pcs-val" id="ctrl-my-bat">--%</div>
-              <div class="bat-bar"><div class="bat-fill" id="ctrl-my-bat-bar" style="width:0%"></div></div>
+              <div class="sett-lbl">Nama / Panggilan</div>
+              <div class="sett-val" id="settNameVal">—</div>
             </div>
+            <button class="btn btn-ghost btn-sm" onclick="editName()">✏️ Edit</button>
+          </div>
+          <div class="sett-row">
             <div>
-              <div class="pcs-label">Baterai Pasangan</div>
-              <div class="pcs-val" id="ctrl-p-bat">--%</div>
-              <div class="bat-bar"><div class="bat-fill" id="ctrl-p-bat-bar" style="width:0%"></div></div>
+              <div class="sett-lbl">Jenis Kelamin</div>
+              <div class="sett-val" id="settGenderVal">—</div>
             </div>
+            <button class="btn btn-ghost btn-sm" onclick="toggleGender()">🔄 Ganti</button>
+          </div>
+          <div class="sett-row">
+            <div>
+              <div class="sett-lbl">Foto Profil</div>
+              <div class="sett-val">Upload dari galeri</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="uploadAvatar()">📷 Ganti</button>
+          </div>
+          <div class="sett-row">
+            <div>
+              <div class="sett-lbl">Notifikasi Latar</div>
+              <div class="sett-val" id="settNotifVal">Aktif</div>
+            </div>
+            <div class="toggle on" id="notifToggle" onclick="toggleNotif(this)"></div>
+          </div>
+          <div class="sett-row">
+            <div>
+              <div class="sett-lbl">Kode Kamarku</div>
+              <div class="sett-val" id="settCodeVal" style="font-weight:800;letter-spacing:2px">—</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="copyMyCode()">📋</button>
+          </div>
+          <div style="margin-top:14px">
+            <button class="btn btn-sm btn-red" style="width:100%" onclick="disconnectRoom()">🚪 Keluar Kamar</button>
           </div>
         </div>
       </div>
     </div>
-
-  </div>
+  </div><!-- end app-content -->
 
   <!-- Bottom Nav -->
-  <div class="bnav">
-    <div class="ni active" onclick="switchTab('tab-home'); playSound('pop')" id="ni-home">
-      <div class="ni-icon">🏠</div><div class="ni-label">Beranda</div>
-    </div>
-    <div class="ni" onclick="switchTab('tab-map'); playSound('pop')" id="ni-map">
-      <div class="ni-icon">🗺️</div><div class="ni-label">Peta</div>
-    </div>
-    <div class="ni" onclick="switchTab('tab-cam'); playSound('pop')" id="ni-cam">
-      <div class="ni-icon">📷</div><div class="ni-label">Kamera</div>
-    </div>
-    <div class="ni" onclick="switchTab('tab-ctrl'); playSound('pop')" id="ni-ctrl">
-      <div class="ni-icon">🎮</div><div class="ni-label">Kontrol</div>
-      <div class="nbadge" id="ctrl-badge" style="display:none">!</div>
-    </div>
+  <div class="app-nav">
+    <button class="nav-btn active" onclick="switchTab('home',this)"><div class="nav-ico">🏠</div><div class="nav-lbl">Home</div></button>
+    <button class="nav-btn" onclick="switchTab('map',this)"><div class="nav-ico">🗺️</div><div class="nav-lbl">Peta</div></button>
+    <button class="nav-btn" onclick="switchTab('live',this)"><div class="nav-ico">📹</div><div class="nav-lbl">Live</div><div class="notif-dot" id="liveDot"></div></button>
+    <button class="nav-btn" onclick="switchTab('ctrl',this)"><div class="nav-ico">🎮</div><div class="nav-lbl">Kontrol</div><div class="notif-dot" id="ctrlDot"></div></button>
   </div>
+</div><!-- end app -->
+
+<!-- Fullscreen modal -->
+<div id="fsModal">
+  <video id="fsVideo" autoplay playsinline></video>
+  <button class="fs-close" onclick="closeFullscreen()">✕</button>
 </div>
 
-<!-- ===== VIDEO CALL ===== -->
-<div id="vc-overlay">
-  <div class="vc-remote" id="vc-remote">
-    <div class="vc-calling" id="vc-calling">
-      <div class="vc-c-avatar" id="vc-call-avatar">💝</div>
-      <div class="vc-c-name" id="vc-call-name">Memanggil...</div>
-      <div class="vc-c-status" id="vc-call-status">Menghubungkan... 📞</div>
-    </div>
-    <video id="vc-remote-video" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:none"></video>
-    <div class="vc-top-info" id="vc-top-info" style="display:none">
-      <div class="vc-pname" id="vc-pname-display">--</div>
-      <div class="vc-dur" id="vc-dur">00:00</div>
-    </div>
-  </div>
-  <div class="vc-local-wrap">
-    <video id="vc-local-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover"></video>
-  </div>
-  <div class="vc-ctrls">
-    <button class="vc-btn vc-btn-mute" id="vc-mute-btn" onclick="toggleMute(); playSound('pop')">🎤</button>
-    <button class="vc-btn vc-btn-end" onclick="endCall(); playSound('pop')">📵</button>
-    <button class="vc-btn vc-btn-vid" id="vc-vid-btn" onclick="toggleVideo(); playSound('pop')">📷</button>
-  </div>
-</div>
-
-<!-- ===== INCOMING CALL ===== -->
-<div id="incall-overlay">
-  <div class="ic-avatar" id="ic-avatar">💝</div>
-  <div class="ic-name" id="ic-name">Pasangan</div>
-  <div class="ic-status">Video Call Masuk... 💕</div>
-  <div class="ic-waves">
-    <div class="ic-wave"></div><div class="ic-wave"></div><div class="ic-wave"></div>
-    <div class="ic-wave"></div><div class="ic-wave"></div>
-  </div>
-  <div class="ic-btns">
-    <button class="ic-btn ic-dec" onclick="declineCall(); playSound('pop')">📵</button>
-    <button class="ic-btn ic-ans" onclick="answerCall(); playSound('pop')">📞</button>
-  </div>
-</div>
-
-<!-- ===== RING OVERLAY ===== -->
-<div id="ring-overlay">
-  <div class="ring-card">
-    <span class="ring-card-emo">🔔</span>
-    <div class="ring-card-title" id="ring-who">Pasangan memanggilmu!</div>
-    <div class="ring-card-sub">HPmu dibunyikan dari jarak jauh 💕</div>
-    <div class="ring-actions">
-      <button class="btn btn-outline" onclick="dismissRing(); playSound('pop')">✖️ Tutup</button>
-      <button class="btn btn-pink" onclick="dismissRing(); startVideoCall(); playSound('pop')">📞 Balas</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== FORCE MESSAGE ===== -->
-<div id="msg-overlay">
-  <div class="msg-card">
-    <span class="msg-card-emo" id="msg-overlay-emo">💌</span>
-    <div class="msg-card-from" id="msg-overlay-from">Dari Sayang</div>
-    <div class="msg-card-text" id="msg-overlay-text">Aku sayang kamu 💕</div>
-    <div class="msg-card-sub">~ dikirim dengan cinta ~</div>
-    <div class="mt16"><button class="btn btn-pink" onclick="dismissMsg(); playSound('pop')">💕 Terima Kasih!</button></div>
-  </div>
-</div>
-
-<!-- ===== SETTINGS PANEL ===== -->
-<div id="settings-panel">
-  <div class="settings-card">
-    <div class="settings-hdr">
-      <h3>⚙️ Pengaturan</h3>
-      <div class="settings-close" onclick="closeSettings(); playSound('pop')">✕</div>
-    </div>
-    <div class="settings-body">
-
-      <!-- Change Avatar & Profile -->
-      <div class="settings-section">
-        <div class="settings-section-title">📸 Profil & Avatar</div>
-        <div style="display:flex;gap:16px;align-items:flex-start">
-          <div style="position:relative;cursor:pointer;flex-shrink:0" onclick="triggerAvatarUpload()">
-            <div class="avatar-wrapper fem-lg" id="settings-avatar-wrapper">
-              <div class="avatar-inner" id="settings-avatar-inner">🌸</div>
-            </div>
-            <div class="avatar-upload-btn" style="bottom:2px;right:2px">📷</div>
-          </div>
-          <div style="flex:1">
-            <div style="font-size:11px;font-weight:700;color:var(--textl);margin-bottom:4px">NAMA</div>
-            <input class="settings-input" id="settings-name" type="text" placeholder="Nama panggilanmu">
-            <div style="font-size:11px;font-weight:700;color:var(--textl);margin-top:10px;margin-bottom:4px">USERNAME</div>
-            <input class="settings-input" id="settings-username" type="text" placeholder="@username">
-          </div>
-        </div>
-        <div style="margin-top:12px">
-          <div style="font-size:11px;font-weight:700;color:var(--textl);margin-bottom:8px">BORDER GENDER</div>
-          <div style="display:flex;gap:8px">
-            <button id="settings-gender-fem" onclick="changeGender('fem')" style="flex:1;padding:10px;border:2px solid #FFD6E0;border-radius:14px;background:white;font-size:13px;font-weight:700;cursor:pointer;color:var(--pink)">🌸 Perempuan</button>
-            <button id="settings-gender-male" onclick="changeGender('male')" style="flex:1;padding:10px;border:2px solid #C8E6FF;border-radius:14px;background:white;font-size:13px;font-weight:700;cursor:pointer;color:var(--blue)">💙 Laki-laki</button>
-          </div>
-        </div>
-        <button class="btn btn-pink mt16" onclick="saveSettings()">💾 Simpan Perubahan</button>
-      </div>
-
-      <!-- Room Info -->
-      <div class="settings-section">
-        <div class="settings-section-title">🏠 Info Kamar</div>
-        <div class="settings-row">
-          <div><div class="settings-row-label">Kode Unikku</div><div class="settings-row-sub" id="settings-my-code">--</div></div>
-          <button class="btn btn-outline btn-sm" onclick="copyRoomCode()">📋 Salin</button>
-        </div>
-        <div class="settings-row">
-          <div><div class="settings-row-label">Pasangan</div><div class="settings-row-sub" id="settings-partner-name">--</div></div>
-          <span class="chip" id="settings-partner-status">--</span>
-        </div>
-      </div>
-
-      <!-- Disconnect -->
-      <div class="settings-section">
-        <div class="settings-section-title">⚠️ Lainnya</div>
-        <button class="btn btn-outline" style="color:#ef4444;border-color:#fecaca" onclick="disconnectRoom()">🔌 Putuskan & Ganti Pasangan</button>
-      </div>
-      <div style="height:20px"></div>
-    </div>
-  </div>
-</div>
-
+<!-- Toast -->
 <div id="toast"></div>
 
+<!-- Hidden file input for avatar -->
+<input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="onAvatarFile(event)">
+
 <script>
-// ===== FIREBASE =====
+'use strict';
+// ═══════════════════════════════════════════════════════
+// FIREBASE CONFIG
+// ═══════════════════════════════════════════════════════
 const FB_CFG = {
-  apiKey:"AIzaSyAAJniLnjwHVd5DEDg4zHpWqF0fnJMoB0Y",
-  authDomain:"ular-tangga-jm.firebaseapp.com",
-  databaseURL:"https://ular-tangga-jm-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId:"ular-tangga-jm",
-  storageBucket:"ular-tangga-jm.firebasestorage.app",
-  messagingSenderId:"16689505417",
-  appId:"1:16689505417:web:6f479f831063e2978d1258"
+  apiKey: "AIzaSyDuVzMORRVHMzEzRjuUTa3VxJBX0FoZsZA",
+  authDomain: "ular-tangga-jm.firebaseapp.com",
+  databaseURL: "https://ular-tangga-jm-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ular-tangga-jm",
+  storageBucket: "ular-tangga-jm.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
 };
 firebase.initializeApp(FB_CFG);
 const db = firebase.database();
 
-// ===== STATE =====
-let myRole=null, partnerRole=null, roomId=null;
-let myName='', myUsername='', myGender='fem', myAvatarB64=null;
-let partnerName='Pasangan', partnerUsername='', partnerGender='fem', partnerAvatarB64=null;
-let myLat=null, myLng=null, partnerLat=null, partnerLng=null;
-let prevPartnerLat=null, prevPartnerLng=null, prevPartnerTs=null;
-let partnerOnline=false;
-let localStream=null, peerConn=null, callActive=false;
-let vcStartTime=null, vcTimer=null, muted=false, vidOff=false;
-let watchPeer=null, watchStream=null;
-let ringSound=null, incomingCallData=null;
-let mapInstance=null, myMarker=null, partnerMarker=null, routeLine=null;
-let currentLayer='street', mapFullscreen=false, mapInfoTabActive='info', mapPanelCollapsed=false;
-let myAccuracy=null, partnerAccuracy=null;
-let accuracyCircle=null, mapAcc1=null, mapAcc2=null;
-let myAddress='', partnerAddress='';
-let addrCache={};
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let myCode = '', partnerCode = '', roomId = '', myRole = '';
+let myName = '', myGender = 'female', myAvatar = '';
+let partnerName = '', partnerGender = 'male', partnerAvatar = '';
+let myLat = null, myLng = null, partnerLat = null, partnerLng = null;
+let myBattery = null, partnerBattery = null;
+let connectedSince = null, connectedTimer = null;
+let notifEnabled = true;
+let mapInstance = null, mapLayers = {}, currentLayer = 'street';
+let myMarker = null, partnerMarker = null, routeLine = null;
+let destMarker = null, destLat = null, destLng = null;
+let currentRouteMode = 'normal';
+let routePanelOpen = false;
+let heartMarker = null;
+let camPC = null, screenPC = null;
+let localCamStream = null, localScreenStream = null;
+let camRole = null; // 'watcher' or 'streamer'
+let screenRole = null; // 'watcher' or 'streamer'
+let currentLiveTab = 'cam';
+let pairingListener = null;
+let audioCtx = null;
 
-const RTC_CFG={iceServers:[
-  {urls:'stun:stun.l.google.com:19302'},
-  {urls:'stun:stun1.l.google.com:19302'},
-  {urls:'stun:stun2.l.google.com:19302'}
-]};
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+window.addEventListener('load', async () => {
+  // Spawn floating particles
+  spawnParticles();
+  // Load saved data
+  myCode = localStorage.getItem('myCode') || generateCode();
+  localStorage.setItem('myCode', myCode);
+  myName = localStorage.getItem('myName') || '';
+  myGender = localStorage.getItem('myGender') || 'female';
+  myAvatar = localStorage.getItem('myAvatar') || '';
+  roomId = localStorage.getItem('roomId') || '';
+  partnerCode = localStorage.getItem('partnerCode') || '';
+  myRole = localStorage.getItem('myRole') || '';
 
-// ===== SOUND ENGINE =====
-const AudioCtx=window.AudioContext||window.webkitAudioContext;
-let audioCtx=null;
-function getAudioCtx(){if(!audioCtx){try{audioCtx=new AudioCtx();}catch(e){}}return audioCtx;}
-function playSound(type){
-  try{
-    const ctx=getAudioCtx();if(!ctx)return;
-    if(ctx.state==='suspended')ctx.resume();
-    const t=ctx.currentTime;
-    if(type==='pop'){
-      const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
-      o.frequency.setValueAtTime(800,t);o.frequency.exponentialRampToValueAtTime(400,t+0.1);
-      g.gain.setValueAtTime(0.25,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.15);
-      o.start(t);o.stop(t+0.15);
-    }else if(type==='ring'){
-      [0,0.25,0.5,0.75].forEach((d,i)=>{
-        const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
-        o.frequency.value=i%2===0?880:1100;
-        g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(0.35,t+d+0.05);
-        g.gain.linearRampToValueAtTime(0,t+d+0.2);
-        o.start(t+d);o.stop(t+d+0.25);
-      });
-    }else if(type==='ding'){
-      const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
-      o.type='sine';o.frequency.value=1047;
-      g.gain.setValueAtTime(0.4,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.8);
-      o.start(t);o.stop(t+0.8);
-    }else if(type==='swoosh'){
-      const buf=ctx.createBuffer(1,ctx.sampleRate*.3,ctx.sampleRate);
-      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
-      const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=buf;s.connect(g);g.connect(ctx.destination);
-      g.gain.value=0.35;s.start(t);
-    }else if(type==='heart'){
-      [0,0.12].forEach(d=>{
-        const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
-        o.type='sine';o.frequency.value=110;
-        g.gain.setValueAtTime(0.4,t+d);g.gain.exponentialRampToValueAtTime(0.001,t+d+0.1);
-        o.start(t+d);o.stop(t+d+0.12);
-      });
-    }else if(type==='online'){
-      [523,659,784].forEach((f,i)=>{
-        const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
-        o.frequency.value=f;o.type='triangle';
-        g.gain.setValueAtTime(0,t+i*.12);g.gain.linearRampToValueAtTime(0.25,t+i*.12+.05);
-        g.gain.linearRampToValueAtTime(0,t+i*.12+.1);
-        o.start(t+i*.12);o.stop(t+i*.12+.12);
-      });
-    }
-  }catch(e){}
-}
-function startRingLoop(){stopRingLoop();ringSound=setInterval(()=>playSound('ring'),900);playSound('ring');}
-function stopRingLoop(){if(ringSound){clearInterval(ringSound);ringSound=null;}}
+  // Register service worker (only works on https:// or localhost, not file://)
+  if ('serviceWorker' in navigator && !location.protocol.startsWith('file')) {
+    try {
+      const swPath = location.pathname.includes('/game/') ? '/game/sw-duobucin.js' : '/sw-duobucin.js';
+      await navigator.serviceWorker.register(swPath);
+    } catch(e) { /* silent — not critical */ }
+  }
+  // Request notification permission
+  if ('Notification' in window && Notification.permission === 'default') {
+    try { await Notification.requestPermission(); } catch(e) {}
+  }
 
-// ===== RIPPLE =====
-document.addEventListener('click',e=>{
-  const t=e.target.closest('.ctrl-card,.btn,.cam-ctrl-btn,.vc-btn,.ic-btn,.ni,.map-layer-btn,.preset,.role-btn,.map-action-btn');
-  if(!t)return;
-  const r=document.createElement('span');const rect=t.getBoundingClientRect();const sz=Math.max(rect.width,rect.height)*2;
-  r.className='ripple';r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
-  t.style.position='relative';t.style.overflow='hidden';t.appendChild(r);setTimeout(()=>r.remove(),700);
-},{passive:true});
+  // Battery API
+  try {
+    const batt = await navigator.getBattery();
+    myBattery = Math.round(batt.level * 100);
+    batt.addEventListener('levelchange', () => { myBattery = Math.round(batt.level * 100); });
+  } catch(e) {}
 
-// ===== SCREEN =====
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-  document.getElementById(id)?.classList.remove('hidden');
-}
-function switchTab(tabId){
-  document.querySelectorAll('.tab-page').forEach(t=>{t.classList.remove('active');t.style.display='';});
-  const t=document.getElementById(tabId);
-  if(t){t.classList.add('active');}
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
-  const map={'tab-home':'ni-home','tab-map':'ni-map','tab-cam':'ni-cam','tab-ctrl':'ni-ctrl'};
-  if(map[tabId])document.getElementById(map[tabId])?.classList.add('active');
-  if(tabId==='tab-map'){setTimeout(()=>{initMap();mapInstance?.invalidateSize();},200);}
-  if(tabId==='tab-cam'){startMyCam();}
-}
+  // Show setup code
+  document.getElementById('myCodeDisplay').textContent = myCode;
 
-// ===== AVATAR STYLE =====
-function setAvatarStyle(wrapperEl, innerEl, gender, avatarB64, fallbackEmoji){
-  if(!wrapperEl||!innerEl)return;
-  const lg=wrapperEl.classList.contains('fem-lg')||wrapperEl.classList.contains('male-lg');
-  const sm=wrapperEl.classList.contains('fem-sm')||wrapperEl.classList.contains('male-sm');
-  const suffix=lg?'-lg':sm?'-sm':'';
-  wrapperEl.className='avatar-wrapper '+(gender==='male'?'male':'fem')+suffix;
-  if(avatarB64){
-    innerEl.innerHTML=`<img src="${avatarB64}" alt="avatar">`;
+  // Wait for splash
+  await sleep(2000);
+  document.getElementById('splash').classList.add('hidden');
+
+  if (roomId && partnerCode) {
+    // Already paired — go straight into app
+    enterApp();
   } else {
-    innerEl.textContent=fallbackEmoji||(gender==='male'?'💙':'🌸');
+    showSetup();
+  }
+});
+
+function spawnParticles() {
+  const wrap = document.getElementById('particles');
+  const emojis = ['💕','🌸','✨','⭐','💫','🎀','🌹','💖','🌙','🦋','💗','🌺'];
+  for (let i = 0; i < 12; i++) {
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    el.textContent = emojis[i % emojis.length];
+    el.style.cssText = `left:${Math.random()*90+5}%;top:${Math.random()*90+5}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*2}s`;
+    wrap.appendChild(el);
   }
 }
-function applyMyAvatar(){
-  const g=myGender, a=myAvatarB64;
-  setAvatarStyle(document.getElementById('my-avatar-wrapper'),document.getElementById('my-avatar-inner'),g,a,'🌸');
-  setAvatarStyle(document.getElementById('settings-avatar-wrapper'),document.getElementById('settings-avatar-inner'),g,a,'🌸');
-  // Update gender buttons
-  const fg=document.getElementById('settings-gender-fem');
-  const mg=document.getElementById('settings-gender-male');
-  if(fg&&mg){
-    fg.style.background=g==='fem'?'linear-gradient(135deg,#FF8FAB,#FF69B4)':'white';
-    fg.style.color=g==='fem'?'white':'var(--pink)';
-    mg.style.background=g==='male'?'linear-gradient(135deg,#5BAAED,#2E7CC4)':'white';
-    mg.style.color=g==='male'?'white':'var(--blue)';
-  }
-}
-function applyPartnerAvatar(){
-  const g=partnerGender, a=partnerAvatarB64;
-  setAvatarStyle(document.getElementById('partner-avatar-wrapper'),document.getElementById('partner-avatar-inner'),g,a,'💝');
-  const card=document.getElementById('partner-main-card');
-  if(card){card.className='partner-card '+(g==='male'?'male-card':'fem-card');}
-  // Update vc avatar
-  const vcAv=document.getElementById('vc-call-avatar');const icAv=document.getElementById('ic-avatar');
-  if(vcAv)vcAv.textContent=g==='male'?'💙':'💝';
-  if(icAv)icAv.textContent=g==='male'?'💙':'💝';
+
+// ═══════════════════════════════════════════════════════
+// PAIRING (ONE-WAY: only guest enters code)
+// ═══════════════════════════════════════════════════════
+function showSetup() {
+  document.getElementById('setup').classList.remove('hidden');
+  document.getElementById('myCodeDisplay').textContent = myCode;
+  document.getElementById('settCodeVal').textContent = myCode;
+  if (myName) document.getElementById('nameInp').value = myName;
+  updateGenderUI(myGender);
+  // Listen for partner joining MY room
+  listenForPartner();
 }
 
-// ===== AVATAR UPLOAD =====
-function triggerAvatarUpload(){document.getElementById('avatar-file-input').click();}
-function handleAvatarUpload(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.getElementById('avatar-canvas');
-      canvas.width=200;canvas.height=200;
-      const ctx=canvas.getContext('2d');
-      ctx.clearRect(0,0,200,200);
-      ctx.beginPath();ctx.arc(100,100,100,0,Math.PI*2);ctx.clip();
-      const s=Math.min(img.width,img.height);
-      const ox=(img.width-s)/2,oy=(img.height-s)/2;
-      ctx.drawImage(img,ox,oy,s,s,0,0,200,200);
-      myAvatarB64=canvas.toDataURL('image/jpeg',0.8);
-      applyMyAvatar();
-      const si=document.getElementById('setup-avatar-inner');
-      if(si){si.innerHTML=`<img src="${myAvatarB64}" alt="avatar">`;}
-      if(roomId&&myRole){db.ref(`duoBucin/${roomId}/${myRole}`).update({avatar:myAvatarB64.substring(0,50000)});}
-      toast('📸 Foto profil diupdate!');playSound('ding');
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
-  e.target.value='';
-}
-
-// ===== PAIRING =====
-function genCode(){return String(Math.floor(100000+Math.random()*900000));}
-function loadOrGenCode(){let c=localStorage.getItem('dbuc_mycode');if(!c){c=genCode();localStorage.setItem('dbuc_mycode',c);}return c;}
-function refreshRoomCode(){const c=genCode();localStorage.setItem('dbuc_mycode',c);document.getElementById('my-code').textContent=c;toast('🔄 Kode baru dibuat!');playSound('pop');}
-function copyRoomCode(){
-  const c=document.getElementById('my-code').textContent;
-  if(navigator.clipboard)navigator.clipboard.writeText(c).then(()=>toast('📋 Kode disalin!'));
-  else toast('Kode: '+c);
-  playSound('pop');
-}
-async function initPairing(){
-  const myCode=loadOrGenCode();
-  document.getElementById('my-code').textContent=myCode;
-  const savedRoom=localStorage.getItem('dbuc_room'),savedRole=localStorage.getItem('dbuc_role');
-  if(savedRoom&&savedRole){
-    roomId=savedRoom;myRole=savedRole;partnerRole=myRole==='p1'?'p2':'p1';
-    myName=localStorage.getItem('dbuc_name')||'Sayang';
-    myUsername=localStorage.getItem('dbuc_username')||'@bucin';
-    myGender=localStorage.getItem('dbuc_gender')||'fem';
-    myAvatarB64=localStorage.getItem('dbuc_avatar')||null;
-    applyMyAvatar();
-    document.getElementById('my-name-display').textContent=myName;
-    document.getElementById('my-username-display').textContent=myUsername;
-    showScreen('app');initApp();return;
-  }
-  showScreen('pairing');
-}
-async function joinRoom(){
-  const code=document.getElementById('partner-code-input').value.trim();
-  if(code.length!==6){toast('❌ Kode harus 6 digit!');playSound('pop');return;}
-  const myCode=loadOrGenCode();
-  const codes=[myCode,code].sort();
-  roomId=codes.join('_');
-  myRole=myCode===codes[0]?'p1':'p2';
-  partnerRole=myRole==='p1'?'p2':'p1';
-  localStorage.setItem('dbuc_room',roomId);
-  localStorage.setItem('dbuc_role',myRole);
-  toast('💕 Terhubung! Atur profilmu dulu');playSound('online');showScreen('setup');
-}
-
-// ===== SETUP =====
-let selectedGender='fem';
-function selectGender(g){
-  selectedGender=g;myGender=g;
-  document.getElementById('role-fem').className='role-btn'+(g==='fem'?' sel-fem':'');
-  document.getElementById('role-male').className='role-btn'+(g==='male'?' sel-male':'');
-  const sw=document.getElementById('setup-avatar-wrapper');
-  if(sw){sw.className='avatar-wrapper '+(g==='male'?'male-lg':'fem-lg');}
-  playSound('pop');
-}
-function changeGender(g){
-  myGender=g;
-  applyMyAvatar();
-  localStorage.setItem('dbuc_gender',g);
-  if(roomId&&myRole)db.ref(`duoBucin/${roomId}/${myRole}`).update({gender:g});
-  toast(g==='male'?'💙 Border Neon Galaxy aktif!':'🌸 Border Floral Rose Gold aktif!');
-  playSound('pop');
-}
-async function requestAllPerms(){
-  playSound('pop');
-  try{await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000}));
-    document.getElementById('perm-loc-st').textContent='✅';}catch{document.getElementById('perm-loc-st').textContent='⚠️';}
-  try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});s.getTracks().forEach(t=>t.stop());
-    document.getElementById('perm-cam-st').textContent='✅';}catch{document.getElementById('perm-cam-st').textContent='⚠️';}
-  try{if(navigator.getBattery)await navigator.getBattery();document.getElementById('perm-bat-st').textContent='✅';}catch{document.getElementById('perm-bat-st').textContent='⚠️';}
-  toast('🔐 Izin akses diminta!');
-}
-function finishSetup(){
-  const name=document.getElementById('my-name-input').value.trim();
-  if(!name){toast('❌ Masukkan nama panggilanmu!');playSound('pop');return;}
-  myName=name;
-  let uname=document.getElementById('my-username-input').value.trim()||'bucin';
-  if(!uname.startsWith('@'))uname='@'+uname;
-  myUsername=uname;
-  myGender=selectedGender;
-  localStorage.setItem('dbuc_name',myName);
-  localStorage.setItem('dbuc_username',myUsername);
-  localStorage.setItem('dbuc_gender',myGender);
-  if(myAvatarB64)localStorage.setItem('dbuc_avatar',myAvatarB64);
-  applyMyAvatar();
-  document.getElementById('my-name-display').textContent=myName;
-  document.getElementById('my-username-display').textContent=myUsername;
-  playSound('online');showScreen('app');initApp();
-}
-
-// ===== MAIN APP INIT =====
-function initApp(){
-  updateSettingsPanel();
-  startLocationSharing();
-  startBatterySharing();
-  listenToPartner();
-  listenForRing();
-  listenForMessages();
-  listenForCalls();
-  startMyCam();
-  pushMyPresence();
-}
-function pushMyPresence(){
-  if(!roomId||!myRole)return;
-  const ref=db.ref(`duoBucin/${roomId}/${myRole}`);
-  const data={name:myName,username:myUsername,gender:myGender,online:true,lastSeen:Date.now()};
-  if(myAvatarB64)data.avatar=myAvatarB64.substring(0,50000);
-  ref.update(data);
-  ref.onDisconnect().update({online:false,lastSeen:Date.now()});
-  setInterval(()=>ref.update({online:true,lastSeen:Date.now()}),30000);
-}
-
-// ===== LOCATION =====
-function startLocationSharing(){
-  if(!navigator.geolocation)return;
-  navigator.geolocation.watchPosition(pos=>{
-    myLat=pos.coords.latitude;myLng=pos.coords.longitude;myAccuracy=pos.coords.accuracy;
-    document.getElementById('my-loc-status').textContent='Aktif';
-    db.ref(`duoBucin/${roomId}/${myRole}`).update({lat:myLat,lng:myLng,locTs:Date.now(),accuracy:myAccuracy||10});
-    updateMapAndETA();
-    // Reverse geocode my location
-    reverseGeocode(myLat,myLng,'me');
-  },err=>{document.getElementById('my-loc-status').textContent='Off';},{
-    enableHighAccuracy:true,maximumAge:0,timeout:10000
+function listenForPartner() {
+  db.ref(`pairing/${myCode}`).on('value', snap => {
+    const val = snap.val();
+    if (!val || !val.partnerCode) return;
+    // Partner joined us!
+    partnerCode = val.partnerCode;
+    partnerName = val.partnerName || 'Pasangan';
+    partnerGender = val.partnerGender || 'male';
+    roomId = myCode; // host's code = room
+    myRole = 'host';
+    localStorage.setItem('roomId', roomId);
+    localStorage.setItem('partnerCode', partnerCode);
+    localStorage.setItem('myRole', myRole);
+    // Clean up pairing entry
+    db.ref(`pairing/${myCode}`).remove();
+    toast('💕 Pasangan bergabung! Terhubung~');
+    enterApp();
   });
 }
 
-// ===== REVERSE GEOCODE =====
-async function reverseGeocode(lat,lng,who){
-  const key=lat.toFixed(3)+','+lng.toFixed(3);
-  if(addrCache[key]){
-    if(who==='me')myAddress=addrCache[key];
-    else partnerAddress=addrCache[key];
-    if(mapInfoTabActive==='partner'&&who==='partner')updateMapInfoContent();
-    if(mapInfoTabActive==='me'&&who==='me')updateMapInfoContent();
+function onNameInput() {
+  myName = document.getElementById('nameInp').value.trim();
+  localStorage.setItem('myName', myName);
+}
+
+function setGender(g) {
+  myGender = g;
+  localStorage.setItem('myGender', myGender);
+  updateGenderUI(g);
+  playSound('click');
+}
+
+function updateGenderUI(g) {
+  document.getElementById('gBtn-f').className = 'gender-btn' + (g === 'female' ? ' af' : '');
+  document.getElementById('gBtn-m').className = 'gender-btn' + (g === 'male' ? ' am' : '');
+}
+
+async function joinAsGuest() {
+  const nameVal = document.getElementById('nameInp').value.trim();
+  if (!nameVal) { toast('Masukkan namamu dulu 🥺'); return; }
+  const code = document.getElementById('partnerCodeInp').value.trim().toUpperCase();
+  if (code.length !== 6) { toast('Kode harus 6 karakter 💌'); return; }
+  if (code === myCode) { toast('Itu kode sendiri kamu 😅'); return; }
+
+  myName = nameVal;
+  localStorage.setItem('myName', myName);
+
+  playSound('open');
+  document.getElementById('waitingBox').style.display = 'block';
+  document.getElementById('waitingTxt').textContent = 'Menghubungkan ke pasangan...';
+  document.getElementById('joinBtn').disabled = true;
+
+  // Write join request to partner's pairing slot
+  await db.ref(`pairing/${code}`).set({
+    partnerCode: myCode,
+    partnerName: myName,
+    partnerGender: myGender,
+    ts: Date.now()
+  });
+
+  partnerCode = code;
+  roomId = code; // guest uses host's code as room
+  myRole = 'guest';
+  localStorage.setItem('roomId', roomId);
+  localStorage.setItem('partnerCode', partnerCode);
+  localStorage.setItem('myRole', myRole);
+
+  document.getElementById('waitingTxt').textContent = 'Berhasil! Masuk kamar... 💕';
+  document.getElementById('waitingIcon').textContent = '💕';
+  await sleep(1000);
+  enterApp();
+}
+
+function copyMyCode() {
+  navigator.clipboard.writeText(myCode).catch(() => {});
+  toast(`📋 Kode ${myCode} disalin!`);
+  playSound('click');
+}
+
+// ═══════════════════════════════════════════════════════
+// APP ENTRY
+// ═══════════════════════════════════════════════════════
+function enterApp() {
+  document.getElementById('setup').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  playSound('open');
+  updateMyUI();
+  startPresence();
+  startLocationWatch();
+  listenRoom();
+  initMap();
+  updateSettingsUI();
+}
+
+function updateMyUI() {
+  const isFem = myGender === 'female';
+  const emoji = isFem ? '🥺' : '🥹';
+  const av = myAvatar || emoji;
+
+  // Avatar wrap gender class
+  ['hdrMeWrap','myAvatarWrap'].forEach(id => {
+    const w = document.getElementById(id);
+    if (w) {
+      w.className = `av-wrap sm ${isFem ? 'fem' : 'male'}`;
+      if (id === 'myAvatarWrap') w.className = `av-wrap lg ${isFem ? 'fem' : 'male'}`;
+    }
+  });
+  // Pics
+  ['hdrMePic','myAvatarPic'].forEach(id => {
+    const p = document.getElementById(id);
+    if (!p) return;
+    if (myAvatar) { p.innerHTML = `<img src="${myAvatar}">`; }
+    else { p.textContent = emoji; }
+  });
+  // Names
+  const displayName = myName || 'Aku';
+  document.getElementById('hdrMyName').textContent = displayName;
+  document.getElementById('hdrMyNameSmall').textContent = displayName;
+  document.getElementById('myDisplayName').textContent = displayName;
+  document.getElementById('myDisplayRole').textContent = isFem ? '🌸 Cewek' : '⚡ Cowok';
+  document.getElementById('hdrMyRole').textContent = myRole === 'host' ? '👑 Host' : '💌 Guest';
+}
+
+function updatePartnerUI() {
+  const isFem = partnerGender === 'female';
+  const emoji = isFem ? '🥺' : '🥹';
+  ['hdrPartnerWrap','partnerAvatarWrap'].forEach(id => {
+    const w = document.getElementById(id);
+    if (!w) return;
+    const cls = id === 'partnerAvatarWrap' ? 'lg' : 'sm';
+    w.className = `av-wrap ${cls} ${isFem ? 'fem' : 'male'}`;
+  });
+  ['hdrPartnerPic','partnerAvatarPic'].forEach(id => {
+    const p = document.getElementById(id);
+    if (!p) return;
+    if (partnerAvatar) { p.innerHTML = `<img src="${partnerAvatar}">`; }
+    else { p.textContent = emoji; }
+  });
+  const displayName = partnerName || 'Pasangan';
+  document.getElementById('hdrPartnerName').textContent = displayName;
+  document.getElementById('hdrPairName').textContent = displayName;
+  document.getElementById('partnerDisplayName').textContent = displayName;
+  document.getElementById('partnerDisplayRole').textContent = isFem ? '🌸 Cewek' : '⚡ Cowok';
+  document.getElementById('hdrPartnerRole').textContent = partnerRole();
+}
+
+function partnerRole() { return myRole === 'host' ? '💌 Guest' : '👑 Host'; }
+
+// ═══════════════════════════════════════════════════════
+// FIREBASE PRESENCE & ROOM LISTENING
+// ═══════════════════════════════════════════════════════
+function startPresence() {
+  const presRef = db.ref(`rooms/${roomId}/presence/${myCode}`);
+  const data = {
+    name: myName,
+    gender: myGender,
+    avatar: myAvatar ? myAvatar.slice(0, 5000) : '',
+    battery: myBattery,
+    online: true,
+    ts: Date.now()
+  };
+  presRef.set(data);
+  presRef.onDisconnect().update({ online: false, ts: firebase.database.ServerValue.TIMESTAMP });
+  // Refresh presence every 30s
+  setInterval(() => {
+    presRef.update({ battery: myBattery, ts: Date.now(), online: true });
+  }, 30000);
+}
+
+function listenRoom() {
+  // Listen for partner presence
+  db.ref(`rooms/${roomId}/presence/${partnerCode}`).on('value', snap => {
+    const val = snap.val();
+    if (!val) return;
+    const wasOnline = !!partnerLat;
+    partnerName = val.name || 'Pasangan';
+    partnerGender = val.gender || 'male';
+    if (val.avatar) partnerAvatar = val.avatar;
+    if (val.battery != null) partnerBattery = val.battery;
+    updatePartnerUI();
+    updateConnUI(val.online);
+    if (val.battery != null) document.getElementById('statBatt').textContent = val.battery + '%';
+  });
+  // Listen for partner location
+  db.ref(`rooms/${roomId}/location/${partnerCode}`).on('value', snap => {
+    const val = snap.val();
+    if (!val) return;
+    partnerLat = val.lat;
+    partnerLng = val.lng;
+    updatePartnerMarker();
+    updateDistance();
+  });
+  // Listen for control signals
+  db.ref(`rooms/${roomId}/control`).on('child_added', snap => {
+    const val = snap.val();
+    if (!val || val.to !== myCode) return;
+    snap.ref.remove();
+    handleControl(val);
+  });
+  // Listen for WebRTC signals
+  db.ref(`rooms/${roomId}/webrtc/${myCode}`).on('child_added', snap => {
+    const val = snap.val();
+    if (!val) return;
+    snap.ref.remove();
+    handleWebRTCSignal(val);
+  });
+  // Listen for messages
+  db.ref(`rooms/${roomId}/messages`).orderByChild('ts').limitToLast(1).on('child_added', snap => {
+    const val = snap.val();
+    if (!val || val.from === myCode) return;
+    showBgNotif(`💌 ${partnerName || 'Pasangan'}`, val.text || '');
+    toast(`💌 ${partnerName || 'Pasangan'}: ${val.text}`);
+    playSound('notify');
+  });
+  // Connection status
+  db.ref('.info/connected').on('value', snap => {
+    if (snap.val()) {
+      connectedSince = connectedSince || Date.now();
+      startConnTimer();
+    } else {
+      updateConnUI(false);
+    }
+  });
+}
+
+function updateConnUI(online) {
+  const pill = document.getElementById('connPill');
+  const txt = document.getElementById('connTxt');
+  if (online) {
+    pill.className = 'conn-pill';
+    txt.textContent = 'Terhubung 💕';
+  } else {
+    pill.className = 'conn-pill off';
+    txt.textContent = 'Terputus';
+  }
+}
+
+function startConnTimer() {
+  if (connectedTimer) return;
+  connectedTimer = setInterval(() => {
+    if (!connectedSince) return;
+    const secs = Math.floor((Date.now() - connectedSince) / 1000);
+    const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60), s = secs % 60;
+    const str = h > 0 ? `${h}j ${m}m` : m > 0 ? `${m}m ${s}s` : `${s}d`;
+    document.getElementById('statTime').textContent = str;
+    document.getElementById('connTimeTxt').textContent = str;
+  }, 1000);
+}
+
+// ═══════════════════════════════════════════════════════
+// LOCATION
+// ═══════════════════════════════════════════════════════
+function startLocationWatch() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.watchPosition(pos => {
+    myLat = pos.coords.latitude;
+    myLng = pos.coords.longitude;
+    // Push to Firebase
+    db.ref(`rooms/${roomId}/location/${myCode}`).set({ lat: myLat, lng: myLng, ts: Date.now() });
+    updateMyMarker();
+    updateDistance();
+    // Init map view
+    if (mapInstance && !myMarker) mapInstance.setView([myLat, myLng], 16);
+  }, err => {}, { enableHighAccuracy: true, maximumAge: 5000 });
+}
+
+function updateDistance() {
+  if (myLat == null || partnerLat == null) return;
+  const d = haversine(myLat, myLng, partnerLat, partnerLng);
+  const txt = d < 1000 ? Math.round(d) + ' m' : (d/1000).toFixed(1) + ' km';
+  document.getElementById('distPill').textContent = '📍 ' + txt;
+  document.getElementById('statDist').textContent = txt;
+  // Update route line
+  if (mapInstance && myMarker && partnerMarker) drawCoupleLine();
+}
+
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000, r = Math.PI/180;
+  const dLat = (lat2-lat1)*r, dLng = (lng2-lng1)*r;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+
+// ═══════════════════════════════════════════════════════
+// MAP
+// ═══════════════════════════════════════════════════════
+function initMap() {
+  if (mapInstance) return;
+  mapInstance = L.map('map', { zoomControl: false, attributionControl: false });
+  mapLayers = {
+    street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }),
+    satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }),
+    hybrid: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }),
+    terrain: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17 }),
+    dark: L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', { maxZoom: 19 })
+  };
+  mapLayers.street.addTo(mapInstance);
+  currentLayer = 'street';
+  if (myLat) mapInstance.setView([myLat, myLng], 16);
+  else mapInstance.setView([-6.2, 106.8], 12); // default Jakarta
+
+  // Click on map to set destination
+  mapInstance.on('click', async e => {
+    const { lat, lng } = e.latlng;
+    setDestination(lat, lng, null);
+  });
+}
+
+function setLayer(name, btn) {
+  if (!mapInstance) return;
+  mapInstance.removeLayer(mapLayers[currentLayer]);
+  mapLayers[name].addTo(mapInstance);
+  currentLayer = name;
+  document.querySelectorAll('.lyr-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  playSound('click');
+}
+
+function makeAvatarIcon(emoji, imgSrc, isFem) {
+  const colors = isFem
+    ? 'background:conic-gradient(#FF69B4,#FFD700,#FF1493,#FF69B4);'
+    : 'background:conic-gradient(#00f0ff,#9333ea,#5BAAED,#00f0ff);';
+  const inner = imgSrc
+    ? `<img src="${imgSrc}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+    : `<span style="font-size:22px">${emoji}</span>`;
+  const html = `<div style="width:42px;height:42px;border-radius:50%;${colors}animation:spin 3s linear infinite;display:flex;align-items:center;justify-content:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFD6E0,#C8E6FF)">
+        ${inner}
+      </div>
+    </div>
+  </div>`;
+  return L.divIcon({ html, className: '', iconSize: [42, 42], iconAnchor: [21, 21], popupAnchor: [0, -25] });
+}
+
+function updateMyMarker() {
+  if (!mapInstance || myLat == null) return;
+  const isFem = myGender === 'female';
+  const icon = makeAvatarIcon(isFem ? '🥺' : '🥹', myAvatar, isFem);
+  if (!myMarker) {
+    myMarker = L.marker([myLat, myLng], { icon }).addTo(mapInstance);
+    myMarker.bindPopup(makeMyPopup());
+  } else {
+    myMarker.setLatLng([myLat, myLng]);
+    myMarker.setIcon(icon);
+  }
+}
+
+function updatePartnerMarker() {
+  if (!mapInstance || partnerLat == null) return;
+  const isFem = partnerGender === 'female';
+  const icon = makeAvatarIcon(isFem ? '🥺' : '🥹', partnerAvatar, isFem);
+  if (!partnerMarker) {
+    partnerMarker = L.marker([partnerLat, partnerLng], { icon }).addTo(mapInstance);
+    partnerMarker.bindPopup(makePartnerPopup());
+  } else {
+    partnerMarker.setLatLng([partnerLat, partnerLng]);
+    partnerMarker.setIcon(icon);
+  }
+}
+
+function makeMyPopup() {
+  return `<div class="popup-card">
+    <div class="popup-hdr">
+      <div class="popup-av">${myAvatar ? `<img src="${myAvatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">` : (myGender==='female'?'🥺':'🥹')}</div>
+      <div><div class="popup-name">${myName||'Aku'}</div><div class="popup-role">Saya 📍</div></div>
+    </div>
+    <div class="popup-info">🔋 Baterai: ${myBattery != null ? myBattery+'%' : '—'}</div>
+    <div class="popup-info">📍 ${myLat ? myLat.toFixed(5)+', '+myLng.toFixed(5) : '—'}</div>
+  </div>`;
+}
+
+function makePartnerPopup() {
+  const lat = partnerLat ? partnerLat.toFixed(5) : '—';
+  const lng = partnerLng ? partnerLng.toFixed(5) : '—';
+  const dist = myLat != null && partnerLat != null ? (() => { const d = haversine(myLat,myLng,partnerLat,partnerLng); return d < 1000 ? Math.round(d)+'m' : (d/1000).toFixed(1)+'km'; })() : '—';
+  return `<div class="popup-card">
+    <div class="popup-hdr">
+      <div class="popup-av">${partnerAvatar ? `<img src="${partnerAvatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">` : (partnerGender==='female'?'🥺':'🥹')}</div>
+      <div><div class="popup-name">${partnerName||'Pasangan'}</div><div class="popup-role">Pasanganku 💕</div></div>
+    </div>
+    <div class="popup-info">🔋 Baterai: ${partnerBattery != null ? partnerBattery+'%' : '—'}</div>
+    <div class="popup-info">📍 ${lat}, ${lng}</div>
+    <div class="popup-info">📏 Jarak: ${dist}</div>
+    <div class="popup-acts">
+      <button class="popup-act" style="background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff" onclick="doAction('buzz');this.closest('.leaflet-popup').style.display='none'">🔔 Bunyikan</button>
+      <button class="popup-act" style="background:linear-gradient(135deg,#5BAAED,#2E7CC4);color:#fff" onclick="goLive('cam');this.closest('.leaflet-popup').style.display='none'">📹 Kamera</button>
+    </div>
+  </div>`;
+}
+
+function drawCoupleLine() {
+  if (!myLat || !partnerLat) return;
+  // Remove old
+  if (routeLine && routeLine._isCoupleLine) { mapInstance.removeLayer(routeLine); routeLine = null; }
+  if (heartMarker) { mapInstance.removeLayer(heartMarker); heartMarker = null; }
+  const midLat = (myLat + partnerLat) / 2;
+  const midLng = (myLng + partnerLng) / 2;
+  // Draw dashed love line
+  routeLine = L.polyline([[myLat, myLng], [partnerLat, partnerLng]], {
+    color: '#FF69B4', weight: 3, dashArray: '8 8', opacity: 0.7
+  }).addTo(mapInstance);
+  routeLine._isCoupleLine = true;
+  // Heart at midpoint
+  const heartIcon = L.divIcon({ html: '<div style="font-size:20px;animation:heartbeat 1.3s ease-in-out infinite;filter:drop-shadow(0 2px 4px rgba(255,20,147,.6))">💕</div>', className:'', iconSize:[24,24], iconAnchor:[12,12] });
+  heartMarker = L.marker([midLat, midLng], { icon: heartIcon }).addTo(mapInstance);
+}
+
+function focusMe() {
+  if (!mapInstance || myLat == null) { toast('Lokasiku belum tersedia'); return; }
+  mapInstance.flyTo([myLat, myLng], 17, { duration: 1 });
+  playSound('click');
+}
+
+function focusPartner() {
+  if (!mapInstance || partnerLat == null) { toast('Lokasi pasangan belum tersedia'); return; }
+  mapInstance.flyTo([partnerLat, partnerLng], 17, { duration: 1 });
+  playSound('click');
+}
+
+function focusBoth() {
+  if (!mapInstance) return;
+  const pts = [];
+  if (myLat != null) pts.push([myLat, myLng]);
+  if (partnerLat != null) pts.push([partnerLat, partnerLng]);
+  if (pts.length === 0) { toast('Lokasi belum tersedia'); return; }
+  if (pts.length === 1) { mapInstance.flyTo(pts[0], 16); return; }
+  mapInstance.flyToBounds(L.latLngBounds(pts).pad(0.2));
+  playSound('click');
+}
+
+// ─── Location search ───────────────────────────────────
+let searchTimeout = null;
+document.getElementById('mapSearchInp').addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  const q = this.value.trim();
+  if (q.length < 3) { hideSearchResults(); return; }
+  searchTimeout = setTimeout(() => searchLocation(), 600);
+});
+
+async function searchLocation() {
+  const q = document.getElementById('mapSearchInp').value.trim();
+  if (q.length < 2) return;
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&addressdetails=1`, {
+      headers: { 'User-Agent': 'DuoBucinApp/2.0' }
+    });
+    const data = await r.json();
+    showSearchResults(data);
+  } catch(e) { toast('Gagal cari lokasi'); }
+}
+
+function showSearchResults(data) {
+  const el = document.getElementById('searchResults');
+  if (!data || data.length === 0) {
+    el.innerHTML = '<div class="sr-item">❌ Tidak ditemukan</div>';
+    el.classList.add('show');
     return;
   }
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=id`,{headers:{'User-Agent':'DuoBucinApp/2.0'}});
-    const d=await r.json();
-    const addr=d.display_name||'Lokasi tidak diketahui';
-    const short=addr.split(',').slice(0,3).join(', ');
-    addrCache[key]=short;
-    if(who==='me')myAddress=short;
-    else partnerAddress=short;
-    if(mapInfoTabActive==='partner'&&who==='partner')updateMapInfoContent();
-    if(mapInfoTabActive==='me'&&who==='me')updateMapInfoContent();
-    // Update popup if exists
-    if(who==='me'&&myMarker){
-      myMarker.setPopupContent(buildMyPopup());
-    }
-    if(who==='partner'&&partnerMarker){
-      partnerMarker.setPopupContent(buildPartnerPopup());
-    }
-  }catch(e){}
+  el.innerHTML = data.map(d => `
+    <div class="sr-item" onclick="selectSearchResult(${d.lat},${d.lon},'${escHtml(d.display_name)}')">
+      <span class="sri-ico">📍</span>
+      <span>${escHtml(d.display_name.split(',').slice(0,3).join(', '))}</span>
+    </div>`).join('');
+  el.classList.add('show');
 }
 
-// ===== BATTERY =====
-async function startBatterySharing(){
-  if(!navigator.getBattery)return;
-  try{
-    const bat=await navigator.getBattery();
-    function push(){
-      const p=Math.round(bat.level*100);
-      document.getElementById('my-battery-val').textContent=p+'%';
-      document.getElementById('ctrl-my-bat').textContent=p+'%';
-      document.getElementById('ctrl-my-bat-bar').style.width=p+'%';
-      if(p<20)document.getElementById('ctrl-my-bat-bar').classList.add('low');
-      db.ref(`duoBucin/${roomId}/${myRole}`).update({battery:p,charging:bat.charging});
-    }
-    push();bat.addEventListener('levelchange',push);bat.addEventListener('chargingchange',push);
-  }catch(e){}
+function selectSearchResult(lat, lng, name) {
+  hideSearchResults();
+  document.getElementById('mapSearchInp').value = '';
+  setDestination(parseFloat(lat), parseFloat(lng), name);
+  switchTab('map', document.querySelector('.nav-btn:nth-child(2)'));
+  playSound('click');
 }
 
-// ===== LISTEN PARTNER =====
-function listenToPartner(){
-  if(!roomId||!partnerRole)return;
-  db.ref(`duoBucin/${roomId}/${partnerRole}`).on('value',snap=>{
-    const d=snap.val();if(!d)return;
-    const wasOnline=partnerOnline;
-    partnerName=d.name||'Pasangan';
-    partnerUsername=d.username||'@partner';
-    partnerGender=d.gender||'fem';
-    if(d.avatar)partnerAvatarB64=d.avatar;
-    partnerOnline=!!d.online;
-    if(!wasOnline&&partnerOnline){playSound('online');toast('💕 '+partnerName+' baru saja online!');}
-    document.getElementById('partner-name-display').textContent=partnerName;
-    document.getElementById('partner-username-display').textContent=partnerUsername;
-    document.getElementById('vc-pname-display').textContent=partnerName;
-    document.getElementById('ic-name').textContent=partnerName;
-    document.getElementById('vc-call-name').textContent=partnerName;
-    document.getElementById('ring-who').textContent=partnerName+' memanggilmu! 💕';
-    applyPartnerAvatar();
-    const pill=document.getElementById('partner-online-pill');
-    if(partnerOnline){
-      pill.textContent='🟢 Online';pill.classList.remove('off');
-      document.getElementById('conn-dot').classList.remove('offline');
-      document.getElementById('conn-text').textContent='Terhubung';
-    }else{
-      pill.textContent='⚪ Offline';pill.classList.add('off');
-      document.getElementById('conn-dot').classList.add('offline');
-      document.getElementById('conn-text').textContent='Offline';
-    }
-    if(d.battery!=null){
-      document.getElementById('p-battery-pct').textContent=d.battery;
-      document.getElementById('ctrl-p-bat').textContent=d.battery+'%';
-      const w=d.battery+'%';
-      document.getElementById('p-bat-bar').style.width=w;
-      document.getElementById('ctrl-p-bat-bar').style.width=w;
-      const isLow=d.battery<20;
-      ['p-bat-bar','ctrl-p-bat-bar'].forEach(id=>{document.getElementById(id)?.classList.toggle('low',isLow);});
-    }
-    if(d.lat&&d.lng){
-      prevPartnerLat=partnerLat;prevPartnerLng=partnerLng;prevPartnerTs=partnerLat?d.locTs:null;
-      partnerLat=d.lat;partnerLng=d.lng;partnerAccuracy=d.accuracy||15;
-      updateMapAndETA();
-      reverseGeocode(partnerLat,partnerLng,'partner');
-    }
-    if(d.lastSeen)document.getElementById('p-lastseen').textContent=timeSince(d.lastSeen);
-    updateSettingsPanel();
-  });
+function hideSearchResults() {
+  document.getElementById('searchResults').classList.remove('show');
 }
 
-// ===== MAP — Advanced =====
-const TILES={
-  street:{url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',attr:'© OpenStreetMap',maxZoom:19},
-  satellite:{url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr:'© Esri',maxZoom:18},
-  hybrid:{url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',attr:'© Esri',maxZoom:18},
-  terrain:{url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',attr:'© OpenTopoMap',maxZoom:17},
-  dark:{url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',attr:'© CartoDB',maxZoom:19}
-};
-let tileLayer=null;
-
-function setLayer(layer){
-  if(!mapInstance){currentLayer=layer;return;}
-  if(tileLayer)mapInstance.removeLayer(tileLayer);
-  const cfg=TILES[layer];
-  tileLayer=L.tileLayer(cfg.url,{attribution:cfg.attr,maxZoom:cfg.maxZoom}).addTo(mapInstance);
-  currentLayer=layer;
-  Object.keys(TILES).forEach(l=>{
-    const b=document.getElementById('btn-'+l);
-    if(b)b.classList.toggle('active',l===layer);
-  });
-  playSound('pop');
+async function setDestination(lat, lng, name) {
+  destLat = lat; destLng = lng;
+  if (!mapInstance) return;
+  // Remove old dest marker
+  if (destMarker) mapInstance.removeLayer(destMarker);
+  const destIcon = L.divIcon({ html: '<div style="font-size:28px;filter:drop-shadow(0 2px 8px rgba(255,20,147,.6))">📌</div>', className:'', iconSize:[28,36], iconAnchor:[14,36] });
+  destMarker = L.marker([lat, lng], { icon: destIcon }).addTo(mapInstance);
+  // Try to get address if not provided
+  if (!name) {
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`, { headers: { 'User-Agent': 'DuoBucinApp/2.0' } });
+      const d = await r.json();
+      name = d.display_name ? d.display_name.split(',').slice(0,3).join(', ') : `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    } catch { name = `${lat.toFixed(4)}, ${lng.toFixed(4)}`; }
+  }
+  document.getElementById('routeDestName').textContent = '📌 ' + name;
+  mapInstance.flyTo([lat, lng], 15, { duration: 1 });
+  // Auto-show route panel
+  if (!routePanelOpen) toggleRoutePanel();
+  // Auto-fetch route
+  fetchRoute();
 }
 
-function buildMyPopup(){
-  const bat=document.getElementById('my-battery-val')?.textContent||'--';
-  const addrHtml=myAddress?`<div class="map-popup-addr">📍 ${myAddress}</div>`:'';
-  return `<div class="map-popup">
-    <div class="map-popup-header">
-      <div>
-        <div class="map-popup-name">${myName||'Aku'}</div>
-        <div class="map-popup-username">${myUsername||'@me'}</div>
-      </div>
-    </div>
-    <div class="map-popup-grid">
-      <div class="map-popup-cell"><div class="map-popup-val">${myLat?myLat.toFixed(5):'--'}</div><div class="map-popup-key">Latitude</div></div>
-      <div class="map-popup-cell blue"><div class="map-popup-val">${myLng?myLng.toFixed(5):'--'}</div><div class="map-popup-key">Longitude</div></div>
-      <div class="map-popup-cell"><div class="map-popup-val">${bat}</div><div class="map-popup-key">🔋 Baterai</div></div>
-      <div class="map-popup-cell blue"><div class="map-popup-val">~${Math.round(myAccuracy||10)}m</div><div class="map-popup-key">🎯 Akurasi</div></div>
-    </div>
-    ${addrHtml}
-    <div class="map-popup-actions">
-      <button class="map-popup-btn map-popup-btn-pink" onclick="centerOnMe()">📍 Fokus</button>
-    </div>
-  </div>`;
+// ─── Routing ───────────────────────────────────────────
+function toggleRoutePanel() {
+  routePanelOpen = !routePanelOpen;
+  document.getElementById('routePanel').className = 'route-panel' + (routePanelOpen ? ' show' : '');
+  document.getElementById('navToggleBtn').className = 'map-tbtn' + (routePanelOpen ? ' active' : '');
 }
 
-function buildPartnerPopup(){
-  const bat=document.getElementById('p-battery-pct')?.textContent||'--';
-  const dist=myLat&&partnerLat?haversine(myLat,myLng,partnerLat,partnerLng):null;
-  const distStr=dist?(dist<1?Math.round(dist*1000)+'m':dist.toFixed(2)+'km'):'--';
-  const addrHtml=partnerAddress?`<div class="map-popup-addr">📍 ${partnerAddress}</div>`:'';
-  return `<div class="map-popup">
-    <div class="map-popup-header">
-      <div>
-        <div class="map-popup-name">${partnerName}</div>
-        <div class="map-popup-username">${partnerUsername||'@partner'}</div>
-      </div>
-    </div>
-    <div class="map-popup-grid">
-      <div class="map-popup-cell"><div class="map-popup-val">${partnerLat?partnerLat.toFixed(5):'--'}</div><div class="map-popup-key">Latitude</div></div>
-      <div class="map-popup-cell blue"><div class="map-popup-val">${partnerLng?partnerLng.toFixed(5):'--'}</div><div class="map-popup-key">Longitude</div></div>
-      <div class="map-popup-cell"><div class="map-popup-val">${bat}%</div><div class="map-popup-key">🔋 Baterai</div></div>
-      <div class="map-popup-cell blue"><div class="map-popup-val">${distStr}</div><div class="map-popup-key">📏 Jarak</div></div>
-    </div>
-    ${addrHtml}
-    <div class="map-popup-actions">
-      <button class="map-popup-btn map-popup-btn-pink" onclick="doRing();playSound('ring')">🔔 Bunyikan</button>
-      <button class="map-popup-btn map-popup-btn-blue" onclick="startVideoCall();playSound('pop')">📞 Call</button>
-    </div>
-  </div>`;
+function openNav() {
+  switchTab('map', document.querySelectorAll('.nav-btn')[1]);
+  setTimeout(() => { if (!routePanelOpen) toggleRoutePanel(); }, 300);
 }
 
-function makeAvatarMarker(lat,lng,gender,avatarB64,name){
-  const borderColor=gender==='male'?'#5BAAED':'#FF69B4';
-  const bgGrad=gender==='male'?'linear-gradient(135deg,#C8E6FF,#F0F7FF)':'linear-gradient(135deg,#FFD6E0,#FFF0F5)';
-  let inner=avatarB64
-    ?`<img src="${avatarB64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
-    :(gender==='male'?'💙':'🌸');
-  const html=`
-    <div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))">
-      <div style="
-        width:50px;height:50px;border-radius:50%;
-        border:3px solid ${borderColor};
-        background:${bgGrad};
-        display:flex;align-items:center;justify-content:center;
-        font-size:22px;overflow:hidden;
-        box-shadow:0 0 0 2px white, 0 0 0 4px ${borderColor}40;
-      ">${inner}</div>
-      <div style="
-        background:${borderColor};color:white;font-size:10px;font-weight:800;
-        border-radius:10px;padding:3px 10px;margin-top:4px;white-space:nowrap;
-        box-shadow:0 2px 8px ${borderColor}60;letter-spacing:.3px;
-      ">${name||'?'}</div>
-      <div style="width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid ${borderColor};margin-top:2px"></div>
-    </div>`;
-  return L.divIcon({html,className:'leaflet-custom-marker',iconSize:[64,76],iconAnchor:[32,76]});
+function setRouteMode(mode, btn) {
+  currentRouteMode = mode;
+  document.querySelectorAll('.rmode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (destLat) fetchRoute();
+  playSound('click');
 }
 
-function initMap(){
-  if(mapInstance)return;
-  const container=document.getElementById('leafmap');
-  if(!container)return;
-  const center=myLat?[myLat,myLng]:[-6.2,106.8];
-  mapInstance=L.map('leafmap',{
-    center,zoom:15,
-    zoomControl:true,
-    attributionControl:true
-  });
-  tileLayer=L.tileLayer(TILES[currentLayer].url,{
-    attribution:TILES[currentLayer].attr,
-    maxZoom:TILES[currentLayer].maxZoom
+async function fetchRoute() {
+  if (!destLat) { toast('Pilih dulu tujuanmu di peta 📌'); return; }
+  const fromLat = myLat || partnerLat;
+  const fromLng = myLng || partnerLng;
+  if (!fromLat) { toast('Lokasiku belum tersedia'); return; }
+  toast('⏳ Menghitung rute...');
+  try {
+    const alt = currentRouteMode === 'shortcut' ? 'true' : 'false';
+    const url = `https://router.project-osrm.org/route/v1/driving/${fromLng},${fromLat};${destLng},${destLat}?overview=full&geometries=geojson&steps=true&alternatives=${alt}`;
+    const r = await fetch(url);
+    const data = await r.json();
+    if (!data.routes || data.routes.length === 0) { toast('Rute tidak ditemukan'); return; }
+    // Pick alternative route if shortcut mode
+    const route = currentRouteMode === 'shortcut' && data.routes.length > 1
+      ? data.routes[1] : data.routes[0];
+    displayRoute(route, fromLat, fromLng);
+  } catch(e) { toast('Gagal ambil rute'); }
+}
+
+function displayRoute(route, fromLat, fromLng) {
+  // Remove old route
+  if (routeLine && !routeLine._isCoupleLine) { mapInstance.removeLayer(routeLine); routeLine = null; }
+  if (heartMarker) { mapInstance.removeLayer(heartMarker); heartMarker = null; }
+  // Draw new route
+  const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+  routeLine = L.polyline(coords, {
+    color: '#FF1493', weight: 5, opacity: 0.85
   }).addTo(mapInstance);
-  L.control.scale({imperial:false,position:'bottomleft'}).addTo(mapInstance);
-  updateMapMarkers();
-  // Click to get address
-  mapInstance.on('click',e=>{
-    const lat=e.latlng.lat,lng=e.latlng.lng;
-    const popup=L.popup({maxWidth:260}).setLatLng(e.latlng)
-      .setContent(`<div style="text-align:center;padding:4px"><b>📍 Titik Dipilih</b><br><span style="font-size:11px;color:#9A7080">${lat.toFixed(6)}, ${lng.toFixed(6)}</span><br><span style="font-size:11px">Memuat alamat...</span></div>`)
-      .openOn(mapInstance);
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=id`,{headers:{'User-Agent':'DuoBucinApp/2.0'}})
-      .then(r=>r.json()).then(d=>{
-        const addr=(d.display_name||'').split(',').slice(0,4).join(', ');
-        popup.setContent(`<div style="min-width:180px"><b>📍 Titik Dipilih</b><br><div style="font-size:11px;color:#9A7080;margin:4px 0">${lat.toFixed(6)}, ${lng.toFixed(6)}</div><div style="font-size:12px;color:#5A3040;background:#FFF5F7;border-radius:8px;padding:6px;margin-top:6px">🏘️ ${addr}</div></div>`);
-      }).catch(()=>{});
-  });
+  mapInstance.fitBounds(routeLine.getBounds().pad(0.15));
+
+  // Show stats
+  const dist = route.distance >= 1000 ? (route.distance/1000).toFixed(1)+' km' : Math.round(route.distance)+' m';
+  const mins = Math.ceil(route.duration / 60);
+  const time = mins >= 60 ? Math.floor(mins/60)+'j '+(mins%60)+'m' : mins+'m';
+  document.getElementById('routeDist').textContent = dist;
+  document.getElementById('routeTime').textContent = time;
+  document.getElementById('routeStats').style.display = 'flex';
+
+  // Show steps
+  const steps = route.legs[0]?.steps || [];
+  const stepsHtml = steps.slice(0, 8).map(s => {
+    const ico = getStepIcon(s.maneuver?.type, s.maneuver?.modifier);
+    const d = s.distance >= 1000 ? (s.distance/1000).toFixed(1)+'km' : Math.round(s.distance)+'m';
+    return `<div class="route-step"><div class="rsi">${ico}</div><div style="flex:1">${s.name || 'Jalan'}</div><div style="font-size:11px;color:var(--textl)">${d}</div></div>`;
+  }).join('');
+  document.getElementById('routeSteps').innerHTML = stepsHtml;
+  toast(`✅ Rute ${dist} • ${time}`);
 }
 
-function updateMapMarkers(){
-  if(!mapInstance)return;
-  if(myLat){
-    const icon=makeAvatarMarker(myLat,myLng,myGender,myAvatarB64,myName||'Aku');
-    if(myMarker){
-      myMarker.setLatLng([myLat,myLng]);myMarker.setIcon(icon);
-      myMarker.setPopupContent(buildMyPopup());
-    } else {
-      myMarker=L.marker([myLat,myLng],{icon,riseOnHover:true})
-        .addTo(mapInstance)
-        .bindPopup(buildMyPopup(),{maxWidth:260});
+function getStepIcon(type, mod) {
+  if (type === 'turn') {
+    if (mod === 'left') return '↰';
+    if (mod === 'right') return '↱';
+    if (mod === 'sharp left') return '↺';
+    if (mod === 'sharp right') return '↻';
+    return '↑';
+  }
+  if (type === 'arrive') return '🏁';
+  if (type === 'depart') return '🚗';
+  if (type === 'roundabout') return '🔄';
+  return '↑';
+}
+
+function clearRoute() {
+  if (routeLine) { mapInstance.removeLayer(routeLine); routeLine = null; }
+  if (destMarker) { mapInstance.removeLayer(destMarker); destMarker = null; }
+  if (heartMarker) { mapInstance.removeLayer(heartMarker); heartMarker = null; }
+  destLat = destLng = null;
+  document.getElementById('routeStats').style.display = 'none';
+  document.getElementById('routeSteps').innerHTML = '';
+  document.getElementById('routeDestName').textContent = 'Pilih lokasi di peta atau cari dulu';
+  drawCoupleLine();
+  playSound('click');
+}
+
+// ═══════════════════════════════════════════════════════
+// WEBRTC — CAMERA
+// ═══════════════════════════════════════════════════════
+const ICE = { iceServers: [
+  { urls: 'stun:stun.l.google.com:19302' },
+  { urls: 'stun:stun1.l.google.com:19302' },
+  { urls: 'stun:stun2.l.google.com:19302' }
+]};
+
+function signalWebRTC(data) {
+  db.ref(`rooms/${roomId}/webrtc/${partnerCode}`).push({ ...data, from: myCode });
+}
+
+async function handleWebRTCSignal(sig) {
+  if (sig.type === 'cam-request') {
+    // Partner wants to see my camera — I am streamer
+    await startCamStream();
+  } else if (sig.type === 'cam-stop') {
+    stopCamera(true);
+  } else if (sig.type === 'cam-offer') {
+    await handleCamOffer(sig.sdp);
+  } else if (sig.type === 'cam-answer') {
+    if (camPC) await camPC.setRemoteDescription({ type: 'answer', sdp: sig.sdp });
+  } else if (sig.type === 'cam-ice') {
+    if (camPC) try { await camPC.addIceCandidate(new RTCIceCandidate(sig.candidate)); } catch {}
+  } else if (sig.type === 'screen-request') {
+    // Partner wants to see my screen
+    await startScreenShare();
+  } else if (sig.type === 'screen-stop') {
+    stopScreen(true);
+  } else if (sig.type === 'screen-offer') {
+    await handleScreenOffer(sig.sdp);
+  } else if (sig.type === 'screen-answer') {
+    if (screenPC) await screenPC.setRemoteDescription({ type: 'answer', sdp: sig.sdp });
+  } else if (sig.type === 'screen-ice') {
+    if (screenPC) try { await screenPC.addIceCandidate(new RTCIceCandidate(sig.candidate)); } catch {}
+  } else if (sig.type === 'screen-touch') {
+    handleRemoteTouch(sig.x, sig.y);
+  }
+}
+
+// --- Camera: Watcher side (wants to see partner's cam) ---
+async function requestCamera() {
+  if (!roomId) return;
+  goLive('cam');
+  setCamStatus('⏳ Meminta kamera pasangan...');
+  hideCamPlaceholder(false);
+  camRole = 'watcher';
+  // Create peer connection ready to receive
+  if (camPC) { camPC.close(); camPC = null; }
+  camPC = new RTCPeerConnection(ICE);
+  camPC.onicecandidate = e => { if (e.candidate) signalWebRTC({ type: 'cam-ice', candidate: e.candidate.toJSON() }); };
+  camPC.ontrack = e => {
+    const vid = document.getElementById('partnerVideo');
+    vid.srcObject = e.streams[0];
+    vid.style.display = 'block';
+    document.getElementById('camPlaceholder').style.display = 'none';
+    document.getElementById('camFsOverlay').style.display = 'block';
+    document.getElementById('camControls').style.display = 'flex';
+    setCamStatus('📹 Kamera Pasangan - Live');
+    playSound('open');
+  };
+  camPC.onconnectionstatechange = () => {
+    if (camPC?.connectionState === 'disconnected' || camPC?.connectionState === 'failed') {
+      setCamStatus('⚠️ Koneksi terputus');
     }
-    if(mapAcc1)mapInstance.removeLayer(mapAcc1);
-    mapAcc1=L.circle([myLat,myLng],{radius:myAccuracy||10,color:'#FF69B4',fillColor:'#FF69B4',fillOpacity:.08,weight:1.5,dashArray:'6 4'}).addTo(mapInstance);
-  }
-  if(partnerLat){
-    const icon2=makeAvatarMarker(partnerLat,partnerLng,partnerGender,partnerAvatarB64,partnerName);
-    if(partnerMarker){
-      partnerMarker.setLatLng([partnerLat,partnerLng]);partnerMarker.setIcon(icon2);
-      partnerMarker.setPopupContent(buildPartnerPopup());
-    } else {
-      partnerMarker=L.marker([partnerLat,partnerLng],{icon:icon2,riseOnHover:true})
-        .addTo(mapInstance)
-        .bindPopup(buildPartnerPopup(),{maxWidth:260});
-    }
-    if(mapAcc2)mapInstance.removeLayer(mapAcc2);
-    mapAcc2=L.circle([partnerLat,partnerLng],{radius:partnerAccuracy||15,color:'#5BAAED',fillColor:'#5BAAED',fillOpacity:.08,weight:1.5,dashArray:'6 4'}).addTo(mapInstance);
-  }
-  // Animated route line
-  if(myLat&&partnerLat){
-    if(routeLine)mapInstance.removeLayer(routeLine);
-    routeLine=L.polyline([[myLat,myLng],[partnerLat,partnerLng]],{
-      color:'#FF8FAB',weight:3,dashArray:'12 8',opacity:.9
-    }).addTo(mapInstance);
-    // Midpoint heart
-    const midLat=(myLat+partnerLat)/2, midLng=(myLng+partnerLng)/2;
-    const midIcon=L.divIcon({html:`<div style="font-size:20px;animation:heartbeat 1.5s infinite;display:block;text-align:center">💕</div>`,className:'leaflet-custom-marker',iconSize:[24,24],iconAnchor:[12,12]});
-    if(window._midMarker)mapInstance.removeLayer(window._midMarker);
-    window._midMarker=L.marker([midLat,midLng],{icon:midIcon,interactive:false}).addTo(mapInstance);
-  }
-}
-
-function centerOnMe(){
-  if(!mapInstance||!myLat)return;
-  mapInstance.setView([myLat,myLng],17,{animate:true});
-  if(myMarker)myMarker.openPopup();
-  playSound('pop');
-}
-function centerOnPartner(){
-  if(!mapInstance||!partnerLat){toast('😴 Lokasi pasangan belum tersedia');return;}
-  mapInstance.setView([partnerLat,partnerLng],17,{animate:true});
-  if(partnerMarker)partnerMarker.openPopup();
-  playSound('pop');
-}
-function fitBothOnMap(){
-  if(!mapInstance)return;
-  if(myLat&&partnerLat){
-    const bounds=L.latLngBounds([[myLat,myLng],[partnerLat,partnerLng]]);
-    mapInstance.fitBounds(bounds,{padding:[60,60],maxZoom:16,animate:true});
-  } else if(myLat){
-    mapInstance.setView([myLat,myLng],15,{animate:true});
-  }
-  playSound('pop');
-}
-
-function haversine(a,b,c,d){
-  const R=6371,dl=(c-a)*Math.PI/180,dm=(d-b)*Math.PI/180,
-    e=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dm/2)**2;
-  return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));
-}
-
-function updateMapAndETA(){
-  updateMapMarkers();
-  if(!myLat||!partnerLat)return;
-  const dist=haversine(myLat,myLng,partnerLat,partnerLng);
-  const distStr=dist<1?Math.round(dist*1000)+'m':dist.toFixed(2)+'km';
-  document.getElementById('p-distance').textContent=distStr;
-  document.getElementById('map-dist').textContent=dist<1?Math.round(dist*1000)+'m':dist.toFixed(2);
-  let spd=20;
-  if(prevPartnerLat&&prevPartnerTs){
-    const dd=haversine(prevPartnerLat,prevPartnerLng,partnerLat,partnerLng);
-    const dt=(Date.now()-prevPartnerTs)/3600000;
-    if(dt>0&&dt<0.1){const s=dd/dt;if(s>0.5&&s<150)spd=s;}
-  }
-  document.getElementById('map-speed').textContent=Math.round(spd);
-  const etaM=Math.round(dist/spd*60);
-  const etaStr=etaM<60?etaM+' mnt':`${Math.floor(etaM/60)}j ${etaM%60}m`;
-  document.getElementById('p-eta').textContent=etaStr;
-  document.getElementById('map-eta').textContent=etaStr;
-  updateMapInfoContent();
-}
-
-function setMapInfoTab(tab){
-  mapInfoTabActive=tab;
-  ['info','partner','me'].forEach(t=>{
-    document.getElementById('mit-'+t)?.classList.toggle('active',t===tab);
-  });
-  updateMapInfoContent();
-}
-
-function toggleMapPanel(){
-  mapPanelCollapsed=!mapPanelCollapsed;
-  const panel=document.getElementById('map-info-panel');
-  const btn=document.getElementById('map-collapse-btn');
-  if(panel)panel.classList.toggle('collapsed',mapPanelCollapsed);
-  if(btn)btn.textContent=mapPanelCollapsed?'▲':'▼';
-  setTimeout(()=>mapInstance?.invalidateSize(),300);
-}
-
-function updateMapInfoContent(){
-  const c=document.getElementById('map-info-content');if(!c)return;
-  if(mapInfoTabActive==='info'){
-    const dist=myLat&&partnerLat?haversine(myLat,myLng,partnerLat,partnerLng):null;
-    const distStr=dist?(dist<1?Math.round(dist*1000)+'m':dist.toFixed(2)):'--';
-    const eta=document.getElementById('map-eta')?.textContent||'--';
-    const spd=document.getElementById('map-speed')?.textContent||'--';
-    c.innerHTML=`<div class="map-stat-row">
-      <div class="map-stat"><div class="map-stat-val">${distStr}</div><div class="map-stat-label">📏 Jarak</div></div>
-      <div class="map-stat blue"><div class="map-stat-val">${eta}</div><div class="map-stat-label">⏱️ ETA</div></div>
-      <div class="map-stat green"><div class="map-stat-val">${spd}</div><div class="map-stat-label">🚗 km/h</div></div>
-    </div>`;
-  } else if(mapInfoTabActive==='partner'){
-    const bat=document.getElementById('p-battery-pct')?.textContent||'--';
-    const last=document.getElementById('p-lastseen')?.textContent||'--';
-    const addrHtml=partnerAddress?`<div class="map-addr-row"><div class="map-addr-label">📍 Alamat Terakhir</div>${partnerAddress}</div>`:'';
-    c.innerHTML=`${addrHtml}<div class="map-partner-detail">
-      <b>👤 ${partnerName}</b> ${partnerUsername||''}<br>
-      📍 ${partnerLat?`${partnerLat.toFixed(6)}, ${partnerLng.toFixed(6)}`:'Memuat...'}<br>
-      🎯 Akurasi: ~${Math.round(partnerAccuracy||15)}m<br>
-      🔋 Baterai: ${bat}%<br>
-      🕐 Update: ${last}
-    </div>`;
-  } else {
-    const addrHtml=myAddress?`<div class="map-addr-row"><div class="map-addr-label">📍 Alamatku</div>${myAddress}</div>`:'';
-    c.innerHTML=`${addrHtml}<div class="map-partner-detail">
-      <b>📍 Posisiku</b><br>
-      Lat: ${myLat?myLat.toFixed(6):'Memuat...'}<br>
-      Lng: ${myLng?myLng.toFixed(6):'Memuat...'}<br>
-      🎯 Akurasi: ~${Math.round(myAccuracy||10)}m<br>
-      🗺️ Layer: ${currentLayer}
-    </div>`;
-  }
-}
-
-function toggleMapFullscreen(){
-  mapFullscreen=!mapFullscreen;
-  const mapEl=document.getElementById('leafmap');
-  const panel=document.getElementById('map-info-panel');
-  const toolbar=document.querySelector('.map-toolbar');
-  const fsBtn=document.getElementById('map-fs-btn');
-  if(mapFullscreen){
-    mapEl.style.cssText='position:fixed;inset:0;z-index:150;height:100vh!important';
-    if(panel)panel.style.display='none';
-    if(toolbar)toolbar.style.cssText='position:fixed;top:0;left:0;right:0;z-index:151;background:white;border-radius:0';
-    if(fsBtn)fsBtn.textContent='✕';
-    const closeBtn=document.createElement('button');
-    closeBtn.id='map-close-fs';
-    closeBtn.style.cssText='position:fixed;top:56px;right:12px;z-index:160;background:white;border:none;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);color:var(--pinkd)';
-    closeBtn.textContent='✕ Tutup';
-    closeBtn.onclick=()=>toggleMapFullscreen();
-    document.body.appendChild(closeBtn);
-  } else {
-    mapEl.style.cssText='';
-    if(panel)panel.style.display='';
-    if(toolbar)toolbar.style.cssText='';
-    if(fsBtn)fsBtn.textContent='⛶';
-    const old=document.getElementById('map-close-fs');if(old)old.remove();
-  }
-  setTimeout(()=>mapInstance?.invalidateSize(),150);
-  playSound('pop');
-}
-
-// ===== CAMERA =====
-async function ensureLocalStream(){
-  if(localStream)return;
-  try{localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});}catch(e){}
-}
-async function startMyCam(){
-  if(localStream)return;
-  try{
-    localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});
-    document.getElementById('my-cam-preview').srcObject=localStream;
-    document.getElementById('my-cam-status').textContent='On';
-    startCameraStreamServer();
-  }catch(e){}
-}
-function stopMyCam(){
-  if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
-  document.getElementById('my-cam-preview').srcObject=null;
-  document.getElementById('my-cam-status').textContent='Off';
-  db.ref(`duoBucin/${roomId}/${myRole}`).update({camAvail:false});
-}
-function startCameraStreamServer(){
-  db.ref(`duoBucin/${roomId}/${myRole}`).update({camAvail:true});
-  db.ref(`duoBucin/${roomId}/camWatch/${myRole}Offer`).on('value',async snap=>{
-    const offer=snap.val();if(!offer||!localStream)return;
-    if(watchPeer)watchPeer.close();
-    watchPeer=new RTCPeerConnection(RTC_CFG);
-    localStream.getTracks().forEach(t=>watchPeer.addTrack(t,localStream));
-    watchPeer.onicecandidate=e=>{if(e.candidate)db.ref(`duoBucin/${roomId}/camWatch/${myRole}IceAnswer`).push(e.candidate.toJSON());};
-    await watchPeer.setRemoteDescription(new RTCSessionDescription(JSON.parse(offer)));
-    const ans=await watchPeer.createAnswer();
-    await watchPeer.setLocalDescription(ans);
-    db.ref(`duoBucin/${roomId}/camWatch/${myRole}Answer`).set(JSON.stringify(watchPeer.localDescription));
-    db.ref(`duoBucin/${roomId}/camWatch/${partnerRole}IceOffer`).on('child_added',s=>watchPeer.addIceCandidate(new RTCIceCandidate(s.val())));
-  });
-}
-async function watchPartner(){
-  const snap=await db.ref(`duoBucin/${roomId}/${partnerRole}/camAvail`).once('value');
-  if(!snap.val()){toast('😴 Kamera pasangan belum aktif');return;}
-  const pc=new RTCPeerConnection(RTC_CFG);
-  pc.ontrack=e=>{
-    watchStream=e.streams[0];
-    const vid=document.getElementById('partner-cam-video');
-    vid.srcObject=watchStream;vid.style.display='block';
-    document.getElementById('cam-placeholder').style.display='none';
-    document.getElementById('cam-overlay-btns').style.display='flex';
-    document.getElementById('cam-status-pill').style.display='flex';
   };
-  pc.onicecandidate=e=>{if(e.candidate)db.ref(`duoBucin/${roomId}/camWatch/${myRole}IceOffer`).push(e.candidate.toJSON());};
-  pc.addTransceiver('video',{direction:'recvonly'});pc.addTransceiver('audio',{direction:'recvonly'});
-  const offer=await pc.createOffer();await pc.setLocalDescription(offer);
-  db.ref(`duoBucin/${roomId}/camWatch/${myRole}Offer`).set(JSON.stringify(pc.localDescription));
-  db.ref(`duoBucin/${roomId}/camWatch/${partnerRole}Answer`).once('value',async s=>{
-    if(!s.val())return;
-    await pc.setRemoteDescription(new RTCSessionDescription(JSON.parse(s.val())));
-  });
-  db.ref(`duoBucin/${roomId}/camWatch/${partnerRole}IceAnswer`).on('child_added',s=>pc.addIceCandidate(new RTCIceCandidate(s.val())));
-  toast('👁️ Menghubungkan ke kamera pasangan...');
-}
-function stopWatchPartner(){
-  const vid=document.getElementById('partner-cam-video');
-  vid.srcObject=null;vid.style.display='none';
-  document.getElementById('cam-placeholder').style.display='flex';
-  document.getElementById('cam-overlay-btns').style.display='none';
-  document.getElementById('cam-status-pill').style.display='none';
-  if(watchStream){watchStream.getTracks?.().forEach(t=>t.stop());watchStream=null;}
+  // Signal partner
+  signalWebRTC({ type: 'cam-request' });
 }
 
-// ===== VIDEO CALL =====
-async function startVideoCall(){
-  if(!partnerOnline){toast('😴 Pasangan sedang offline');return;}
-  if(callActive){toast('📞 Panggilan sudah aktif');return;}
-  await ensureLocalStream();if(!localStream){toast('❌ Butuh izin kamera');return;}
-  peerConn=new RTCPeerConnection(RTC_CFG);
-  localStream.getTracks().forEach(t=>peerConn.addTrack(t,localStream));
-  document.getElementById('vc-local-video').srcObject=localStream;
-  peerConn.ontrack=e=>{
-    const v=document.getElementById('vc-remote-video');v.srcObject=e.streams[0];v.style.display='block';
-    document.getElementById('vc-calling').style.display='none';document.getElementById('vc-top-info').style.display='block';startCallTimer();
-  };
-  peerConn.onicecandidate=e=>{if(e.candidate)db.ref(`duoBucin/${roomId}/call/ice_${myRole}`).push(e.candidate.toJSON());};
-  const offer=await peerConn.createOffer();await peerConn.setLocalDescription(offer);
-  db.ref(`duoBucin/${roomId}/call`).set({from:myRole,fromName:myName,type:'call',offer:JSON.stringify(peerConn.localDescription),ts:Date.now(),active:true});
-  showVCOverlay();callActive=true;
-  document.getElementById('vc-call-status').textContent='Menghubungi '+partnerName+'... 💕';
-  db.ref(`duoBucin/${roomId}/call/answer`).on('value',async s=>{
-    if(!s.val()||!peerConn)return;
-    try{await peerConn.setRemoteDescription(new RTCSessionDescription(JSON.parse(s.val())));}catch(e){}
-  });
-  db.ref(`duoBucin/${roomId}/call/ice_${partnerRole}`).on('child_added',s=>{if(peerConn)peerConn.addIceCandidate(new RTCIceCandidate(s.val())).catch(()=>{});});
-  playSound('ring');
-}
-function listenForCalls(){
-  db.ref(`duoBucin/${roomId}/call`).on('value',async snap=>{
-    const d=snap.val();if(!d||!d.active)return;
-    if(d.from===myRole)return;
-    if(callActive)return;
-    incomingCallData=d;
-    document.getElementById('incall-overlay').classList.add('show');
-    startRingLoop();
-  });
-}
-async function answerCall(){
-  stopRingLoop();
-  document.getElementById('incall-overlay').classList.remove('show');
-  if(!incomingCallData)return;
-  await ensureLocalStream();if(!localStream){toast('❌ Butuh izin kamera');return;}
-  peerConn=new RTCPeerConnection(RTC_CFG);
-  localStream.getTracks().forEach(t=>peerConn.addTrack(t,localStream));
-  document.getElementById('vc-local-video').srcObject=localStream;
-  peerConn.ontrack=e=>{
-    const v=document.getElementById('vc-remote-video');v.srcObject=e.streams[0];v.style.display='block';
-    document.getElementById('vc-calling').style.display='none';document.getElementById('vc-top-info').style.display='block';startCallTimer();
-  };
-  peerConn.onicecandidate=e=>{if(e.candidate)db.ref(`duoBucin/${roomId}/call/ice_${myRole}`).push(e.candidate.toJSON());};
-  try{
-    await peerConn.setRemoteDescription(new RTCSessionDescription(JSON.parse(incomingCallData.offer)));
-    const ans=await peerConn.createAnswer();await peerConn.setLocalDescription(ans);
-    db.ref(`duoBucin/${roomId}/call/answer`).set(JSON.stringify(peerConn.localDescription));
-    db.ref(`duoBucin/${roomId}/call/ice_${partnerRole}`).on('child_added',s=>{if(peerConn)peerConn.addIceCandidate(new RTCIceCandidate(s.val())).catch(()=>{});});
-    showVCOverlay();callActive=true;
-  }catch(e){toast('❌ Gagal menjawab: '+e.message);}
-}
-function declineCall(){
-  stopRingLoop();
-  document.getElementById('incall-overlay').classList.remove('show');
-  db.ref(`duoBucin/${roomId}/call`).update({active:false});
-  incomingCallData=null;
-}
-function showVCOverlay(){document.getElementById('vc-overlay').classList.add('show');}
-function hideVCOverlay(){document.getElementById('vc-overlay').classList.remove('show');}
-function endCall(){
-  stopRingLoop();
-  if(peerConn){peerConn.close();peerConn=null;}
-  callActive=false;
-  hideVCOverlay();
-  stopCallTimer();
-  document.getElementById('vc-remote-video').style.display='none';
-  document.getElementById('vc-calling').style.display='flex';
-  document.getElementById('vc-top-info').style.display='none';
-  db.ref(`duoBucin/${roomId}/call`).update({active:false});
-}
-function startCallTimer(){
-  vcStartTime=Date.now();
-  vcTimer=setInterval(()=>{
-    const s=Math.floor((Date.now()-vcStartTime)/1000);
-    const m=Math.floor(s/60),ss=s%60;
-    document.getElementById('vc-dur').textContent=`${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
-  },1000);
-}
-function stopCallTimer(){if(vcTimer){clearInterval(vcTimer);vcTimer=null;}}
-function toggleMute(){
-  muted=!muted;
-  localStream?.getAudioTracks().forEach(t=>t.enabled=!muted);
-  document.getElementById('vc-mute-btn').textContent=muted?'🔇':'🎤';
-}
-function toggleVideo(){
-  vidOff=!vidOff;
-  localStream?.getVideoTracks().forEach(t=>t.enabled=!vidOff);
-  document.getElementById('vc-vid-btn').textContent=vidOff?'📵':'📷';
-}
-
-// ===== RING =====
-function listenForRing(){
-  db.ref(`duoBucin/${roomId}/ring`).on('value',snap=>{
-    const d=snap.val();if(!d||!d.ts)return;
-    if(d.to!==myRole)return;
-    if(Date.now()-d.ts>5000)return;
-    document.getElementById('ring-overlay').classList.add('show');
-    startRingLoop();
-    setTimeout(()=>dismissRing(),15000);
-  });
-}
-function doRing(){
-  if(!partnerOnline){toast('😴 Pasangan offline');return;}
-  db.ref(`duoBucin/${roomId}/ring`).set({to:partnerRole,from:myName,ts:Date.now()});
-  toast('🔔 HP pasangan dibunyikan!');
-}
-function dismissRing(){
-  stopRingLoop();
-  document.getElementById('ring-overlay').classList.remove('show');
-}
-
-// ===== FORCE MESSAGE =====
-function listenForMessages(){
-  db.ref(`duoBucin/${roomId}/forceMsg`).on('value',snap=>{
-    const d=snap.val();if(!d||!d.ts)return;
-    if(d.to!==myRole)return;
-    if(Date.now()-d.ts>10000)return;
-    document.getElementById('msg-overlay-from').textContent='Dari '+d.from;
-    document.getElementById('msg-overlay-text').textContent=d.text;
-    document.getElementById('msg-overlay-emo').textContent=d.emoji||'💌';
-    document.getElementById('msg-overlay').classList.add('show');
-    document.getElementById('ctrl-badge').style.display='flex';
-    playSound('ding');
-  });
-}
-function sendForceMessage(){
-  if(!partnerOnline){toast('😴 Pasangan offline');return;}
-  const text=document.getElementById('force-msg-input').value.trim();
-  if(!text){toast('❌ Tulis pesan dulu!');return;}
-  const emojis=['💌','💕','🥺','🌸','💝','😘','💖','🌙'];
-  db.ref(`duoBucin/${roomId}/forceMsg`).set({to:partnerRole,from:myName,text,emoji:emojis[Math.floor(Math.random()*emojis.length)],ts:Date.now()});
-  document.getElementById('force-msg-input').value='';
-  toast('💌 Pesan dikirim ke '+partnerName+'!');
-}
-function setPreset(el){document.getElementById('force-msg-input').value=el.textContent;}
-function dismissMsg(){
-  document.getElementById('msg-overlay').classList.remove('show');
-  document.getElementById('ctrl-badge').style.display='none';
-}
-
-// ===== CHECK-IN =====
-function doCheckIn(){
-  if(!partnerOnline){toast('😴 Pasangan offline');return;}
-  db.ref(`duoBucin/${roomId}/forceMsg`).set({to:partnerRole,from:myName,text:'Hei, kamu baik-baik saja? Aku lagi mikirin kamu 🙋',emoji:'🙋',ts:Date.now()});
-  toast('🙋 Check-in dikirim!');
-}
-
-// ===== SETTINGS =====
-function openSettings(){
-  updateSettingsPanel();
-  const n=document.getElementById('settings-name');
-  const u=document.getElementById('settings-username');
-  if(n)n.value=myName;
-  if(u)u.value=myUsername;
-  document.getElementById('settings-panel').classList.add('show');
-}
-function closeSettings(){document.getElementById('settings-panel').classList.remove('show');}
-function saveSettings(){
-  const name=document.getElementById('settings-name').value.trim();
-  const uname=document.getElementById('settings-username').value.trim();
-  if(!name){toast('❌ Nama tidak boleh kosong');return;}
-  myName=name;
-  myUsername=uname.startsWith('@')?uname:'@'+uname;
-  localStorage.setItem('dbuc_name',myName);
-  localStorage.setItem('dbuc_username',myUsername);
-  if(myAvatarB64)localStorage.setItem('dbuc_avatar',myAvatarB64);
-  document.getElementById('my-name-display').textContent=myName;
-  document.getElementById('my-username-display').textContent=myUsername;
-  applyMyAvatar();
-  if(roomId&&myRole){
-    const data={name:myName,username:myUsername,gender:myGender};
-    if(myAvatarB64)data.avatar=myAvatarB64.substring(0,50000);
-    db.ref(`duoBucin/${roomId}/${myRole}`).update(data);
+// --- Camera: Streamer side (sharing my cam) ---
+async function startCamStream() {
+  camRole = 'streamer';
+  showBgNotif('📹 Pasangan ingin lihat kamera', `${partnerName || 'Pasangan'} mau lihat kameramu`);
+  navigator.vibrate && navigator.vibrate([100, 50, 100]);
+  try {
+    localCamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:'user', width:640, height:480 }, audio: false });
+  } catch(e) {
+    signalWebRTC({ type: 'cam-stop' });
+    toast('Kamera tidak bisa diakses');
+    return;
   }
-  closeSettings();
-  toast('💾 Profil disimpan!');playSound('ding');
-  updateSettingsPanel();
-}
-function updateSettingsPanel(){
-  const el=document.getElementById('settings-my-code');if(el)el.textContent=localStorage.getItem('dbuc_mycode')||'--';
-  const pn=document.getElementById('settings-partner-name');if(pn)pn.textContent=partnerName+(partnerUsername?' ('+partnerUsername+')':'');
-  const ps=document.getElementById('settings-partner-status');if(ps){ps.textContent=partnerOnline?'🟢 Online':'⚪ Offline';ps.className='chip '+(partnerOnline?'':'');}
-}
-function disconnectRoom(){
-  if(!confirm('Putuskan hubungan dengan pasangan?'))return;
-  db.ref(`duoBucin/${roomId}/${myRole}`).update({online:false});
-  localStorage.removeItem('dbuc_room');localStorage.removeItem('dbuc_role');
-  roomId=null;myRole=null;partnerRole=null;
-  closeSettings();showScreen('pairing');toast('🔌 Terputus');
+  // Show my video pip
+  const myVid = document.getElementById('myVideo');
+  myVid.srcObject = localCamStream;
+  myVid.style.display = 'block';
+
+  if (camPC) { camPC.close(); camPC = null; }
+  camPC = new RTCPeerConnection(ICE);
+  localCamStream.getTracks().forEach(t => camPC.addTrack(t, localCamStream));
+  camPC.onicecandidate = e => { if (e.candidate) signalWebRTC({ type: 'cam-ice', candidate: e.candidate.toJSON() }); };
+  const offer = await camPC.createOffer();
+  await camPC.setLocalDescription(offer);
+  signalWebRTC({ type: 'cam-offer', sdp: offer.sdp });
 }
 
-// ===== UTILS =====
-function timeSince(ts){
-  const s=Math.floor((Date.now()-ts)/1000);
-  if(s<60)return s+'d';
-  if(s<3600)return Math.floor(s/60)+'m';
-  return Math.floor(s/3600)+'j';
-}
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer=setTimeout(()=>el.classList.remove('show'),2500);
+// --- Camera: Watcher receives offer ---
+async function handleCamOffer(sdp) {
+  if (!camPC) {
+    camPC = new RTCPeerConnection(ICE);
+    camPC.onicecandidate = e => { if (e.candidate) signalWebRTC({ type: 'cam-ice', candidate: e.candidate.toJSON() }); };
+    camPC.ontrack = e => {
+      const vid = document.getElementById('partnerVideo');
+      vid.srcObject = e.streams[0];
+      vid.style.display = 'block';
+      document.getElementById('camPlaceholder').style.display = 'none';
+      document.getElementById('camFsOverlay').style.display = 'block';
+      document.getElementById('camControls').style.display = 'flex';
+      setCamStatus('📹 Live - Klik untuk layar penuh');
+      playSound('open');
+    };
+  }
+  await camPC.setRemoteDescription({ type: 'offer', sdp });
+  const answer = await camPC.createAnswer();
+  await camPC.setLocalDescription(answer);
+  signalWebRTC({ type: 'cam-answer', sdp: answer.sdp });
 }
 
-// ===== INIT =====
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    initPairing();
-  },1800);
+function setCamStatus(txt) {
+  const el = document.getElementById('camStatus');
+  el.textContent = txt;
+  el.style.display = 'block';
+}
+
+function hideCamPlaceholder(hide) {
+  document.getElementById('camPlaceholder').style.display = hide ? 'none' : 'flex';
+}
+
+function stopCamera(fromRemote) {
+  if (!fromRemote) signalWebRTC({ type: 'cam-stop' });
+  if (localCamStream) { localCamStream.getTracks().forEach(t => t.stop()); localCamStream = null; }
+  if (camPC) { camPC.close(); camPC = null; }
+  document.getElementById('partnerVideo').srcObject = null;
+  document.getElementById('partnerVideo').style.display = 'none';
+  document.getElementById('myVideo').srcObject = null;
+  document.getElementById('myVideo').style.display = 'none';
+  document.getElementById('camFsOverlay').style.display = 'none';
+  document.getElementById('camControls').style.display = 'none';
+  document.getElementById('camStatus').style.display = 'none';
+  document.getElementById('camPlaceholder').style.display = 'flex';
+  camRole = null;
+  toast('📹 Kamera dihentikan');
+  playSound('click');
+}
+
+// ═══════════════════════════════════════════════════════
+// WEBRTC — SCREEN SHARE
+// ═══════════════════════════════════════════════════════
+async function requestScreen() {
+  goLive('screen');
+  screenRole = 'watcher';
+  document.getElementById('screenPlaceholder').style.display = 'none';
+  document.getElementById('screenInfo').textContent = '⏳ Meminta layar pasangan...';
+  document.getElementById('screenInfo').style.display = 'block';
+
+  if (screenPC) { screenPC.close(); screenPC = null; }
+  screenPC = new RTCPeerConnection(ICE);
+  screenPC.onicecandidate = e => { if (e.candidate) signalWebRTC({ type: 'screen-ice', candidate: e.candidate.toJSON() }); };
+  screenPC.ontrack = e => {
+    const vid = document.getElementById('screenVideo');
+    vid.srcObject = e.streams[0];
+    vid.style.display = 'block';
+    document.getElementById('screenInfo').textContent = '📱 Layar Pasangan - Tap untuk remote control';
+    document.getElementById('screenControls').style.display = 'flex';
+    // Bind touch
+    vid.addEventListener('click', onScreenTap);
+    playSound('open');
+  };
+  signalWebRTC({ type: 'screen-request' });
+}
+
+async function shareMyScreen() {
+  screenRole = 'streamer';
+  try {
+    localScreenStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 10 }, audio: false });
+  } catch(e) {
+    // Fallback: capture canvas of this page
+    toast('Bagikan layar tidak tersedia — menggunakan capture page');
+    localScreenStream = null;
+    return;
+  }
+  if (!screenPC) {
+    screenPC = new RTCPeerConnection(ICE);
+    screenPC.onicecandidate = e => { if (e.candidate) signalWebRTC({ type: 'screen-ice', candidate: e.candidate.toJSON() }); };
+  }
+  localScreenStream.getTracks().forEach(t => {
+    screenPC.addTrack(t, localScreenStream);
+    t.onended = () => stopScreen(false);
+  });
+  const offer = await screenPC.createOffer();
+  await screenPC.setLocalDescription(offer);
+  signalWebRTC({ type: 'screen-offer', sdp: offer.sdp });
+  document.getElementById('screenPlaceholder').style.display = 'none';
+  document.getElementById('screenInfo').textContent = '🖥️ Layarmu sedang dibagikan';
+  document.getElementById('screenInfo').style.display = 'block';
+  document.getElementById('screenControls').style.display = 'flex';
+  toast('🖥️ Layar dibagikan ke pasangan');
+}
+
+async function handleScreenOffer(sdp) {
+  if (!screenPC) {
+    screenPC = new RTCPeerConnection(ICE);
+    screenPC.onicecandidate = e => { if (e.candidate) signalWebRTC({ type: 'screen-ice', candidate: e.candidate.toJSON() }); };
+    screenPC.ontrack = e => {
+      const vid = document.getElementById('screenVideo');
+      vid.srcObject = e.streams[0];
+      vid.style.display = 'block';
+      document.getElementById('screenPlaceholder').style.display = 'none';
+      document.getElementById('screenInfo').textContent = '📱 Live - Tap layar untuk remote control';
+      document.getElementById('screenInfo').style.display = 'block';
+      document.getElementById('screenControls').style.display = 'flex';
+      vid.addEventListener('click', onScreenTap);
+      playSound('open');
+    };
+  }
+  await screenPC.setRemoteDescription({ type: 'offer', sdp });
+  const ans = await screenPC.createAnswer();
+  await screenPC.setLocalDescription(ans);
+  signalWebRTC({ type: 'screen-answer', sdp: ans.sdp });
+}
+
+function onScreenTap(e) {
+  const vid = document.getElementById('screenVideo');
+  const rect = vid.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width;
+  const y = (e.clientY - rect.top) / rect.height;
+  // Send touch to partner
+  signalWebRTC({ type: 'screen-touch', x, y });
+  // Show ripple
+  const ripple = document.getElementById('touchRipple');
+  ripple.style.left = e.clientX + 'px';
+  ripple.style.top = e.clientY + 'px';
+  ripple.style.display = 'block';
+  ripple.style.animation = 'none';
+  setTimeout(() => { ripple.style.animation = 'ripple .5s ease-out forwards'; }, 10);
+  setTimeout(() => { ripple.style.display = 'none'; }, 600);
+  playSound('click');
+}
+
+function handleRemoteTouch(xRatio, yRatio) {
+  // Simulate a tap on our screen at given ratio
+  const x = xRatio * window.innerWidth;
+  const y = yRatio * window.innerHeight;
+  const el = document.elementFromPoint(x, y);
+  if (el && typeof el.click === 'function') el.click();
+  // Show a visual indicator
+  const ripple = document.getElementById('touchRipple');
+  ripple.style.left = x + 'px';
+  ripple.style.top = y + 'px';
+  ripple.style.display = 'block';
+  ripple.style.animation = 'none';
+  setTimeout(() => { ripple.style.animation = 'ripple .5s ease-out forwards'; }, 10);
+  setTimeout(() => { ripple.style.display = 'none'; }, 600);
+  toast('👆 Pasangan mengetuk layarmu');
+}
+
+function stopScreen(fromRemote) {
+  if (!fromRemote) signalWebRTC({ type: 'screen-stop' });
+  if (localScreenStream) { localScreenStream.getTracks().forEach(t => t.stop()); localScreenStream = null; }
+  if (screenPC) { screenPC.close(); screenPC = null; }
+  const vid = document.getElementById('screenVideo');
+  vid.srcObject = null;
+  vid.style.display = 'none';
+  vid.removeEventListener('click', onScreenTap);
+  document.getElementById('screenInfo').style.display = 'none';
+  document.getElementById('screenControls').style.display = 'none';
+  document.getElementById('screenPlaceholder').style.display = 'flex';
+  screenRole = null;
+  toast('📱 Layar dihentikan');
+}
+
+// ═══════════════════════════════════════════════════════
+// CONTROL ACTIONS
+// ═══════════════════════════════════════════════════════
+function sendControl(type, extra = {}) {
+  if (!roomId) return;
+  db.ref(`rooms/${roomId}/control`).push({ type, to: partnerCode, from: myCode, ts: Date.now(), ...extra });
+}
+
+function handleControl(val) {
+  switch (val.type) {
+    case 'buzz':
+      navigator.vibrate && navigator.vibrate([300, 200, 300, 200, 300]);
+      showBgNotif(`🔔 ${partnerName || 'Pasangan'}`, 'Pasanganmu membunyikan HPmu! 🔔');
+      toast(`🔔 ${partnerName || 'Pasangan'} membunyikan HPmu!`);
+      playSound('buzz');
+      break;
+    case 'love':
+      showBgNotif(`💕 ${partnerName || 'Pasangan'}`, 'Mengirim cinta untukmu 💕');
+      toast('💕 Pasangan mengirim cinta!');
+      playSound('love');
+      break;
+    case 'poke':
+      navigator.vibrate && navigator.vibrate([100, 50, 100]);
+      showBgNotif(`👉 ${partnerName || 'Pasangan'}`, 'Pasanganmu colek kamu!');
+      toast('👉 Pasangan colek kamu!');
+      playSound('notify');
+      break;
+    case 'goodnight':
+      showBgNotif(`🌙 ${partnerName || 'Pasangan'}`, 'Selamat malam sayang 🌙✨');
+      toast('🌙 Pasangan bilang selamat malam!');
+      playSound('love');
+      break;
+    case 'wake':
+      navigator.vibrate && navigator.vibrate([500, 200, 500, 200, 500]);
+      showBgNotif(`📳 ${partnerName || 'Pasangan'}`, 'Pasanganmu menghidupkan HPmu! Bangun sayang! 💕');
+      playSound('buzz');
+      toast('📳 HP kamu dihidupkan pasangan!');
+      break;
+    case 'vc-request':
+      navigator.vibrate && navigator.vibrate([200, 100, 200]);
+      showBgNotif(`📞 Video Call`, `${partnerName || 'Pasangan'} mengajak video call 📞`);
+      toast(`📞 ${partnerName || 'Pasangan'} video call!`);
+      goLive('cam');
+      requestCamera();
+      break;
+  }
+}
+
+function doAction(type) {
+  sendControl(type);
+  playSound('click');
+  const msgs = { buzz:'🔔 Membunyikan HP pasangan!', love:'💕 Mengirim cinta!', poke:'👉 Colek!', goodnight:'🌙 Selamat malam dikirim!' };
+  toast(msgs[type] || 'Terkirim!');
+}
+
+function sendLove() {
+  sendControl('love');
+  // Animate hearts
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.textContent = ['💕','💗','💖','❤️','🌸'][i];
+      el.style.cssText = `position:fixed;left:${40+Math.random()*20}%;bottom:100px;font-size:24px;z-index:9999;animation:particlePop 1s ease-out forwards;pointer-events:none`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }, i * 120);
+  }
+  playSound('love');
+  toast('💕 Cinta terkirim!');
+}
+
+function wakePartnerPhone() {
+  sendControl('wake');
+  navigator.vibrate && navigator.vibrate([100]);
+  toast('📳 Sinyal bangun dikirim ke pasangan!');
+  playSound('buzz');
+}
+
+function sendMsg() {
+  const inp = document.getElementById('msgInp');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  if (!roomId) { toast('Belum terhubung'); return; }
+  db.ref(`rooms/${roomId}/messages`).push({ text: txt, from: myCode, name: myName, ts: Date.now() });
+  // Show notification on partner side via control
+  sendControl('message', { text: txt });
+  inp.value = '';
+  toast('💌 Pesan terkirim!');
+  playSound('click');
+}
+
+// ═══════════════════════════════════════════════════════
+// AVATAR UPLOAD
+// ═══════════════════════════════════════════════════════
+function uploadAvatar() {
+  document.getElementById('avatarInput').click();
+  playSound('click');
+}
+
+function onAvatarFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const size = 200;
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      // Crop circle
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+      ctx.clip();
+      // Draw image (crop center)
+      const s = Math.min(img.width, img.height);
+      const sx = (img.width - s) / 2, sy = (img.height - s) / 2;
+      ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      myAvatar = dataUrl;
+      localStorage.setItem('myAvatar', myAvatar);
+      updateMyUI();
+      // Push to Firebase (truncated)
+      db.ref(`rooms/${roomId}/presence/${myCode}`).update({ avatar: myAvatar.slice(0, 50000) });
+      toast('📷 Foto profil diperbarui!');
+      playSound('open');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+// ═══════════════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════════════
+function openSettings() {
+  switchTab('ctrl', document.querySelectorAll('.nav-btn')[3]);
+}
+
+function updateSettingsUI() {
+  document.getElementById('settNameVal').textContent = myName || '(belum diisi)';
+  document.getElementById('settGenderVal').textContent = myGender === 'female' ? '🌸 Cewek' : '⚡ Cowok';
+  document.getElementById('settCodeVal').textContent = myCode;
+  document.getElementById('notifToggle').className = 'toggle' + (notifEnabled ? ' on' : '');
+  document.getElementById('settNotifVal').textContent = notifEnabled ? 'Aktif' : 'Nonaktif';
+}
+
+function editName() {
+  const n = prompt('Masukkan nama / panggilan sayang:', myName);
+  if (n === null) return;
+  myName = n.trim() || myName;
+  localStorage.setItem('myName', myName);
+  updateMyUI();
+  updateSettingsUI();
+  db.ref(`rooms/${roomId}/presence/${myCode}`).update({ name: myName });
+  toast('✅ Nama diperbarui!');
+  playSound('click');
+}
+
+function toggleGender() {
+  myGender = myGender === 'female' ? 'male' : 'female';
+  localStorage.setItem('myGender', myGender);
+  updateMyUI();
+  updateSettingsUI();
+  db.ref(`rooms/${roomId}/presence/${myCode}`).update({ gender: myGender });
+  toast('🔄 Gender diperbarui!');
+  playSound('click');
+}
+
+function toggleNotif(el) {
+  notifEnabled = !notifEnabled;
+  el.className = 'toggle' + (notifEnabled ? ' on' : '');
+  document.getElementById('settNotifVal').textContent = notifEnabled ? 'Aktif' : 'Nonaktif';
+  if (notifEnabled && Notification.permission === 'default') Notification.requestPermission();
+  playSound('click');
+}
+
+function disconnectRoom() {
+  if (!confirm('Keluar dari kamar? Kamu harus masukkan kode lagi nanti.')) return;
+  db.ref(`rooms/${roomId}/presence/${myCode}`).update({ online: false });
+  roomId = ''; partnerCode = ''; myRole = '';
+  localStorage.removeItem('roomId');
+  localStorage.removeItem('partnerCode');
+  localStorage.removeItem('myRole');
+  location.reload();
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION HELPERS
+// ═══════════════════════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  playSound('click');
+  if (name === 'map') {
+    setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 350);
+  }
+}
+
+function goLive(tab) {
+  switchTab('live', document.querySelectorAll('.nav-btn')[2]);
+  setLiveTab(tab, document.getElementById('ltab-' + tab));
+}
+
+function setLiveTab(name, btn) {
+  document.querySelectorAll('.ltab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.lpanel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('lpanel-' + name).classList.add('active');
+  currentLiveTab = name;
+}
+
+function openFullscreen(type) {
+  const src = type === 'cam'
+    ? document.getElementById('partnerVideo').srcObject
+    : document.getElementById('screenVideo').srcObject;
+  if (!src) return;
+  const fsVid = document.getElementById('fsVideo');
+  fsVid.srcObject = src;
+  document.getElementById('fsModal').classList.add('show');
+  // Try native fullscreen
+  const el = document.getElementById('fsModal');
+  if (el.requestFullscreen) el.requestFullscreen();
+  playSound('click');
+}
+
+function closeFullscreen() {
+  document.getElementById('fsModal').classList.remove('show');
+  document.getElementById('fsVideo').srcObject = null;
+  if (document.exitFullscreen && document.fullscreenElement) document.exitFullscreen();
+}
+
+// ═══════════════════════════════════════════════════════
+// BACKGROUND NOTIFICATIONS
+// ═══════════════════════════════════════════════════════
+function showBgNotif(title, body) {
+  if (!notifEnabled) return;
+  // Via service worker (works even when tab is in background)
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', title, body });
+    return;
+  }
+  // Fallback: Notification API directly
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '/game/duo-bucin-icon.png', vibrate: [200, 100, 200] });
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// SOUND ENGINE
+// ═══════════════════════════════════════════════════════
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playSound(type) {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const patterns = {
+      click: [[523, 0, 0.12, 0.15, 0.15], [659, 0.1, 0.08, 0.12, 0.1]],
+      open: [[523, 0, 0.15, 0.15, 0.1], [659, 0.1, 0.12, 0.15, 0.1], [784, 0.2, 0.1, 0.2, 0.08]],
+      love: [[659, 0, 0.12, 0.2, 0.1], [784, 0.15, 0.1, 0.2, 0.1], [1047, 0.3, 0.08, 0.3, 0.07]],
+      notify: [[784, 0, 0.12, 0.15, 0.08], [1047, 0.12, 0.1, 0.15, 0.07], [784, 0.24, 0.08, 0.15, 0.06]],
+      buzz: [[200, 0, 0.3, 0.05, 0.5], [180, 0.3, 0.3, 0.05, 0.5]],
+    };
+    const notes = patterns[type] || patterns.click;
+    notes.forEach(([freq, delay, vol, dur, decay]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = type === 'buzz' ? 'sawtooth' : 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + delay;
+      gain.gain.setValueAtTime(vol, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur + decay);
+      osc.start(t);
+      osc.stop(t + dur + decay + 0.05);
+    });
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════
+function generateCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+let toastTimer;
+function toast(msg, dur = 2800) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Close search results on outside tap
+document.addEventListener('click', e => {
+  if (!e.target.closest('.map-search-wrap')) hideSearchResults();
+});
+
+// Handle visibility change for background detection
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && roomId) {
+    // Re-establish presence when coming back to foreground
+    db.ref(`rooms/${roomId}/presence/${myCode}`).update({ online: true, ts: Date.now() });
+  }
 });
 </script>
 </body>
