@@ -9,13 +9,18 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-:root{--pink:#FF8FAB;--pinkl:#FFD6E0;--pinkd:#E05A7A;--blue:#5BAAED;--bluel:#C8E6FF;--blued:#2E7CC4;--bg:#FFF5F7;--card:#fff;--text:#5A3040;--textl:#9A7080;--green:#4ade80;--orange:#fb923c}
+:root{
+  --pink:#FF8FAB;--pinkl:#FFD6E0;--pinkd:#E05A7A;
+  --blue:#5BAAED;--bluel:#C8E6FF;--blued:#2E7CC4;
+  --bg:#FFF5F7;--card:#fff;--text:#5A3040;--textl:#9A7080;
+  --green:#4ade80;--orange:#fb923c
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);transition:opacity .3s,transform .3s;z-index:10}
 .screen.hidden{opacity:0;pointer-events:none;transform:translateY(20px)}
 
-/* ANIMATIONS */
+/* ===== ANIMATIONS ===== */
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-20px)}60%{transform:translateY(-10px)}}
@@ -27,47 +32,113 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 @keyframes ripple{to{transform:scale(4);opacity:0}}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes spinReverse{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+@keyframes dash{to{stroke-dashoffset:0}}
+@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes routeDash{to{stroke-dashoffset:-20}}
 
-/* ===== ANIMATED BORDERS ===== */
-/* Female (pink) border - floral rotating */
-@keyframes femBorderSpin{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+/* ===== FEMALE BORDER — Premium Floral Rose Gold ===== */
+@keyframes femSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes femInner{0%{transform:rotate(360deg)}100%{transform:rotate(0deg)}}
+@keyframes femGlow{
+  0%,100%{box-shadow:0 0 8px rgba(255,105,180,.6),0 0 16px rgba(255,105,180,.3),inset 0 0 6px rgba(255,182,193,.2)}
+  50%{box-shadow:0 0 16px rgba(255,20,147,.8),0 0 32px rgba(255,105,180,.4),inset 0 0 10px rgba(255,182,193,.3)}
 }
-@keyframes femHearts{
-  0%{transform:translate(0,0) scale(1);opacity:1}
-  100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
+@keyframes femPetals{
+  0%{background-position:0% 0%}
+  50%{background-position:100% 100%}
+  100%{background-position:0% 0%}
 }
-@keyframes maleBorderSpin{
-  0%{transform:rotate(0deg)}
-  100%{transform:rotate(360deg)}
-}
+
+/* ===== MALE BORDER — Premium Neon Galaxy ===== */
+@keyframes maleSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 @keyframes maleGlow{
-  0%,100%{box-shadow:0 0 10px #5BAAED,0 0 20px #5BAAED,0 0 30px rgba(91,170,237,0.5)}
-  50%{box-shadow:0 0 20px #2E7CC4,0 0 40px #2E7CC4,0 0 60px rgba(46,124,196,0.5)}
+  0%,100%{box-shadow:0 0 10px rgba(91,170,237,.8),0 0 20px rgba(0,240,255,.4),0 0 40px rgba(46,124,196,.2)}
+  33%{box-shadow:0 0 15px rgba(147,51,234,.8),0 0 30px rgba(147,51,234,.4),0 0 50px rgba(91,170,237,.3)}
+  66%{box-shadow:0 0 12px rgba(0,240,255,.9),0 0 25px rgba(91,170,237,.5),0 0 45px rgba(46,124,196,.25)}
+}
+@keyframes maleInner{0%{transform:rotate(-360deg)}100%{transform:rotate(0deg)}}
+
+/* ===== AVATAR WRAPPERS ===== */
+.avatar-wrapper{position:relative;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Female - large */
+.avatar-wrapper.fem,.avatar-wrapper.fem-lg{width:72px;height:72px}
+.avatar-wrapper.fem-lg{width:86px;height:86px}
+
+.avatar-wrapper.fem::before,.avatar-wrapper.fem-lg::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  background:conic-gradient(
+    #FF69B4 0deg,#FFB6C1 30deg,#FFD700 60deg,#FF8C94 90deg,
+    #FF1493 120deg,#FFB6C1 150deg,#FFD700 180deg,
+    #FF69B4 210deg,#FFC0CB 240deg,#FF8C94 270deg,
+    #FF1493 300deg,#FFD700 330deg,#FF69B4 360deg
+  );
+  animation:femSpin 4s linear infinite;z-index:0
+}
+.avatar-wrapper.fem::after,.avatar-wrapper.fem-lg::after{
+  content:'';position:absolute;inset:-2px;border-radius:50%;
+  background:conic-gradient(
+    transparent 0deg,rgba(255,255,255,.8) 20deg,transparent 40deg,
+    rgba(255,255,255,.8) 100deg,transparent 120deg,
+    rgba(255,255,255,.8) 200deg,transparent 220deg,
+    rgba(255,255,255,.8) 300deg,transparent 320deg
+  );
+  animation:femInner 3s linear infinite;z-index:1
+}
+.avatar-wrapper.fem .avatar-inner,.avatar-wrapper.fem-lg .avatar-inner{
+  animation:femGlow 2s ease-in-out infinite
 }
 
-/* Female avatar border */
-.avatar-wrapper{position:relative;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.avatar-wrapper.fem{width:72px;height:72px}
-.avatar-wrapper.fem::before{content:'';position:absolute;inset:-3px;border-radius:50%;background:linear-gradient(0deg,#FF69B4,#FFB6C1,#FF1493,#FFD700,#FF69B4);background-size:300% 300%;animation:femBorderSpin 3s ease infinite;z-index:0}
-.avatar-wrapper.fem::after{content:'';position:absolute;inset:0;border-radius:50%;background:white;z-index:1;transform:scale(0.93)}
-.avatar-wrapper.male{width:72px;height:72px}
-.avatar-wrapper.male::before{content:'';position:absolute;inset:-3px;border-radius:50%;z-index:0;background:conic-gradient(from 0deg,#5BAAED,#00f0ff,#2E7CC4,#9333ea,#5BAAED);animation:spin 2s linear infinite}
-.avatar-wrapper.male::after{content:'';position:absolute;inset:0;border-radius:50%;background:white;z-index:1;transform:scale(0.93)}
-.avatar-inner{position:relative;z-index:2;width:64px;height:64px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:30px;background:linear-gradient(135deg,#FFD6E0,#C8E6FF)}
-.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-/* Large avatar for home card */
-.avatar-wrapper.fem-lg{width:86px;height:86px}
-.avatar-wrapper.fem-lg .avatar-inner{width:78px;height:78px;font-size:36px}
+/* Male - large */
+.avatar-wrapper.male,.avatar-wrapper.male-lg{width:72px;height:72px}
 .avatar-wrapper.male-lg{width:86px;height:86px}
-.avatar-wrapper.male-lg .avatar-inner{width:78px;height:78px;font-size:36px}
-/* Small avatar for markers */
-.avatar-wrapper.fem-sm{width:46px;height:46px}
-.avatar-wrapper.fem-sm::before,.avatar-wrapper.male-sm::before{inset:-2px}
+
+.avatar-wrapper.male::before,.avatar-wrapper.male-lg::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  background:conic-gradient(
+    #00f0ff 0deg,#5BAAED 45deg,#9333ea 90deg,
+    #2E7CC4 135deg,#00f0ff 180deg,
+    #5BAAED 225deg,#9333ea 270deg,#2E7CC4 315deg,#00f0ff 360deg
+  );
+  animation:maleSpin 2.5s linear infinite;z-index:0
+}
+.avatar-wrapper.male::after,.avatar-wrapper.male-lg::after{
+  content:'';position:absolute;inset:-1px;border-radius:50%;
+  background:conic-gradient(
+    rgba(0,240,255,.5) 0deg,transparent 30deg,
+    rgba(0,240,255,.5) 90deg,transparent 120deg,
+    rgba(0,240,255,.5) 180deg,transparent 210deg,
+    rgba(0,240,255,.5) 270deg,transparent 300deg
+  );
+  animation:maleInner 1.8s linear infinite;z-index:1
+}
+.avatar-wrapper.male .avatar-inner,.avatar-wrapper.male-lg .avatar-inner{
+  animation:maleGlow 2.5s ease-in-out infinite
+}
+
+/* Small avatar (markers) */
+.avatar-wrapper.fem-sm,.avatar-wrapper.male-sm{width:48px;height:48px}
+.avatar-wrapper.fem-sm::before{inset:-3px}
+.avatar-wrapper.male-sm::before{inset:-3px}
 .avatar-wrapper.fem-sm .avatar-inner,.avatar-wrapper.male-sm .avatar-inner{width:40px;height:40px;font-size:18px}
-.avatar-wrapper.male-sm{width:46px;height:46px}
+
+.avatar-inner{
+  position:relative;z-index:2;
+  width:64px;height:64px;border-radius:50%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;font-size:30px;
+  background:linear-gradient(135deg,#FFD6E0,#C8E6FF);
+  transition:transform .2s
+}
+.avatar-wrapper.fem-lg .avatar-inner,.avatar-wrapper.male-lg .avatar-inner{width:78px;height:78px;font-size:36px}
+.avatar-wrapper.fem-sm .avatar-inner,.avatar-wrapper.male-sm .avatar-inner{width:40px;height:40px;font-size:18px}
+.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* White ring between border and inner */
+.avatar-wrapper::before{background-clip:padding-box}
+.avatar-inner-ring{
+  position:absolute;inset:0;border-radius:50%;background:white;z-index:1;
+  transform:scale(0.91)
+}
 
 /* ===== SPLASH ===== */
 #splash{background:linear-gradient(135deg,#FFD6E0,#C8E6FF);justify-content:center;align-items:center;z-index:100}
@@ -79,19 +150,19 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 
 /* ===== PAIRING ===== */
 #pairing{justify-content:center;align-items:center;padding:24px;background:linear-gradient(160deg,#FFF0F5,#F0F7FF)}
-.pair-card{background:white;border-radius:32px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(255,143,171,0.25)}
+.pair-card{background:white;border-radius:32px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(255,143,171,.25)}
 .pair-emoji{font-size:56px;text-align:center;display:block;animation:float 2s ease-in-out infinite;margin-bottom:12px}
 .pair-title{text-align:center;font-size:22px;font-weight:900;color:#FF69B4;margin-bottom:4px}
 .pair-sub{text-align:center;font-size:13px;color:var(--textl);margin-bottom:20px}
-.code-box{background:#FFF0F5;border-radius:18px;padding:18px;text-align:center;margin-bottom:18px;cursor:pointer}
+.code-box{background:#FFF0F5;border-radius:18px;padding:18px;text-align:center;margin-bottom:18px;cursor:pointer;border:2px dashed #FFD6E0}
 .code-num{font-size:40px;font-weight:900;letter-spacing:8px;color:#FF69B4;font-family:monospace}
 .code-hint{font-size:11px;color:var(--textl);margin-top:4px}
 .pair-input{width:100%;border:2.5px solid #FFD6E0;border-radius:16px;padding:14px;font-size:28px;text-align:center;letter-spacing:6px;font-weight:900;color:#FF69B4;outline:none;background:#FFF5F8;font-family:monospace}
 .pair-input:focus{border-color:var(--pink)}
 .btn{width:100%;padding:16px;border:none;border-radius:18px;font-size:15px;font-weight:800;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;letter-spacing:.5px}
 .btn:active{transform:scale(.97)}
-.btn-pink{background:linear-gradient(135deg,var(--pink),#FF69B4);color:white;box-shadow:0 6px 20px rgba(255,105,180,0.4)}
-.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blued));color:white;box-shadow:0 6px 20px rgba(91,170,237,0.4)}
+.btn-pink{background:linear-gradient(135deg,var(--pink),#FF69B4);color:white;box-shadow:0 6px 20px rgba(255,105,180,.4)}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blued));color:white;box-shadow:0 6px 20px rgba(91,170,237,.4)}
 .btn-outline{background:white;color:var(--pink);border:2.5px solid #FFD6E0}
 .btn-sm{padding:10px 20px;font-size:13px;width:auto;border-radius:14px}
 .divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#C0A0A8;font-size:13px}
@@ -123,10 +194,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .name-input{width:100%;border:2.5px solid #FFD6E0;border-radius:16px;padding:14px;font-size:16px;color:var(--text);outline:none;background:#FFF5F8}
 .name-input:focus{border-color:var(--pink)}
 
-/* ===== AVATAR UPLOAD ===== */
+/* Avatar Upload */
 .avatar-upload-area{display:flex;flex-direction:column;align-items:center;gap:14px}
 .avatar-upload-preview{position:relative;cursor:pointer}
-.avatar-upload-btn{position:absolute;bottom:0;right:0;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#FF69B4);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:10;box-shadow:0 2px 8px rgba(255,105,180,.4)}
+.avatar-upload-btn{position:absolute;bottom:2px;right:2px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#FF69B4);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:10;box-shadow:0 2px 8px rgba(255,105,180,.5)}
 .avatar-upload-hint{font-size:12px;color:var(--textl);text-align:center}
 #avatar-file-input{display:none}
 
@@ -153,8 +224,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 
 /* ===== HOME TAB ===== */
 .partner-card{background:white;border-radius:26px;padding:20px;margin-bottom:14px;box-shadow:0 4px 20px rgba(255,143,171,.1);position:relative;overflow:hidden}
-.partner-card.fem-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(255,105,180,.15),transparent)}
-.partner-card.male-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(91,170,237,.15),transparent)}
+.partner-card.fem-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,105,180,.15),transparent)}
+.partner-card.male-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(91,170,237,.15),transparent)}
 .pc-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
 .pc-info{flex:1;min-width:0}
 .pc-name{font-size:18px;font-weight:900;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -181,34 +252,79 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .my-stat-val{font-size:13px;font-weight:900;color:var(--text);margin-top:4px}
 .my-stat-label{font-size:10px;color:var(--textl)}
 
-/* ===== MAP TAB ===== */
-.map-fullscreen{position:fixed!important;inset:0;z-index:150!important;border-radius:0!important}
-#tab-map{padding:0;display:none;flex-direction:column}
+/* ===== MAP TAB — Advanced ===== */
+#tab-map{padding:0;display:none;flex-direction:column;height:100%}
 #tab-map.active{display:flex}
-.map-toolbar{background:white;padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #FFE0EA;flex-shrink:0}
-.map-layer-btn{padding:6px 14px;border:1.5px solid #FFD6E0;border-radius:20px;background:white;font-size:12px;font-weight:700;cursor:pointer;color:var(--text);transition:all .15s;white-space:nowrap}
+.map-toolbar{
+  background:white;padding:8px 12px;
+  display:flex;align-items:center;gap:6px;
+  border-bottom:1px solid #FFE0EA;flex-shrink:0;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none
+}
+.map-toolbar::-webkit-scrollbar{display:none}
+.map-layer-btn{
+  padding:6px 12px;border:1.5px solid #FFD6E0;border-radius:20px;
+  background:white;font-size:11px;font-weight:700;cursor:pointer;
+  color:var(--text);transition:all .15s;white-space:nowrap;flex-shrink:0
+}
 .map-layer-btn.active{background:linear-gradient(135deg,var(--pink),#FF69B4);color:white;border-color:var(--pink)}
-.map-fullscreen-btn{margin-left:auto;width:36px;height:36px;border:1.5px solid #FFD6E0;border-radius:12px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px}
-#leafmap{flex:1;min-height:260px;background:#E8F4FD}
-.map-info-panel{background:white;flex-shrink:0;border-top:1px solid #FFE0EA}
-.map-info-tabs{display:flex;border-bottom:1px solid #FFE0EA}
-.map-info-tab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;color:var(--textl);border-bottom:2px solid transparent;transition:all .2s}
-.map-info-tab.active{color:var(--pink);border-bottom-color:var(--pink)}
-.map-info-content{padding:14px;overflow-y:auto;max-height:160px}
-.map-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.map-stat{background:#FFF5F7;border-radius:14px;padding:10px;text-align:center}
-.map-stat.blue{background:#F0F7FF}
-.map-stat-val{font-size:18px;font-weight:900;color:var(--text)}
-.map-stat-label{font-size:10px;color:var(--textl);margin-top:3px}
-.map-partner-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #FFE0EA}
-.map-partner-row:last-child{border:none}
+.map-sep{width:1px;height:20px;background:#FFE0EA;flex-shrink:0;margin:0 2px}
+.map-action-btn{
+  width:32px;height:32px;border:1.5px solid #FFD6E0;border-radius:10px;
+  background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;transition:all .15s
+}
+.map-action-btn:active{transform:scale(.93)}
+#leafmap{flex:1;min-height:200px;background:#E8F4FD}
 
-/* Custom Leaflet styles */
+/* Resizable info panel */
+.map-info-panel{
+  background:white;flex-shrink:0;
+  border-top:2px solid #FFE0EA;
+  max-height:220px;overflow:hidden;
+  transition:max-height .3s
+}
+.map-info-panel.collapsed{max-height:42px}
+.map-info-tabs{display:flex;border-bottom:1px solid #FFE0EA;position:relative}
+.map-info-tab{flex:1;padding:10px 4px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;color:var(--textl);border-bottom:2px solid transparent;transition:all .2s}
+.map-info-tab.active{color:var(--pink);border-bottom-color:var(--pink)}
+.map-collapse-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:8px;background:#FFF0F5;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+.map-info-content{padding:12px;overflow-y:auto;max-height:160px}
+.map-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.map-stat{background:#FFF5F7;border-radius:12px;padding:10px;text-align:center}
+.map-stat.blue{background:#F0F7FF}
+.map-stat.green{background:#F0FFF4}
+.map-stat-val{font-size:16px;font-weight:900;color:var(--text)}
+.map-stat-label{font-size:9px;color:var(--textl);margin-top:3px;font-weight:600}
+.map-partner-detail{font-size:12px;line-height:1.8;color:var(--text)}
+.map-partner-detail b{font-weight:800}
+.map-addr-row{background:#FFF5F7;border-radius:12px;padding:10px;margin-bottom:8px;font-size:12px;color:var(--text)}
+.map-addr-label{font-size:10px;font-weight:700;color:var(--textl);margin-bottom:3px}
+
+/* Leaflet overrides */
+.leaflet-control-zoom a{border-radius:8px!important;color:var(--pinkd)!important;font-weight:700!important}
+.leaflet-popup-content-wrapper{border-radius:18px!important;box-shadow:0 8px 30px rgba(0,0,0,.15)!important}
+.leaflet-popup-content{margin:14px 16px!important;font-size:13px!important}
 .leaflet-custom-marker{background:transparent!important;border:none!important}
-.map-marker-wrap{position:relative;display:flex;flex-direction:column;align-items:center}
-.map-marker-bubble{border-radius:50% 50% 50% 0;transform:rotate(-45deg);overflow:hidden}
-.map-marker-tail{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--mc)}
-.leaflet-control-layers{border-radius:12px!important;box-shadow:0 4px 16px rgba(0,0,0,.15)!important}
+.leaflet-control-scale-line{border-color:var(--pink)!important;color:var(--pinkd)!important;font-size:10px!important}
+
+/* Rich popup */
+.map-popup{min-width:180px}
+.map-popup-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.map-popup-name{font-size:15px;font-weight:900;color:var(--text)}
+.map-popup-username{font-size:11px;color:var(--textl)}
+.map-popup-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.map-popup-cell{background:#FFF5F7;border-radius:10px;padding:8px;text-align:center}
+.map-popup-cell.blue{background:#F0F7FF}
+.map-popup-val{font-size:14px;font-weight:800;color:var(--text)}
+.map-popup-key{font-size:10px;color:var(--textl);margin-top:2px}
+.map-popup-addr{background:#FFF5F7;border-radius:10px;padding:8px;margin-top:6px;font-size:11px;color:var(--text);line-height:1.5}
+.map-popup-actions{display:flex;gap:6px;margin-top:10px}
+.map-popup-btn{flex:1;padding:8px;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;transition:transform .1s}
+.map-popup-btn:active{transform:scale(.97)}
+.map-popup-btn-pink{background:linear-gradient(135deg,#FF8FAB,#FF69B4);color:white}
+.map-popup-btn-blue{background:linear-gradient(135deg,#5BAAED,#2E7CC4);color:white}
 
 /* ===== CAMERA TAB ===== */
 .cam-frame{border-radius:24px;overflow:hidden;background:#1a1a2e;aspect-ratio:3/4;position:relative;max-height:340px}
@@ -256,10 +372,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .ic-status{color:rgba(255,255,255,.6);font-size:14px;margin-top:8px}
 .ic-waves{display:flex;gap:5px;margin:20px 0}
 .ic-wave{width:4px;height:28px;border-radius:2px;background:rgba(255,255,255,.4);animation:wave 1.2s infinite}
-.ic-wave:nth-child(2){animation-delay:.15s}
-.ic-wave:nth-child(3){animation-delay:.3s}
-.ic-wave:nth-child(4){animation-delay:.45s}
-.ic-wave:nth-child(5){animation-delay:.6s}
+.ic-wave:nth-child(2){animation-delay:.15s}.ic-wave:nth-child(3){animation-delay:.3s}
+.ic-wave:nth-child(4){animation-delay:.45s}.ic-wave:nth-child(5){animation-delay:.6s}
 .ic-btns{display:flex;gap:40px;margin-top:10px}
 .ic-btn{width:70px;height:70px;border-radius:50%;border:none;cursor:pointer;font-size:28px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .ic-btn:active{transform:scale(.9)}
@@ -329,10 +443,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .chip.blue{background:#F0F7FF;color:var(--blue)}
 .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);animation:ripple .6s linear;pointer-events:none}
 canvas{display:none}
-
-/* Leaflet overrides */
-.leaflet-control-zoom a{border-radius:8px!important;color:var(--pinkd)!important;font-weight:700!important}
-.leaflet-popup-content-wrapper{border-radius:16px!important}
 </style>
 </head>
 <body>
@@ -351,14 +461,11 @@ canvas{display:none}
     <span class="pair-emoji">💑</span>
     <div class="pair-title">Duo Bucin Love 💕</div>
     <div class="pair-sub">Masukkan kode 6 digit pasanganmu untuk terhubung</div>
-
     <div class="code-box" onclick="copyRoomCode()" title="Ketuk untuk salin">
       <div class="code-num" id="my-code">------</div>
       <div class="code-hint">📋 Kode Unikmu · Ketuk untuk salin</div>
     </div>
-
     <div class="divider">masukkan kode pasangan</div>
-
     <input class="pair-input" id="partner-code-input" type="number" maxlength="6" placeholder="000000" oninput="this.value=this.value.slice(0,6)">
     <div class="mt10">
       <button class="btn btn-pink" onclick="joinRoom()">💕 Hubungkan dengan Pasangan</button>
@@ -387,32 +494,42 @@ canvas{display:none}
           </div>
           <button class="avatar-upload-btn">📷</button>
         </div>
-        <div class="avatar-upload-hint">Ketuk untuk upload foto dari galeri<br><small>Foto akan ditampilkan ke pasangan</small></div>
+        <div class="avatar-upload-hint">Ketuk untuk upload foto dari galeri<br><small>Foto akan ditampilkan ke pasangan dengan border animasi</small></div>
       </div>
       <input type="file" id="avatar-file-input" accept="image/*" onchange="handleAvatarUpload(event)">
-      <canvas id="avatar-canvas" width="200" height="200"></canvas>
+      <canvas id="avatar-canvas" width="200" height="200" style="display:none"></canvas>
     </div>
 
     <!-- Nama & Username -->
     <div class="setup-card">
       <div class="setup-card-title"><span class="setup-card-icon">✏️</span> Nama & Username</div>
       <input class="name-input" id="my-name-input" type="text" placeholder="Nama panggilanmu e.g. Sayang 🌸" maxlength="20">
-      <input class="name-input mt10" id="my-username-input" type="text" placeholder="Username e.g. @bucin_girl" maxlength="20" style="margin-top:10px">
+      <input class="name-input mt10" id="my-username-input" type="text" placeholder="Username e.g. bucin_girl (tanpa @)" maxlength="20" style="margin-top:10px">
     </div>
 
-    <!-- Gender -->
+    <!-- Gender & Border -->
     <div class="setup-card">
-      <div class="setup-card-title"><span class="setup-card-icon">🎨</span> Jenis Kelamin & Border</div>
+      <div class="setup-card-title"><span class="setup-card-icon">🎨</span> Jenis Kelamin & Border Animasi</div>
       <div class="role-row">
         <div class="role-btn" id="role-fem" onclick="selectGender('fem')">
           <span class="re">🌸</span>
           <span class="rl">Perempuan</span>
-          <div style="font-size:10px;color:var(--pink);margin-top:4px">Border Bunga Pink</div>
+          <div style="font-size:10px;color:var(--pink);margin-top:6px;font-weight:700">✨ Border Floral Rose Gold</div>
+          <div style="margin-top:8px">
+            <div class="avatar-wrapper fem" style="margin:0 auto">
+              <div class="avatar-inner" style="width:40px;height:40px;font-size:18px">🌸</div>
+            </div>
+          </div>
         </div>
         <div class="role-btn" id="role-male" onclick="selectGender('male')">
           <span class="re">💙</span>
           <span class="rl">Laki-laki</span>
-          <div style="font-size:10px;color:var(--blue);margin-top:4px">Border Circuit Biru</div>
+          <div style="font-size:10px;color:var(--blue);margin-top:6px;font-weight:700">⚡ Border Neon Galaxy</div>
+          <div style="margin-top:8px">
+            <div class="avatar-wrapper male" style="margin:0 auto">
+              <div class="avatar-inner" style="width:40px;height:40px;font-size:18px">💙</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -555,39 +672,37 @@ canvas{display:none}
 
     </div><!-- end home -->
 
-    <!-- MAP TAB -->
+    <!-- MAP TAB — Advanced -->
     <div class="tab-page no-pad" id="tab-map">
       <div class="map-toolbar">
         <button class="map-layer-btn active" id="btn-street" onclick="setLayer('street')">🗺️ Peta</button>
         <button class="map-layer-btn" id="btn-satellite" onclick="setLayer('satellite')">🛰️ Satelit</button>
+        <button class="map-layer-btn" id="btn-hybrid" onclick="setLayer('hybrid')">🌍 Hybrid</button>
         <button class="map-layer-btn" id="btn-terrain" onclick="setLayer('terrain')">⛰️ Terrain</button>
-        <button class="map-fullscreen-btn" id="map-fs-btn" onclick="toggleMapFullscreen()" title="Fullscreen">⛶</button>
+        <button class="map-layer-btn" id="btn-dark" onclick="setLayer('dark')">🌙 Dark</button>
+        <div class="map-sep"></div>
+        <button class="map-action-btn" onclick="centerOnMe()" title="Lokasiku">📍</button>
+        <button class="map-action-btn" onclick="centerOnPartner()" title="Lokasi Pasangan">💕</button>
+        <button class="map-action-btn" onclick="fitBothOnMap()" title="Lihat Semua">👥</button>
+        <button class="map-action-btn" onclick="toggleMapFullscreen()" title="Fullscreen" id="map-fs-btn">⛶</button>
       </div>
       <div id="leafmap"></div>
       <div class="map-info-panel" id="map-info-panel">
         <div class="map-info-tabs">
           <div class="map-info-tab active" id="mit-info" onclick="setMapInfoTab('info')">📊 Info</div>
-          <div class="map-info-tab" id="mit-partner" onclick="setMapInfoTab('partner')">👥 Pasangan</div>
+          <div class="map-info-tab" id="mit-partner" onclick="setMapInfoTab('partner')">💕 Pasangan</div>
           <div class="map-info-tab" id="mit-me" onclick="setMapInfoTab('me')">📍 Posisiku</div>
+          <button class="map-collapse-btn" id="map-collapse-btn" onclick="toggleMapPanel()">▼</button>
         </div>
         <div class="map-info-content" id="map-info-content">
           <div class="map-stat-row">
-            <div class="map-stat">
-              <div class="map-stat-val" id="map-dist">--</div>
-              <div class="map-stat-label">Jarak (km)</div>
-            </div>
-            <div class="map-stat blue">
-              <div class="map-stat-val" id="map-eta">-- mnt</div>
-              <div class="map-stat-label">ETA</div>
-            </div>
-            <div class="map-stat">
-              <div class="map-stat-val" id="map-speed">--</div>
-              <div class="map-stat-label">km/h</div>
-            </div>
+            <div class="map-stat"><div class="map-stat-val" id="map-dist">--</div><div class="map-stat-label">Jarak</div></div>
+            <div class="map-stat blue"><div class="map-stat-val" id="map-eta">--</div><div class="map-stat-label">ETA</div></div>
+            <div class="map-stat green"><div class="map-stat-val" id="map-speed">--</div><div class="map-stat-label">km/h</div></div>
           </div>
         </div>
       </div>
-    </div><!-- end map -->
+    </div>
 
     <!-- CAMERA TAB -->
     <div class="tab-page" id="tab-cam">
@@ -606,7 +721,6 @@ canvas{display:none}
           <button class="cam-btn cam-btn-white" onclick="playSound('pop')">🔄</button>
         </div>
       </div>
-
       <div class="cam-ctrl-row">
         <button class="cam-ctrl-btn" style="background:linear-gradient(135deg,var(--pink),#FF69B4);color:white" onclick="watchPartner(); playSound('pop')">
           👁️ Lihat Pasangan
@@ -615,7 +729,6 @@ canvas{display:none}
           📞 Video Call
         </button>
       </div>
-
       <div class="section-card" style="margin-top:14px">
         <div class="section-title">📷 Kameraku</div>
         <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:#111">
@@ -626,7 +739,7 @@ canvas{display:none}
           <button class="cam-ctrl-btn" style="background:white;color:var(--textl);border:2px solid #FFE0EA" onclick="stopMyCam(); playSound('pop')">⛔ Matikan</button>
         </div>
       </div>
-    </div><!-- end cam -->
+    </div>
 
     <!-- CONTROL TAB -->
     <div class="tab-page" id="tab-ctrl">
@@ -669,9 +782,7 @@ canvas{display:none}
             <span class="preset" onclick="setPreset(this)">Makan udah belum? 🍱</span>
             <span class="preset" onclick="setPreset(this)">Pulang kapan sayang? 🏠</span>
             <span class="preset" onclick="setPreset(this)">I love you to the moon 🌙</span>
-            <span class="preset" onclick="setPreset(this)">Kamu dunia segalanya 🌏</span>
             <span class="preset" onclick="setPreset(this)">Miss you so much 😘</span>
-            <span class="preset" onclick="setPreset(this)">You're my everything 💖</span>
           </div>
           <div class="mt10">
             <button class="btn btn-pink" onclick="sendForceMessage(); playSound('swoosh')">💌 Kirim Sekarang!</button>
@@ -697,7 +808,7 @@ canvas{display:none}
           </div>
         </div>
       </div>
-    </div><!-- end ctrl -->
+    </div>
 
   </div>
 
@@ -791,21 +902,28 @@ canvas{display:none}
     </div>
     <div class="settings-body">
 
-      <!-- Change Avatar -->
+      <!-- Change Avatar & Profile -->
       <div class="settings-section">
-        <div class="settings-section-title">📸 Profil</div>
-        <div style="display:flex;gap:16px;align-items:center">
-          <div style="position:relative;cursor:pointer" onclick="triggerAvatarUpload()">
+        <div class="settings-section-title">📸 Profil & Avatar</div>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="position:relative;cursor:pointer;flex-shrink:0" onclick="triggerAvatarUpload()">
             <div class="avatar-wrapper fem-lg" id="settings-avatar-wrapper">
               <div class="avatar-inner" id="settings-avatar-inner">🌸</div>
             </div>
-            <div class="avatar-upload-btn">📷</div>
+            <div class="avatar-upload-btn" style="bottom:2px;right:2px">📷</div>
           </div>
           <div style="flex:1">
-            <div class="settings-section-title" style="margin-bottom:6px">Ubah Nama</div>
+            <div style="font-size:11px;font-weight:700;color:var(--textl);margin-bottom:4px">NAMA</div>
             <input class="settings-input" id="settings-name" type="text" placeholder="Nama panggilanmu">
-            <div class="settings-section-title" style="margin-bottom:6px;margin-top:10px">Ubah Username</div>
+            <div style="font-size:11px;font-weight:700;color:var(--textl);margin-top:10px;margin-bottom:4px">USERNAME</div>
             <input class="settings-input" id="settings-username" type="text" placeholder="@username">
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--textl);margin-bottom:8px">BORDER GENDER</div>
+          <div style="display:flex;gap:8px">
+            <button id="settings-gender-fem" onclick="changeGender('fem')" style="flex:1;padding:10px;border:2px solid #FFD6E0;border-radius:14px;background:white;font-size:13px;font-weight:700;cursor:pointer;color:var(--pink)">🌸 Perempuan</button>
+            <button id="settings-gender-male" onclick="changeGender('male')" style="flex:1;padding:10px;border:2px solid #C8E6FF;border-radius:14px;background:white;font-size:13px;font-weight:700;cursor:pointer;color:var(--blue)">💙 Laki-laki</button>
           </div>
         </div>
         <button class="btn btn-pink mt16" onclick="saveSettings()">💾 Simpan Perubahan</button>
@@ -815,11 +933,8 @@ canvas{display:none}
       <div class="settings-section">
         <div class="settings-section-title">🏠 Info Kamar</div>
         <div class="settings-row">
-          <div><div class="settings-row-label">Kode Kamar</div><div class="settings-row-sub" id="settings-room-id">--</div></div>
-          <button class="btn btn-outline btn-sm" onclick="copyRoomCode()">📋 Salin</button>
-        </div>
-        <div class="settings-row">
           <div><div class="settings-row-label">Kode Unikku</div><div class="settings-row-sub" id="settings-my-code">--</div></div>
+          <button class="btn btn-outline btn-sm" onclick="copyRoomCode()">📋 Salin</button>
         </div>
         <div class="settings-row">
           <div><div class="settings-row-label">Pasangan</div><div class="settings-row-sub" id="settings-partner-name">--</div></div>
@@ -832,7 +947,6 @@ canvas{display:none}
         <div class="settings-section-title">⚠️ Lainnya</div>
         <button class="btn btn-outline" style="color:#ef4444;border-color:#fecaca" onclick="disconnectRoom()">🔌 Putuskan & Ganti Pasangan</button>
       </div>
-
       <div style="height:20px"></div>
     </div>
   </div>
@@ -866,9 +980,11 @@ let vcStartTime=null, vcTimer=null, muted=false, vidOff=false;
 let watchPeer=null, watchStream=null;
 let ringSound=null, incomingCallData=null;
 let mapInstance=null, myMarker=null, partnerMarker=null, routeLine=null;
-let currentLayer='street', mapFullscreen=false, mapInfoTabActive='info';
+let currentLayer='street', mapFullscreen=false, mapInfoTabActive='info', mapPanelCollapsed=false;
 let myAccuracy=null, partnerAccuracy=null;
-let accuracyCircle=null;
+let accuracyCircle=null, mapAcc1=null, mapAcc2=null;
+let myAddress='', partnerAddress='';
+let addrCache={};
 
 const RTC_CFG={iceServers:[
   {urls:'stun:stun.l.google.com:19302'},
@@ -931,7 +1047,7 @@ function stopRingLoop(){if(ringSound){clearInterval(ringSound);ringSound=null;}}
 
 // ===== RIPPLE =====
 document.addEventListener('click',e=>{
-  const t=e.target.closest('.ctrl-card,.btn,.cam-ctrl-btn,.vc-btn,.ic-btn,.ni,.map-layer-btn,.preset,.role-btn');
+  const t=e.target.closest('.ctrl-card,.btn,.cam-ctrl-btn,.vc-btn,.ic-btn,.ni,.map-layer-btn,.preset,.role-btn,.map-action-btn');
   if(!t)return;
   const r=document.createElement('span');const rect=t.getBoundingClientRect();const sz=Math.max(rect.width,rect.height)*2;
   r.className='ripple';r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
@@ -950,37 +1066,46 @@ function switchTab(tabId){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   const map={'tab-home':'ni-home','tab-map':'ni-map','tab-cam':'ni-cam','tab-ctrl':'ni-ctrl'};
   if(map[tabId])document.getElementById(map[tabId])?.classList.add('active');
-  if(tabId==='tab-map'){setTimeout(initMap,200);}
+  if(tabId==='tab-map'){setTimeout(()=>{initMap();mapInstance?.invalidateSize();},200);}
   if(tabId==='tab-cam'){startMyCam();}
 }
 
-// ===== AVATAR =====
+// ===== AVATAR STYLE =====
 function setAvatarStyle(wrapperEl, innerEl, gender, avatarB64, fallbackEmoji){
   if(!wrapperEl||!innerEl)return;
-  // Set border class
   const lg=wrapperEl.classList.contains('fem-lg')||wrapperEl.classList.contains('male-lg');
   const sm=wrapperEl.classList.contains('fem-sm')||wrapperEl.classList.contains('male-sm');
   const suffix=lg?'-lg':sm?'-sm':'';
   wrapperEl.className='avatar-wrapper '+(gender==='male'?'male':'fem')+suffix;
-  // Set content
   if(avatarB64){
     innerEl.innerHTML=`<img src="${avatarB64}" alt="avatar">`;
   } else {
     innerEl.textContent=fallbackEmoji||(gender==='male'?'💙':'🌸');
   }
 }
-
 function applyMyAvatar(){
   const g=myGender, a=myAvatarB64;
   setAvatarStyle(document.getElementById('my-avatar-wrapper'),document.getElementById('my-avatar-inner'),g,a,'🌸');
   setAvatarStyle(document.getElementById('settings-avatar-wrapper'),document.getElementById('settings-avatar-inner'),g,a,'🌸');
+  // Update gender buttons
+  const fg=document.getElementById('settings-gender-fem');
+  const mg=document.getElementById('settings-gender-male');
+  if(fg&&mg){
+    fg.style.background=g==='fem'?'linear-gradient(135deg,#FF8FAB,#FF69B4)':'white';
+    fg.style.color=g==='fem'?'white':'var(--pink)';
+    mg.style.background=g==='male'?'linear-gradient(135deg,#5BAAED,#2E7CC4)':'white';
+    mg.style.color=g==='male'?'white':'var(--blue)';
+  }
 }
 function applyPartnerAvatar(){
   const g=partnerGender, a=partnerAvatarB64;
   setAvatarStyle(document.getElementById('partner-avatar-wrapper'),document.getElementById('partner-avatar-inner'),g,a,'💝');
-  // Update card style
   const card=document.getElementById('partner-main-card');
   if(card){card.className='partner-card '+(g==='male'?'male-card':'fem-card');}
+  // Update vc avatar
+  const vcAv=document.getElementById('vc-call-avatar');const icAv=document.getElementById('ic-avatar');
+  if(vcAv)vcAv.textContent=g==='male'?'💙':'💝';
+  if(icAv)icAv.textContent=g==='male'?'💙':'💝';
 }
 
 // ===== AVATAR UPLOAD =====
@@ -992,22 +1117,17 @@ function handleAvatarUpload(e){
     const img=new Image();
     img.onload=()=>{
       const canvas=document.getElementById('avatar-canvas');
-      canvas.style.display='none';
       canvas.width=200;canvas.height=200;
       const ctx=canvas.getContext('2d');
-      // Crop to circle
       ctx.clearRect(0,0,200,200);
       ctx.beginPath();ctx.arc(100,100,100,0,Math.PI*2);ctx.clip();
-      // Center-crop
       const s=Math.min(img.width,img.height);
       const ox=(img.width-s)/2,oy=(img.height-s)/2;
       ctx.drawImage(img,ox,oy,s,s,0,0,200,200);
       myAvatarB64=canvas.toDataURL('image/jpeg',0.8);
-      // Update all avatar displays
       applyMyAvatar();
       const si=document.getElementById('setup-avatar-inner');
       if(si){si.innerHTML=`<img src="${myAvatarB64}" alt="avatar">`;}
-      // Save to Firebase
       if(roomId&&myRole){db.ref(`duoBucin/${roomId}/${myRole}`).update({avatar:myAvatarB64.substring(0,50000)});}
       toast('📸 Foto profil diupdate!');playSound('ding');
     };
@@ -1063,9 +1183,16 @@ function selectGender(g){
   selectedGender=g;myGender=g;
   document.getElementById('role-fem').className='role-btn'+(g==='fem'?' sel-fem':'');
   document.getElementById('role-male').className='role-btn'+(g==='male'?' sel-male':'');
-  // Update setup avatar border
   const sw=document.getElementById('setup-avatar-wrapper');
   if(sw){sw.className='avatar-wrapper '+(g==='male'?'male-lg':'fem-lg');}
+  playSound('pop');
+}
+function changeGender(g){
+  myGender=g;
+  applyMyAvatar();
+  localStorage.setItem('dbuc_gender',g);
+  if(roomId&&myRole)db.ref(`duoBucin/${roomId}/${myRole}`).update({gender:g});
+  toast(g==='male'?'💙 Border Neon Galaxy aktif!':'🌸 Border Floral Rose Gold aktif!');
   playSound('pop');
 }
 async function requestAllPerms(){
@@ -1081,9 +1208,10 @@ function finishSetup(){
   const name=document.getElementById('my-name-input').value.trim();
   if(!name){toast('❌ Masukkan nama panggilanmu!');playSound('pop');return;}
   myName=name;
-  myUsername=document.getElementById('my-username-input').value.trim()||'@bucin';
+  let uname=document.getElementById('my-username-input').value.trim()||'bucin';
+  if(!uname.startsWith('@'))uname='@'+uname;
+  myUsername=uname;
   myGender=selectedGender;
-  if(!myUsername.startsWith('@'))myUsername='@'+myUsername;
   localStorage.setItem('dbuc_name',myName);
   localStorage.setItem('dbuc_username',myUsername);
   localStorage.setItem('dbuc_gender',myGender);
@@ -1124,9 +1252,41 @@ function startLocationSharing(){
     document.getElementById('my-loc-status').textContent='Aktif';
     db.ref(`duoBucin/${roomId}/${myRole}`).update({lat:myLat,lng:myLng,locTs:Date.now(),accuracy:myAccuracy||10});
     updateMapAndETA();
+    // Reverse geocode my location
+    reverseGeocode(myLat,myLng,'me');
   },err=>{document.getElementById('my-loc-status').textContent='Off';},{
     enableHighAccuracy:true,maximumAge:0,timeout:10000
   });
+}
+
+// ===== REVERSE GEOCODE =====
+async function reverseGeocode(lat,lng,who){
+  const key=lat.toFixed(3)+','+lng.toFixed(3);
+  if(addrCache[key]){
+    if(who==='me')myAddress=addrCache[key];
+    else partnerAddress=addrCache[key];
+    if(mapInfoTabActive==='partner'&&who==='partner')updateMapInfoContent();
+    if(mapInfoTabActive==='me'&&who==='me')updateMapInfoContent();
+    return;
+  }
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=id`,{headers:{'User-Agent':'DuoBucinApp/2.0'}});
+    const d=await r.json();
+    const addr=d.display_name||'Lokasi tidak diketahui';
+    const short=addr.split(',').slice(0,3).join(', ');
+    addrCache[key]=short;
+    if(who==='me')myAddress=short;
+    else partnerAddress=short;
+    if(mapInfoTabActive==='partner'&&who==='partner')updateMapInfoContent();
+    if(mapInfoTabActive==='me'&&who==='me')updateMapInfoContent();
+    // Update popup if exists
+    if(who==='me'&&myMarker){
+      myMarker.setPopupContent(buildMyPopup());
+    }
+    if(who==='partner'&&partnerMarker){
+      partnerMarker.setPopupContent(buildPartnerPopup());
+    }
+  }catch(e){}
 }
 
 // ===== BATTERY =====
@@ -1157,20 +1317,14 @@ function listenToPartner(){
     partnerGender=d.gender||'fem';
     if(d.avatar)partnerAvatarB64=d.avatar;
     partnerOnline=!!d.online;
-
     if(!wasOnline&&partnerOnline){playSound('online');toast('💕 '+partnerName+' baru saja online!');}
-
     document.getElementById('partner-name-display').textContent=partnerName;
     document.getElementById('partner-username-display').textContent=partnerUsername;
     document.getElementById('vc-pname-display').textContent=partnerName;
     document.getElementById('ic-name').textContent=partnerName;
     document.getElementById('vc-call-name').textContent=partnerName;
     document.getElementById('ring-who').textContent=partnerName+' memanggilmu! 💕';
-
-    // Apply partner avatar
     applyPartnerAvatar();
-
-    // Online status
     const pill=document.getElementById('partner-online-pill');
     if(partnerOnline){
       pill.textContent='🟢 Online';pill.classList.remove('off');
@@ -1181,8 +1335,6 @@ function listenToPartner(){
       document.getElementById('conn-dot').classList.add('offline');
       document.getElementById('conn-text').textContent='Offline';
     }
-
-    // Battery
     if(d.battery!=null){
       document.getElementById('p-battery-pct').textContent=d.battery;
       document.getElementById('ctrl-p-bat').textContent=d.battery+'%';
@@ -1190,30 +1342,28 @@ function listenToPartner(){
       document.getElementById('p-bat-bar').style.width=w;
       document.getElementById('ctrl-p-bat-bar').style.width=w;
       const isLow=d.battery<20;
-      ['p-bat-bar','ctrl-p-bat-bar'].forEach(id=>{
-        document.getElementById(id)?.classList.toggle('low',isLow);
-      });
+      ['p-bat-bar','ctrl-p-bat-bar'].forEach(id=>{document.getElementById(id)?.classList.toggle('low',isLow);});
     }
-
-    // Location
     if(d.lat&&d.lng){
       prevPartnerLat=partnerLat;prevPartnerLng=partnerLng;prevPartnerTs=partnerLat?d.locTs:null;
       partnerLat=d.lat;partnerLng=d.lng;partnerAccuracy=d.accuracy||15;
       updateMapAndETA();
+      reverseGeocode(partnerLat,partnerLng,'partner');
     }
     if(d.lastSeen)document.getElementById('p-lastseen').textContent=timeSince(d.lastSeen);
     updateSettingsPanel();
   });
 }
 
-// ===== MAP =====
+// ===== MAP — Advanced =====
 const TILES={
-  street:{url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',attr:'© OpenStreetMap contributors',maxZoom:19},
-  satellite:{url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr:'© Esri World Imagery',maxZoom:18},
-  terrain:{url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',attr:'© OpenTopoMap',maxZoom:17}
+  street:{url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',attr:'© OpenStreetMap',maxZoom:19},
+  satellite:{url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr:'© Esri',maxZoom:18},
+  hybrid:{url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',attr:'© Esri',maxZoom:18},
+  terrain:{url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',attr:'© OpenTopoMap',maxZoom:17},
+  dark:{url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',attr:'© CartoDB',maxZoom:19}
 };
 let tileLayer=null;
-let mapAcc1=null,mapAcc2=null;
 
 function setLayer(layer){
   if(!mapInstance){currentLayer=layer;return;}
@@ -1221,11 +1371,86 @@ function setLayer(layer){
   const cfg=TILES[layer];
   tileLayer=L.tileLayer(cfg.url,{attribution:cfg.attr,maxZoom:cfg.maxZoom}).addTo(mapInstance);
   currentLayer=layer;
-  ['street','satellite','terrain'].forEach(l=>{
+  Object.keys(TILES).forEach(l=>{
     const b=document.getElementById('btn-'+l);
     if(b)b.classList.toggle('active',l===layer);
   });
   playSound('pop');
+}
+
+function buildMyPopup(){
+  const bat=document.getElementById('my-battery-val')?.textContent||'--';
+  const addrHtml=myAddress?`<div class="map-popup-addr">📍 ${myAddress}</div>`:'';
+  return `<div class="map-popup">
+    <div class="map-popup-header">
+      <div>
+        <div class="map-popup-name">${myName||'Aku'}</div>
+        <div class="map-popup-username">${myUsername||'@me'}</div>
+      </div>
+    </div>
+    <div class="map-popup-grid">
+      <div class="map-popup-cell"><div class="map-popup-val">${myLat?myLat.toFixed(5):'--'}</div><div class="map-popup-key">Latitude</div></div>
+      <div class="map-popup-cell blue"><div class="map-popup-val">${myLng?myLng.toFixed(5):'--'}</div><div class="map-popup-key">Longitude</div></div>
+      <div class="map-popup-cell"><div class="map-popup-val">${bat}</div><div class="map-popup-key">🔋 Baterai</div></div>
+      <div class="map-popup-cell blue"><div class="map-popup-val">~${Math.round(myAccuracy||10)}m</div><div class="map-popup-key">🎯 Akurasi</div></div>
+    </div>
+    ${addrHtml}
+    <div class="map-popup-actions">
+      <button class="map-popup-btn map-popup-btn-pink" onclick="centerOnMe()">📍 Fokus</button>
+    </div>
+  </div>`;
+}
+
+function buildPartnerPopup(){
+  const bat=document.getElementById('p-battery-pct')?.textContent||'--';
+  const dist=myLat&&partnerLat?haversine(myLat,myLng,partnerLat,partnerLng):null;
+  const distStr=dist?(dist<1?Math.round(dist*1000)+'m':dist.toFixed(2)+'km'):'--';
+  const addrHtml=partnerAddress?`<div class="map-popup-addr">📍 ${partnerAddress}</div>`:'';
+  return `<div class="map-popup">
+    <div class="map-popup-header">
+      <div>
+        <div class="map-popup-name">${partnerName}</div>
+        <div class="map-popup-username">${partnerUsername||'@partner'}</div>
+      </div>
+    </div>
+    <div class="map-popup-grid">
+      <div class="map-popup-cell"><div class="map-popup-val">${partnerLat?partnerLat.toFixed(5):'--'}</div><div class="map-popup-key">Latitude</div></div>
+      <div class="map-popup-cell blue"><div class="map-popup-val">${partnerLng?partnerLng.toFixed(5):'--'}</div><div class="map-popup-key">Longitude</div></div>
+      <div class="map-popup-cell"><div class="map-popup-val">${bat}%</div><div class="map-popup-key">🔋 Baterai</div></div>
+      <div class="map-popup-cell blue"><div class="map-popup-val">${distStr}</div><div class="map-popup-key">📏 Jarak</div></div>
+    </div>
+    ${addrHtml}
+    <div class="map-popup-actions">
+      <button class="map-popup-btn map-popup-btn-pink" onclick="doRing();playSound('ring')">🔔 Bunyikan</button>
+      <button class="map-popup-btn map-popup-btn-blue" onclick="startVideoCall();playSound('pop')">📞 Call</button>
+    </div>
+  </div>`;
+}
+
+function makeAvatarMarker(lat,lng,gender,avatarB64,name){
+  const borderColor=gender==='male'?'#5BAAED':'#FF69B4';
+  const bgGrad=gender==='male'?'linear-gradient(135deg,#C8E6FF,#F0F7FF)':'linear-gradient(135deg,#FFD6E0,#FFF0F5)';
+  let inner=avatarB64
+    ?`<img src="${avatarB64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+    :(gender==='male'?'💙':'🌸');
+  const html=`
+    <div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))">
+      <div style="
+        width:50px;height:50px;border-radius:50%;
+        border:3px solid ${borderColor};
+        background:${bgGrad};
+        display:flex;align-items:center;justify-content:center;
+        font-size:22px;overflow:hidden;
+        box-shadow:0 0 0 2px white, 0 0 0 4px ${borderColor}40;
+      ">${inner}</div>
+      <div style="
+        background:${borderColor};color:white;font-size:10px;font-weight:800;
+        border-radius:10px;padding:3px 10px;margin-top:4px;white-space:nowrap;
+        box-shadow:0 2px 8px ${borderColor}60;letter-spacing:.3px;
+      ">${name||'?'}</div>
+      <div style="width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid ${borderColor};margin-top:2px"></div>
+    </div>`;
+  return L.divIcon({html,className:'leaflet-custom-marker',iconSize:[64,76],iconAnchor:[32,76]});
 }
 
 function initMap(){
@@ -1238,84 +1463,96 @@ function initMap(){
     zoomControl:true,
     attributionControl:true
   });
-  // Set tile
   tileLayer=L.tileLayer(TILES[currentLayer].url,{
     attribution:TILES[currentLayer].attr,
     maxZoom:TILES[currentLayer].maxZoom
   }).addTo(mapInstance);
-  // Scale control
   L.control.scale({imperial:false,position:'bottomleft'}).addTo(mapInstance);
   updateMapMarkers();
-  // Map click event for details
+  // Click to get address
   mapInstance.on('click',e=>{
-    const lat=e.latlng.lat.toFixed(6),lng=e.latlng.lng.toFixed(6);
-    L.popup().setLatLng(e.latlng)
-      .setContent(`<b>📍 Titik Dipilih</b><br>Lat: ${lat}<br>Lng: ${lng}`)
+    const lat=e.latlng.lat,lng=e.latlng.lng;
+    const popup=L.popup({maxWidth:260}).setLatLng(e.latlng)
+      .setContent(`<div style="text-align:center;padding:4px"><b>📍 Titik Dipilih</b><br><span style="font-size:11px;color:#9A7080">${lat.toFixed(6)}, ${lng.toFixed(6)}</span><br><span style="font-size:11px">Memuat alamat...</span></div>`)
       .openOn(mapInstance);
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=id`,{headers:{'User-Agent':'DuoBucinApp/2.0'}})
+      .then(r=>r.json()).then(d=>{
+        const addr=(d.display_name||'').split(',').slice(0,4).join(', ');
+        popup.setContent(`<div style="min-width:180px"><b>📍 Titik Dipilih</b><br><div style="font-size:11px;color:#9A7080;margin:4px 0">${lat.toFixed(6)}, ${lng.toFixed(6)}</div><div style="font-size:12px;color:#5A3040;background:#FFF5F7;border-radius:8px;padding:6px;margin-top:6px">🏘️ ${addr}</div></div>`);
+      }).catch(()=>{});
   });
-}
-
-function makeAvatarMarker(lat,lng,gender,avatarB64,name,color){
-  const border=gender==='male'?'#5BAAED':'#FF69B4';
-  let inner=avatarB64
-    ?`<img src="${avatarB64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
-    :(gender==='male'?'💙':'🌸');
-  const html=`
-    <div style="display:flex;flex-direction:column;align-items:center;cursor:pointer">
-      <div style="width:46px;height:46px;border-radius:50%;border:3px solid ${border};
-           background:white;display:flex;align-items:center;justify-content:center;
-           font-size:20px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.25);
-           animation:pulse 2s infinite">
-        ${inner}
-      </div>
-      <div style="background:${border};color:white;font-size:10px;font-weight:700;
-           border-radius:10px;padding:2px 8px;margin-top:3px;white-space:nowrap;
-           box-shadow:0 2px 8px rgba(0,0,0,.2)">
-        ${name||'?'}
-      </div>
-      <div style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;
-           border-top:10px solid ${border};margin-top:1px"></div>
-    </div>`;
-  return L.divIcon({html,className:'leaflet-custom-marker',iconSize:[60,70],iconAnchor:[30,70]});
 }
 
 function updateMapMarkers(){
   if(!mapInstance)return;
-  // My marker
   if(myLat){
-    const icon=makeAvatarMarker(myLat,myLng,myGender,myAvatarB64,myName||'Aku','#FF69B4');
-    if(myMarker){myMarker.setLatLng([myLat,myLng]);myMarker.setIcon(icon);}
-    else{myMarker=L.marker([myLat,myLng],{icon}).addTo(mapInstance)
-      .bindPopup(`<b>${myName||'Aku'}</b><br>📍 Posisiku<br>Akurasi: ${Math.round(myAccuracy||10)}m`);}
-    // Accuracy circle
+    const icon=makeAvatarMarker(myLat,myLng,myGender,myAvatarB64,myName||'Aku');
+    if(myMarker){
+      myMarker.setLatLng([myLat,myLng]);myMarker.setIcon(icon);
+      myMarker.setPopupContent(buildMyPopup());
+    } else {
+      myMarker=L.marker([myLat,myLng],{icon,riseOnHover:true})
+        .addTo(mapInstance)
+        .bindPopup(buildMyPopup(),{maxWidth:260});
+    }
     if(mapAcc1)mapInstance.removeLayer(mapAcc1);
-    mapAcc1=L.circle([myLat,myLng],{radius:myAccuracy||10,color:'#FF69B4',fillColor:'#FF69B4',fillOpacity:.08,weight:1.5}).addTo(mapInstance);
+    mapAcc1=L.circle([myLat,myLng],{radius:myAccuracy||10,color:'#FF69B4',fillColor:'#FF69B4',fillOpacity:.08,weight:1.5,dashArray:'6 4'}).addTo(mapInstance);
   }
-  // Partner marker
   if(partnerLat){
-    const icon2=makeAvatarMarker(partnerLat,partnerLng,partnerGender,partnerAvatarB64,partnerName,'#5BAAED');
-    if(partnerMarker){partnerMarker.setLatLng([partnerLat,partnerLng]);partnerMarker.setIcon(icon2);}
-    else{partnerMarker=L.marker([partnerLat,partnerLng],{icon:icon2}).addTo(mapInstance)
-      .bindPopup(`<b>${partnerName}</b><br>📍 Posisi Pasangan<br>Akurasi: ${Math.round(partnerAccuracy||15)}m`);}
+    const icon2=makeAvatarMarker(partnerLat,partnerLng,partnerGender,partnerAvatarB64,partnerName);
+    if(partnerMarker){
+      partnerMarker.setLatLng([partnerLat,partnerLng]);partnerMarker.setIcon(icon2);
+      partnerMarker.setPopupContent(buildPartnerPopup());
+    } else {
+      partnerMarker=L.marker([partnerLat,partnerLng],{icon:icon2,riseOnHover:true})
+        .addTo(mapInstance)
+        .bindPopup(buildPartnerPopup(),{maxWidth:260});
+    }
     if(mapAcc2)mapInstance.removeLayer(mapAcc2);
-    mapAcc2=L.circle([partnerLat,partnerLng],{radius:partnerAccuracy||15,color:'#5BAAED',fillColor:'#5BAAED',fillOpacity:.08,weight:1.5}).addTo(mapInstance);
+    mapAcc2=L.circle([partnerLat,partnerLng],{radius:partnerAccuracy||15,color:'#5BAAED',fillColor:'#5BAAED',fillOpacity:.08,weight:1.5,dashArray:'6 4'}).addTo(mapInstance);
   }
-  // Route line
+  // Animated route line
   if(myLat&&partnerLat){
     if(routeLine)mapInstance.removeLayer(routeLine);
     routeLine=L.polyline([[myLat,myLng],[partnerLat,partnerLng]],{
-      color:'#FF8FAB',weight:3,dashArray:'10 6',opacity:.8
+      color:'#FF8FAB',weight:3,dashArray:'12 8',opacity:.9
     }).addTo(mapInstance);
-    // Fit bounds
-    const bounds=L.latLngBounds([[myLat,myLng],[partnerLat,partnerLng]]);
-    mapInstance.fitBounds(bounds,{padding:[50,50],maxZoom:16});
-  } else if(myLat){
-    mapInstance.setView([myLat,myLng],16);
+    // Midpoint heart
+    const midLat=(myLat+partnerLat)/2, midLng=(myLng+partnerLng)/2;
+    const midIcon=L.divIcon({html:`<div style="font-size:20px;animation:heartbeat 1.5s infinite;display:block;text-align:center">💕</div>`,className:'leaflet-custom-marker',iconSize:[24,24],iconAnchor:[12,12]});
+    if(window._midMarker)mapInstance.removeLayer(window._midMarker);
+    window._midMarker=L.marker([midLat,midLng],{icon:midIcon,interactive:false}).addTo(mapInstance);
   }
 }
 
-function haversine(a,b,c,d){const R=6371,dl=(c-a)*Math.PI/180,dm=(d-b)*Math.PI/180,e=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dm/2)**2;return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));}
-function bearing(a,b,c,d){const dl=(d-b)*Math.PI/180,y=Math.sin(dl)*Math.cos(c*Math.PI/180),x=Math.cos(a*Math.PI/180)*Math.sin(c*Math.PI/180)-Math.sin(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.cos(dl);return((Math.atan2(y,x)*180/Math.PI)+360)%360;}
+function centerOnMe(){
+  if(!mapInstance||!myLat)return;
+  mapInstance.setView([myLat,myLng],17,{animate:true});
+  if(myMarker)myMarker.openPopup();
+  playSound('pop');
+}
+function centerOnPartner(){
+  if(!mapInstance||!partnerLat){toast('😴 Lokasi pasangan belum tersedia');return;}
+  mapInstance.setView([partnerLat,partnerLng],17,{animate:true});
+  if(partnerMarker)partnerMarker.openPopup();
+  playSound('pop');
+}
+function fitBothOnMap(){
+  if(!mapInstance)return;
+  if(myLat&&partnerLat){
+    const bounds=L.latLngBounds([[myLat,myLng],[partnerLat,partnerLng]]);
+    mapInstance.fitBounds(bounds,{padding:[60,60],maxZoom:16,animate:true});
+  } else if(myLat){
+    mapInstance.setView([myLat,myLng],15,{animate:true});
+  }
+  playSound('pop');
+}
+
+function haversine(a,b,c,d){
+  const R=6371,dl=(c-a)*Math.PI/180,dm=(d-b)*Math.PI/180,
+    e=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dm/2)**2;
+  return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));
+}
 
 function updateMapAndETA(){
   updateMapMarkers();
@@ -1324,7 +1561,6 @@ function updateMapAndETA(){
   const distStr=dist<1?Math.round(dist*1000)+'m':dist.toFixed(2)+'km';
   document.getElementById('p-distance').textContent=distStr;
   document.getElementById('map-dist').textContent=dist<1?Math.round(dist*1000)+'m':dist.toFixed(2);
-  // Speed estimate
   let spd=20;
   if(prevPartnerLat&&prevPartnerTs){
     const dd=haversine(prevPartnerLat,prevPartnerLng,partnerLat,partnerLng);
@@ -1333,10 +1569,9 @@ function updateMapAndETA(){
   }
   document.getElementById('map-speed').textContent=Math.round(spd);
   const etaM=Math.round(dist/spd*60);
-  const etaStr=etaM<60?etaM+' mnt':Math.floor(etaM/60)+'j '+etaM%60+'m';
+  const etaStr=etaM<60?etaM+' mnt':`${Math.floor(etaM/60)}j ${etaM%60}m`;
   document.getElementById('p-eta').textContent=etaStr;
   document.getElementById('map-eta').textContent=etaStr;
-  // Map info content
   updateMapInfoContent();
 }
 
@@ -1347,32 +1582,47 @@ function setMapInfoTab(tab){
   });
   updateMapInfoContent();
 }
+
+function toggleMapPanel(){
+  mapPanelCollapsed=!mapPanelCollapsed;
+  const panel=document.getElementById('map-info-panel');
+  const btn=document.getElementById('map-collapse-btn');
+  if(panel)panel.classList.toggle('collapsed',mapPanelCollapsed);
+  if(btn)btn.textContent=mapPanelCollapsed?'▲':'▼';
+  setTimeout(()=>mapInstance?.invalidateSize(),300);
+}
+
 function updateMapInfoContent(){
   const c=document.getElementById('map-info-content');if(!c)return;
   if(mapInfoTabActive==='info'){
     const dist=myLat&&partnerLat?haversine(myLat,myLng,partnerLat,partnerLng):null;
-    const distStr=dist?( dist<1?Math.round(dist*1000)+'m':dist.toFixed(2) ):'--';
+    const distStr=dist?(dist<1?Math.round(dist*1000)+'m':dist.toFixed(2)):'--';
+    const eta=document.getElementById('map-eta')?.textContent||'--';
+    const spd=document.getElementById('map-speed')?.textContent||'--';
     c.innerHTML=`<div class="map-stat-row">
-      <div class="map-stat"><div class="map-stat-val">${distStr}</div><div class="map-stat-label">Jarak</div></div>
-      <div class="map-stat blue"><div class="map-stat-val" id="map-eta">--</div><div class="map-stat-label">ETA</div></div>
-      <div class="map-stat"><div class="map-stat-val" id="map-speed">--</div><div class="map-stat-label">km/h Est.</div></div>
+      <div class="map-stat"><div class="map-stat-val">${distStr}</div><div class="map-stat-label">📏 Jarak</div></div>
+      <div class="map-stat blue"><div class="map-stat-val">${eta}</div><div class="map-stat-label">⏱️ ETA</div></div>
+      <div class="map-stat green"><div class="map-stat-val">${spd}</div><div class="map-stat-label">🚗 km/h</div></div>
     </div>`;
-    updateMapAndETA();
   } else if(mapInfoTabActive==='partner'){
-    c.innerHTML=`<div style="font-size:13px;line-height:2;color:var(--text)">
-      <b>👤 ${partnerName}</b> (${partnerUsername})<br>
-      📍 ${partnerLat?partnerLat.toFixed(5)+', '+partnerLng.toFixed(5):'Memuat...'}<br>
+    const bat=document.getElementById('p-battery-pct')?.textContent||'--';
+    const last=document.getElementById('p-lastseen')?.textContent||'--';
+    const addrHtml=partnerAddress?`<div class="map-addr-row"><div class="map-addr-label">📍 Alamat Terakhir</div>${partnerAddress}</div>`:'';
+    c.innerHTML=`${addrHtml}<div class="map-partner-detail">
+      <b>👤 ${partnerName}</b> ${partnerUsername||''}<br>
+      📍 ${partnerLat?`${partnerLat.toFixed(6)}, ${partnerLng.toFixed(6)}`:'Memuat...'}<br>
       🎯 Akurasi: ~${Math.round(partnerAccuracy||15)}m<br>
-      🔋 Baterai: ${document.getElementById('p-battery-pct')?.textContent||'--'}%<br>
-      🕐 Update: ${document.getElementById('p-lastseen')?.textContent||'--'}
+      🔋 Baterai: ${bat}%<br>
+      🕐 Update: ${last}
     </div>`;
   } else {
-    c.innerHTML=`<div style="font-size:13px;line-height:2;color:var(--text)">
+    const addrHtml=myAddress?`<div class="map-addr-row"><div class="map-addr-label">📍 Alamatku</div>${myAddress}</div>`:'';
+    c.innerHTML=`${addrHtml}<div class="map-partner-detail">
       <b>📍 Posisiku</b><br>
       Lat: ${myLat?myLat.toFixed(6):'Memuat...'}<br>
       Lng: ${myLng?myLng.toFixed(6):'Memuat...'}<br>
       🎯 Akurasi: ~${Math.round(myAccuracy||10)}m<br>
-      🌐 Layer: ${currentLayer}
+      🗺️ Layer: ${currentLayer}
     </div>`;
   }
 }
@@ -1384,28 +1634,32 @@ function toggleMapFullscreen(){
   const toolbar=document.querySelector('.map-toolbar');
   const fsBtn=document.getElementById('map-fs-btn');
   if(mapFullscreen){
-    mapEl.style.cssText='position:fixed;inset:0;z-index:150;border-radius:0;height:100vh!important';
+    mapEl.style.cssText='position:fixed;inset:0;z-index:150;height:100vh!important';
     if(panel)panel.style.display='none';
+    if(toolbar)toolbar.style.cssText='position:fixed;top:0;left:0;right:0;z-index:151;background:white;border-radius:0';
     if(fsBtn)fsBtn.textContent='✕';
-    // Add close button overlay
     const closeBtn=document.createElement('button');
     closeBtn.id='map-close-fs';
-    closeBtn.style.cssText='position:fixed;top:16px;right:16px;z-index:160;background:white;border:none;border-radius:12px;padding:8px 14px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2)';
+    closeBtn.style.cssText='position:fixed;top:56px;right:12px;z-index:160;background:white;border:none;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);color:var(--pinkd)';
     closeBtn.textContent='✕ Tutup';
     closeBtn.onclick=()=>toggleMapFullscreen();
     document.body.appendChild(closeBtn);
   } else {
     mapEl.style.cssText='';
     if(panel)panel.style.display='';
+    if(toolbar)toolbar.style.cssText='';
     if(fsBtn)fsBtn.textContent='⛶';
-    const old=document.getElementById('map-close-fs');
-    if(old)old.remove();
+    const old=document.getElementById('map-close-fs');if(old)old.remove();
   }
-  setTimeout(()=>mapInstance?.invalidateSize(),100);
+  setTimeout(()=>mapInstance?.invalidateSize(),150);
   playSound('pop');
 }
 
 // ===== CAMERA =====
+async function ensureLocalStream(){
+  if(localStream)return;
+  try{localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});}catch(e){}
+}
 async function startMyCam(){
   if(localStream)return;
   try{
@@ -1495,16 +1749,18 @@ async function startVideoCall(){
 function listenForCalls(){
   db.ref(`duoBucin/${roomId}/call`).on('value',async snap=>{
     const d=snap.val();if(!d||!d.active)return;
-    if(d.from===myRole||callActive)return;
+    if(d.from===myRole)return;
+    if(callActive)return;
     incomingCallData=d;
     document.getElementById('incall-overlay').classList.add('show');
     startRingLoop();
   });
 }
 async function answerCall(){
-  stopRingLoop();document.getElementById('incall-overlay').classList.remove('show');
+  stopRingLoop();
+  document.getElementById('incall-overlay').classList.remove('show');
   if(!incomingCallData)return;
-  await ensureLocalStream();if(!localStream)return;
+  await ensureLocalStream();if(!localStream){toast('❌ Butuh izin kamera');return;}
   peerConn=new RTCPeerConnection(RTC_CFG);
   localStream.getTracks().forEach(t=>peerConn.addTrack(t,localStream));
   document.getElementById('vc-local-video').srcObject=localStream;
@@ -1513,128 +1769,174 @@ async function answerCall(){
     document.getElementById('vc-calling').style.display='none';document.getElementById('vc-top-info').style.display='block';startCallTimer();
   };
   peerConn.onicecandidate=e=>{if(e.candidate)db.ref(`duoBucin/${roomId}/call/ice_${myRole}`).push(e.candidate.toJSON());};
-  await peerConn.setRemoteDescription(new RTCSessionDescription(JSON.parse(incomingCallData.offer)));
-  const ans=await peerConn.createAnswer();await peerConn.setLocalDescription(ans);
-  db.ref(`duoBucin/${roomId}/call/answer`).set(JSON.stringify(peerConn.localDescription));
-  db.ref(`duoBucin/${roomId}/call/ice_${partnerRole}`).on('child_added',s=>{if(peerConn)peerConn.addIceCandidate(new RTCIceCandidate(s.val())).catch(()=>{});});
-  showVCOverlay();callActive=true;playSound('online');
+  try{
+    await peerConn.setRemoteDescription(new RTCSessionDescription(JSON.parse(incomingCallData.offer)));
+    const ans=await peerConn.createAnswer();await peerConn.setLocalDescription(ans);
+    db.ref(`duoBucin/${roomId}/call/answer`).set(JSON.stringify(peerConn.localDescription));
+    db.ref(`duoBucin/${roomId}/call/ice_${partnerRole}`).on('child_added',s=>{if(peerConn)peerConn.addIceCandidate(new RTCIceCandidate(s.val())).catch(()=>{});});
+    showVCOverlay();callActive=true;
+  }catch(e){toast('❌ Gagal menjawab: '+e.message);}
 }
-function declineCall(){stopRingLoop();document.getElementById('incall-overlay').classList.remove('show');db.ref(`duoBucin/${roomId}/call/active`).set(false);toast('📵 Panggilan ditolak');}
-function endCall(){
-  stopRingLoop();callActive=false;
-  if(peerConn){peerConn.close();peerConn=null;}
-  db.ref(`duoBucin/${roomId}/call`).remove();
-  stopCallTimer();hideVCOverlay();playSound('pop');
+function declineCall(){
+  stopRingLoop();
+  document.getElementById('incall-overlay').classList.remove('show');
+  db.ref(`duoBucin/${roomId}/call`).update({active:false});
+  incomingCallData=null;
 }
 function showVCOverlay(){document.getElementById('vc-overlay').classList.add('show');}
-function hideVCOverlay(){
-  document.getElementById('vc-overlay').classList.remove('show');
-  const v=document.getElementById('vc-remote-video');v.srcObject=null;v.style.display='none';
-  document.getElementById('vc-calling').style.display='flex';document.getElementById('vc-top-info').style.display='none';
+function hideVCOverlay(){document.getElementById('vc-overlay').classList.remove('show');}
+function endCall(){
+  stopRingLoop();
+  if(peerConn){peerConn.close();peerConn=null;}
+  callActive=false;
+  hideVCOverlay();
+  stopCallTimer();
+  document.getElementById('vc-remote-video').style.display='none';
+  document.getElementById('vc-calling').style.display='flex';
+  document.getElementById('vc-top-info').style.display='none';
+  db.ref(`duoBucin/${roomId}/call`).update({active:false});
 }
 function startCallTimer(){
-  vcStartTime=Date.now();stopCallTimer();
+  vcStartTime=Date.now();
   vcTimer=setInterval(()=>{
-    const s=Math.floor((Date.now()-vcStartTime)/1000),m=Math.floor(s/60),ss=s%60;
-    document.getElementById('vc-dur').textContent=String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+    const s=Math.floor((Date.now()-vcStartTime)/1000);
+    const m=Math.floor(s/60),ss=s%60;
+    document.getElementById('vc-dur').textContent=`${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
   },1000);
 }
 function stopCallTimer(){if(vcTimer){clearInterval(vcTimer);vcTimer=null;}}
-function toggleMute(){if(!localStream)return;muted=!muted;localStream.getAudioTracks().forEach(t=>t.enabled=!muted);document.getElementById('vc-mute-btn').textContent=muted?'🔇':'🎤';toast(muted?'🔇 Mikrofon mati':'🎤 Mikrofon nyala');}
-function toggleVideo(){if(!localStream)return;vidOff=!vidOff;localStream.getVideoTracks().forEach(t=>t.enabled=!vidOff);document.getElementById('vc-vid-btn').textContent=vidOff?'🚫':'📷';toast(vidOff?'📷 Video mati':'📷 Video nyala');}
-async function ensureLocalStream(){if(localStream)return;try{localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});}catch(e){localStream=null;}}
+function toggleMute(){
+  muted=!muted;
+  localStream?.getAudioTracks().forEach(t=>t.enabled=!muted);
+  document.getElementById('vc-mute-btn').textContent=muted?'🔇':'🎤';
+}
+function toggleVideo(){
+  vidOff=!vidOff;
+  localStream?.getVideoTracks().forEach(t=>t.enabled=!vidOff);
+  document.getElementById('vc-vid-btn').textContent=vidOff?'📵':'📷';
+}
 
 // ===== RING =====
 function listenForRing(){
   db.ref(`duoBucin/${roomId}/ring`).on('value',snap=>{
-    const d=snap.val();if(!d||d.to!==myRole)return;
-    if(Date.now()-d.ts>15000)return;
+    const d=snap.val();if(!d||!d.ts)return;
+    if(d.to!==myRole)return;
+    if(Date.now()-d.ts>5000)return;
     document.getElementById('ring-overlay').classList.add('show');
-    startRingLoop();setTimeout(()=>dismissRing(),30000);
+    startRingLoop();
+    setTimeout(()=>dismissRing(),15000);
   });
 }
 function doRing(){
   if(!partnerOnline){toast('😴 Pasangan offline');return;}
-  db.ref(`duoBucin/${roomId}/ring`).set({from:myRole,to:partnerRole,ts:Date.now()});
+  db.ref(`duoBucin/${roomId}/ring`).set({to:partnerRole,from:myName,ts:Date.now()});
   toast('🔔 HP pasangan dibunyikan!');
 }
-function dismissRing(){stopRingLoop();document.getElementById('ring-overlay').classList.remove('show');db.ref(`duoBucin/${roomId}/ring`).remove();}
+function dismissRing(){
+  stopRingLoop();
+  document.getElementById('ring-overlay').classList.remove('show');
+}
 
 // ===== FORCE MESSAGE =====
 function listenForMessages(){
   db.ref(`duoBucin/${roomId}/forceMsg`).on('value',snap=>{
-    const d=snap.val();if(!d||d.to!==myRole)return;
-    if(Date.now()-d.ts>30000)return;
-    const emojis=['💌','💝','🌸','💕','🥺','💖','🌷','✨','😘','💗'];
-    document.getElementById('msg-overlay-emo').textContent=emojis[Math.floor(Math.random()*emojis.length)];
-    document.getElementById('msg-overlay-from').textContent='Dari '+d.fromName+' 💕';
+    const d=snap.val();if(!d||!d.ts)return;
+    if(d.to!==myRole)return;
+    if(Date.now()-d.ts>10000)return;
+    document.getElementById('msg-overlay-from').textContent='Dari '+d.from;
     document.getElementById('msg-overlay-text').textContent=d.text;
+    document.getElementById('msg-overlay-emo').textContent=d.emoji||'💌';
     document.getElementById('msg-overlay').classList.add('show');
-    playSound('swoosh');db.ref(`duoBucin/${roomId}/forceMsg`).remove();
+    document.getElementById('ctrl-badge').style.display='flex';
+    playSound('ding');
   });
 }
 function sendForceMessage(){
-  const txt=document.getElementById('force-msg-input').value.trim();
-  if(!txt){toast('✏️ Tulis pesanmu dulu!');return;}
   if(!partnerOnline){toast('😴 Pasangan offline');return;}
-  db.ref(`duoBucin/${roomId}/forceMsg`).set({text:txt,from:myRole,to:partnerRole,fromName:myName,ts:Date.now()});
-  toast('💌 Pesan dikirim ke '+partnerName+'!');document.getElementById('force-msg-input').value='';
+  const text=document.getElementById('force-msg-input').value.trim();
+  if(!text){toast('❌ Tulis pesan dulu!');return;}
+  const emojis=['💌','💕','🥺','🌸','💝','😘','💖','🌙'];
+  db.ref(`duoBucin/${roomId}/forceMsg`).set({to:partnerRole,from:myName,text,emoji:emojis[Math.floor(Math.random()*emojis.length)],ts:Date.now()});
+  document.getElementById('force-msg-input').value='';
+  toast('💌 Pesan dikirim ke '+partnerName+'!');
 }
-function dismissMsg(){document.getElementById('msg-overlay').classList.remove('show');playSound('heart');}
-function setPreset(el){document.getElementById('force-msg-input').value=el.textContent;playSound('pop');}
+function setPreset(el){document.getElementById('force-msg-input').value=el.textContent;}
+function dismissMsg(){
+  document.getElementById('msg-overlay').classList.remove('show');
+  document.getElementById('ctrl-badge').style.display='none';
+}
+
+// ===== CHECK-IN =====
 function doCheckIn(){
   if(!partnerOnline){toast('😴 Pasangan offline');return;}
-  db.ref(`duoBucin/${roomId}/forceMsg`).set({text:'Kamu baik-baik saja? 🥺 Aku lagi kepikiran kamu...',from:myRole,to:partnerRole,fromName:myName,ts:Date.now()});
+  db.ref(`duoBucin/${roomId}/forceMsg`).set({to:partnerRole,from:myName,text:'Hei, kamu baik-baik saja? Aku lagi mikirin kamu 🙋',emoji:'🙋',ts:Date.now()});
   toast('🙋 Check-in dikirim!');
 }
 
 // ===== SETTINGS =====
-function updateSettingsPanel(){
-  document.getElementById('settings-room-id').textContent=roomId||'--';
-  document.getElementById('settings-my-code').textContent=loadOrGenCode();
-  document.getElementById('settings-partner-name').textContent=partnerName+' ('+partnerUsername+')';
-  document.getElementById('settings-partner-status').textContent=partnerOnline?'Online':'Offline';
-  document.getElementById('settings-name').value=myName;
-  document.getElementById('settings-username').value=myUsername;
-}
 function openSettings(){
   updateSettingsPanel();
+  const n=document.getElementById('settings-name');
+  const u=document.getElementById('settings-username');
+  if(n)n.value=myName;
+  if(u)u.value=myUsername;
   document.getElementById('settings-panel').classList.add('show');
 }
 function closeSettings(){document.getElementById('settings-panel').classList.remove('show');}
 function saveSettings(){
-  const n=document.getElementById('settings-name').value.trim();
-  const u=document.getElementById('settings-username').value.trim();
-  if(n){myName=n;localStorage.setItem('dbuc_name',n);document.getElementById('my-name-display').textContent=n;}
-  if(u){myUsername=u.startsWith('@')?u:'@'+u;localStorage.setItem('dbuc_username',myUsername);document.getElementById('my-username-display').textContent=myUsername;}
+  const name=document.getElementById('settings-name').value.trim();
+  const uname=document.getElementById('settings-username').value.trim();
+  if(!name){toast('❌ Nama tidak boleh kosong');return;}
+  myName=name;
+  myUsername=uname.startsWith('@')?uname:'@'+uname;
+  localStorage.setItem('dbuc_name',myName);
+  localStorage.setItem('dbuc_username',myUsername);
   if(myAvatarB64)localStorage.setItem('dbuc_avatar',myAvatarB64);
+  document.getElementById('my-name-display').textContent=myName;
+  document.getElementById('my-username-display').textContent=myUsername;
   applyMyAvatar();
   if(roomId&&myRole){
-    const upd={name:myName,username:myUsername};
-    if(myAvatarB64)upd.avatar=myAvatarB64.substring(0,50000);
-    db.ref(`duoBucin/${roomId}/${myRole}`).update(upd);
+    const data={name:myName,username:myUsername,gender:myGender};
+    if(myAvatarB64)data.avatar=myAvatarB64.substring(0,50000);
+    db.ref(`duoBucin/${roomId}/${myRole}`).update(data);
   }
-  closeSettings();toast('💾 Profil disimpan!');playSound('ding');
+  closeSettings();
+  toast('💾 Profil disimpan!');playSound('ding');
+  updateSettingsPanel();
+}
+function updateSettingsPanel(){
+  const el=document.getElementById('settings-my-code');if(el)el.textContent=localStorage.getItem('dbuc_mycode')||'--';
+  const pn=document.getElementById('settings-partner-name');if(pn)pn.textContent=partnerName+(partnerUsername?' ('+partnerUsername+')':'');
+  const ps=document.getElementById('settings-partner-status');if(ps){ps.textContent=partnerOnline?'🟢 Online':'⚪ Offline';ps.className='chip '+(partnerOnline?'':'');}
 }
 function disconnectRoom(){
-  if(!confirm('Yakin mau putuskan & ganti pasangan?'))return;
+  if(!confirm('Putuskan hubungan dengan pasangan?'))return;
+  db.ref(`duoBucin/${roomId}/${myRole}`).update({online:false});
   localStorage.removeItem('dbuc_room');localStorage.removeItem('dbuc_role');
-  if(roomId&&myRole)db.ref(`duoBucin/${roomId}/${myRole}`).update({online:false});
-  location.reload();
+  roomId=null;myRole=null;partnerRole=null;
+  closeSettings();showScreen('pairing');toast('🔌 Terputus');
 }
 
-// ===== HELPERS =====
-function timeSince(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return s+'d lalu';if(s<3600)return Math.floor(s/60)+'m lalu';if(s<86400)return Math.floor(s/3600)+'j lalu';return Math.floor(s/86400)+'hr lalu';}
-let toastTimer=null;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3000);}
-document.addEventListener('contextmenu',e=>e.preventDefault());
-let lastTap=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTap<300)e.preventDefault();lastTap=n;},{passive:false});
+// ===== UTILS =====
+function timeSince(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return s+'d';
+  if(s<3600)return Math.floor(s/60)+'m';
+  return Math.floor(s/3600)+'j';
+}
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>el.classList.remove('show'),2500);
+}
 
-// ===== START =====
+// ===== INIT =====
 window.addEventListener('load',()=>{
-  setTimeout(()=>{showScreen('pairing');initPairing();},2000);
+  setTimeout(()=>{
+    initPairing();
+  },1800);
 });
-setInterval(()=>{if(roomId&&myRole&&myLat)db.ref(`duoBucin/${roomId}/${myRole}`).update({lat:myLat,lng:myLng,locTs:Date.now()});},5000);
 </script>
 </body>
 </html>
