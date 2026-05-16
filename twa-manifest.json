@@ -1,0 +1,23 @@
+{
+  "packageId": "id.lawnime.app",
+  "host": "jmstory-27.github.io",
+  "name": "Lawnime ID",
+  "launcherName": "Lawnime",
+  "display": "standalone",
+  "themeColor": "#FF6B00",
+  "navigationColor": "#07070e",
+  "navigationDividerColor": "#07070e",
+  "backgroundColor": "#07070e",
+  "startUrl": "/Jumalia-Makruf/",
+  "iconUrl": "https://jmstory-27.github.io/Jumalia-Makruf/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "enableNotifications": false,
+  "orientation": "default",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://jmstory-27.github.io/Jumalia-Makruf/manifest.json",
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "minSdkVersion": 19,
+  "fullScopeUrl": "https://jmstory-27.github.io/Jumalia-Makruf/"
+}
