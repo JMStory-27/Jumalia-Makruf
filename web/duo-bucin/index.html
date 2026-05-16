@@ -691,6 +691,9 @@ let screenRole = null; // 'watcher' or 'streamer'
 let currentLiveTab = 'cam';
 let pairingListener = null;
 let audioCtx = null;
+let presRef = null;          // global presence ref for auto-reconnect
+let heartbeatTimer = null;   // presence heartbeat timer
+let partnerWasOnline = null; // track partner online state for comeback notif
 
 // ═══════════════════════════════════════════════════════
 // INIT
@@ -918,9 +921,8 @@ function partnerRole() { return myRole === 'host' ? '💌 Guest' : '👑 Host'; 
 // ═══════════════════════════════════════════════════════
 // FIREBASE PRESENCE & ROOM LISTENING
 // ═══════════════════════════════════════════════════════
-function startPresence() {
-  const presRef = db.ref(`rooms/${roomId}/presence/${myCode}`);
-  const data = {
+function getPresenceData() {
+  return {
     name: myName,
     gender: myGender,
     avatar: myAvatar ? myAvatar.slice(0, 5000) : '',
@@ -928,20 +930,33 @@ function startPresence() {
     online: true,
     ts: Date.now()
   };
-  presRef.set(data);
+}
+
+function republishPresence() {
+  if (!presRef) return;
+  presRef.update({ online: true, battery: myBattery, ts: Date.now() });
+  // Re-register onDisconnect — Firebase clears it after every disconnection
   presRef.onDisconnect().update({ online: false, ts: firebase.database.ServerValue.TIMESTAMP });
-  // Refresh presence every 30s
-  setInterval(() => {
-    presRef.update({ battery: myBattery, ts: Date.now(), online: true });
-  }, 30000);
+}
+
+function startPresence() {
+  presRef = db.ref(`rooms/${roomId}/presence/${myCode}`);
+  presRef.set(getPresenceData());
+  presRef.onDisconnect().update({ online: false, ts: firebase.database.ServerValue.TIMESTAMP });
+
+  // Heartbeat every 15s — faster detection of stale presence
+  if (heartbeatTimer) clearInterval(heartbeatTimer);
+  heartbeatTimer = setInterval(() => {
+    republishPresence();
+  }, 15000);
 }
 
 function listenRoom() {
-  // Listen for partner presence
+  // Listen for partner presence — real-time, no delay
   db.ref(`rooms/${roomId}/presence/${partnerCode}`).on('value', snap => {
     const val = snap.val();
     if (!val) return;
-    const wasOnline = !!partnerLat;
+    const wasOnline = partnerWasOnline;
     partnerName = val.name || 'Pasangan';
     partnerGender = val.gender || 'male';
     if (val.avatar) partnerAvatar = val.avatar;
@@ -949,6 +964,13 @@ function listenRoom() {
     updatePartnerUI();
     updateConnUI(val.online);
     if (val.battery != null) document.getElementById('statBatt').textContent = val.battery + '%';
+    // Notif saat pasangan balik online
+    if (wasOnline === false && val.online === true) {
+      toast(`💕 ${partnerName || 'Pasangan'} kembali online!`, 4000);
+      showBgNotif(`💕 ${partnerName || 'Pasangan'} Online`, 'Pasanganmu baru saja kembali online! 🌸');
+      playSound('love');
+    }
+    partnerWasOnline = !!val.online;
   });
   // Listen for partner location
   db.ref(`rooms/${roomId}/location/${partnerCode}`).on('value', snap => {
@@ -981,11 +1003,14 @@ function listenRoom() {
     toast(`💌 ${partnerName || 'Pasangan'}: ${val.text}`);
     playSound('notify');
   });
-  // Connection status
+  // Connection status — auto-reconnect presence when Firebase comes back
   db.ref('.info/connected').on('value', snap => {
     if (snap.val()) {
+      // Reconnected — immediately re-publish presence & re-register onDisconnect
+      republishPresence();
       connectedSince = connectedSince || Date.now();
       startConnTimer();
+      updateConnUI(true);
     } else {
       updateConnUI(false);
     }
@@ -1950,11 +1975,10 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.map-search-wrap')) hideSearchResults();
 });
 
-// Handle visibility change for background detection
+// Handle visibility change — re-publish presence when app comes back to foreground
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && roomId) {
-    // Re-establish presence when coming back to foreground
-    db.ref(`rooms/${roomId}/presence/${myCode}`).update({ online: true, ts: Date.now() });
+    republishPresence();
   }
 });
 </script>
