@@ -62,7 +62,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .av-wrap.xl{width:110px;height:110px;padding:4px}.av-wrap.xl .av-gap{width:102px;height:102px;padding:3px}.av-wrap.xl .av-pic{width:96px;height:96px;font-size:42px}
 
 /* ===== SCREENS ===== */
-.screen{position:fixed;inset:0;display:flex;flex-direction:column;transition:opacity .3s,transform .3s;z-index:10}
+.screen{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;transition:opacity .3s,transform .3s;z-index:10}
 .screen.hidden{opacity:0;pointer-events:none;transform:translateY(20px)}
 
 /* Splash */
@@ -73,7 +73,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .splash-sub{font-size:14px;color:var(--textl);text-align:center;z-index:1}
 .splash-loader{width:70px;height:5px;background:rgba(255,105,180,.2);border-radius:5px;overflow:hidden;z-index:1}
 .splash-loader-bar{height:100%;background:linear-gradient(90deg,#FF69B4,#9333ea);border-radius:5px;animation:pLoader 2s ease-out forwards}
-.particles-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particles-wrap{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden}
 .sparkle{position:absolute;font-size:16px;opacity:0;animation:sparkle 3s ease-in-out infinite}
 .chibi-splash{display:flex;align-items:flex-end;gap:24px;z-index:1}
 .chibi{display:flex;flex-direction:column;align-items:center;animation:wiggle 2s ease-in-out infinite}
@@ -130,8 +130,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .hdr-names{font-size:11px;color:var(--textl);display:flex;align-items:center;gap:5px}
 .hdr-names span{font-weight:700;color:var(--text)}
 .app-content{flex:1;overflow:hidden;position:relative}
-.tab-pane{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .3s,transform .3s}
-.tab-pane.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.tab-pane{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .3s,transform .3s}
+.tab-pane.active{opacity:1;pointer-events:auto;transform:translateX(0)}
 .app-nav{background:var(--card);display:flex;align-items:center;justify-content:space-around;padding:8px 10px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 20px rgba(255,105,180,.1);flex-shrink:0;backdrop-filter:blur(20px);border-top:1px solid rgba(255,182,193,.2)}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 16px;border-radius:14px;cursor:pointer;transition:all .2s;border:none;background:transparent;position:relative}
 .nav-ico{font-size:22px;transition:transform .2s}
@@ -181,7 +181,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 #map-pane{position:relative}
 #map{width:100%;flex:1}
 .map-top{position:absolute;top:0;left:0;right:0;z-index:1000;padding:10px;pointer-events:none;display:flex;flex-direction:column;gap:7px}
-.map-top>*{pointer-events:all}
+.map-top>*{pointer-events:auto}
 .map-search-wrap{position:relative}
 .map-search-row{display:flex;gap:7px}
 .map-search-inp{flex:1;padding:10px 14px;border-radius:14px;border:none;background:rgba(255,255,255,.96);box-shadow:0 4px 18px rgba(0,0,0,.13);font-size:14px;color:var(--text);outline:none;font-family:inherit;backdrop-filter:blur(10px)}
@@ -220,13 +220,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 .ltab{flex:1;padding:12px;font-size:13px;font-weight:700;color:#666;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s}
 .ltab.active{color:var(--pink);border-bottom-color:var(--pink)}
 .live-content{flex:1;position:relative;overflow:hidden}
-.lpanel{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center}
+.lpanel{position:absolute;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center}
 .lpanel.active{display:flex}
 
 /* Camera panel */
 .cam-wrap{position:relative;width:100%;flex:1;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
 #partnerVideo{width:100%;height:100%;object-fit:cover}
-.cam-fs-overlay{position:absolute;inset:0;z-index:5;cursor:pointer;background:transparent}
+.cam-fs-overlay{position:absolute;top:0;right:0;bottom:0;left:0;z-index:5;cursor:pointer;background:transparent}
 #myVideo{position:absolute;bottom:80px;right:12px;width:90px;height:120px;border-radius:12px;border:2px solid var(--pink);object-fit:cover;z-index:15;cursor:pointer}
 .cam-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;z-index:10;white-space:nowrap;text-align:center;max-width:85vw}
 .cam-controls{position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.75));display:flex;justify-content:center;gap:10px;z-index:10}
@@ -282,15 +282,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-u
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* Modal */
-.mbg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:flex;align-items:flex-end;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
-.mbg.show{opacity:1;pointer-events:all}
+.mbg{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.55);z-index:2000;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+.mbg.show{opacity:1;pointer-events:auto}
 .modal{background:var(--card);border-radius:28px 28px 0 0;padding:22px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s}
 .mbg.show .modal{transform:translateY(0)}
 .modal-handle{width:40px;height:4px;border-radius:4px;background:#FFD6E0;margin:0 auto 18px}
 .modal-title{font-size:18px;font-weight:900;margin-bottom:14px;text-align:center;background:linear-gradient(135deg,#FF1493,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
 /* Fullscreen video */
-#fsModal{position:fixed;inset:0;background:#000;z-index:9500;display:none;align-items:center;justify-content:center;flex-direction:column}
+#fsModal{position:fixed;top:0;right:0;bottom:0;left:0;background:#000;z-index:9500;display:none;align-items:center;justify-content:center;flex-direction:column}
 #fsModal.show{display:flex}
 #fsVideo{width:100%;height:100%;object-fit:contain}
 .fs-close{position:absolute;top:env(safe-area-inset-top,16px);right:16px;margin-top:8px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:18px;cursor:pointer;z-index:1;display:flex;align-items:center;justify-content:center}
@@ -925,7 +925,7 @@ function getPresenceData() {
   return {
     name: myName,
     gender: myGender,
-    avatar: myAvatar ? myAvatar.slice(0, 5000) : '',
+    avatar: myAvatar ? myAvatar.slice(0, 50000) : '',
     battery: myBattery,
     online: true,
     ts: Date.now()
@@ -1353,9 +1353,9 @@ function displayRoute(route, fromLat, fromLng) {
   document.getElementById('routeStats').style.display = 'flex';
 
   // Show steps
-  const steps = route.legs[0]?.steps || [];
+  const steps = (route.legs[0] && route.legs[0].steps) || [];
   const stepsHtml = steps.slice(0, 8).map(s => {
-    const ico = getStepIcon(s.maneuver?.type, s.maneuver?.modifier);
+    const ico = getStepIcon(s.maneuver && s.maneuver.type, s.maneuver && s.maneuver.modifier);
     const d = s.distance >= 1000 ? (s.distance/1000).toFixed(1)+'km' : Math.round(s.distance)+'m';
     return `<div class="route-step"><div class="rsi">${ico}</div><div style="flex:1">${s.name || 'Jalan'}</div><div style="font-size:11px;color:var(--textl)">${d}</div></div>`;
   }).join('');
@@ -1416,7 +1416,7 @@ async function handleWebRTCSignal(sig) {
     if (camPC) try { await camPC.addIceCandidate(new RTCIceCandidate(sig.candidate)); } catch {}
   } else if (sig.type === 'screen-request') {
     // Partner wants to see my screen
-    await startScreenShare();
+    await shareMyScreen();
   } else if (sig.type === 'screen-stop') {
     stopScreen(true);
   } else if (sig.type === 'screen-offer') {
@@ -1452,7 +1452,8 @@ async function requestCamera() {
     playSound('open');
   };
   camPC.onconnectionstatechange = () => {
-    if (camPC?.connectionState === 'disconnected' || camPC?.connectionState === 'failed') {
+    const state = camPC && camPC.connectionState;
+    if (state === 'disconnected' || state === 'failed') {
       setCamStatus('⚠️ Koneksi terputus');
     }
   };
