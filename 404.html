@@ -4,11 +4,9 @@
 (function(){
   var l=window.location;
   var repoBase='/Jumalia-Makruf';
-  var appPath='/lawnime';
-  var fullBase=repoBase+appPath+'/';
-  var route=l.pathname.slice((repoBase+appPath).length)||'/';
+  var route=l.pathname.slice(repoBase.length)||'/';
   if(route==='/'&&!l.search)return;
-  l.replace(l.origin+fullBase+'?redirect='+encodeURIComponent(route+l.search+l.hash));
+  l.replace(l.origin+repoBase+'/?redirect='+encodeURIComponent(route+l.search+l.hash));
 })();
 </script>
 </head><body></body></html>
