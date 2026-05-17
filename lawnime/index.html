@@ -20,6 +20,16 @@
     <link rel="icon" type="image/png" href="icon-192.png" />
     <link rel="apple-touch-icon" href="icon-192.png" />
     <link rel="manifest" href="manifest.json" />
+    <script>
+      (function() {
+        var redirect = new URLSearchParams(window.location.search).get('redirect');
+        if (redirect && redirect.charAt(0) === '/') {
+          window.history.replaceState(null, null,
+            window.location.pathname.replace(/\/$/, '') + redirect
+          );
+        }
+      })();
+    </script>
     <style>
       #pre-splash {
         position: fixed;
