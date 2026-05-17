@@ -3,7 +3,7 @@
 <script>
 (function(){
   var l=window.location;
-  var repoBase='/Jumalia-Makruf/anime';
+  var repoBase='/Jumalia-Makruf';
   var route=l.pathname.slice(repoBase.length)||'/';
   if(route==='/'&&!l.search)return;
   l.replace(l.origin+repoBase+'/?redirect='+encodeURIComponent(route+l.search+l.hash));
