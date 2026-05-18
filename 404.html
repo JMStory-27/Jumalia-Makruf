@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8">
+<title>Lawnime ID</title>
 <script>
 (function(){
   var l=window.location;
-  var repoBase='/Jumalia-Makruf/anime';
-  var route=l.pathname.slice(repoBase.length)||'/';
-  if(route==='/'&&!l.search)return;
-  l.replace(l.origin+repoBase+'/?redirect='+encodeURIComponent(route+l.search+l.hash));
+  var p=l.pathname.replace(/^\/Jumalia-Makruf/,'');
+  if(!p||p==='/'||p==='/index.html'){l.replace('/Jumalia-Makruf/anime/');return;}
+  l.replace('/Jumalia-Makruf/anime/');
 })();
 </script>
 </head><body></body></html>
