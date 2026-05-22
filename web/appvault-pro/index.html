@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#0a0a14"/>
+<title>AppVault Pro — App Manager Android</title>
+<meta name="description" content="AppVault Pro adalah manajer aplikasi Android all-in-one. Kelola, buka, dan temukan app favoritmu dengan mudah."/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a14;--bg2:#10101e;--bg3:#181828;
+  --card:#141428;--card2:#1c1c34;
+  --accent:#7c6fff;--accent2:#b06fff;--accent3:#00d4ff;
+  --green:#00e676;--text:#eeeeff;--text2:#9090b8;
+  --border:rgba(124,111,255,0.2);
+  --glow:0 0 32px rgba(124,111,255,0.4);
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;overflow-x:hidden}
+.stars{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s)}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.9;transform:scale(1.3)}}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 20px 80px}
+.hero{text-align:center;padding:64px 0 48px}
+.icon-wrap{display:inline-flex;align-items:center;justify-content:center;width:100px;height:100px;border-radius:28px;background:linear-gradient(135deg,#7c6fff,#b06fff);box-shadow:var(--glow);margin-bottom:24px;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.icon-wrap svg{width:56px;height:56px;fill:#fff}
+.app-name{font-size:36px;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#a89fff,#d4b0ff,#7fffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.app-sub{font-size:15px;color:var(--text2);margin-top:8px;line-height:1.6}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;border:1.5px solid}
+.badge-green{color:#00e676;border-color:rgba(0,230,118,.35);background:rgba(0,230,118,.08)}
+.badge-purple{color:#b06fff;border-color:rgba(176,111,255,.35);background:rgba(176,111,255,.08)}
+.badge-blue{color:#00d4ff;border-color:rgba(0,212,255,.35);background:rgba(0,212,255,.08)}
+.dl-card{background:linear-gradient(135deg,rgba(124,111,255,.15),rgba(176,111,255,.1));border:1.5px solid var(--border);border-radius:24px;padding:32px 24px;text-align:center;margin:0 0 32px;backdrop-filter:blur(12px);box-shadow:0 8px 48px rgba(124,111,255,.15)}
+.version-tag{display:inline-block;background:rgba(124,111,255,.2);color:#b06fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;margin-bottom:16px}
+.dl-title{font-size:20px;font-weight:800;margin-bottom:6px}
+.dl-meta{font-size:13px;color:var(--text2);margin-bottom:24px}
+.btn-dl{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:16px;border:none;cursor:pointer;background:linear-gradient(135deg,#7c6fff,#b06fff);color:#fff;font-size:16px;font-weight:800;text-decoration:none;box-shadow:var(--glow);transition:transform .15s,box-shadow .15s}
+.btn-dl:active{transform:scale(.97)}
+.btn-dl:hover{box-shadow:0 0 48px rgba(124,111,255,.6)}
+.btn-dl svg{width:22px;height:22px;fill:#fff}
+.install-hint{margin-top:16px;font-size:12px;color:var(--text2);line-height:1.6}
+.install-hint a{color:var(--accent3);text-decoration:none}
+.section-title{font-size:18px;font-weight:800;margin-bottom:16px;color:var(--text)}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+@media(max-width:420px){.feature-grid{grid-template-columns:1fr}}
+.feature-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px 16px}
+.feat-icon{font-size:28px;margin-bottom:10px}
+.feat-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.feat-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.steps{margin-bottom:32px}
+.step{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px}
+.step-num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c6fff,#b06fff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff}
+.step-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.warn{background:rgba(255,171,64,.08);border:1.5px solid rgba(255,171,64,.3);border-radius:14px;padding:16px;font-size:12px;color:rgba(255,171,64,.9);margin-bottom:24px;line-height:1.6}
+.changelog{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
+.cl-ver{font-size:13px;font-weight:700;color:#b06fff;margin-bottom:8px}
+.cl-item{font-size:12px;color:var(--text2);padding:3px 0 3px 14px;position:relative;line-height:1.5}
+.cl-item::before{content:'•';position:absolute;left:2px;color:var(--accent)}
+.footer{text-align:center;font-size:12px;color:var(--text2);padding-top:24px;border-top:1px solid var(--border);line-height:2}
+.footer a{color:var(--accent3);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="wrap">
+  <div class="hero">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.06 15.96 0 13.36 0c-1.3 0-2.48.54-3.36 1.4C9.12.54 7.94 0 6.64 0 4.04 0 2 2.06 2 4.64c0 .48.11.92.18 1.36H0v2h1v12a2 2 0 002 2h18a2 2 0 002-2V8h1V6h-4zm-6.64-4c1.3 0 2.36 1.08 2.36 2.64 0 .48-.1.92-.18 1.36h-4.36c-.08-.44-.18-.88-.18-1.36C11 3.08 12.06 2 13.36 2zM6.64 2C7.94 2 9 3.08 9 4.64c0 .48-.1.92-.18 1.36H4.46c-.08-.44-.18-.88-.18-1.36C4.28 3.08 5.34 2 6.64 2zM11 20H4V8h7v12zm9 0h-7V8h7v12z"/></svg>
+    </div>
+    <div class="app-name">AppVault Pro</div>
+    <div class="app-sub">Manajer Aplikasi Android All-in-One<br/>Kelola, buka &amp; temukan app favoritmu dengan mudah</div>
+    <div class="badge-row">
+      <span class="badge badge-green">&#10003; Gratis</span>
+      <span class="badge badge-purple">Android 6.0+</span>
+      <span class="badge badge-blue">v2.3.0</span>
+    </div>
+  </div>
+
+  <div class="dl-card">
+    <div class="version-tag">Versi Terbaru</div>
+    <div class="dl-title">AppVault Pro v2.3.0</div>
+    <div class="dl-meta">~49 KB &middot; APK &middot; Android 6.0 (API 23)+</div>
+    <a class="btn-dl" href="https://github.com/JMStory-27/Jumalia-Makruf/releases/download/appvault-pro-v2.3.0/AppVaultPro-v2.3.0.apk">
+      <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+      Download APK
+    </a>
+    <div class="install-hint">
+      &#9888;&#65039; Aktifkan <strong>Install Unknown Apps</strong> di Settings sebelum menginstal<br/>
+      <a href="#cara-install">Cara install &rarr;</a>
+    </div>
+  </div>
+
+  <div class="section-title">&#10024; Fitur Utama</div>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="feat-icon">&#128241;</div><div class="feat-title">App Launcher</div><div class="feat-desc">Buka semua app yang terinstal langsung dari satu tempat</div></div>
+    <div class="feature-card"><div class="feat-icon">&#128269;</div><div class="feat-title">Pencarian Cepat</div><div class="feat-desc">Temukan app yang kamu butuhkan secara instan</div></div>
+    <div class="feature-card"><div class="feat-icon">&#128722;</div><div class="feat-title">Discover</div><div class="feat-desc">Temukan aplikasi pilihan yang direkomendasikan</div></div>
+    <div class="feature-card"><div class="feat-icon">&#128737;&#65039;</div><div class="feat-title">Privacy Check</div><div class="feat-desc">Pantau izin yang diminta setiap aplikasi</div></div>
+    <div class="feature-card"><div class="feat-icon">&#11088;</div><div class="feat-title">Favorit</div><div class="feat-desc">Pin app favoritmu di Island untuk akses kilat</div></div>
+    <div class="feature-card"><div class="feat-icon">&#127752;</div><div class="feat-title">Dark UI Premium</div><div class="feat-desc">Tampilan gelap elegan dengan aksen ungu</div></div>
+  </div>
+
+  <div class="section-title" id="cara-install">&#128229; Cara Install</div>
+  <div class="warn">APK ini tidak dari Google Play Store. Android akan menampilkan peringatan saat instalasi &mdash; ini normal untuk APK luar Play Store.</div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div><div class="step-title">Download APK</div><div class="step-desc">Klik tombol Download APK di atas. File tersimpan di folder Downloads.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div><div class="step-title">Izinkan Install Unknown Apps</div><div class="step-desc">Settings &rarr; Apps &rarr; Browser/File Manager &rarr; aktifkan "Install Unknown Apps".</div></div></div>
+    <div class="step"><div class="step-num">3</div><div><div class="step-title">Buka File APK</div><div class="step-desc">File Manager &rarr; Downloads &rarr; ketuk AppVaultPro-v2.3.0.apk &rarr; Install.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div><div class="step-title">Selesai!</div><div class="step-desc">Ketuk "Buka" atau temukan ikon AppVault Pro di laci aplikasi.</div></div></div>
+  </div>
+
+  <div class="section-title">&#128203; Riwayat Versi</div>
+  <div class="changelog">
+    <div class="cl-ver">v2.3.0 &mdash; Mei 2026 (Terbaru)</div>
+    <div class="cl-item">Fix crash saat dibuka &mdash; ART VerifyError pada bytecode Smali (.registers 12 &rarr; 8)</div>
+    <div class="cl-item">Perbaiki type-merge conflict register v0 di onPause/perm block</div>
+    <div class="cl-item">Tambah onShowCustomView + onHideCustomView untuk video fullscreen</div>
+  </div>
+  <div class="changelog">
+    <div class="cl-ver">v2.2.0</div>
+    <div class="cl-item">Fix aset HTML dikompresi di ZIP &mdash; WebView tidak bisa membaca (jar uf &rarr; jar u0f)</div>
+  </div>
+  <div class="changelog">
+    <div class="cl-ver">v2.1.0</div>
+    <div class="cl-item">Guard requestPermissions hanya dipanggil di API 23+ (Android 6+)</div>
+  </div>
+
+  <div class="footer">
+    Dibuat oleh <a href="https://github.com/JMStory-27" target="_blank">JMStory-27</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/JMStory-27/Jumalia-Makruf/releases" target="_blank">Semua Rilis</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://jmstory-27.github.io/Jumalia-Makruf/anime/" target="_blank">Lawnime ID</a>
+  </div>
+</div>
+<script>
+const c=document.getElementById('stars');
+for(let i=0;i<60;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2.5+1;s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(2+Math.random()*4)+'s;--delay:-'+(Math.random()*5)+'s';c.appendChild(s);}
+</script>
+</body>
+</html>
