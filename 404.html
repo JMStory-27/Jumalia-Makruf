@@ -3,10 +3,19 @@
 <title>Lawnime ID</title>
 <script>
 (function(){
-  var l=window.location;
-  var p=l.pathname.replace(/^\/Jumalia-Makruf/,'');
-  if(!p||p==='/'||p==='/index.html'){l.replace('/Jumalia-Makruf/anime/');return;}
-  l.replace('/Jumalia-Makruf/anime/');
+  var l = window.location;
+  var base = '/Jumalia-Makruf/anime';
+  // Ambil path relatif dari base /anime (strip /Jumalia-Makruf/anime)
+  var rel = l.pathname.replace(/^\/Jumalia-Makruf\/anime/, '') || '/';
+  var qs  = l.search;
+  var redirect = rel + qs;
+  // Kalau sudah di root anime atau tidak ada path spesifik, langsung ke home
+  if (!redirect || redirect === '/' || redirect === '/index.html') {
+    l.replace(base + '/');
+  } else {
+    // Encode path dan kirim ke index.html sebagai ?redirect=
+    l.replace(base + '/?redirect=' + encodeURIComponent(redirect));
+  }
 })();
 </script>
 </head><body></body></html>
