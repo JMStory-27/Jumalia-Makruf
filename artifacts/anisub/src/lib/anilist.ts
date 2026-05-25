@@ -213,15 +213,29 @@ export interface PersonDetail {
   languageV2?: string | null;
   // For characters
   bloodType?: string | null;
-  anime?: { title: string; image: string }[];
+  anime?: { id: number; title: string; image: string }[];
 }
 
 const PERSON_MEM: Map<string, PersonDetail> = new Map();
 const PERSON_TTL = 24 * 3600_000;
 
+function cleanMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")   // [text](url) → text
+    .replace(/__([^_]+)__/g, "$1")              // __bold__ → bold
+    .replace(/_([^_]+)_/g, "$1")               // _italic_ → italic
+    .replace(/\*\*([^*]+)\*\*/g, "$1")         // **bold** → bold
+    .replace(/\*([^*]+)\*/g, "$1")             // *italic* → italic
+    .replace(/^#{1,6}\s+/gm, "")              // # headers
+    .replace(/`([^`]+)`/g, "$1")              // `code` → code
+    .replace(/~([^~]+)~/g, "$1")             // ~strikethrough~
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function stripHtml(raw?: string | null): string {
   if (!raw) return "";
-  return raw
+  const stripped = raw
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<[^>]+>/g, "")
     .replace(/&amp;/g, "&")
@@ -231,6 +245,78 @@ function stripHtml(raw?: string | null): string {
     .replace(/&#039;/g, "'")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
+  return cleanMarkdown(stripped);
+}
+
+// ── Wikipedia Indonesia Bio ───────────────────────────────────────────────
+const BIO_ID_MEM = new Map<string, string>();
+const BIO_ID_CACHE_KEY = "anisub_bio_id_v1";
+const BIO_ID_TTL = 7 * 24 * 3600_000; // 7 hari
+
+export async function fetchPersonBioId(name: string, fallback?: string): Promise<string> {
+  const key = name.toLowerCase().trim();
+  if (BIO_ID_MEM.has(key)) return BIO_ID_MEM.get(key)!;
+
+  try {
+    const stored = JSON.parse(localStorage.getItem(BIO_ID_CACHE_KEY) ?? "{}") as Record<string, { text: string; ts: number }>;
+    const hit = stored[key];
+    if (hit && Date.now() - hit.ts < BIO_ID_TTL) {
+      BIO_ID_MEM.set(key, hit.text);
+      return hit.text;
+    }
+  } catch {}
+
+  const saveCache = (text: string) => {
+    BIO_ID_MEM.set(key, text);
+    try {
+      const stored = JSON.parse(localStorage.getItem(BIO_ID_CACHE_KEY) ?? "{}");
+      stored[key] = { text, ts: Date.now() };
+      localStorage.setItem(BIO_ID_CACHE_KEY, JSON.stringify(stored));
+    } catch {}
+  };
+
+  // 1. Coba Wikipedia Indonesia langsung
+  const tryWiki = async (lang: string, query: string): Promise<string | null> => {
+    try {
+      // Cari dulu via search API biar lebih akurat
+      const searchRes = await fetch(
+        `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=1`,
+        { signal: AbortSignal.timeout(5000) }
+      );
+      if (!searchRes.ok) return null;
+      const searchJson = await searchRes.json() as { query?: { search?: { title: string }[] } };
+      const firstTitle = searchJson.query?.search?.[0]?.title;
+      if (!firstTitle) return null;
+
+      const pageRes = await fetch(
+        `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(firstTitle)}`,
+        { signal: AbortSignal.timeout(5000) }
+      );
+      if (!pageRes.ok) return null;
+      const pageJson = await pageRes.json() as { extract?: string; type?: string };
+      if (pageJson.type === "disambiguation" || !pageJson.extract || pageJson.extract.length < 40) return null;
+      return pageJson.extract;
+    } catch {
+      return null;
+    }
+  };
+
+  // Coba Wikipedia Indonesia dulu
+  const idBio = await tryWiki("id", name);
+  if (idBio) { saveCache(idBio); return idBio; }
+
+  // Fallback: Wikipedia Inggris → label "[EN]"
+  const enBio = await tryWiki("en", name);
+  if (enBio) {
+    const labeled = `[dari Wikipedia] ${enBio}`;
+    saveCache(labeled);
+    return labeled;
+  }
+
+  // Terakhir: pakai AniList description yang sudah di-clean
+  const cleaned = fallback ? cleanMarkdown(fallback) : "";
+  if (cleaned) saveCache(cleaned);
+  return cleaned;
 }
 
 export async function fetchPersonDetail(id: number, type: "staff" | "character"): Promise<PersonDetail | null> {
@@ -258,8 +344,8 @@ export async function fetchPersonDetail(id: number, type: "staff" | "character")
           dateOfBirth { year month day }
           age gender yearsActive homeTown
           languageV2
-          staffMedia(perPage: 10, sort: POPULARITY_DESC, type: ANIME) {
-            edges { staffRole node { title { romaji } coverImage { medium } } }
+          staffMedia(perPage: 12, sort: POPULARITY_DESC, type: ANIME) {
+            edges { staffRole node { id title { romaji } coverImage { medium } } }
           }
         }
       }`;
@@ -270,8 +356,8 @@ export async function fetchPersonDetail(id: number, type: "staff" | "character")
           image { large medium }
           description(asHtml: false)
           gender dateOfBirth { year month day } age bloodType
-          media(perPage: 8, sort: POPULARITY_DESC, type: ANIME) {
-            edges { node { title { romaji } coverImage { medium } } }
+          media(perPage: 10, sort: POPULARITY_DESC, type: ANIME) {
+            edges { node { id title { romaji } coverImage { medium } } }
           }
         }
       }`;
@@ -288,13 +374,13 @@ export async function fetchPersonDetail(id: number, type: "staff" | "character")
     const raw = (type === "staff" ? json.data?.Staff : json.data?.Character) as Record<string, unknown> | undefined;
     if (!raw) return null;
 
-    let anime: { title: string; image: string }[] | undefined;
+    let anime: { id: number; title: string; image: string }[] | undefined;
     if (type === "staff") {
-      const staffMedia = raw.staffMedia as { edges?: { staffRole: string; node: { title: { romaji: string }; coverImage: { medium: string } } }[] } | undefined;
-      anime = staffMedia?.edges?.map(e => ({ title: e.node.title.romaji, image: e.node.coverImage.medium })) ?? [];
+      const staffMedia = raw.staffMedia as { edges?: { staffRole: string; node: { id: number; title: { romaji: string }; coverImage: { medium: string } } }[] } | undefined;
+      anime = staffMedia?.edges?.map(e => ({ id: e.node.id, title: e.node.title.romaji, image: e.node.coverImage.medium })) ?? [];
     } else {
-      const media = raw.media as { edges?: { node: { title: { romaji: string }; coverImage: { medium: string } } }[] } | undefined;
-      anime = media?.edges?.map(e => ({ title: e.node.title.romaji, image: e.node.coverImage.medium })) ?? [];
+      const media = raw.media as { edges?: { node: { id: number; title: { romaji: string }; coverImage: { medium: string } } }[] } | undefined;
+      anime = media?.edges?.map(e => ({ id: e.node.id, title: e.node.title.romaji, image: e.node.coverImage.medium })) ?? [];
     }
 
     const result: PersonDetail = {
