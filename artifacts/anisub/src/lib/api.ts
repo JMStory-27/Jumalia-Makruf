@@ -1,4 +1,4 @@
-const BASE_URL = "/api";
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) || "/api";
 
 // Fallback: GitHub raw data (selalu available 24/7 walau Replit off)
 const GH_RAW = "https://raw.githubusercontent.com/JMStory-27/Jumalia-Makruf/main/data";
@@ -127,6 +127,27 @@ export async function fetchOngoing(page = 1): Promise<AnimeListResponse> {
     const data = await ghFetch<{ animeList: AnimeCard[]; maxPage?: number }>("ongoing.json");
     return { animeList: data.animeList ?? [], maxPage: data.maxPage };
   }
+}
+
+/** Fetch semua halaman ongoing sekaligus (untuk banner carousel) */
+export async function fetchAllOngoing(): Promise<AnimeCard[]> {
+  // Ambil page 1 dulu, lalu parallel sisanya
+  const first = await fetchOngoing(1);
+  const all: AnimeCard[] = [...first.animeList];
+  if (first.animeList.length < 25) return all; // Cuma 1 halaman
+
+  // Fetch halaman 2–10 secara parallel
+  const extraPages = await Promise.allSettled(
+    [2, 3, 4, 5, 6, 7, 8, 9, 10].map(p => fetchOngoing(p))
+  );
+  for (const r of extraPages) {
+    if (r.status === "fulfilled" && r.value.animeList.length > 0) {
+      all.push(...r.value.animeList);
+    } else {
+      break;
+    }
+  }
+  return all;
 }
 
 export async function fetchCompleted(page = 1): Promise<AnimeListResponse> {
