@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { fetchOngoing, fetchGenres } from "@/lib/api";
+import { fetchOngoing, fetchAllOngoing, fetchGenres } from "@/lib/api";
 import { fetchAiringAnime, getStreamingLinks, getTitle, PLATFORM_STYLE, type AniListAnime } from "@/lib/anilist";
 import AnimeCard from "@/components/AnimeCard";
 import HeroCarousel from "@/components/HeroCarousel";
@@ -132,6 +132,14 @@ export default function Home() {
     refetchInterval: 30 * 60_000,
   });
 
+  // Semua ongoing untuk banner carousel (background load)
+  const { data: allOngoingList } = useQuery({
+    queryKey: ["ongoing-all"],
+    queryFn: fetchAllOngoing,
+    staleTime: 30 * 60_000,
+    refetchInterval: 30 * 60_000,
+  });
+
   const REFRESH_SECS = 30 * 60;
   const [countdown, setCountdown] = useState(REFRESH_SECS);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -163,6 +171,7 @@ export default function Home() {
   });
 
   const ongoingList = ongoingData?.animeList ?? [];
+  const carouselList = allOngoingList ?? ongoingList; // Gunakan semua, fallback ke page 1
   const genres = genreList?.genreList ?? [];
 
   const handleRandom = () => {
@@ -320,7 +329,7 @@ export default function Home() {
 
       {/* ── Hero Carousel ── */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        <HeroCarousel items={ongoingList} />
+        <HeroCarousel items={carouselList} />
       </div>
 
       {/* ── Stats strip ── */}
@@ -334,7 +343,7 @@ export default function Home() {
           }}
         >
           {[
-            { label: "Ongoing", value: ongoingData?.maxPage && ongoingData.maxPage > 1 ? (ongoingData.maxPage * 25) + "+" : ongoingList.length + "+", color: "#60A5FA" },
+            { label: "Ongoing", value: carouselList.length > ongoingList.length ? carouselList.length + "+" : ongoingList.length + "+", color: "#60A5FA" },
             { label: "Genre",   value: genres.length || "35+",   color: "#A78BFA" },
             { label: "Update",  value: "Tiap Hari",               color: "#34D399" },
           ].map((s, i) => (
