@@ -60,7 +60,14 @@ self.addEventListener('push', e => {
     ]
   };
 
-  e.waitUntil(self.registration.showNotification(title, options));
+  // Broadcast ke semua tab/halaman yang terbuka agar langsung refresh bell
+  const broadcast = self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+    .then(clients => clients.forEach(c => c.postMessage({ type: 'PUSH_RECEIVED', data })));
+
+  e.waitUntil(Promise.all([
+    self.registration.showNotification(title, options),
+    broadcast,
+  ]));
 });
 
 // ── Notification Click ────────────────────────────────────────────────────────
