@@ -6,7 +6,7 @@ import { titlePlaceholder } from "@/lib/utils";
 import { usePoster } from "@/lib/usePoster";
 import { useBanner } from "@/lib/useBanner";
 
-const AUTO_ROTATE_MS = 3000;
+const AUTO_ROTATE_MS = 5000;
 const DOT_LIMIT = 8;
 
 function HeroSlide({ anime }: { anime: AnimeCard }) {
@@ -148,20 +148,6 @@ export default function HeroCarousel({ items }: { items: AnimeCard[] }) {
         </div>
       </div>
 
-      {/* Progress bar — resets every 3 seconds */}
-      {list.length > 1 && (
-        <div className="absolute bottom-0 left-0 right-0 h-0.5 z-10"
-          style={{ background: "rgba(255,255,255,0.08)" }}>
-          <div
-            key={`${current.animeId}-progress`}
-            className="h-full"
-            style={{
-              background: "linear-gradient(90deg, #FF6B00, #FF4444)",
-              animation: `hero-progress ${AUTO_ROTATE_MS}ms linear forwards`,
-            }}
-          />
-        </div>
-      )}
 
       {/* Dot indicators (max DOT_LIMIT dots) */}
       {list.length > 1 && (
