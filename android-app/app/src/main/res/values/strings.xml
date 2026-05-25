@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LAWNIME ID</string>
+    <string name="channel_name">Lawnime ID</string>
+    <string name="channel_desc">Notifikasi anime dan info terbaru dari Lawnime ID</string>
+    <string name="loading">Memuat Lawnime ID…</string>
+    <string name="no_internet">Tidak ada koneksi internet. Periksa jaringan kamu.</string>
+    <string name="retry">Coba Lagi</string>
+</resources>
