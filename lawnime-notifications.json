@@ -1,5 +1,14 @@
 [
   {
+    "id": "admin_1779682130355",
+    "type": "admin",
+    "title": "INFO ADMIN",
+    "body": "HALO USER BARU",
+    "timestamp": 1779682130355,
+    "read": false,
+    "adminBadge": true
+  },
+  {
     "id": "admin_test_1779676965033",
     "type": "admin",
     "title": "🔥 TEST SIMULASI!",
