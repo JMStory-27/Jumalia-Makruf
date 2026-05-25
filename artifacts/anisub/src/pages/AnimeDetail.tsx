@@ -153,6 +153,7 @@ function fmtALDatePersonModal(d?: { year?: number | null; month?: number | null;
 function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void }) {
   const [, navigate] = useLocation();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const bioSectionRef = useRef<HTMLDivElement>(null);
   const [navigatingWork, setNavigatingWork] = useState<number | null>(null);
 
   const { data: detail, isLoading } = useQuery({
@@ -177,11 +178,29 @@ function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void 
     enabled: !!detail, // Baru fetch setelah detail AniList ada
   });
 
-  // Scroll ke atas saat modal pertama kali muncul
+  // Reset scroll ke atas saat modal pertama buka
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = 0;
+    // Kunci scroll body (penting untuk Android agar background tidak ikut scroll)
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
   }, [seed.id]);
+
+  // Saat detail AniList sudah ada → auto-scroll ke seksi Biografi
+  // Sehingga di HP Android bio langsung terlihat tanpa perlu scroll manual
+  useEffect(() => {
+    if (!detail) return;
+    const container = scrollRef.current;
+    const bioEl = bioSectionRef.current;
+    if (!container || !bioEl) return;
+    // Delay kecil biar layout settle, lalu scroll
+    const t = setTimeout(() => {
+      const offset = bioEl.offsetTop - 12; // 12px padding atas
+      container.scrollTo({ top: Math.max(0, offset), behavior: "smooth" });
+    }, 150);
+    return () => clearTimeout(t);
+  }, [!!detail]);
 
   // Klik karya anime → cari di OtakuDesu → navigate langsung
   const handleWorkClick = async (work: { id: number; title: string }) => {
@@ -343,7 +362,7 @@ function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void 
             )}
 
             {/* ── Biografi (Wikipedia Indonesia / AniList cleaned) ── */}
-            <div>
+            <div ref={bioSectionRef}>
               <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: "#475569" }}>
                 {seed.type === "character" ? "Tentang Karakter" : "Biografi"}
               </p>
