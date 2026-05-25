@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import type { AnimeCard } from "@/lib/api";
 import { titlePlaceholder } from "@/lib/utils";
 import { usePoster } from "@/lib/usePoster";
 import { useBanner } from "@/lib/useBanner";
+
+const AUTO_ROTATE_MS = 3000;
+const DOT_LIMIT = 8;
 
 function HeroSlide({ anime }: { anime: AnimeCard }) {
   const malPoster = usePoster(anime.title);
@@ -25,7 +28,7 @@ function HeroSlide({ anime }: { anime: AnimeCard }) {
           className="absolute inset-0 w-full h-full"
           style={{
             opacity: imgLoaded ? 1 : 0,
-            transition: "opacity 0.3s ease",
+            transition: "opacity 0.4s ease",
             objectFit: "cover",
             objectPosition: isBanner ? "center 30%" : "center 20%",
           }}
@@ -38,10 +41,29 @@ function HeroSlide({ anime }: { anime: AnimeCard }) {
 
 export default function HeroCarousel({ items }: { items: AnimeCard[] }) {
   const [idx, setIdx] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const list = items;
 
-  const prev = () => setIdx((i) => (i - 1 + list.length) % list.length);
-  const next = () => setIdx((i) => (i + 1) % list.length);
+  const resetTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (list.length <= 1) return;
+    timerRef.current = setInterval(() => {
+      setIdx((i) => (i + 1) % list.length);
+    }, AUTO_ROTATE_MS);
+  };
+
+  useEffect(() => {
+    resetTimer();
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [list.length]);
+
+  const goTo = (i: number) => {
+    setIdx((i + list.length) % list.length);
+    resetTimer();
+  };
+
+  const prev = () => goTo(idx - 1);
+  const next = () => goTo(idx + 1);
 
   if (!list.length) return null;
   const current = list[idx];
@@ -51,7 +73,7 @@ export default function HeroCarousel({ items }: { items: AnimeCard[] }) {
       className="relative w-full overflow-hidden"
       style={{ height: "280px" }}
     >
-      {/* Active slide only */}
+      {/* Active slide */}
       <HeroSlide key={current.animeId} anime={current} />
 
       {/* Gradient overlays */}
@@ -120,31 +142,60 @@ export default function HeroCarousel({ items }: { items: AnimeCard[] }) {
             style={{ background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.15)" }}>
             <ChevronRight size={16} color="white" />
           </button>
-          {list.length > 1 && (
-            <span className="text-[10px] font-bold ml-1" style={{ color: "rgba(255,255,255,0.4)" }}>
-              {idx + 1}/{list.length}
-            </span>
-          )}
+          <span className="text-[10px] font-bold ml-1" style={{ color: "rgba(255,255,255,0.4)" }}>
+            {idx + 1}/{list.length}
+          </span>
         </div>
       </div>
 
-      {/* Dot indicators */}
+      {/* Progress bar — resets every 3 seconds */}
+      {list.length > 1 && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 z-10"
+          style={{ background: "rgba(255,255,255,0.08)" }}>
+          <div
+            key={`${current.animeId}-progress`}
+            className="h-full"
+            style={{
+              background: "linear-gradient(90deg, #FF6B00, #FF4444)",
+              animation: `hero-progress ${AUTO_ROTATE_MS}ms linear forwards`,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Dot indicators (max DOT_LIMIT dots) */}
       {list.length > 1 && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-10">
-          {list.slice(0, 10).map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)}
-              className="rounded-full"
-              style={{
-                width: "5px",
-                height: i === idx ? "20px" : "5px",
-                background: i === idx ? "linear-gradient(180deg, #60A5FA, #A78BFA)" : "rgba(255,255,255,0.2)",
-                boxShadow: i === idx ? "0 0 8px rgba(96,165,250,0.7)" : "none",
-                transition: "height 0.2s ease, background 0.2s ease",
-              }}
-            />
-          ))}
-          {list.length > 10 && (
-            <span className="text-[8px] text-center" style={{ color: "rgba(255,255,255,0.3)" }}>+{list.length - 10}</span>
+          {(() => {
+            const total = list.length;
+            const half = Math.floor(DOT_LIMIT / 2);
+            let start = Math.max(0, idx - half);
+            const end = Math.min(total, start + DOT_LIMIT);
+            start = Math.max(0, end - DOT_LIMIT);
+            return Array.from({ length: end - start }, (_, i) => {
+              const realIdx = start + i;
+              const isActive = realIdx === idx;
+              return (
+                <button
+                  key={realIdx}
+                  onClick={() => goTo(realIdx)}
+                  className="rounded-full transition-all duration-200"
+                  style={{
+                    width: "5px",
+                    height: isActive ? "20px" : "5px",
+                    background: isActive
+                      ? "linear-gradient(180deg, #60A5FA, #A78BFA)"
+                      : "rgba(255,255,255,0.2)",
+                    boxShadow: isActive ? "0 0 8px rgba(96,165,250,0.7)" : "none",
+                  }}
+                />
+              );
+            });
+          })()}
+          {list.length > DOT_LIMIT && (
+            <span className="text-[8px] text-center" style={{ color: "rgba(255,255,255,0.3)" }}>
+              {list.length}
+            </span>
           )}
         </div>
       )}
