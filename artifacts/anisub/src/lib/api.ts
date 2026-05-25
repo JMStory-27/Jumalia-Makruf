@@ -129,25 +129,32 @@ export async function fetchOngoing(page = 1): Promise<AnimeListResponse> {
   }
 }
 
-/** Fetch semua halaman ongoing sekaligus (untuk banner carousel) */
-export async function fetchAllOngoing(): Promise<AnimeCard[]> {
-  // Ambil page 1 dulu, lalu parallel sisanya
-  const first = await fetchOngoing(1);
-  const all: AnimeCard[] = [...first.animeList];
-  if (first.animeList.length < 25) return all; // Cuma 1 halaman
-
-  // Fetch halaman 2–10 secara parallel
-  const extraPages = await Promise.allSettled(
-    [2, 3, 4, 5, 6, 7, 8, 9, 10].map(p => fetchOngoing(p))
-  );
-  for (const r of extraPages) {
-    if (r.status === "fulfilled" && r.value.animeList.length > 0) {
-      all.push(...r.value.animeList);
-    } else {
-      break;
+/** Fetch anime dari jadwal mingguan OtakuDesu (Senin–Minggu), tanpa duplikat.
+ *  Ini yang dipakai untuk banner carousel — hanya anime yang sedang tayang minggu ini. */
+export async function fetchScheduleAnime(): Promise<AnimeCard[]> {
+  try {
+    const { scheduleList } = await fetchSchedule();
+    const seen = new Set<string>();
+    const cards: AnimeCard[] = [];
+    for (const day of scheduleList) {
+      for (const a of day.animeList) {
+        if (!seen.has(a.animeId)) {
+          seen.add(a.animeId);
+          cards.push({
+            title: a.title,
+            poster: "",           // HeroCarousel pakai usePoster hook by title
+            animeId: a.animeId,
+            releaseDay: day.title,
+          });
+        }
+      }
     }
+    return cards;
+  } catch {
+    // Fallback ke page 1 ongoing
+    const data = await fetchOngoing(1);
+    return data.animeList;
   }
-  return all;
 }
 
 export async function fetchCompleted(page = 1): Promise<AnimeListResponse> {
