@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Bookmark, BookmarkCheck, Star, Play, ChevronDown, ChevronUp, Layers, X } from "lucide-react";
-import { fetchAnimeDetail, getSynopsisText } from "@/lib/api";
+import { ArrowLeft, Bookmark, BookmarkCheck, Star, Play, ChevronDown, ChevronUp, Layers, X, Loader2 } from "lucide-react";
+import { fetchAnimeDetail, getSynopsisText, fetchSearch } from "@/lib/api";
 import CommentsSection from "@/components/CommentsSection";
 import {
   getWatchlistItem, upsertWatchlist, removeWatchlist,
@@ -13,7 +13,7 @@ import AnimeCard from "@/components/AnimeCard";
 import { titlePlaceholder } from "@/lib/utils";
 import { usePoster } from "@/lib/usePoster";
 import { useBanner } from "@/lib/useBanner";
-import { fetchAniListRichByTitle, fetchPersonDetail } from "@/lib/anilist";
+import { fetchAniListRichByTitle, fetchPersonDetail, fetchPersonBioId } from "@/lib/anilist";
 import type { AniListRichData, PersonDetail } from "@/lib/anilist";
 
 type ConfettiParticle = { id: number; color: string; tx: number; ty: number; size: number };
@@ -151,6 +151,10 @@ function fmtALDatePersonModal(d?: { year?: number | null; month?: number | null;
 }
 
 function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void }) {
+  const [, navigate] = useLocation();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [navigatingWork, setNavigatingWork] = useState<number | null>(null);
+
   const { data: detail, isLoading } = useQuery({
     queryKey: ["person-detail", seed.type, seed.id],
     queryFn: () => fetchPersonDetail(seed.id, seed.type),
@@ -163,8 +167,47 @@ function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void 
   const native = detail?.name?.native;
   const birth = fmtALDatePersonModal(detail?.dateOfBirth);
   const occupations = detail?.primaryOccupations;
-  const bio = detail?.description;
   const animeWorks = detail?.anime ?? [];
+
+  // Bio Indonesia dari Wikipedia (query terpisah, lazy)
+  const { data: bio, isLoading: bioLoading } = useQuery({
+    queryKey: ["person-bio-id", name],
+    queryFn: () => fetchPersonBioId(name, detail?.description ?? ""),
+    staleTime: 7 * 24 * 3600_000,
+    enabled: !!detail, // Baru fetch setelah detail AniList ada
+  });
+
+  // Scroll ke atas saat modal pertama kali muncul
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollTop = 0;
+  }, [seed.id]);
+
+  // Klik karya anime → cari di OtakuDesu → navigate langsung
+  const handleWorkClick = async (work: { id: number; title: string }) => {
+    setNavigatingWork(work.id);
+    try {
+      const result = await fetchSearch(work.title);
+      if (result.animeList.length > 0) {
+        onClose();
+        navigate(`/anime/${result.animeList[0].animeId}`);
+        return;
+      }
+      // Fallback: coba judul lebih pendek (tanpa season info)
+      const shortTitle = work.title.replace(/\s*(Season\s*\d+|Part\s*\d+|\d+th\s*Season|\(\w+\))$/i, "").trim();
+      if (shortTitle !== work.title) {
+        const r2 = await fetchSearch(shortTitle);
+        if (r2.animeList.length > 0) {
+          onClose();
+          navigate(`/anime/${r2.animeList[0].animeId}`);
+          return;
+        }
+      }
+    } catch {}
+    // Tidak ketemu — pergi ke halaman cari dengan query
+    onClose();
+    navigate(`/cari?q=${encodeURIComponent(work.title)}`);
+  };
 
   return (
     <div
@@ -173,115 +216,109 @@ function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void 
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg rounded-t-3xl overflow-hidden overflow-y-auto"
+        ref={scrollRef}
+        className="w-full max-w-lg rounded-t-3xl overflow-y-auto"
         style={{
           background: "linear-gradient(180deg,#12121f 0%,#0a0a16 100%)",
           border: "1px solid rgba(255,255,255,0.1)",
           borderBottom: "none",
-          maxHeight: "88vh",
+          maxHeight: "90vh",
           boxShadow: "0 -8px 48px rgba(0,0,0,0.7)",
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Handle */}
-        <div className="flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.2)" }} />
-        </div>
-
-        {/* Close button */}
-        <div className="flex justify-end px-4 pt-1">
+        {/* Handle + close */}
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 pt-3 pb-2"
+          style={{ background: "linear-gradient(180deg,#12121f 80%,transparent)" }}>
+          <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "rgba(255,255,255,0.2)", position: "absolute", left: "50%", transform: "translateX(-50%)", top: 12 }} />
+          <div style={{ width: 32 }} />
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full"
+            className="w-8 h-8 flex items-center justify-center rounded-full ml-auto"
             style={{ background: "rgba(255,255,255,0.08)" }}
           >
             <X size={16} className="text-white" />
           </button>
         </div>
 
-        {/* Photo + basic info */}
-        <div className="flex flex-col items-center px-6 pb-4">
-          <div
-            className="w-32 h-32 rounded-2xl overflow-hidden mb-4"
-            style={{
-              border: "2px solid rgba(167,139,250,0.4)",
-              boxShadow: "0 0 32px rgba(167,139,250,0.2)",
-            }}
-          >
+        {/* ── Compact header: foto kiri, nama kanan ── */}
+        <div className="flex items-center gap-3 px-4 pb-3">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0"
+            style={{ border: "2px solid rgba(167,139,250,0.5)", boxShadow: "0 0 20px rgba(167,139,250,0.2)" }}>
             {photo ? (
               <img src={photo} alt={name} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl"
+              <div className="w-full h-full flex items-center justify-center text-3xl"
                 style={{ background: "rgba(255,255,255,0.06)" }}>
                 {seed.type === "staff" ? "✍️" : "🎭"}
               </div>
             )}
           </div>
-
-          <h2 className="text-lg font-black text-white text-center">{name}</h2>
-          {native && (
-            <p className="text-sm mt-0.5 text-center" style={{ color: "#6E6E90" }}>{native}</p>
-          )}
-
-          {/* Role badge */}
-          <span className="mt-2 text-xs font-bold px-3 py-1 rounded-full"
-            style={{ background: "rgba(255,107,0,0.15)", color: "#FF6B00", border: "1px solid rgba(255,107,0,0.25)" }}>
-            {seed.role}
-          </span>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-base font-black text-white leading-tight">{name}</h2>
+            {native && <p className="text-xs mt-0.5" style={{ color: "#6E6E90" }}>{native}</p>}
+            <span className="inline-block mt-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full"
+              style={{ background: "rgba(255,107,0,0.15)", color: "#FF6B00", border: "1px solid rgba(255,107,0,0.25)" }}>
+              {seed.role}
+            </span>
+          </div>
         </div>
 
+        {/* ── Skeleton saat loading ── */}
         {isLoading && (
-          <div className="px-6 pb-6 space-y-3">
-            {[80, 60, 100, 50].map((w, i) => (
-              <div key={i} className="h-3 rounded-full animate-pulse" style={{ background: "rgba(255,255,255,0.06)", width: `${w}%` }} />
+          <div className="px-4 pb-6 space-y-3">
+            {[90, 70, 100, 60, 80].map((w, i) => (
+              <div key={i} className="h-3 rounded-full animate-pulse"
+                style={{ background: "rgba(255,255,255,0.06)", width: `${w}%` }} />
             ))}
           </div>
         )}
 
         {detail && (
-          <div className="px-6 pb-8 space-y-4">
-            {/* Stats row */}
-            {(birth || detail.age || detail.gender || detail.homeTown) && (
+          <div className="px-4 pb-8 space-y-4">
+
+            {/* ── Stats grid ── */}
+            {(birth || detail.age || detail.gender || detail.homeTown || (detail.yearsActive?.length ?? 0) > 0 || detail.bloodType) && (
               <div className="grid grid-cols-2 gap-2">
                 {birth && (
-                  <div className="rounded-xl px-3 py-2.5"
+                  <div className="rounded-xl px-3 py-2"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                     <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#475569" }}>Lahir</p>
                     <p className="text-xs font-semibold text-white mt-0.5">{birth}</p>
                   </div>
                 )}
                 {detail.age && (
-                  <div className="rounded-xl px-3 py-2.5"
+                  <div className="rounded-xl px-3 py-2"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                     <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#475569" }}>Usia</p>
                     <p className="text-xs font-semibold text-white mt-0.5">{detail.age} tahun</p>
                   </div>
                 )}
                 {detail.gender && (
-                  <div className="rounded-xl px-3 py-2.5"
+                  <div className="rounded-xl px-3 py-2"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                     <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#475569" }}>Gender</p>
                     <p className="text-xs font-semibold text-white mt-0.5">{detail.gender}</p>
                   </div>
                 )}
                 {detail.homeTown && (
-                  <div className="rounded-xl px-3 py-2.5"
+                  <div className="rounded-xl px-3 py-2"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                     <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#475569" }}>Asal</p>
                     <p className="text-xs font-semibold text-white mt-0.5 truncate">{detail.homeTown}</p>
                   </div>
                 )}
-                {detail.yearsActive && detail.yearsActive.length > 0 && (
-                  <div className="rounded-xl px-3 py-2.5 col-span-2"
+                {(detail.yearsActive?.length ?? 0) > 0 && (
+                  <div className="rounded-xl px-3 py-2 col-span-2"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                     <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#475569" }}>Aktif</p>
                     <p className="text-xs font-semibold text-white mt-0.5">
-                      {detail.yearsActive[0]}{detail.yearsActive.length > 1 ? ` – ${detail.yearsActive[detail.yearsActive.length - 1]}` : " – sekarang"}
+                      {detail.yearsActive![0]}{detail.yearsActive!.length > 1 ? ` – ${detail.yearsActive![detail.yearsActive!.length - 1]}` : " – sekarang"}
                     </p>
                   </div>
                 )}
                 {detail.bloodType && (
-                  <div className="rounded-xl px-3 py-2.5"
+                  <div className="rounded-xl px-3 py-2"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                     <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#475569" }}>Gol. Darah</p>
                     <p className="text-xs font-semibold text-white mt-0.5">{detail.bloodType}</p>
@@ -290,7 +327,7 @@ function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void 
               </div>
             )}
 
-            {/* Occupations */}
+            {/* ── Pekerjaan ── */}
             {occupations && occupations.length > 0 && (
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: "#475569" }}>Pekerjaan</p>
@@ -305,32 +342,64 @@ function PersonModal({ seed, onClose }: { seed: PersonSeed; onClose: () => void 
               </div>
             )}
 
-            {/* Bio / Description */}
-            {bio && bio.length > 0 && (
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: "#475569" }}>
-                  {seed.type === "character" ? "Tentang Karakter" : "Biografi"}
-                </p>
+            {/* ── Biografi (Wikipedia Indonesia / AniList cleaned) ── */}
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: "#475569" }}>
+                {seed.type === "character" ? "Tentang Karakter" : "Biografi"}
+              </p>
+              {bioLoading ? (
+                <div className="flex items-center gap-2 py-2">
+                  <Loader2 size={14} className="animate-spin" style={{ color: "#A78BFA" }} />
+                  <span className="text-xs" style={{ color: "#6E6E90" }}>Mencari biografi…</span>
+                </div>
+              ) : bio && bio.length > 0 ? (
                 <ExpandableBio text={bio} />
-              </div>
-            )}
+              ) : (
+                <p className="text-xs italic" style={{ color: "#475569" }}>Belum ada biografi tersedia.</p>
+              )}
+            </div>
 
-            {/* Works */}
+            {/* ── Karya Anime (clickable → navigate ke anime) ── */}
             {animeWorks.length > 0 && (
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>
                   {seed.type === "character" ? "Muncul di Anime" : "Karya Anime"}
                 </p>
-                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                  {animeWorks.map((w, i) => (
-                    <div key={i} className="flex-shrink-0 flex flex-col items-center gap-1.5" style={{ width: 64 }}>
-                      <div className="w-14 h-20 rounded-xl overflow-hidden"
-                        style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
-                        <img src={w.image} alt={w.title} className="w-full h-full object-cover" loading="lazy" />
-                      </div>
-                      <p className="text-[9px] text-center text-white/70 line-clamp-2 leading-tight">{w.title}</p>
-                    </div>
-                  ))}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                  {animeWorks.map((w) => {
+                    const isNav = navigatingWork === w.id;
+                    return (
+                      <button
+                        key={w.id}
+                        className="flex-shrink-0 flex flex-col items-center gap-1.5 transition-all active:scale-95"
+                        style={{ width: 68 }}
+                        onClick={() => handleWorkClick(w)}
+                        disabled={isNav}
+                      >
+                        <div className="w-14 h-20 rounded-xl overflow-hidden relative"
+                          style={{
+                            border: `1.5px solid ${isNav ? "rgba(255,107,0,0.6)" : "rgba(255,255,255,0.12)"}`,
+                            boxShadow: isNav ? "0 0 12px rgba(255,107,0,0.3)" : "none",
+                          }}>
+                          <img src={w.image} alt={w.title} className="w-full h-full object-cover" loading="lazy" />
+                          {isNav && (
+                            <div className="absolute inset-0 flex items-center justify-center rounded-xl"
+                              style={{ background: "rgba(0,0,0,0.55)" }}>
+                              <Loader2 size={18} className="animate-spin text-white" />
+                            </div>
+                          )}
+                          {/* Play overlay hint */}
+                          {!isNav && (
+                            <div className="absolute inset-0 flex items-end justify-center pb-1 opacity-0 hover:opacity-100 transition-opacity rounded-xl"
+                              style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)" }}>
+                              <Play size={10} fill="white" color="white" />
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-[9px] text-center text-white/70 line-clamp-2 leading-tight">{w.title}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
