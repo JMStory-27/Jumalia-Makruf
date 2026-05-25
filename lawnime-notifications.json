@@ -1,5 +1,14 @@
 [
   {
+    "id": "admin_test_1779676965033",
+    "type": "admin",
+    "title": "🔥 TEST SIMULASI!",
+    "body": "Halo dari owner! Ini test notifikasi — episode Demon Slayer S5 sudah tersedia! 🎌",
+    "timestamp": 1779676965033,
+    "read": false,
+    "adminBadge": true
+  },
+  {
     "id": "admin_1779675629628",
     "type": "admin",
     "title": "INFO ADMIN",
