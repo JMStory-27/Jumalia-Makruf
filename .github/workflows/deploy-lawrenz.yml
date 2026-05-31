@@ -1,0 +1,63 @@
+name: Deploy LawrenZ AI to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'artifacts/lawrenz-ai/**'
+      - '.github/workflows/deploy-lawrenz.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build LawrenZ AI for GitHub Pages
+        env:
+          PORT: "3002"
+          BASE_PATH: "/Jumalia-Makruf/LawrenzAI/"
+          NODE_ENV: production
+          VITE_DIRECT: "true"
+          VITE_GROQ_KEY: ${{ secrets.GROQ_API_KEY }}
+          VITE_GEMINI_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_OPENROUTER_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: pnpm --filter @workspace/lawrenz-ai run build
+
+      - name: Prepare gh-pages content
+        run: |
+          mkdir -p /tmp/gh-pages/LawrenzAI
+          cp -r artifacts/lawrenz-ai/dist/public/. /tmp/gh-pages/LawrenzAI/
+          cat > /tmp/gh-pages/index.html << 'EOF'
+          <!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=LawrenzAI/"></head><body><script>window.location.replace('LawrenzAI/');</script></body></html>
+          EOF
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: /tmp/gh-pages
+          force_orphan: false
+          keep_files: true
+          commit_message: '🚀 Deploy LawrenZ AI — ${{ github.sha }}'
