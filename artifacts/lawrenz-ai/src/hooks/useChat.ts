@@ -75,7 +75,7 @@ export function useChat() {
   }, []);
 
   const updateLastAiMessage = useCallback(
-    (sessionId: string, content: string) => {
+    (sessionId: string, content: string, type?: Message["type"]) => {
       setSessions((prev) =>
         prev.map((s) =>
           s.id === sessionId
@@ -83,7 +83,7 @@ export function useChat() {
                 ...s,
                 messages: s.messages.map((m, i) =>
                   i === s.messages.length - 1 && m.role === "assistant"
-                    ? { ...m, content }
+                    ? { ...m, content, ...(type ? { type } : {}) }
                     : m
                 ),
               }
@@ -358,7 +358,8 @@ export function useChat() {
           );
         }
       } catch (err: any) {
-        updateLastAiMessage(sessionId, `⚠️ Gagal proses file: ${err.message}`);
+        // Must pass type:"text" to exit the "file-loading" state
+        updateLastAiMessage(sessionId, `⚠️ Gagal proses file: ${err.message}`, "text");
       } finally {
         setIsLoading(false);
       }
