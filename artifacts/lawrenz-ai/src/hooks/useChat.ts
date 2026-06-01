@@ -1,15 +1,17 @@
 import { useState, useRef, useCallback } from "react";
-import { chatDirectStream, generateImageDirect, processFileDirect } from "@/lib/directApi";
+import { pollinationsChat, pollinationsImageUrl } from "@/lib/pollinationsAI";
 
 export type ChatMode = "daily" | "coding";
 export type DailySubMode = "chat" | "image" | "file";
-export type LoadingType = "chat" | "image" | "file" | null;
+
+// When deployed on GitHub Pages, use Pollinations.ai directly (no backend needed)
+const IS_GH_PAGES = import.meta.env.VITE_GH_PAGES === "1";
 
 export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  type?: "text" | "image" | "file";
+  type?: "text" | "image" | "file" | "file-loading";
   imageUrl?: string;
   fileName?: string;
   timestamp: Date;
@@ -26,16 +28,6 @@ export interface ChatSession {
 
 const BASE = "/api";
 
-/**
- * Use direct browser-to-API calls when:
- * 1. Built with VITE_DIRECT=true (GitHub Pages build), OR
- * 2. Accessed from github.io (safety fallback)
- */
-const IS_DIRECT =
-  import.meta.env.VITE_DIRECT === "true" ||
-  (typeof window !== "undefined" &&
-    window.location.hostname === "jmstory-27.github.io");
-
 function genId() {
   return Math.random().toString(36).slice(2, 10);
 }
@@ -44,7 +36,6 @@ export function useChat() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingType, setLoadingType] = useState<LoadingType>(null);
   const [mode, setMode] = useState<ChatMode>("daily");
   const [subMode, setSubMode] = useState<DailySubMode>("chat");
   const abortRef = useRef<AbortController | null>(null);
@@ -84,7 +75,7 @@ export function useChat() {
   }, []);
 
   const updateLastAiMessage = useCallback(
-    (sessionId: string, content: string, extra?: Partial<Message>) => {
+    (sessionId: string, content: string) => {
       setSessions((prev) =>
         prev.map((s) =>
           s.id === sessionId
@@ -92,7 +83,7 @@ export function useChat() {
                 ...s,
                 messages: s.messages.map((m, i) =>
                   i === s.messages.length - 1 && m.role === "assistant"
-                    ? { ...m, content, ...extra }
+                    ? { ...m, content }
                     : m
                 ),
               }
@@ -127,57 +118,71 @@ export function useChat() {
       addMessage(sessionId, aiMsg);
 
       setIsLoading(true);
-      setLoadingType("chat");
       const controller = new AbortController();
       abortRef.current = controller;
 
       try {
-        const prevMessages = [...session.messages, userMsg].map((m) => ({
-          role: m.role,
-          content: m.content,
-        }));
+        const prevMessages = [
+          ...session.messages,
+          userMsg,
+        ].map((m) => ({ role: m.role, content: m.content }));
 
-        let response: Response;
-        if (IS_DIRECT) {
-          response = await chatDirectStream(prevMessages, chatMode, controller.signal);
+        let fullText = "";
+
+        if (IS_GH_PAGES) {
+          // GitHub Pages mode: call Pollinations.ai directly from browser
+          await pollinationsChat(
+            prevMessages,
+            chatMode,
+            (chunk) => {
+              fullText += chunk;
+              updateLastAiMessage(sessionId, fullText);
+            },
+            controller.signal
+          );
         } else {
+          // Replit mode: use the Express backend
           const endpoint =
             chatMode === "daily" ? `${BASE}/chat/daily` : `${BASE}/chat/coding`;
-          response = await fetch(endpoint, {
+
+          const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ messages: prevMessages }),
             signal: controller.signal,
           });
-        }
 
-        if (!response.ok) throw new Error(`Error ${response.status}`);
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}`);
+          }
 
-        const reader = response.body!.getReader();
-        const decoder = new TextDecoder();
-        let fullText = "";
+          const reader = response.body!.getReader();
+          const decoder = new TextDecoder();
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n");
-          for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              const data = line.slice(6).trim();
-              if (data === "[DONE]") continue;
-              if (data.startsWith("[ERROR]")) {
-                fullText += `\n\n⚠️ ${data.slice(8)}`;
-                continue;
-              }
-              try {
-                const parsed = JSON.parse(data);
-                const delta = parsed.choices?.[0]?.delta?.content;
-                if (delta) {
-                  fullText += delta;
-                  updateLastAiMessage(sessionId, fullText);
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split("\n");
+
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const data = line.slice(6).trim();
+                if (data === "[DONE]") continue;
+                if (data.startsWith("[ERROR]")) {
+                  fullText += `\n\n⚠️ ${data.slice(8)}`;
+                  continue;
                 }
-              } catch {}
+                try {
+                  const parsed = JSON.parse(data);
+                  const delta = parsed.choices?.[0]?.delta?.content;
+                  if (delta) {
+                    fullText += delta;
+                    updateLastAiMessage(sessionId, fullText);
+                  }
+                } catch {}
+              }
             }
           }
         }
@@ -186,11 +191,10 @@ export function useChat() {
         updateLastAiMessage(sessionId, fullText);
       } catch (err: any) {
         if (err.name !== "AbortError") {
-          updateLastAiMessage(sessionId, "⚠️ Gagal connect ke AI. Cek API key ya bro!");
+          updateLastAiMessage(sessionId, "⚠️ Lawrenz AI sedang sibuk, coba lagi sebentar ya!");
         }
       } finally {
         setIsLoading(false);
-        setLoadingType(null);
         abortRef.current = null;
       }
     },
@@ -199,51 +203,69 @@ export function useChat() {
 
   const generateImage = useCallback(
     async (prompt: string, sessionId: string) => {
-      addMessage(sessionId, {
+      const userMsg: Message = {
         id: genId(),
         role: "user",
         content: `🎨 Generate gambar: ${prompt}`,
         type: "text",
         timestamp: new Date(),
-      });
-      addMessage(sessionId, {
+      };
+      addMessage(sessionId, userMsg);
+
+      const aiMsg: Message = {
         id: genId(),
         role: "assistant",
-        content: "",
+        content: prompt,
         type: "image",
         timestamp: new Date(),
-      });
+      };
+      addMessage(sessionId, aiMsg);
 
       setIsLoading(true);
-      setLoadingType("image");
 
       try {
         let imageUrl: string;
-        if (IS_DIRECT) {
-          imageUrl = await generateImageDirect(prompt);
+
+        if (IS_GH_PAGES) {
+          // GitHub Pages mode: use Pollinations.ai directly (no API key needed)
+          imageUrl = pollinationsImageUrl(prompt);
+          // Small delay so the loading state shows
+          await new Promise((r) => setTimeout(r, 800));
         } else {
           const response = await fetch(`${BASE}/image/generate`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt }),
           });
-          const data = (await response.json()) as { imageUrl?: string; error?: string };
-          if (!response.ok || data.error) throw new Error(data.error || "Gagal generate gambar");
+          const data = await response.json() as { imageUrl?: string; error?: string };
+          if (!response.ok || data.error) {
+            throw new Error(data.error || "Gagal generate gambar");
+          }
           imageUrl = data.imageUrl!;
         }
 
-        updateLastAiMessage(
-          sessionId,
-          `✦ Gambar berhasil di-generate! Prompt: "${prompt}"`,
-          { imageUrl }
+        setSessions((prev) =>
+          prev.map((s) =>
+            s.id === sessionId
+              ? {
+                  ...s,
+                  messages: s.messages.map((m, i) =>
+                    i === s.messages.length - 1 && m.role === "assistant"
+                      ? {
+                          ...m,
+                          content: `Gambar berhasil di-generate! Prompt: "${prompt}"`,
+                          imageUrl,
+                        }
+                      : m
+                  ),
+                }
+              : s
+          )
         );
       } catch (err: any) {
-        updateLastAiMessage(sessionId, `⚠️ Gagal generate gambar: ${err.message}`, {
-          type: "text",
-        });
+        updateLastAiMessage(sessionId, `⚠️ Gagal generate gambar: ${err.message}`);
       } finally {
         setIsLoading(false);
-        setLoadingType(null);
       }
     },
     [addMessage, updateLastAiMessage]
@@ -251,58 +273,110 @@ export function useChat() {
 
   const processFile = useCallback(
     async (file: File, prompt: string, sessionId: string) => {
-      addMessage(sessionId, {
+      const userMsg: Message = {
         id: genId(),
         role: "user",
         content: `📄 File: **${file.name}**\n\n${prompt}`,
         type: "file",
         fileName: file.name,
         timestamp: new Date(),
-      });
-      addMessage(sessionId, {
+      };
+      addMessage(sessionId, userMsg);
+
+      const aiMsg: Message = {
         id: genId(),
         role: "assistant",
         content: "",
-        type: "text",
+        type: "file-loading",
+        fileName: file.name,
         timestamp: new Date(),
-      });
+      };
+      addMessage(sessionId, aiMsg);
 
       setIsLoading(true);
-      setLoadingType("file");
 
       try {
-        let result: string;
-        if (IS_DIRECT) {
-          result = await processFileDirect(file, prompt);
+        if (IS_GH_PAGES) {
+          // GitHub Pages: file reading — extract text and use Pollinations for analysis
+          const text = await file.text().catch(() => null);
+          const fileContext = text
+            ? `Isi file "${file.name}":\n\n${text.slice(0, 8000)}`
+            : `File "${file.name}" (${file.type}, ${Math.round(file.size / 1024)} KB) — tidak bisa dibaca sebagai teks.`;
+          const userPrompt = prompt || "Analisis dan jelaskan isi file ini secara detail.";
+
+          let result = "";
+          await pollinationsChat(
+            [{ role: "user", content: `${fileContext}\n\n---\n\n${userPrompt}` }],
+            "daily",
+            (chunk) => {
+              result += chunk;
+              setSessions((prev) =>
+                prev.map((s) =>
+                  s.id === sessionId
+                    ? {
+                        ...s,
+                        messages: s.messages.map((m, i) =>
+                          i === s.messages.length - 1 && m.role === "assistant"
+                            ? { ...m, content: result, type: "text" as Message["type"] }
+                            : m
+                        ),
+                      }
+                    : s
+                )
+              );
+            }
+          );
         } else {
           const formData = new FormData();
           formData.append("file", file);
           formData.append("prompt", prompt || "Analisis dan jelaskan isi file ini secara detail.");
+
           const response = await fetch(`${BASE}/file/process`, {
             method: "POST",
             body: formData,
           });
-          const data = (await response.json()) as { result?: string; error?: string };
-          if (!response.ok || data.error) throw new Error(data.error || "Gagal proses file");
-          result = data.result || "Tidak ada respons dari AI.";
-        }
 
-        updateLastAiMessage(sessionId, result);
+          const data = await response.json() as { result?: string; error?: string };
+
+          if (!response.ok || data.error) {
+            throw new Error(data.error || "Gagal proses file");
+          }
+
+          setSessions((prev) =>
+            prev.map((s) =>
+              s.id === sessionId
+                ? {
+                    ...s,
+                    messages: s.messages.map((m, i) =>
+                      i === s.messages.length - 1 && m.role === "assistant"
+                        ? { ...m, content: data.result || "Tidak ada respons dari AI.", type: "text" as Message["type"] }
+                        : m
+                    ),
+                  }
+                : s
+            )
+          );
+        }
       } catch (err: any) {
         updateLastAiMessage(sessionId, `⚠️ Gagal proses file: ${err.message}`);
       } finally {
         setIsLoading(false);
-        setLoadingType(null);
       }
     },
     [addMessage, updateLastAiMessage]
   );
 
   const sendMessage = useCallback(
-    async (content: string, opts?: { file?: File; imagePrompt?: string }) => {
+    async (
+      content: string,
+      opts?: { file?: File; imagePrompt?: string }
+    ) => {
       if (isLoading) return;
+
       let sessionId = activeSessionId;
-      if (!sessionId) sessionId = createSession(mode);
+      if (!sessionId) {
+        sessionId = createSession(mode);
+      }
 
       if (opts?.imagePrompt) {
         await generateImage(opts.imagePrompt, sessionId);
@@ -312,7 +386,15 @@ export function useChat() {
         await sendChat(content, sessionId, mode);
       }
     },
-    [isLoading, activeSessionId, createSession, mode, generateImage, processFile, sendChat]
+    [
+      isLoading,
+      activeSessionId,
+      createSession,
+      mode,
+      generateImage,
+      processFile,
+      sendChat,
+    ]
   );
 
   const newChat = useCallback(() => {
@@ -320,8 +402,14 @@ export function useChat() {
     setActiveSessionId(id);
   }, [createSession, mode]);
 
-  const switchSession = useCallback((id: string) => setActiveSessionId(id), []);
-  const stopGeneration = useCallback(() => abortRef.current?.abort(), []);
+  const switchSession = useCallback((id: string) => {
+    setActiveSessionId(id);
+  }, []);
+
+  const stopGeneration = useCallback(() => {
+    abortRef.current?.abort();
+  }, []);
+
   const switchMode = useCallback((newMode: ChatMode) => {
     setMode(newMode);
     setSubMode("chat");
@@ -332,7 +420,6 @@ export function useChat() {
     activeSession,
     messages,
     isLoading,
-    loadingType,
     mode,
     subMode,
     setSubMode,
