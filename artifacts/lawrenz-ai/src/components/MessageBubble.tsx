@@ -1,5 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import type { Message } from "@/hooks/useChat";
 import ImageGenerating from "@/components/ImageGenerating";
@@ -320,6 +322,8 @@ export default function MessageBubble({ message, isStreaming, index = 0 }: Props
           <div className={`msg-ai px-4 py-3 ${isStreaming ? "stream-cursor" : ""}`} style={{ position: "relative" }}>
             <div className="prose-neon" style={{ fontSize: 14 }}>
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
                 components={{
                   code({ node, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
@@ -351,9 +355,54 @@ export default function MessageBubble({ message, isStreaming, index = 0 }: Props
                   ol({ children }) { return <ol style={{ paddingLeft: "1.4em", margin: "6px 0" }}>{children}</ol>; },
                   table({ children }) {
                     return (
-                      <div style={{ overflowX: "auto", margin: "8px 0" }}>
-                        <table style={{ width: "100%", borderCollapse: "collapse" }}>{children}</table>
+                      <div style={{ overflowX: "auto", margin: "10px 0", borderRadius: 8, border: "1px solid rgba(0,212,255,0.2)" }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>{children}</table>
                       </div>
+                    );
+                  },
+                  thead({ children }) {
+                    return (
+                      <thead style={{ background: "rgba(0,212,255,0.08)", borderBottom: "1px solid rgba(0,212,255,0.25)" }}>
+                        {children}
+                      </thead>
+                    );
+                  },
+                  tbody({ children }) {
+                    return <tbody>{children}</tbody>;
+                  },
+                  tr({ children }) {
+                    return (
+                      <tr style={{ borderBottom: "1px solid rgba(0,212,255,0.08)" }}>
+                        {children}
+                      </tr>
+                    );
+                  },
+                  th({ children }) {
+                    return (
+                      <th style={{
+                        padding: "8px 12px",
+                        textAlign: "left",
+                        fontWeight: 700,
+                        color: "var(--neon-cyan)",
+                        fontSize: 12,
+                        letterSpacing: "0.05em",
+                        textTransform: "uppercase",
+                        whiteSpace: "nowrap",
+                      }}>
+                        {children}
+                      </th>
+                    );
+                  },
+                  td({ children }) {
+                    return (
+                      <td style={{
+                        padding: "7px 12px",
+                        color: "rgba(200,220,255,0.85)",
+                        verticalAlign: "top",
+                        lineHeight: 1.5,
+                      }}>
+                        {children}
+                      </td>
                     );
                   },
                   blockquote({ children }) {
