@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <link rel="manifest" href="/dungeon-world/manifest.json" />
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Dungeon World" />
+    <link rel="apple-touch-icon" href="/dungeon-world/icons/icon-192.png" />
+    <meta property="og:title" content="Dungeon World" />
+    <meta property="og:description" content="Dark Fantasy RPG — 100 Floors, 5 Classes, Infinite Power" />
+    <meta property="og:type" content="website" />
+    <title>Dungeon World</title>
+    <link rel="icon" href="/dungeon-world/icons/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" media="print" onload="this.media='all'"
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oxanium:wght@200..800&family=Outfit:wght@100..900&display=swap">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/dungeon-world/sw.js', { scope: '/dungeon-world/' }).catch(() => {});
+        });
+      }
+    </script>
+    <script type="module" crossorigin src="/Jumalia-Makruf/dungeon-world/assets/index-C6OD6CSO.js"></script>
+    <link rel="stylesheet" crossorigin href="/Jumalia-Makruf/dungeon-world/assets/index-DgEAB9fx.css">
+  </head>
+  <body style="height: 100%; margin: 0">
+    <div id="root" style="height: 100%"></div>
+  </body>
+</html>
