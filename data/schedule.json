@@ -74,11 +74,6 @@
           "otakudesuUrl": "https://otakudesu.blog/anime/liar-game-sub-indo/"
         },
         {
-          "title": "Mayonaka Heart Tune",
-          "animeId": "mayonaka-tune-sub-indo",
-          "otakudesuUrl": "https://otakudesu.blog/anime/mayonaka-tune-sub-indo/"
-        },
-        {
           "title": "Ponkotsu Fuuki Iin to Skirt-take ga Futekisetsu na JK no Hanashi",
           "animeId": "ponkotsu-fuuki-skirt-sub-indo",
           "otakudesuUrl": "https://otakudesu.blog/anime/ponkotsu-fuuki-skirt-sub-indo/"
@@ -93,11 +88,6 @@
     {
       "title": "Rabu",
       "animeList": [
-        {
-          "title": "29-sai Dokushin Chuuken Boukensha no Nichijou",
-          "animeId": "29sai-nichijou-sub-indo",
-          "otakudesuUrl": "https://otakudesu.blog/anime/29sai-nichijou-sub-indo/"
-        },
         {
           "title": "Darwin Jihen",
           "animeId": "dwin-jihen-sub-indo",
@@ -187,11 +177,6 @@
           "title": "Odayaka Kizoku no Kyuuka no Susume.",
           "animeId": "odayaka-kizoku-kyuuka-susume-sub-indo",
           "otakudesuUrl": "https://otakudesu.blog/anime/odayaka-kizoku-kyuuka-susume-sub-indo/"
-        },
-        {
-          "title": "Oshi no Ko Season 3",
-          "animeId": "oshi-ko-s3-sub-indo",
-          "otakudesuUrl": "https://otakudesu.blog/anime/oshi-ko-s3-sub-indo/"
         },
         {
           "title": "Tamon-kun Ima Docchi!?",
@@ -474,7 +459,26 @@
           "otakudesuUrl": "https://otakudesu.blog/anime/yozakura-daisakusen-s2-sub-indo/"
         }
       ]
+    },
+    {
+      "title": "Random",
+      "animeList": [
+        {
+          "title": "Arne no Jikenbo",
+          "animeId": "arne-jikenbo-sub-indo",
+          "otakudesuUrl": "https://otakudesu.blog/anime/arne-jikenbo-sub-indo/"
+        },
+        {
+          "title": "MF Ghost Season 3",
+          "animeId": "mf-ghst-s3-sub-indo",
+          "otakudesuUrl": "https://otakudesu.blog/anime/mf-ghst-s3-sub-indo/"
+        },
+        {
+          "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
+          "animeId": "jojo-steel-ball-run-sub-indo",
+          "otakudesuUrl": "https://otakudesu.blog/anime/jojo-steel-ball-run-sub-indo/"
+        }
+      ]
     }
-  ],
-  "updatedAt": "2026-05-25T03:59:06.626Z"
+  ]
 }
