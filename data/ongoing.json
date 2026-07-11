@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Uchi no Otouto-domo ga Sumimasen",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Uchi-no-Otouto-domo-ga-Sumimasen.jpg",
+      "episodes": "2",
+      "animeId": "uchi-otouto-sumimasen-sub-indo",
+      "latestReleaseDate": "11 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/uchi-otouto-sumimasen-sub-indo/"
+    },
+    {
       "title": "Hell Mode Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/156314.jpg",
       "episodes": "2",
@@ -413,15 +422,6 @@
       "latestReleaseDate": "04 Jul",
       "releaseDay": "Sabtu",
       "otakudesuUrl": "https://otakudesu.blog/anime/iruma-kun-s4-sub-indo/"
-    },
-    {
-      "title": "Uchi no Otouto-domo ga Sumimasen",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Uchi-no-Otouto-domo-ga-Sumimasen.jpg",
-      "episodes": "1",
-      "animeId": "uchi-otouto-sumimasen-sub-indo",
-      "latestReleaseDate": "04 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/uchi-otouto-sumimasen-sub-indo/"
     },
     {
       "title": "Snowball Earth",
@@ -1927,5 +1927,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-11T05:15:00.089Z"
+  "updatedAt": "2026-07-11T05:20:37.481Z"
 }
