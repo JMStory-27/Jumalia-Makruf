@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Mairimashita! Iruma-kun Season 4",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mairimashita-Iruma-kun-Season-4.jpg",
+      "episodes": "15",
+      "animeId": "iruma-kun-s4-sub-indo",
+      "latestReleaseDate": "11 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/iruma-kun-s4-sub-indo/"
+    },
+    {
       "title": "Honzuki no Gekokujou Season 4",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Honzuki-no-Gekokujou-Season-4-Sub.jpg",
       "episodes": "13",
@@ -1891,5 +1900,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-11T15:06:14.255Z"
+  "updatedAt": "2026-07-11T15:11:51.329Z"
 }
