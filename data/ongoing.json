@@ -1,6 +1,69 @@
 {
   "animeList": [
     {
+      "title": "Digimon Beatbreak",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
+      "episodes": "38",
+      "animeId": "digimon-bb-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
+    },
+    {
+      "title": "Neko to Ryuu",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157796.jpg",
+      "episodes": "3",
+      "animeId": "neko-ryuu-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/neko-ryuu-sub-indo/"
+    },
+    {
+      "title": "Saijo no Osewa",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saijo-no-Osewa.jpg",
+      "episodes": "2",
+      "animeId": "saijo-osewa-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/saijo-osewa-sub-indo/"
+    },
+    {
+      "title": "Mahou Shoujo Lyrical Nanoha EXCEEDS",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Mahou-Shoujo-Lyrical-Nanoha-EXCEEDS.jpg",
+      "episodes": "2",
+      "animeId": "mahou-shoujo-exceeds-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/mahou-shoujo-exceeds-sub-indo/"
+    },
+    {
+      "title": "Tenmaku no Jaadugar",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158227.jpg",
+      "episodes": "3",
+      "animeId": "tenmaku-jaadugar-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tenmaku-jaadugar-sub-indo/"
+    },
+    {
+      "title": "Yomi no Tsugai",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156397.jpg",
+      "episodes": "14",
+      "animeId": "yomi-tsugai-sub-indo",
+      "latestReleaseDate": "11 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/yomi-tsugai-sub-indo/"
+    },
+    {
+      "title": "Black Torch",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Black-Torch.jpg",
+      "episodes": "2",
+      "animeId": "black-torch-sub-indo",
+      "latestReleaseDate": "11 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/black-torch-sub-indo/"
+    },
+    {
       "title": "Mairimashita! Iruma-kun Season 4",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mairimashita-Iruma-kun-Season-4.jpg",
       "episodes": "15",
@@ -181,15 +244,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/sora-akai-kawa-hotori-sub-indo/"
     },
     {
-      "title": "Neko to Ryuu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157796.jpg",
-      "episodes": "2",
-      "animeId": "neko-ryuu-sub-indo",
-      "latestReleaseDate": "08 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/neko-ryuu-sub-indo/"
-    },
-    {
       "title": "Hyakkano Season 3",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157174.jpg",
       "episodes": "1",
@@ -343,24 +397,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/sekai-saikyou-kouei-sub-indo/"
     },
     {
-      "title": "Digimon Beatbreak",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
-      "episodes": "37",
-      "animeId": "digimon-bb-sub-indo",
-      "latestReleaseDate": "05 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
-    },
-    {
-      "title": "Tenmaku no Jaadugar",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158227.jpg",
-      "episodes": "2",
-      "animeId": "tenmaku-jaadugar-sub-indo",
-      "latestReleaseDate": "05 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tenmaku-jaadugar-sub-indo/"
-    },
-    {
       "title": "Mushoku Tensei : Isekai Ittara Honki Dasu Season 3",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158340.jpg",
       "episodes": "2",
@@ -379,24 +415,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/iwamoto-suisen-sub-indo/"
     },
     {
-      "title": "Mahou Shoujo Lyrical Nanoha EXCEEDS",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Mahou-Shoujo-Lyrical-Nanoha-EXCEEDS.jpg",
-      "episodes": "1",
-      "animeId": "mahou-shoujo-exceeds-sub-indo",
-      "latestReleaseDate": "05 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mahou-shoujo-exceeds-sub-indo/"
-    },
-    {
-      "title": "Saijo no Osewa",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saijo-no-Osewa.jpg",
-      "episodes": "1",
-      "animeId": "saijo-osewa-sub-indo",
-      "latestReleaseDate": "05 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/saijo-osewa-sub-indo/"
-    },
-    {
       "title": "Mao",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mao.jpg",
       "episodes": "14",
@@ -404,24 +422,6 @@
       "latestReleaseDate": "05 Jul",
       "releaseDay": "Minggu",
       "otakudesuUrl": "https://otakudesu.blog/anime/mao-sub-indo/"
-    },
-    {
-      "title": "Yomi no Tsugai",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156397.jpg",
-      "episodes": "13",
-      "animeId": "yomi-tsugai-sub-indo",
-      "latestReleaseDate": "04 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/yomi-tsugai-sub-indo/"
-    },
-    {
-      "title": "Black Torch",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Black-Torch.jpg",
-      "episodes": "1",
-      "animeId": "black-torch-sub-indo",
-      "latestReleaseDate": "04 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/black-torch-sub-indo/"
     },
     {
       "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
@@ -1900,5 +1900,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-11T15:23:36.492Z"
+  "updatedAt": "2026-07-12T09:24:41.581Z"
 }
