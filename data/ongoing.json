@@ -334,15 +334,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
     },
     {
-      "title": "Oni no Hanayome",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Oni-no-Hanayome.jpg",
-      "episodes": "1",
-      "animeId": "oni-hanayome-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/oni-hanayome-sub-indo/"
-    },
-    {
       "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
       "episodes": "1",
@@ -386,15 +377,6 @@
       "latestReleaseDate": "06 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/kuroneko-to-majo-no-kyoushitsu-sub-indo/"
-    },
-    {
-      "title": "Sekai Saikyou no Kouei",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sekai-Saikyou-no-Kouei-Sub.jpg",
-      "episodes": "1",
-      "animeId": "sekai-saikyou-kouei-sub-indo",
-      "latestReleaseDate": "05 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sekai-saikyou-kouei-sub-indo/"
     },
     {
       "title": "Mushoku Tensei : Isekai Ittara Honki Dasu Season 3",
@@ -1900,5 +1882,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-12T15:17:34.004Z"
+  "updatedAt": "2026-07-12T15:23:08.945Z"
 }
