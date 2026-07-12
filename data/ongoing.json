@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Mushoku Tensei : Isekai Ittara Honki Dasu Season 3",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158340.jpg",
+      "episodes": "3",
+      "animeId": "mushoku-ni-tensei-s3-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/mushoku-ni-tensei-s3-sub-indo/"
+    },
+    {
       "title": "Seihantai na Kimi to Boku Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Seihantai-na-Kimi-to-Boku-Season-2-Sub.jpg",
       "episodes": "2",
@@ -1891,5 +1900,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-12T16:19:52.166Z"
+  "updatedAt": "2026-07-12T16:25:28.453Z"
 }
