@@ -1,6 +1,24 @@
 {
   "animeList": [
     {
+      "title": "Sekai Saikyou no Kouei",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sekai-Saikyou-no-Kouei-Sub.jpg",
+      "episodes": "2",
+      "animeId": "sekai-saikyou-kouei-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/sekai-saikyou-kouei-sub-indo/"
+    },
+    {
+      "title": "Oni no Hanayome",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Oni-no-Hanayome.jpg",
+      "episodes": "2",
+      "animeId": "oni-hanayome-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/oni-hanayome-sub-indo/"
+    },
+    {
       "title": "Digimon Beatbreak",
       "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
       "episodes": "38",
@@ -1882,5 +1900,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-12T15:23:08.945Z"
+  "updatedAt": "2026-07-12T15:28:55.790Z"
 }
