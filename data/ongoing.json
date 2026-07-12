@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Seihantai na Kimi to Boku Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Seihantai-na-Kimi-to-Boku-Season-2-Sub.jpg",
+      "episodes": "2",
+      "animeId": "seihantai-kimi-boku-s2-sub-indo",
+      "latestReleaseDate": "12 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/seihantai-kimi-boku-s2-sub-indo/"
+    },
+    {
       "title": "Sekai Saikyou no Kouei",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sekai-Saikyou-no-Kouei-Sub.jpg",
       "episodes": "2",
@@ -368,15 +377,6 @@
       "latestReleaseDate": "07 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/world-dancing-sub-indo/"
-    },
-    {
-      "title": "Seihantai na Kimi to Boku Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Seihantai-na-Kimi-to-Boku-Season-2-Sub.jpg",
-      "episodes": "1",
-      "animeId": "seihantai-kimi-boku-s2-sub-indo",
-      "latestReleaseDate": "06 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/seihantai-kimi-boku-s2-sub-indo/"
     },
     {
       "title": "Nijusseiki Denki Mokuroku",
@@ -1900,5 +1900,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-12T15:28:55.790Z"
+  "updatedAt": "2026-07-12T15:34:38.425Z"
 }
