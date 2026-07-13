@@ -1,13 +1,58 @@
 {
   "animeList": [
     {
+      "title": "Hyakkano Season 3",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157174.jpg",
+      "episodes": "2",
+      "animeId": "hyakkano-s3-sub-ind",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/hyakkano-s3-sub-ind/"
+    },
+    {
+      "title": "Futsutsuka na Akujo dewa Gozaimasu ga",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158341-1.jpg",
+      "episodes": "1",
+      "animeId": "futsutsuka-akujo-gozaimasu-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/futsutsuka-akujo-gozaimasu-sub-indo/"
+    },
+    {
+      "title": "Sayonara Lara",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sayonara-Lara.jpg",
+      "episodes": "2",
+      "animeId": "sayonara-lara-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/sayonara-lara-sub-indo/"
+    },
+    {
+      "title": "Kuroneko to Majo no Kyoushitsu",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Kuroneko-to-Majo-no-Kyoushitsu.jpg",
+      "episodes": "14",
+      "animeId": "kuroneko-to-majo-no-kyoushitsu-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kuroneko-to-majo-no-kyoushitsu-sub-indo/"
+    },
+    {
       "title": "Nijusseiki Denki Mokuroku",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158475.jpg",
       "episodes": "2",
       "animeId": "nijusseiki-denki-mokuroku-sub-indo",
-      "latestReleaseDate": "12 Jul",
+      "latestReleaseDate": "13 Jul",
       "releaseDay": "Minggu",
       "otakudesuUrl": "https://otakudesu.blog/anime/nijusseiki-denki-mokuroku-sub-indo/"
+    },
+    {
+      "title": "One Piece",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2021/05/One-Piece-Sub-Indo.jpg",
+      "episodes": "1169",
+      "animeId": "1piece-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/1piece-sub-indo/"
     },
     {
       "title": "Mushoku Tensei : Isekai Ittara Honki Dasu Season 3",
@@ -289,15 +334,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/sora-akai-kawa-hotori-sub-indo/"
     },
     {
-      "title": "Hyakkano Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157174.jpg",
-      "episodes": "1",
-      "animeId": "hyakkano-s3-sub-ind",
-      "latestReleaseDate": "08 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hyakkano-s3-sub-ind/"
-    },
-    {
       "title": "Tai-Ari deshita. Ojousama wa Kakutou Game nante Shinai",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tai-Ari-deshita.-Ojousama-wa-Kakutou-Game-nante-Shinai.jpg",
       "episodes": "1",
@@ -323,15 +359,6 @@
       "latestReleaseDate": "08 Jul",
       "releaseDay": "Rabu",
       "otakudesuUrl": "https://otakudesu.blog/anime/mujikaku-seijo-nagasu-sub-indo/"
-    },
-    {
-      "title": "Sayonara Lara",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sayonara-Lara.jpg",
-      "episodes": "1",
-      "animeId": "sayonara-lara-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sayonara-lara-sub-indo/"
     },
     {
       "title": "Liar Game",
@@ -395,15 +422,6 @@
       "latestReleaseDate": "07 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/world-dancing-sub-indo/"
-    },
-    {
-      "title": "Kuroneko to Majo no Kyoushitsu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Kuroneko-to-Majo-no-Kyoushitsu.jpg",
-      "episodes": "13",
-      "animeId": "kuroneko-to-majo-no-kyoushitsu-sub-indo",
-      "latestReleaseDate": "06 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kuroneko-to-majo-no-kyoushitsu-sub-indo/"
     },
     {
       "title": "Iwamoto-senpai no Suisen",
@@ -512,15 +530,6 @@
       "latestReleaseDate": "30 Jun",
       "releaseDay": "Selasa",
       "otakudesuUrl": "https://otakudesu.blog/anime/replica-datte-suru-sub-indo/"
-    },
-    {
-      "title": "One Piece",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2021/05/One-Piece-Sub-Indo.jpg",
-      "episodes": "1168",
-      "animeId": "1piece-sub-indo",
-      "latestReleaseDate": "29 Jun",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/1piece-sub-indo/"
     },
     {
       "title": "Needy Girl Overdose",
@@ -1900,5 +1909,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-12T16:59:09.896Z"
+  "updatedAt": "2026-07-13T14:08:19.389Z"
 }
