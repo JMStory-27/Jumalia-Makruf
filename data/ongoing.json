@@ -1,6 +1,78 @@
 {
   "animeList": [
     {
+      "title": "Liar Game",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/LIAR-GAME.jpg",
+      "episodes": "15",
+      "animeId": "liar-game-sub-indo",
+      "latestReleaseDate": "14 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/liar-game-sub-indo/"
+    },
+    {
+      "title": "Grand Blue Season 3",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158194.jpg",
+      "episodes": "2",
+      "animeId": "grand-blue-s3-sub-indo",
+      "latestReleaseDate": "14 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/grand-blue-s3-sub-indo/"
+    },
+    {
+      "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
+      "episodes": "2",
+      "animeId": "toumei-yoru-kakeru-kimi-sub-indo",
+      "latestReleaseDate": "14 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
+    },
+    {
+      "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Buchigire-Reijou-wa-Houfuku-wo-Chikaimashita-Sub.jpg",
+      "episodes": "2",
+      "animeId": "buchigire-reijou-chikaimashita-sub-indo",
+      "latestReleaseDate": "14 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/buchigire-reijou-chikaimashita-sub-indo/"
+    },
+    {
+      "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tenkou-saki-no-Seiso-Karen-na-Bishoujo-ga-Mukashi-Danshi-to-Omotte-Issho-ni-Asonda-Osananajimi-Datta-Ken.jpg",
+      "episodes": "2",
+      "animeId": "tenkouno-seiso-karen-bishoujo-sub-indo",
+      "latestReleaseDate": "14 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
+    },
+    {
+      "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
+      "episodes": "2",
+      "animeId": "saikyou-anyaku-arasoi-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
+    },
+    {
+      "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
+      "episodes": "2",
+      "animeId": "gaikotsu-kishi-s2-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
+    },
+    {
+      "title": "World Is Dancing",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158709.jpg",
+      "episodes": "3",
+      "animeId": "world-dancing-sub-indo",
+      "latestReleaseDate": "13 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/world-dancing-sub-indo/"
+    },
+    {
       "title": "Hyakkano Season 3",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157174.jpg",
       "episodes": "2",
@@ -361,69 +433,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/mujikaku-seijo-nagasu-sub-indo/"
     },
     {
-      "title": "Liar Game",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/LIAR-GAME.jpg",
-      "episodes": "14",
-      "animeId": "liar-game-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/liar-game-sub-indo/"
-    },
-    {
-      "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
-      "episodes": "1",
-      "animeId": "toumei-yoru-kakeru-kimi-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
-    },
-    {
-      "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Buchigire-Reijou-wa-Houfuku-wo-Chikaimashita-Sub.jpg",
-      "episodes": "1",
-      "animeId": "buchigire-reijou-chikaimashita-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/buchigire-reijou-chikaimashita-sub-indo/"
-    },
-    {
-      "title": "Grand Blue Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158194.jpg",
-      "episodes": "1",
-      "animeId": "grand-blue-s3-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/grand-blue-s3-sub-indo/"
-    },
-    {
-      "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tenkou-saki-no-Seiso-Karen-na-Bishoujo-ga-Mukashi-Danshi-to-Omotte-Issho-ni-Asonda-Osananajimi-Datta-Ken.jpg",
-      "episodes": "1",
-      "animeId": "tenkouno-seiso-karen-bishoujo-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
-    },
-    {
-      "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
-      "episodes": "1",
-      "animeId": "saikyou-anyaku-arasoi-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
-    },
-    {
-      "title": "World Is Dancing",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158709.jpg",
-      "episodes": "2",
-      "animeId": "world-dancing-sub-indo",
-      "latestReleaseDate": "07 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/world-dancing-sub-indo/"
-    },
-    {
       "title": "Iwamoto-senpai no Suisen",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Iwamoto-senpai-no-Suisen.jpg",
       "episodes": "1",
@@ -440,15 +449,6 @@
       "latestReleaseDate": "05 Jul",
       "releaseDay": "Minggu",
       "otakudesuUrl": "https://otakudesu.blog/anime/mao-sub-indo/"
-    },
-    {
-      "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
-      "episodes": "1",
-      "animeId": "gaikotsu-kishi-s2-sub-indo",
-      "latestReleaseDate": "04 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
     },
     {
       "title": "Snowball Earth",
@@ -1909,5 +1909,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-13T15:10:12.102Z"
+  "updatedAt": "2026-07-14T02:20:14.843Z"
 }
