@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Heroine? Seijo? Iie, All Works Maid desu (Hokori)!",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158290.jpg",
+      "episodes": "4",
+      "animeId": "heroine-seijo-iie-sub-indo",
+      "latestReleaseDate": "15 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/heroine-seijo-iie-sub-indo/"
+    },
+    {
       "title": "Otome Kaijuu Caraméliser",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
       "episodes": "2",
@@ -1790,7 +1799,97 @@
       "latestReleaseDate": "06 Agu",
       "releaseDay": "None",
       "otakudesuUrl": "https://otakudesu.blog/anime/kimi-todoke-s3-sub-indo/"
+    },
+    {
+      "title": "Captain Tsubasa Season 2: Junior Youth-hen",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2023/10/Captain-Tsubasa-Season-2.jpg",
+      "episodes": "39",
+      "animeId": "captain-tsubasa-s2-sub-indo",
+      "latestReleaseDate": "30 Jun",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/captain-tsubasa-s2-sub-indo/"
+    },
+    {
+      "title": "Tonari no Youkai-san",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2024/04/Tonari-no-Youkai-san.jpg",
+      "episodes": "4",
+      "animeId": "tonari-youkai-sub-indo",
+      "latestReleaseDate": "01 Mei",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tonari-youkai-sub-indo/"
+    },
+    {
+      "title": "Astro Note",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2024/04/141859.jpg",
+      "episodes": "3",
+      "animeId": "astro-n-sub-indo",
+      "latestReleaseDate": "19 Apr",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/astro-n-sub-indo/"
+    },
+    {
+      "title": "Yuuki Bakuhatsu Bang Bravern",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2024/01/Yuuki-Bakuhatsu-Bang-Bravern.jpg",
+      "episodes": "12",
+      "animeId": "yuuki-bakuhatsu-ravern-sub-indo",
+      "latestReleaseDate": "30 Mar",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/yuuki-bakuhatsu-ravern-sub-indo/"
+    },
+    {
+      "title": "Shingeki no Kyojin: The Final Season - Kanketsu-hen",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2023/03/Shingeki-no-Kyojin-The-Final-Season-Kanketsu-hen.jpg",
+      "episodes": "2",
+      "animeId": "snk-final-part3-sub-indo",
+      "latestReleaseDate": "06 Nov",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/snk-final-part3-sub-indo/"
+    },
+    {
+      "title": "Tensei shitara Slime Datta Ken: Coleus no Yume",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2023/11/Tensei-shitara-Slime-Datta-Ken-Coleus-no-Yume.jpg",
+      "episodes": "3",
+      "animeId": "tensei-shitara-slime-datta-coleus-yume-sub-indo",
+      "latestReleaseDate": "01 Nov",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tensei-shitara-slime-datta-coleus-yume-sub-indo/"
+    },
+    {
+      "title": "Synduality: Noir",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2023/07/134806.jpg",
+      "episodes": "12",
+      "animeId": "synduality-nr-sub-indo",
+      "latestReleaseDate": "26 Sep",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/synduality-nr-sub-indo/"
+    },
+    {
+      "title": "Urusei Yatsura (2022)",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2022/10/129144.jpg",
+      "episodes": "12",
+      "animeId": "usura-2022-sub-indo",
+      "latestReleaseDate": "15 Jan",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/usura-2022-sub-indo/"
+    },
+    {
+      "title": "Dragon Quest",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2020/10/Dragon-Quest-Sub-Indo.jpg",
+      "episodes": "100",
+      "animeId": "dragon-the-quest-sub-indo",
+      "latestReleaseDate": "22 Okt",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/dragon-the-quest-sub-indo/"
+    },
+    {
+      "title": "Boruto",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2020/05/Boruto-Sub-Indo.jpg",
+      "episodes": "293",
+      "animeId": "borot-sub-indo",
+      "latestReleaseDate": "12 Mei",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-15T16:39:09.622Z"
+  "updatedAt": "2026-07-15T16:44:47.649Z"
 }
