@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Otome Kaijuu Caraméliser",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
+      "episodes": "2",
+      "animeId": "kaijuu-carameliser-sub-indo",
+      "latestReleaseDate": "15 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kaijuu-carameliser-sub-indo/"
+    },
+    {
       "title": "Clevatess Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157105.jpg",
       "episodes": "2",
@@ -485,15 +494,6 @@
       "latestReleaseDate": "03 Jul",
       "releaseDay": "Jumat",
       "otakudesuUrl": "https://otakudesu.blog/anime/koori-jouheki-sub-indo/"
-    },
-    {
-      "title": "Otome Kaijuu Caraméliser",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
-      "episodes": "1",
-      "animeId": "kaijuu-carameliser-sub-indo",
-      "latestReleaseDate": "03 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kaijuu-carameliser-sub-indo/"
     },
     {
       "title": "Hidarikiki no Eren",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-15T15:33:57.944Z"
+  "updatedAt": "2026-07-15T15:39:41.323Z"
 }
