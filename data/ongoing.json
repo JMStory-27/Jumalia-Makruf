@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tsuihou-sareta-Tensei-Juukishi-wa-Game-Chishiki-de-Musou-suru.jpg",
+      "episodes": "2",
+      "animeId": "tsuihou-game-chishiki-suru-sub-indo",
+      "latestReleaseDate": "15 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tsuihou-game-chishiki-suru-sub-indo/"
+    },
+    {
       "title": "Sora wa Akai Kawa no Hotori",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sora-wa-Akai-Kawa-no-Hotori-Sub.jpg",
       "episodes": "2",
@@ -1882,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-15T13:31:01.906Z"
+  "updatedAt": "2026-07-15T13:36:43.688Z"
 }
