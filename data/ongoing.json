@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Clevatess Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157105.jpg",
+      "episodes": "2",
+      "animeId": "clevatess-s2-sub-indo",
+      "latestReleaseDate": "15 Jul",
+      "releaseDay": "Rabu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/clevatess-s2-sub-indo/"
+    },
+    {
       "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tsuihou-sareta-Tensei-Juukishi-wa-Game-Chishiki-de-Musou-suru.jpg",
       "episodes": "2",
@@ -1882,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-15T14:15:48.004Z"
+  "updatedAt": "2026-07-15T14:21:23.751Z"
 }
