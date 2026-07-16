@@ -1,6 +1,51 @@
 {
   "animeList": [
     {
+      "title": "Hanazakari no Kimitachi e Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158523.jpg",
+      "episodes": "4",
+      "animeId": "hanazakari-kimitachi-s2-sub-indo",
+      "latestReleaseDate": "16 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/hanazakari-kimitachi-s2-sub-indo/"
+    },
+    {
+      "title": "Tomb Raider King",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tomb-Raider-King-Sub.jpg",
+      "episodes": "2",
+      "animeId": "tomb-raider-king-sub-indo",
+      "latestReleaseDate": "16 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tomb-raider-king-sub-indo/"
+    },
+    {
+      "title": "Otome Game Sekai wa Mob ni Kibishii Sekai desu S2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158337.jpg",
+      "episodes": "2",
+      "animeId": "otome-game-mob-s2-sub-indo",
+      "latestReleaseDate": "16 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/otome-game-mob-s2-sub-indo/"
+    },
+    {
+      "title": "Katainaka no Ossan, Kensei ni Naru Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157173.jpg",
+      "episodes": "2",
+      "animeId": "katainaka-ossan-kensei-naru-s2-sub-indo",
+      "latestReleaseDate": "16 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/katainaka-ossan-kensei-naru-s2-sub-indo/"
+    },
+    {
+      "title": "Lv999 no Murabito",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158400.jpg",
+      "episodes": "4",
+      "animeId": "lv999-murabito-sub-indo",
+      "latestReleaseDate": "16 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/lv999-murabito-sub-indo/"
+    },
+    {
       "title": "Heroine? Seijo? Iie, All Works Maid desu (Hokori)!",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158290.jpg",
       "episodes": "4",
@@ -8,6 +53,15 @@
       "latestReleaseDate": "15 Jul",
       "releaseDay": "Kamis",
       "otakudesuUrl": "https://otakudesu.blog/anime/heroine-seijo-iie-sub-indo/"
+    },
+    {
+      "title": "Youjo Senki Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158371.jpg",
+      "episodes": "2",
+      "animeId": "youjo-senki-s2-sub-indo",
+      "latestReleaseDate": "15 Jul",
+      "releaseDay": "Rabu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/youjo-senki-s2-sub-indo/"
     },
     {
       "title": "Otome Kaijuu Caraméliser",
@@ -395,60 +449,6 @@
       "latestReleaseDate": "10 Jul",
       "releaseDay": "Jumat",
       "otakudesuUrl": "https://otakudesu.blog/anime/rakudai-kenja-gakuin-musou-sub-indo/"
-    },
-    {
-      "title": "Otome Game Sekai wa Mob ni Kibishii Sekai desu S2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158337.jpg",
-      "episodes": "1",
-      "animeId": "otome-game-mob-s2-sub-indo",
-      "latestReleaseDate": "09 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/otome-game-mob-s2-sub-indo/"
-    },
-    {
-      "title": "Tomb Raider King",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tomb-Raider-King-Sub.jpg",
-      "episodes": "1",
-      "animeId": "tomb-raider-king-sub-indo",
-      "latestReleaseDate": "09 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tomb-raider-king-sub-indo/"
-    },
-    {
-      "title": "Katainaka no Ossan, Kensei ni Naru Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157173.jpg",
-      "episodes": "1",
-      "animeId": "katainaka-ossan-kensei-naru-s2-sub-indo",
-      "latestReleaseDate": "09 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/katainaka-ossan-kensei-naru-s2-sub-indo/"
-    },
-    {
-      "title": "Lv999 no Murabito",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158400.jpg",
-      "episodes": "3",
-      "animeId": "lv999-murabito-sub-indo",
-      "latestReleaseDate": "09 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/lv999-murabito-sub-indo/"
-    },
-    {
-      "title": "Youjo Senki Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158371.jpg",
-      "episodes": "1",
-      "animeId": "youjo-senki-s2-sub-indo",
-      "latestReleaseDate": "09 Jul",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/youjo-senki-s2-sub-indo/"
-    },
-    {
-      "title": "Hanazakari no Kimitachi e Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158523.jpg",
-      "episodes": "3",
-      "animeId": "hanazakari-kimitachi-s2-sub-indo",
-      "latestReleaseDate": "09 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hanazakari-kimitachi-s2-sub-indo/"
     },
     {
       "title": "Iwamoto-senpai no Suisen",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-15T16:50:22.904Z"
+  "updatedAt": "2026-07-16T00:11:03.201Z"
 }
