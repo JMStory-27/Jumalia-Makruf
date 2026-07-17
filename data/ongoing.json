@@ -1,6 +1,24 @@
 {
   "animeList": [
     {
+      "title": "Ryoumin 0-nin Start no Henkyou Ryoushu-sama",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Ryoumin-0-nin-Start-no-Henkyou-Ryoushu-sama.jpg",
+      "episodes": "3",
+      "animeId": "ryoumin-ryoushu-sub-indo",
+      "latestReleaseDate": "17 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/ryoumin-ryoushu-sub-indo/"
+    },
+    {
+      "title": "Otome Kaijuu Caraméliser",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
+      "episodes": "3",
+      "animeId": "kaijuu-carameliser-sub-indo",
+      "latestReleaseDate": "17 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kaijuu-carameliser-sub-indo/"
+    },
+    {
       "title": "Super no Ura de Yani Suu Futari",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/155018.jpg",
       "episodes": "2",
@@ -98,15 +116,6 @@
       "latestReleaseDate": "15 Jul",
       "releaseDay": "Rabu",
       "otakudesuUrl": "https://otakudesu.blog/anime/youjo-senki-s2-sub-indo/"
-    },
-    {
-      "title": "Otome Kaijuu Caraméliser",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
-      "episodes": "2",
-      "animeId": "kaijuu-carameliser-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kaijuu-carameliser-sub-indo/"
     },
     {
       "title": "Clevatess Season 2",
@@ -431,15 +440,6 @@
       "latestReleaseDate": "10 Jul",
       "releaseDay": "Jumat",
       "otakudesuUrl": "https://otakudesu.blog/anime/slime-s4-sub-indo/"
-    },
-    {
-      "title": "Ryoumin 0-nin Start no Henkyou Ryoushu-sama",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Ryoumin-0-nin-Start-no-Henkyou-Ryoushu-sama.jpg",
-      "episodes": "2",
-      "animeId": "ryoumin-ryoushu-sub-indo",
-      "latestReleaseDate": "10 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ryoumin-ryoushu-sub-indo/"
     },
     {
       "title": "Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-17T15:11:16.856Z"
+  "updatedAt": "2026-07-17T15:16:51.494Z"
 }
