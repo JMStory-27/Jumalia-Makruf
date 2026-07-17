@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Tensei shitara Slime Datta Ken Season 4",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156389.jpg",
+      "episodes": "15",
+      "animeId": "slime-s4-sub-indo",
+      "latestReleaseDate": "17 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/slime-s4-sub-indo/"
+    },
+    {
       "title": "Ryoumin 0-nin Start no Henkyou Ryoushu-sama",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Ryoumin-0-nin-Start-no-Henkyou-Ryoushu-sama.jpg",
       "episodes": "3",
@@ -431,15 +440,6 @@
       "latestReleaseDate": "11 Jul",
       "releaseDay": "Sabtu",
       "otakudesuUrl": "https://otakudesu.blog/anime/hell-mode-s2-sub-indo/"
-    },
-    {
-      "title": "Tensei shitara Slime Datta Ken Season 4",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156389.jpg",
-      "episodes": "14",
-      "animeId": "slime-s4-sub-indo",
-      "latestReleaseDate": "10 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/slime-s4-sub-indo/"
     },
     {
       "title": "Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-17T16:16:54.685Z"
+  "updatedAt": "2026-07-17T16:22:38.942Z"
 }
