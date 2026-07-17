@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Hell Mode Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/156314.jpg",
+      "episodes": "3",
+      "animeId": "hell-mode-s2-sub-indo",
+      "latestReleaseDate": "18 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/hell-mode-s2-sub-indo/"
+    },
+    {
       "title": "Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/154308.jpg",
       "episodes": "3",
@@ -1882,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-17T19:29:59.900Z"
+  "updatedAt": "2026-07-17T19:35:33.694Z"
 }
