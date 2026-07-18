@@ -1,7 +1,6 @@
 {
-  "releaseTag": "anisub-cache-v1",
   "fullCacheUrl": "https://github.com/JMStory-27/Jumalia-Makruf/releases/download/anisub-cache-v1/anisub-full-cache.json",
-  "lightListUrl": "https://github.com/JMStory-27/Jumalia-Makruf/releases/download/anisub-cache-v1/anisub-light-list.json",
-  "updatedAt": "2026-07-18T02:25:36.762Z",
-  "totalAnime": 1837
+  "lightListUrl": "https://raw.githubusercontent.com/JMStory-27/Jumalia-Makruf/main/data/anisub-light-list.json",
+  "updatedAt": "2026-07-18T02:37:17.828Z",
+  "totalAnime": 1854
 }
