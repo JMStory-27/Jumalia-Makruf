@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Buchigire-Reijou-wa-Houfuku-wo-Chikaimashita-Sub.jpg",
+      "episodes": "3",
+      "animeId": "buchigire-reijou-chikaimashita-sub-indo",
+      "latestReleaseDate": "21 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/buchigire-reijou-chikaimashita-sub-indo/"
+    },
+    {
       "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tenkou-saki-no-Seiso-Karen-na-Bishoujo-ga-Mukashi-Danshi-to-Omotte-Issho-ni-Asonda-Osananajimi-Datta-Ken.jpg",
       "episodes": "3",
@@ -1882,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-20T17:44:32.902Z"
+  "updatedAt": "2026-07-20T17:50:27.999Z"
 }
