@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
+      "episodes": "3",
+      "animeId": "toumei-yoru-kakeru-kimi-sub-indo",
+      "latestReleaseDate": "20 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
+    },
+    {
       "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
       "episodes": "3",
@@ -431,15 +440,6 @@
       "latestReleaseDate": "14 Jul",
       "releaseDay": "Selasa",
       "otakudesuUrl": "https://otakudesu.blog/anime/grand-blue-s3-sub-indo/"
-    },
-    {
-      "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
-      "episodes": "2",
-      "animeId": "toumei-yoru-kakeru-kimi-sub-indo",
-      "latestReleaseDate": "14 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
     },
     {
       "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-20T16:51:09.960Z"
+  "updatedAt": "2026-07-20T16:51:47.656Z"
 }
