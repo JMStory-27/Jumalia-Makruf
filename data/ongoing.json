@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
+      "episodes": "3",
+      "animeId": "saikyou-anyaku-arasoi-sub-indo",
+      "latestReleaseDate": "20 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
+    },
+    {
       "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
       "episodes": "3",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "14 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
-    },
-    {
-      "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
-      "episodes": "2",
-      "animeId": "saikyou-anyaku-arasoi-sub-indo",
-      "latestReleaseDate": "13 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
     },
     {
       "title": "World Is Dancing",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-20T15:38:49.210Z"
+  "updatedAt": "2026-07-20T15:40:33.806Z"
 }
