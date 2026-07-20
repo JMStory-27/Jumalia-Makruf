@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
+      "episodes": "3",
+      "animeId": "gaikotsu-kishi-s2-sub-indo",
+      "latestReleaseDate": "20 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
+    },
+    {
       "title": "Sayonara Lara",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sayonara-Lara.jpg",
       "episodes": "3",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "13 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
-    },
-    {
-      "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
-      "episodes": "2",
-      "animeId": "gaikotsu-kishi-s2-sub-indo",
-      "latestReleaseDate": "13 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
     },
     {
       "title": "World Is Dancing",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-20T14:56:27.459Z"
+  "updatedAt": "2026-07-20T14:57:21.953Z"
 }
