@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tenkou-saki-no-Seiso-Karen-na-Bishoujo-ga-Mukashi-Danshi-to-Omotte-Issho-ni-Asonda-Osananajimi-Datta-Ken.jpg",
+      "episodes": "3",
+      "animeId": "tenkouno-seiso-karen-bishoujo-sub-indo",
+      "latestReleaseDate": "21 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
+    },
+    {
       "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
       "episodes": "3",
@@ -1882,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-20T17:38:30.783Z"
+  "updatedAt": "2026-07-20T17:39:00.139Z"
 }
