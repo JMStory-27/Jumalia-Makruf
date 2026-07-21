@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Liar Game",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/LIAR-GAME.jpg",
+      "episodes": "16",
+      "animeId": "liar-game-sub-indo",
+      "latestReleaseDate": "21 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/liar-game-sub-indo/"
+    },
+    {
       "title": "Grand Blue Season 3",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158194.jpg",
       "episodes": "3",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "15 Jul",
       "releaseDay": "Rabu",
       "otakudesuUrl": "https://otakudesu.blog/anime/mujikaku-seijo-nagasu-sub-indo/"
-    },
-    {
-      "title": "Liar Game",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/LIAR-GAME.jpg",
-      "episodes": "15",
-      "animeId": "liar-game-sub-indo",
-      "latestReleaseDate": "14 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/liar-game-sub-indo/"
     },
     {
       "title": "World Is Dancing",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-21T06:11:58.627Z"
+  "updatedAt": "2026-07-21T06:18:34.991Z"
 }
