@@ -1,6 +1,33 @@
 {
   "animeList": [
     {
+      "title": "Sora wa Akai Kawa no Hotori",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sora-wa-Akai-Kawa-no-Hotori-Sub.jpg",
+      "episodes": "3",
+      "animeId": "sora-akai-kawa-hotori-sub-indo",
+      "latestReleaseDate": "22 Jul",
+      "releaseDay": "Rabu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/sora-akai-kawa-hotori-sub-indo/"
+    },
+    {
+      "title": "Kimi ga Shinu made Koi wo Shitai",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158429.jpg",
+      "episodes": "3",
+      "animeId": "kimi-shinu-shitai-sub-indo",
+      "latestReleaseDate": "22 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kimi-shinu-shitai-sub-indo/"
+    },
+    {
+      "title": "Mujikaku Seijo wa Kyou mo Muishiki ni Chikara wo Tare Nagasu",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158373.jpg",
+      "episodes": "4",
+      "animeId": "mujikaku-seijo-nagasu-sub-indo",
+      "latestReleaseDate": "22 Jul",
+      "releaseDay": "Rabu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/mujikaku-seijo-nagasu-sub-indo/"
+    },
+    {
       "title": "Liar Game",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/LIAR-GAME.jpg",
       "episodes": "16",
@@ -424,24 +451,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/tsuihou-game-chishiki-suru-sub-indo/"
     },
     {
-      "title": "Sora wa Akai Kawa no Hotori",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sora-wa-Akai-Kawa-no-Hotori-Sub.jpg",
-      "episodes": "2",
-      "animeId": "sora-akai-kawa-hotori-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sora-akai-kawa-hotori-sub-indo/"
-    },
-    {
-      "title": "Kimi ga Shinu made Koi wo Shitai",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158429.jpg",
-      "episodes": "2",
-      "animeId": "kimi-shinu-shitai-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kimi-shinu-shitai-sub-indo/"
-    },
-    {
       "title": "Tai-Ari deshita. Ojousama wa Kakutou Game nante Shinai",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tai-Ari-deshita.-Ojousama-wa-Kakutou-Game-nante-Shinai.jpg",
       "episodes": "2",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "15 Jul",
       "releaseDay": "Selasa",
       "otakudesuUrl": "https://otakudesu.blog/anime/yai-ari-deshita-sub-indo/"
-    },
-    {
-      "title": "Mujikaku Seijo wa Kyou mo Muishiki ni Chikara wo Tare Nagasu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158373.jpg",
-      "episodes": "3",
-      "animeId": "mujikaku-seijo-nagasu-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mujikaku-seijo-nagasu-sub-indo/"
     },
     {
       "title": "World Is Dancing",
@@ -1891,5 +1891,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-21T12:00:13.776Z"
+  "updatedAt": "2026-07-22T00:52:23.181Z"
 }
