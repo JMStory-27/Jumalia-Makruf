@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Super no Ura de Yani Suu Futari",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/155018.jpg",
+      "episodes": "3",
+      "animeId": "super-yani-suu-futari-sub-indo",
+      "latestReleaseDate": "24 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/super-yani-suu-futari-sub-indo/"
+    },
+    {
       "title": "Rakudai Kenja no Gakuin Musou",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158376.jpg",
       "episodes": "5",
@@ -1099,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-23T17:33:18.288Z"
+  "updatedAt": "2026-07-23T17:39:22.855Z"
 }
