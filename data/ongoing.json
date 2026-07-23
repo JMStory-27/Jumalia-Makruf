@@ -1,6 +1,69 @@
 {
   "animeList": [
     {
+      "title": "Tai-Ari deshita. Ojousama wa Kakutou Game nante Shinai",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tai-Ari-deshita.-Ojousama-wa-Kakutou-Game-nante-Shinai.jpg",
+      "episodes": "3",
+      "animeId": "yai-ari-deshita-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/yai-ari-deshita-sub-indo/"
+    },
+    {
+      "title": "Tomb Raider King",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tomb-Raider-King-Sub.jpg",
+      "episodes": "3",
+      "animeId": "tomb-raider-king-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tomb-raider-king-sub-indo/"
+    },
+    {
+      "title": "Otome Game Sekai wa Mob ni Kibishii Sekai desu S2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158337.jpg",
+      "episodes": "3",
+      "animeId": "otome-game-mob-s2-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/otome-game-mob-s2-sub-indo/"
+    },
+    {
+      "title": "Youjo Senki Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158371.jpg",
+      "episodes": "3",
+      "animeId": "youjo-senki-s2-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Rabu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/youjo-senki-s2-sub-indo/"
+    },
+    {
+      "title": "Lv999 no Murabito",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158400.jpg",
+      "episodes": "5",
+      "animeId": "lv999-murabito-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/lv999-murabito-sub-indo/"
+    },
+    {
+      "title": "Katainaka no Ossan, Kensei ni Naru Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157173.jpg",
+      "episodes": "3",
+      "animeId": "katainaka-ossan-kensei-naru-s2-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/katainaka-ossan-kensei-naru-s2-sub-indo/"
+    },
+    {
+      "title": "Clevatess Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157105.jpg",
+      "episodes": "3",
+      "animeId": "clevatess-s2-sub-indo",
+      "latestReleaseDate": "22 Jul",
+      "releaseDay": "Rabu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/clevatess-s2-sub-indo/"
+    },
+    {
       "title": "Sora wa Akai Kawa no Hotori",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sora-wa-Akai-Kawa-no-Hotori-Sub.jpg",
       "episodes": "3",
@@ -379,42 +442,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/hanazakari-kimitachi-s2-sub-indo/"
     },
     {
-      "title": "Tomb Raider King",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tomb-Raider-King-Sub.jpg",
-      "episodes": "2",
-      "animeId": "tomb-raider-king-sub-indo",
-      "latestReleaseDate": "16 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tomb-raider-king-sub-indo/"
-    },
-    {
-      "title": "Otome Game Sekai wa Mob ni Kibishii Sekai desu S2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158337.jpg",
-      "episodes": "2",
-      "animeId": "otome-game-mob-s2-sub-indo",
-      "latestReleaseDate": "16 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/otome-game-mob-s2-sub-indo/"
-    },
-    {
-      "title": "Katainaka no Ossan, Kensei ni Naru Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157173.jpg",
-      "episodes": "2",
-      "animeId": "katainaka-ossan-kensei-naru-s2-sub-indo",
-      "latestReleaseDate": "16 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/katainaka-ossan-kensei-naru-s2-sub-indo/"
-    },
-    {
-      "title": "Lv999 no Murabito",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158400.jpg",
-      "episodes": "4",
-      "animeId": "lv999-murabito-sub-indo",
-      "latestReleaseDate": "16 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/lv999-murabito-sub-indo/"
-    },
-    {
       "title": "Heroine? Seijo? Iie, All Works Maid desu (Hokori)!",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158290.jpg",
       "episodes": "4",
@@ -424,24 +451,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/heroine-seijo-iie-sub-indo/"
     },
     {
-      "title": "Youjo Senki Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158371.jpg",
-      "episodes": "2",
-      "animeId": "youjo-senki-s2-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/youjo-senki-s2-sub-indo/"
-    },
-    {
-      "title": "Clevatess Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157105.jpg",
-      "episodes": "2",
-      "animeId": "clevatess-s2-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/clevatess-s2-sub-indo/"
-    },
-    {
       "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tsuihou-sareta-Tensei-Juukishi-wa-Game-Chishiki-de-Musou-suru.jpg",
       "episodes": "2",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "15 Jul",
       "releaseDay": "Jumat",
       "otakudesuUrl": "https://otakudesu.blog/anime/tsuihou-game-chishiki-suru-sub-indo/"
-    },
-    {
-      "title": "Tai-Ari deshita. Ojousama wa Kakutou Game nante Shinai",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tai-Ari-deshita.-Ojousama-wa-Kakutou-Game-nante-Shinai.jpg",
-      "episodes": "2",
-      "animeId": "yai-ari-deshita-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/yai-ari-deshita-sub-indo/"
     },
     {
       "title": "World Is Dancing",
@@ -719,15 +719,6 @@
       "latestReleaseDate": "27 Mei",
       "releaseDay": "None",
       "otakudesuUrl": "https://otakudesu.blog/anime/dorohedo-s2-sub-indo/"
-    },
-    {
-      "title": "Tadaima, Ojamasaremasu!",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156106.jpg",
-      "episodes": "6",
-      "animeId": "tadaima-ojamasaremasu-sub-indo",
-      "latestReleaseDate": "13 Mei",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tadaima-ojamasaremasu-sub-indo/"
     },
     {
       "title": "Ichijouma Mankitsugurashi!",
@@ -1124,772 +1115,7 @@
       "latestReleaseDate": "27 Des",
       "releaseDay": "None",
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
-    },
-    {
-      "title": "Kekkon Yubiwa Monogatari Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Otakudesu.io_KYM.S2-0_Mkv720p.jpg",
-      "episodes": "13",
-      "animeId": "kekkon-monogatari-s2-sub-indo",
-      "latestReleaseDate": "27 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kekkon-monogatari-s2-sub-indo/"
-    },
-    {
-      "title": "Shabake",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/152179-1.jpg",
-      "episodes": "13",
-      "animeId": "shabake-sub-indo",
-      "latestReleaseDate": "27 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/shabake-sub-indo/"
-    },
-    {
-      "title": "Watari-kun no xx ga Houkai Sunzen",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Watari-kun-no-xx-ga-Houkai-Sunzen.jpg",
-      "episodes": "26",
-      "animeId": "watari-xx-ga-houkai-sunzen-sub-indo",
-      "latestReleaseDate": "27 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/watari-xx-ga-houkai-sunzen-sub-indo/"
-    },
-    {
-      "title": "Tougen Anki",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Tougen-Anki-Subtitle-Indonesia.jpg",
-      "episodes": "24",
-      "animeId": "tougen-anki-sub-indo",
-      "latestReleaseDate": "27 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tougen-anki-sub-indo/"
-    },
-    {
-      "title": "Tensei Akujo no Kuro Rekishi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/150603.jpg",
-      "episodes": "12",
-      "animeId": "tensei-akujo-kuro-rekishi-sub-indo",
-      "latestReleaseDate": "26 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tensei-akujo-kuro-rekishi-sub-indo/"
-    },
-    {
-      "title": "Watashi wo Tabetai, Hitodenashi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Watashi-wo-Tabetai-Hitodenashi.jpg",
-      "episodes": "13",
-      "animeId": "watashi-tabetai-hitodenashi-sub-indo",
-      "latestReleaseDate": "26 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/watashi-tabetai-hitodenashi-sub-indo/"
-    },
-    {
-      "title": "Ninja to Gokudou",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Ninja-to-Gokudou.jpg",
-      "episodes": "12",
-      "animeId": "ninja-gokudou-sub-indo",
-      "latestReleaseDate": "24 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ninja-gokudou-sub-indo/"
-    },
-    {
-      "title": "Tondemo Skill de Isekai Hourou Meshi Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/151772.jpg",
-      "episodes": "12",
-      "animeId": "tondemo-isekai-meshi-s2-sub-indo",
-      "latestReleaseDate": "24 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tondemo-isekai-meshi-s2-sub-indo/"
-    },
-    {
-      "title": "Isekai Quartet Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/11/152103.jpg",
-      "episodes": "11",
-      "animeId": "isekai-quart-season-3-sub-indo",
-      "latestReleaseDate": "23 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/isekai-quart-season-3-sub-indo/"
-    },
-    {
-      "title": "Gintama 3-nen Z-gumi Ginpachi-sensei",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/3-nen-Z-gumi-Ginpachi-sensei.jpg",
-      "episodes": "12",
-      "animeId": "3z-gumi-ginpachi-sensei-sub-indo",
-      "latestReleaseDate": "23 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/3z-gumi-ginpachi-sensei-sub-indo/"
-    },
-    {
-      "title": "Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/151118.jpg",
-      "episodes": "12",
-      "animeId": "sutetsuyo-sub-indo",
-      "latestReleaseDate": "23 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sutetsuyo-sub-indo/"
-    },
-    {
-      "title": "Gachiakuta",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Gachiakuta.jpg",
-      "episodes": "24",
-      "animeId": "gachiakuta-sub-indo",
-      "latestReleaseDate": "21 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/gachiakuta-sub-indo/"
-    },
-    {
-      "title": "Kikaijikake no Marie",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/151138.jpg",
-      "episodes": "12",
-      "animeId": "kikaijikake-marie-sub-indo",
-      "latestReleaseDate": "21 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kikaijikake-marie-sub-indo/"
-    },
-    {
-      "title": "Uma Musume: Cinderella Gray Part 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/152280-1.jpg",
-      "episodes": "10",
-      "animeId": "uma-musume-cinderella-gray-p2-sub-indo",
-      "latestReleaseDate": "21 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/uma-musume-cinderella-gray-p2-sub-indo/"
-    },
-    {
-      "title": "Ranma ½ (2024) Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/11/152084.jpg",
-      "episodes": "12",
-      "animeId": "ranma-2024-s2-sub-indo",
-      "latestReleaseDate": "21 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ranma-2024-s2-sub-indo/"
-    },
-    {
-      "title": "Tomodachi no Imouto ga Ore ni dake Uzai",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Tomodachi-no-Imouto-ga-Ore-ni-dake-Uzai.jpg",
-      "episodes": "12",
-      "animeId": "tomodachi-imouto-dake-uzai-sub-indo",
-      "latestReleaseDate": "21 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tomodachi-imouto-dake-uzai-sub-indo/"
-    },
-    {
-      "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Mikata-ga-Yowasugite-Hojo-Mahou-ni-Tesshiteita-Kyuutei-Mahoushi-Sub-Indo.jpg",
-      "episodes": "12",
-      "animeId": "mikata-yowasugite-hojo-mahou-sub-indo",
-      "latestReleaseDate": "21 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mikata-yowasugite-hojo-mahou-sub-indo/"
-    },
-    {
-      "title": "Taiyou yori mo Mabushii Hoshi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/149410.jpg",
-      "episodes": "12",
-      "animeId": "taiyou-yori-mo-mabushii-hoshi-subtitle-indonesia",
-      "latestReleaseDate": "20 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/taiyou-yori-mo-mabushii-hoshi-subtitle-indonesia/"
-    },
-    {
-      "title": "Saigo ni Hitotsu dake Onegai shitemo Yoroshii deshou ka",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Saigo-ni-Hitotsu-dake-Onegai-Shitemo-Yoroshii-Deshou-ka.jpg",
-      "episodes": "13",
-      "animeId": "saigo-ni-hitotsu-dake-onegai-shitemo-yoroshii-deshou-ka-sub-indo",
-      "latestReleaseDate": "20 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/saigo-ni-hitotsu-dake-onegai-shitemo-yoroshii-deshou-ka-sub-indo/"
-    },
-    {
-      "title": "Sanda",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/151767.jpg",
-      "episodes": "12",
-      "animeId": "sanda-sub-indo",
-      "latestReleaseDate": "20 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sanda-sub-indo/"
-    },
-    {
-      "title": "Let's Play: Quest-darake no My Life",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/151678.jpg",
-      "episodes": "12",
-      "animeId": "lets-play-quest-my-life-sub-indo",
-      "latestReleaseDate": "18 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/lets-play-quest-my-life-sub-indo/"
-    },
-    {
-      "title": "Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/151886.jpg",
-      "episodes": "6",
-      "animeId": "kao-denai-kashiwada-kao-ota-sub-indo",
-      "latestReleaseDate": "09 Nov",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kao-denai-kashiwada-kao-ota-sub-indo/"
-    },
-    {
-      "title": "Kakuriyo no Yadomeshi Ni",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Kakuriyo-no-Yadomeshi-Ni.jpg",
-      "episodes": "5",
-      "animeId": "kakuriyo-yadomeshi-sub-indo",
-      "latestReleaseDate": "30 Okt",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kakuriyo-yadomeshi-sub-indo/"
-    },
-    {
-      "title": "City The Animation",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/City-The-Animation.jpg",
-      "episodes": "13",
-      "animeId": "city-the-animation-sub-indo",
-      "latestReleaseDate": "07 Okt",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/city-the-animation-sub-indo/"
-    },
-    {
-      "title": "Witch Watch",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/148017.jpg",
-      "episodes": "25",
-      "animeId": "wch-watch-sub-indo",
-      "latestReleaseDate": "05 Okt",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/wch-watch-sub-indo/"
-    },
-    {
-      "title": "Silent Witch",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Silent-Witch.jpg",
-      "episodes": "13",
-      "animeId": "silent-witch-sub-indo",
-      "latestReleaseDate": "05 Okt",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/silent-witch-sub-indo/"
-    },
-    {
-      "title": "Game Center Shoujo to Ibunka Kouryuu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Game-Center-Shoujo-to-Ibunka-Kouryuu.jpg",
-      "episodes": "12",
-      "animeId": "game-center-shoujo-ibunka-kouryuu-sub-indo",
-      "latestReleaseDate": "30 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/game-center-shoujo-ibunka-kouryuu-sub-indo/"
-    },
-    {
-      "title": "Summer Pockets",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/Otakudesu.io_MYAG-01_360p.jpg",
-      "episodes": "26",
-      "animeId": "summer-pocket-sub-indo",
-      "latestReleaseDate": "29 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/summer-pocket-sub-indo/"
-    },
-    {
-      "title": "Kijin Gentoushou",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/03/Kijin-Gentoushou.png",
-      "episodes": "24",
-      "animeId": "kijin-gentosou-sub-indo",
-      "latestReleaseDate": "29 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kijin-gentosou-sub-indo/"
-    },
-    {
-      "title": "Ruri no Houseki",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Ruri-no-Houseki.jpg",
-      "episodes": "13",
-      "animeId": "ruri-no-houseki-sub-indo",
-      "latestReleaseDate": "29 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ruri-no-houseki-sub-indo/"
-    },
-    {
-      "title": "Isekai Mokushiroku Mynoghra",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Isekai-Mokushiroku-Mynoghra.jpg",
-      "episodes": "13",
-      "animeId": "isekai-mokushiroku-mynoghra-subtitle-indonesia",
-      "latestReleaseDate": "29 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/isekai-mokushiroku-mynoghra-subtitle-indonesia/"
-    },
-    {
-      "title": "Hikaru ga Shinda Natsu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Hikaru-ga-Shinda-Natsu-Subtitle-Indonesia.jpg",
-      "episodes": "12",
-      "animeId": "hikaru-ga-shinda-natsu-sub-indo",
-      "latestReleaseDate": "28 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hikaru-ga-shinda-natsu-sub-indo/"
-    },
-    {
-      "title": "Kaoru Hana wa Rin to Saku",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Kaoru-Hana-wa-Rin-to-Saku.jpg",
-      "episodes": "13",
-      "animeId": "kaoru-hana-wa-rin-to-saku-sub-indo",
-      "latestReleaseDate": "28 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kaoru-hana-wa-rin-to-saku-sub-indo/"
-    },
-    {
-      "title": "Seishun Buta Yarou wa Santa Claus no Yume wo Minai",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/149858.jpg",
-      "episodes": "13",
-      "animeId": "seishun-buta-yarou-wa-santa-claus-sub-indo",
-      "latestReleaseDate": "28 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/seishun-buta-yarou-wa-santa-claus-sub-indo/"
-    },
-    {
-      "title": "Kaijuu 8-gou Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Kaijuu-8-gou-2nd-Season.jpg",
-      "episodes": "11",
-      "animeId": "kaiju-gou-s2-sub-indo",
-      "latestReleaseDate": "27 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kaiju-gou-s2-sub-indo/"
-    },
-    {
-      "title": "Anne Shirley",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/bx184639-tmj8NbTroNeI.jpg",
-      "episodes": "24",
-      "animeId": "anne-shirley-sub-indo",
-      "latestReleaseDate": "27 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/anne-shirley-sub-indo/"
-    },
-    {
-      "title": "Shin Samurai-den Yaiba",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/148242.jpg",
-      "episodes": "24",
-      "animeId": "shin-samurai-sub-indo",
-      "latestReleaseDate": "27 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/shin-samurai-sub-indo/"
-    },
-    {
-      "title": "Dr. Stone Season 4 Part 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/148849.jpg",
-      "episodes": "12",
-      "animeId": "ds-future-part2-sub-indo",
-      "latestReleaseDate": "25 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ds-future-part2-sub-indo/"
-    },
-    {
-      "title": "Tensei shitara Dainana Ouji Datta node Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/149614.jpg",
-      "episodes": "12",
-      "animeId": "tensei-datta-node-s2-sub-indo",
-      "latestReleaseDate": "25 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tensei-datta-node-s2-sub-indo/"
-    },
-    {
-      "title": "Grand Blue Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/07/Grand-Blue-Season-2-Sub.jpg",
-      "episodes": "12",
-      "animeId": "grand-the-blue-s2-sub-indo",
-      "latestReleaseDate": "23 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/grand-the-blue-s2-sub-indo/"
-    },
-    {
-      "title": "Apocalypse Hotel",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/148642.jpg",
-      "episodes": "12",
-      "animeId": "apocalypse-hotel-sub-indo",
-      "latestReleaseDate": "10 Jul",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/apocalypse-hotel-sub-indo/"
-    },
-    {
-      "title": "Lazarus",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/bx167336-KpGIIBie71OX.png",
-      "episodes": "13",
-      "animeId": "lazarus-sub-indo",
-      "latestReleaseDate": "30 Jun",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/lazarus-sub-indo/"
-    },
-    {
-      "title": "Hibi wa Sugiredo Meshi Umashi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/Hibi-wa-Sugiredo-Meshi-Umashi.jpg",
-      "episodes": "12",
-      "animeId": "hibi-sugiredo-meshi-umashi-sub-indo",
-      "latestReleaseDate": "29 Jun",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hibi-sugiredo-meshi-umashi-sub-indo/"
-    },
-    {
-      "title": "Mono",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/148603.jpg",
-      "episodes": "12",
-      "animeId": "mno-weekend-animation-sub-indo",
-      "latestReleaseDate": "29 Jun",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mno-weekend-animation-sub-indo/"
-    },
-    {
-      "title": "Kimisen Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/07/Kimi-to-Boku-no-Saigo-no-Senjou-Aruiwa-Sekai-ga-Hajimaru-Seisen-Season-2.jpg",
-      "episodes": "12",
-      "animeId": "kimi-boku-saigo-senjou-s2-sub-indo",
-      "latestReleaseDate": "26 Jun",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kimi-boku-saigo-senjou-s2-sub-indo/"
-    },
-    {
-      "title": "Guilty Gear Strive: Dual Rulers",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/04/147623.jpg",
-      "episodes": "8",
-      "animeId": "guilty-gear-dual-rule-sub-indo",
-      "latestReleaseDate": "25 Mei",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/guilty-gear-dual-rule-sub-indo/"
-    },
-    {
-      "title": "Touhai: Ura Rate Mahjong Touhai Roku",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/10/145571.jpg",
-      "episodes": "25",
-      "animeId": "touharate-mahjong-sub-indo",
-      "latestReleaseDate": "22 Apr",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/touharate-mahjong-sub-indo/"
-    },
-    {
-      "title": "NEET Kunoichi to Nazeka Dousei Hajimemashita",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146392.jpg",
-      "episodes": "13",
-      "animeId": "neet-kuoichi-sub-indo",
-      "latestReleaseDate": "15 Apr",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/neet-kuoichi-sub-indo/"
-    },
-    {
-      "title": "Watashi no Shiawase na Kekkon Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146770.jpg",
-      "episodes": "13",
-      "animeId": "watashi-shiawase-s2-sub-indo",
-      "latestReleaseDate": "15 Apr",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/watashi-shiawase-s2-sub-indo/"
-    },
-    {
-      "title": "Around 40 Otoko no Isekai Tsuuhan",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146512.jpg",
-      "episodes": "13",
-      "animeId": "around-40-otoko-isekai-tsuuhan-sub-indo",
-      "latestReleaseDate": "03 Apr",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/around-40-otoko-isekai-tsuuhan-sub-indo/"
-    },
-    {
-      "title": "Ameku Takao no Suiri Karte",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/Ameku-Takao-no-Suiri-Karte.jpg",
-      "episodes": "12",
-      "animeId": "ameku-karte-sub-indo",
-      "latestReleaseDate": "03 Apr",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ameku-karte-sub-indo/"
-    },
-    {
-      "title": "Sentai Red Isekai de Boukensha ni Naru",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146918.jpg",
-      "episodes": "12",
-      "animeId": "sentai-red-isekai-sub-indo",
-      "latestReleaseDate": "31 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sentai-red-isekai-sub-indo/"
-    },
-    {
-      "title": "Hyakkano Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/145470.jpg",
-      "episodes": "12",
-      "animeId": "hyakkano-s2-sub-indo",
-      "latestReleaseDate": "30 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hyakkano-s2-sub-indo/"
-    },
-    {
-      "title": "Medalist",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146850.jpg",
-      "episodes": "13",
-      "animeId": "medalist-sub-indo",
-      "latestReleaseDate": "30 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/medalist-sub-indo/"
-    },
-    {
-      "title": "Übel Blatt",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146961.jpg",
-      "episodes": "12",
-      "animeId": "ubel-blat-sub-indo",
-      "latestReleaseDate": "29 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ubel-blat-sub-indo/"
-    },
-    {
-      "title": "BanG Dream! Ave Mujica",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146762.jpg",
-      "episodes": "13",
-      "animeId": "bang-dream-ave-mujica-sub-indo",
-      "latestReleaseDate": "29 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/bang-dream-ave-mujica-sub-indo/"
-    },
-    {
-      "title": "Farmagia",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146839.jpg",
-      "episodes": "12",
-      "animeId": "farmagia-sub-indo",
-      "latestReleaseDate": "28 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/farmagia-sub-indo/"
-    },
-    {
-      "title": "Nihon e Youkoso Elf-san.",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146113.jpg",
-      "episodes": "12",
-      "animeId": "elf-san-sub-indo",
-      "latestReleaseDate": "28 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/elf-san-sub-indo/"
-    },
-    {
-      "title": "Akuyaku Reijou Tensei Ojisan",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146484.jpg",
-      "episodes": "12",
-      "animeId": "akuyaku-ojisan-sub-indo",
-      "latestReleaseDate": "28 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/akuyaku-ojisan-sub-indo/"
-    },
-    {
-      "title": "Douse, Koishite Shimaunda.",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/02/141789.jpg",
-      "episodes": "12",
-      "animeId": "douse-shimaunda-sub-indo",
-      "latestReleaseDate": "28 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/douse-shimaunda-sub-indo/"
-    },
-    {
-      "title": "Fuguushoku \"Kanteishi\" ga Jitsu wa Saikyou Datta",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146293.jpg",
-      "episodes": "12",
-      "animeId": "kanteishi-sub-indo",
-      "latestReleaseDate": "28 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kanteishi-sub-indo/"
-    },
-    {
-      "title": "Grisaia: Phantom Trigger",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/142188.jpg",
-      "episodes": "13",
-      "animeId": "grisaia-phantom-trigger-sub-indo",
-      "latestReleaseDate": "27 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/grisaia-phantom-trigger-sub-indo/"
-    },
-    {
-      "title": "Magic Maker: Isekai Mahou no Tsukurikata",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146725.jpg",
-      "episodes": "12",
-      "animeId": "magic-maker-isekai-sub-indo",
-      "latestReleaseDate": "27 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/magic-maker-isekai-sub-indo/"
-    },
-    {
-      "title": "Ishura Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146979.jpg",
-      "episodes": "12",
-      "animeId": "ishra-s2-sub-indo",
-      "latestReleaseDate": "27 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ishra-s2-sub-indo/"
-    },
-    {
-      "title": "Shangri-La Frontier Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/10/Shangri-La-Frontier-Season-2.jpg",
-      "episodes": "25",
-      "animeId": "shangri-frontier-s2-sub-indo",
-      "latestReleaseDate": "23 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/shangri-frontier-s2-sub-indo/"
-    },
-    {
-      "title": "Ao no Exorcist Season 5",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/147040.jpg",
-      "episodes": "12",
-      "animeId": "ao-exorcist-s5-sub-indo",
-      "latestReleaseDate": "23 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ao-exorcist-s5-sub-indo/"
-    },
-    {
-      "title": "Hazure Skill \"Kinomi Master\"",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146128.jpg",
-      "episodes": "12",
-      "animeId": "kinomi-master-sub-indo",
-      "latestReleaseDate": "19 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kinomi-master-sub-indo/"
-    },
-    {
-      "title": "The iDOLM@STER Shiny Colors Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/10/bx175533-p3Oq5xfbYycS.jpg",
-      "episodes": "12",
-      "animeId": "the-imas-shiny-colors-s2-sub-indo",
-      "latestReleaseDate": "27 Feb",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/the-imas-shiny-colors-s2-sub-indo/"
-    },
-    {
-      "title": "Okinawa de Suki ni Natta Ko ga Hougen Sugite Tsurasugiru",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/146843.jpg",
-      "episodes": "6",
-      "animeId": "okitsura-sub-indo",
-      "latestReleaseDate": "10 Feb",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/okitsura-sub-indo/"
-    },
-    {
-      "title": "Momentary Lily",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/01/143656.jpg",
-      "episodes": "2",
-      "animeId": "momentary-lily-sub-indo",
-      "latestReleaseDate": "11 Jan",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/momentary-lily-sub-indo/"
-    },
-    {
-      "title": "Nanatsu no Taizai: Mokushiroku no Yonkishi S2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/10/Nanatsu-no-Taizai-Mokushiroku-no-Yonkishi-S2-Subtitle-Indonesia.jpg",
-      "episodes": "12",
-      "animeId": "nanatsu-taizai-my-s2-sub-indo",
-      "latestReleaseDate": "29 Des",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/nanatsu-taizai-my-s2-sub-indo/"
-    },
-    {
-      "title": "Mecha-ude (TV)",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/10/127958.jpg",
-      "episodes": "5",
-      "animeId": "meca-ude-sub-indo",
-      "latestReleaseDate": "12 Nov",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/meca-ude-sub-indo/"
-    },
-    {
-      "title": "Kinoko Inu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/10/Kinoko-Inu.jpg",
-      "episodes": "1",
-      "animeId": "knko-inu-sub-indo",
-      "latestReleaseDate": "04 Okt",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/knko-inu-sub-indo/"
-    },
-    {
-      "title": "Senpai wa Otokonoko",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/07/Senpai-wa-Otokonoko.jpg",
-      "episodes": "5",
-      "animeId": "senpai-otokonoko-sub-indo",
-      "latestReleaseDate": "29 Agu",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/senpai-otokonoko-sub-indo/"
-    },
-    {
-      "title": "Kimi ni Todoke Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/08/Kimi-ni-Todoke-s3.jpg",
-      "episodes": "5",
-      "animeId": "kimi-todoke-s3-sub-indo",
-      "latestReleaseDate": "06 Agu",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kimi-todoke-s3-sub-indo/"
-    },
-    {
-      "title": "Captain Tsubasa Season 2: Junior Youth-hen",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2023/10/Captain-Tsubasa-Season-2.jpg",
-      "episodes": "39",
-      "animeId": "captain-tsubasa-s2-sub-indo",
-      "latestReleaseDate": "30 Jun",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/captain-tsubasa-s2-sub-indo/"
-    },
-    {
-      "title": "Tonari no Youkai-san",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/04/Tonari-no-Youkai-san.jpg",
-      "episodes": "4",
-      "animeId": "tonari-youkai-sub-indo",
-      "latestReleaseDate": "01 Mei",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tonari-youkai-sub-indo/"
-    },
-    {
-      "title": "Astro Note",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/04/141859.jpg",
-      "episodes": "3",
-      "animeId": "astro-n-sub-indo",
-      "latestReleaseDate": "19 Apr",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/astro-n-sub-indo/"
-    },
-    {
-      "title": "Yuuki Bakuhatsu Bang Bravern",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2024/01/Yuuki-Bakuhatsu-Bang-Bravern.jpg",
-      "episodes": "12",
-      "animeId": "yuuki-bakuhatsu-ravern-sub-indo",
-      "latestReleaseDate": "30 Mar",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/yuuki-bakuhatsu-ravern-sub-indo/"
-    },
-    {
-      "title": "Shingeki no Kyojin: The Final Season - Kanketsu-hen",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2023/03/Shingeki-no-Kyojin-The-Final-Season-Kanketsu-hen.jpg",
-      "episodes": "2",
-      "animeId": "snk-final-part3-sub-indo",
-      "latestReleaseDate": "06 Nov",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/snk-final-part3-sub-indo/"
-    },
-    {
-      "title": "Tensei shitara Slime Datta Ken: Coleus no Yume",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2023/11/Tensei-shitara-Slime-Datta-Ken-Coleus-no-Yume.jpg",
-      "episodes": "3",
-      "animeId": "tensei-shitara-slime-datta-coleus-yume-sub-indo",
-      "latestReleaseDate": "01 Nov",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tensei-shitara-slime-datta-coleus-yume-sub-indo/"
-    },
-    {
-      "title": "Synduality: Noir",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2023/07/134806.jpg",
-      "episodes": "12",
-      "animeId": "synduality-nr-sub-indo",
-      "latestReleaseDate": "26 Sep",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/synduality-nr-sub-indo/"
-    },
-    {
-      "title": "Urusei Yatsura (2022)",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2022/10/129144.jpg",
-      "episodes": "12",
-      "animeId": "usura-2022-sub-indo",
-      "latestReleaseDate": "15 Jan",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/usura-2022-sub-indo/"
-    },
-    {
-      "title": "Dragon Quest",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2020/10/Dragon-Quest-Sub-Indo.jpg",
-      "episodes": "100",
-      "animeId": "dragon-the-quest-sub-indo",
-      "latestReleaseDate": "22 Okt",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/dragon-the-quest-sub-indo/"
-    },
-    {
-      "title": "Boruto",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2020/05/Boruto-Sub-Indo.jpg",
-      "episodes": "293",
-      "animeId": "borot-sub-indo",
-      "latestReleaseDate": "12 Mei",
-      "releaseDay": "None",
-      "otakudesuUrl": "https://otakudesu.blog/anime/borot-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-22T06:47:00.385Z"
+  "updatedAt": "2026-07-23T12:02:07.096Z"
 }
