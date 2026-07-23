@@ -1,6 +1,33 @@
 {
   "animeList": [
     {
+      "title": "Rakudai Kenja no Gakuin Musou",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158376.jpg",
+      "episodes": "5",
+      "animeId": "rakudai-kenja-gakuin-musou-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/rakudai-kenja-gakuin-musou-sub-indo/"
+    },
+    {
+      "title": "Heroine? Seijo? Iie, All Works Maid desu (Hokori)!",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158290.jpg",
+      "episodes": "5",
+      "animeId": "heroine-seijo-iie-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/heroine-seijo-iie-sub-indo/"
+    },
+    {
+      "title": "BanG Dream! Yume∞Mita",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/BanG-Dream-Yume∞Mita.jpg",
+      "episodes": "6",
+      "animeId": "bang-dream-yume%e2%88%9emita-sub-indo",
+      "latestReleaseDate": "23 Jul",
+      "releaseDay": "Kamis",
+      "otakudesuUrl": "https://otakudesu.blog/anime/bang-dream-yume%e2%88%9emita-sub-indo/"
+    },
+    {
       "title": "Tai-Ari deshita. Ojousama wa Kakutou Game nante Shinai",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tai-Ari-deshita.-Ojousama-wa-Kakutou-Game-nante-Shinai.jpg",
       "episodes": "3",
@@ -415,24 +442,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/yani-neko-sub-indo/"
     },
     {
-      "title": "Rakudai Kenja no Gakuin Musou",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158376.jpg",
-      "episodes": "4",
-      "animeId": "rakudai-kenja-gakuin-musou-sub-indo",
-      "latestReleaseDate": "17 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/rakudai-kenja-gakuin-musou-sub-indo/"
-    },
-    {
-      "title": "BanG Dream! Yume∞Mita",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/BanG-Dream-Yume∞Mita.jpg",
-      "episodes": "5",
-      "animeId": "bang-dream-yume%e2%88%9emita-sub-indo",
-      "latestReleaseDate": "16 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/bang-dream-yume%e2%88%9emita-sub-indo/"
-    },
-    {
       "title": "Hanazakari no Kimitachi e Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158523.jpg",
       "episodes": "4",
@@ -440,15 +449,6 @@
       "latestReleaseDate": "16 Jul",
       "releaseDay": "Kamis",
       "otakudesuUrl": "https://otakudesu.blog/anime/hanazakari-kimitachi-s2-sub-indo/"
-    },
-    {
-      "title": "Heroine? Seijo? Iie, All Works Maid desu (Hokori)!",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158290.jpg",
-      "episodes": "4",
-      "animeId": "heroine-seijo-iie-sub-indo",
-      "latestReleaseDate": "15 Jul",
-      "releaseDay": "Kamis",
-      "otakudesuUrl": "https://otakudesu.blog/anime/heroine-seijo-iie-sub-indo/"
     },
     {
       "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
@@ -638,15 +638,6 @@
       "latestReleaseDate": "25 Jun",
       "releaseDay": "Kamis",
       "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-ousama-nidome-s2-sub-indo/"
-    },
-    {
-      "title": "Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156029.jpg",
-      "episodes": "12",
-      "animeId": "vending-machine-s3-sub-indo",
-      "latestReleaseDate": "24 Jun",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/vending-machine-s3-sub-indo/"
     },
     {
       "title": "Kanojo, Okarishimasu Season 5",
@@ -1117,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-23T16:18:07.529Z"
+  "updatedAt": "2026-07-23T16:45:43.166Z"
 }
