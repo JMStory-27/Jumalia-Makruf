@@ -1,6 +1,33 @@
 {
   "animeList": [
     {
+      "title": "Otome Kaijuu Caraméliser",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
+      "episodes": "4",
+      "animeId": "kaijuu-carameliser-sub-indo",
+      "latestReleaseDate": "24 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kaijuu-carameliser-sub-indo/"
+    },
+    {
+      "title": "Yani Neko",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Yani-Neko.jpg",
+      "episodes": "4",
+      "animeId": "yani-neko-sub-indo",
+      "latestReleaseDate": "24 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/yani-neko-sub-indo/"
+    },
+    {
+      "title": "Rakudai Kenja no Gakuin Musou",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158376.jpg",
+      "episodes": "5",
+      "animeId": "rakudai-kenja-gakuin-musou-sub-indo",
+      "latestReleaseDate": "24 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/rakudai-kenja-gakuin-musou-sub-indo/"
+    },
+    {
       "title": "Super no Ura de Yani Suu Futari",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/155018.jpg",
       "episodes": "3",
@@ -8,15 +35,6 @@
       "latestReleaseDate": "24 Jul",
       "releaseDay": "Jumat",
       "otakudesuUrl": "https://otakudesu.blog/anime/super-yani-suu-futari-sub-indo/"
-    },
-    {
-      "title": "Rakudai Kenja no Gakuin Musou",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158376.jpg",
-      "episodes": "5",
-      "animeId": "rakudai-kenja-gakuin-musou-sub-indo",
-      "latestReleaseDate": "23 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/rakudai-kenja-gakuin-musou-sub-indo/"
     },
     {
       "title": "Heroine? Seijo? Iie, All Works Maid desu (Hokori)!",
@@ -422,24 +440,6 @@
       "latestReleaseDate": "17 Jul",
       "releaseDay": "Jumat",
       "otakudesuUrl": "https://otakudesu.blog/anime/ryoumin-ryoushu-sub-indo/"
-    },
-    {
-      "title": "Otome Kaijuu Caraméliser",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
-      "episodes": "3",
-      "animeId": "kaijuu-carameliser-sub-indo",
-      "latestReleaseDate": "17 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kaijuu-carameliser-sub-indo/"
-    },
-    {
-      "title": "Yani Neko",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Yani-Neko.jpg",
-      "episodes": "3",
-      "animeId": "yani-neko-sub-indo",
-      "latestReleaseDate": "17 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/yani-neko-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-23T18:27:25.975Z"
+  "updatedAt": "2026-07-24T01:11:09.925Z"
 }
