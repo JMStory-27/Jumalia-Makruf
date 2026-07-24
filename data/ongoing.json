@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Ryoumin 0-nin Start no Henkyou Ryoushu-sama",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Ryoumin-0-nin-Start-no-Henkyou-Ryoushu-sama.jpg",
+      "episodes": "4",
+      "animeId": "ryoumin-ryoushu-sub-indo",
+      "latestReleaseDate": "24 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/ryoumin-ryoushu-sub-indo/"
+    },
+    {
       "title": "Otome Kaijuu Caraméliser",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Otome-Kaijuu-Carameliser.jpg",
       "episodes": "4",
@@ -1090,5 +1099,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-24T14:47:32.626Z"
+  "updatedAt": "2026-07-24T14:53:37.370Z"
 }
