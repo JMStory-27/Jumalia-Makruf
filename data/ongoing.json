@@ -433,15 +433,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/slime-s4-sub-indo/"
     },
     {
-      "title": "Ryoumin 0-nin Start no Henkyou Ryoushu-sama",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Ryoumin-0-nin-Start-no-Henkyou-Ryoushu-sama.jpg",
-      "episodes": "3",
-      "animeId": "ryoumin-ryoushu-sub-indo",
-      "latestReleaseDate": "17 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/ryoumin-ryoushu-sub-indo/"
-    },
-    {
       "title": "Hanazakari no Kimitachi e Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158523.jpg",
       "episodes": "4",
@@ -647,15 +638,6 @@
       "latestReleaseDate": "24 Jun",
       "releaseDay": "Rabu",
       "otakudesuUrl": "https://otakudesu.blog/anime/kanojo-no-okarishimasu-s5-sub-indo/"
-    },
-    {
-      "title": "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e Season 4",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Youkoso-Jitsuryoku-Shijou-Shugi-no-Kyoushitsu-e-S4.jpg",
-      "episodes": "16",
-      "animeId": "youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-s4-sub-indo",
-      "latestReleaseDate": "24 Jun",
-      "releaseDay": "Rabu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-s4-sub-indo/"
     },
     {
       "title": "Nippon Sangoku",
@@ -1108,5 +1090,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-24T14:41:15.843Z"
+  "updatedAt": "2026-07-24T14:47:32.626Z"
 }
