@@ -1,9 +1,18 @@
 {
   "animeList": [
     {
+      "title": "Yomi no Tsugai",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156397.jpg",
+      "episodes": "16",
+      "animeId": "yomi-tsugai-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/yomi-tsugai-sub-indo/"
+    },
+    {
       "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158595.jpg",
-      "episodes": "",
+      "episodes": "1",
       "animeId": "bleach-kashin-tan-sub-indo",
       "latestReleaseDate": "25 Jul",
       "releaseDay": "Sabtu",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "19 Jul",
       "releaseDay": "Minggu",
       "otakudesuUrl": "https://otakudesu.blog/anime/tenmaku-jaadugar-sub-indo/"
-    },
-    {
-      "title": "Yomi no Tsugai",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156397.jpg",
-      "episodes": "15",
-      "animeId": "yomi-tsugai-sub-indo",
-      "latestReleaseDate": "18 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/yomi-tsugai-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-25T16:20:55.271Z"
+  "updatedAt": "2026-07-25T16:48:35.109Z"
 }
