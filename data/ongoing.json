@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Honzuki no Gekokujou Season 4",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Honzuki-no-Gekokujou-Season-4-Sub.jpg",
+      "episodes": "15",
+      "animeId": "honzoku-gekokujou-season-4-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "None",
+      "otakudesuUrl": "https://otakudesu.blog/anime/honzoku-gekokujou-season-4-sub-indo/"
+    },
+    {
       "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tsuihou-sareta-Tensei-Juukishi-wa-Game-Chishiki-de-Musou-suru.jpg",
       "episodes": "4",
@@ -1090,5 +1099,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-25T12:29:50.762Z"
+  "updatedAt": "2026-07-25T12:35:43.597Z"
 }
