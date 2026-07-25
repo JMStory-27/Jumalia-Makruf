@@ -1,6 +1,51 @@
 {
   "animeList": [
     {
+      "title": "Uchi no Otouto-domo ga Sumimasen",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Uchi-no-Otouto-domo-ga-Sumimasen.jpg",
+      "episodes": "4",
+      "animeId": "uchi-otouto-sumimasen-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/uchi-otouto-sumimasen-sub-indo/"
+    },
+    {
+      "title": "Hell Mode Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/156314.jpg",
+      "episodes": "4",
+      "animeId": "hell-mode-s2-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/hell-mode-s2-sub-indo/"
+    },
+    {
+      "title": "Nige Jouzu no Wakagimi Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/156329.jpg",
+      "episodes": "2",
+      "animeId": "nige-wakagimi-s2-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/nige-wakagimi-s2-sub-indo/"
+    },
+    {
+      "title": "Tensei shitara Slime Datta Ken Season 4",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156389.jpg",
+      "episodes": "16",
+      "animeId": "slime-s4-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/slime-s4-sub-indo/"
+    },
+    {
+      "title": "Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/154308.jpg",
+      "episodes": "4",
+      "animeId": "kokoore-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Jumat",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kokoore-sub-indo/"
+    },
+    {
       "title": "Ryoumin 0-nin Start no Henkyou Ryoushu-sama",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Ryoumin-0-nin-Start-no-Henkyou-Ryoushu-sama.jpg",
       "episodes": "4",
@@ -395,42 +440,6 @@
       "latestReleaseDate": "18 Jul",
       "releaseDay": "None",
       "otakudesuUrl": "https://otakudesu.blog/anime/honzoku-gekokujou-season-4-sub-indo/"
-    },
-    {
-      "title": "Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/154308.jpg",
-      "episodes": "3",
-      "animeId": "kokoore-sub-indo",
-      "latestReleaseDate": "18 Jul",
-      "releaseDay": "Jumat",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kokoore-sub-indo/"
-    },
-    {
-      "title": "Nige Jouzu no Wakagimi Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/156329.jpg",
-      "episodes": "1",
-      "animeId": "nige-wakagimi-s2-sub-indo",
-      "latestReleaseDate": "18 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/nige-wakagimi-s2-sub-indo/"
-    },
-    {
-      "title": "Uchi no Otouto-domo ga Sumimasen",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Uchi-no-Otouto-domo-ga-Sumimasen.jpg",
-      "episodes": "3",
-      "animeId": "uchi-otouto-sumimasen-sub-indo",
-      "latestReleaseDate": "18 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/uchi-otouto-sumimasen-sub-indo/"
-    },
-    {
-      "title": "Hell Mode Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/156314.jpg",
-      "episodes": "3",
-      "animeId": "hell-mode-s2-sub-indo",
-      "latestReleaseDate": "18 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hell-mode-s2-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1090,5 +1099,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-24T16:23:14.864Z"
+  "updatedAt": "2026-07-25T01:43:56.931Z"
 }
