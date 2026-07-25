@@ -1,6 +1,33 @@
 {
   "animeList": [
     {
+      "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158595.jpg",
+      "episodes": "",
+      "animeId": "bleach-kashin-tan-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/bleach-kashin-tan-sub-indo/"
+    },
+    {
+      "title": "Black Torch",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Black-Torch.jpg",
+      "episodes": "4",
+      "animeId": "black-torch-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/black-torch-sub-indo/"
+    },
+    {
+      "title": "Mairimashita! Iruma-kun Season 4",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mairimashita-Iruma-kun-Season-4.jpg",
+      "episodes": "17",
+      "animeId": "iruma-kun-s4-sub-indo",
+      "latestReleaseDate": "25 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/iruma-kun-s4-sub-indo/"
+    },
+    {
       "title": "Honzuki no Gekokujou Season 4",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Honzuki-no-Gekokujou-Season-4-Sub.jpg",
       "episodes": "15",
@@ -361,15 +388,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/futsutsuka-akujo-gozaimasu-sub-indo/"
     },
     {
-      "title": "Mairimashita! Iruma-kun Season 4",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mairimashita-Iruma-kun-Season-4.jpg",
-      "episodes": "16",
-      "animeId": "iruma-kun-s4-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/iruma-kun-s4-sub-indo/"
-    },
-    {
       "title": "Oni no Hanayome",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Oni-no-Hanayome.jpg",
       "episodes": "3",
@@ -440,15 +458,6 @@
       "latestReleaseDate": "18 Jul",
       "releaseDay": "Sabtu",
       "otakudesuUrl": "https://otakudesu.blog/anime/yomi-tsugai-sub-indo/"
-    },
-    {
-      "title": "Black Torch",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Black-Torch.jpg",
-      "episodes": "3",
-      "animeId": "black-torch-sub-indo",
-      "latestReleaseDate": "18 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/black-torch-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1099,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-25T12:35:43.597Z"
+  "updatedAt": "2026-07-25T16:20:55.271Z"
 }
