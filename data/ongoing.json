@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Oni no Hanayome",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Oni-no-Hanayome.jpg",
+      "episodes": "4",
+      "animeId": "oni-hanayome-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/oni-hanayome-sub-indo/"
+    },
+    {
       "title": "Neko to Ryuu",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157796.jpg",
       "episodes": "5",
@@ -440,15 +449,6 @@
       "latestReleaseDate": "19 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/futsutsuka-akujo-gozaimasu-sub-indo/"
-    },
-    {
-      "title": "Oni no Hanayome",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Oni-no-Hanayome.jpg",
-      "episodes": "3",
-      "animeId": "oni-hanayome-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/oni-hanayome-sub-indo/"
     },
     {
       "title": "Digimon Beatbreak",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-26T04:26:40.595Z"
+  "updatedAt": "2026-07-26T08:44:55.134Z"
 }
