@@ -1,6 +1,51 @@
 {
   "animeList": [
     {
+      "title": "Neko to Ryuu",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157796.jpg",
+      "episodes": "5",
+      "animeId": "neko-ryuu-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/neko-ryuu-sub-indo/"
+    },
+    {
+      "title": "Mahou Shoujo Lyrical Nanoha EXCEEDS",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Mahou-Shoujo-Lyrical-Nanoha-EXCEEDS.jpg",
+      "episodes": "4",
+      "animeId": "mahou-shoujo-exceeds-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/mahou-shoujo-exceeds-sub-indo/"
+    },
+    {
+      "title": "Saijo no Osewa",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saijo-no-Osewa.jpg",
+      "episodes": "4",
+      "animeId": "saijo-osewa-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/saijo-osewa-sub-indo/"
+    },
+    {
+      "title": "Tenmaku no Jaadugar",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158227.jpg",
+      "episodes": "5",
+      "animeId": "tenmaku-jaadugar-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tenmaku-jaadugar-sub-indo/"
+    },
+    {
+      "title": "Mao",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mao.jpg",
+      "episodes": "17",
+      "animeId": "mao-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/mao-sub-indo/"
+    },
+    {
       "title": "Yomi no Tsugai",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/156397.jpg",
       "episodes": "16",
@@ -413,51 +458,6 @@
       "latestReleaseDate": "19 Jul",
       "releaseDay": "Minggu",
       "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
-    },
-    {
-      "title": "Saijo no Osewa",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saijo-no-Osewa.jpg",
-      "episodes": "3",
-      "animeId": "saijo-osewa-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/saijo-osewa-sub-indo/"
-    },
-    {
-      "title": "Mahou Shoujo Lyrical Nanoha EXCEEDS",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Mahou-Shoujo-Lyrical-Nanoha-EXCEEDS.jpg",
-      "episodes": "3",
-      "animeId": "mahou-shoujo-exceeds-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mahou-shoujo-exceeds-sub-indo/"
-    },
-    {
-      "title": "Neko to Ryuu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157796.jpg",
-      "episodes": "4",
-      "animeId": "neko-ryuu-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/neko-ryuu-sub-indo/"
-    },
-    {
-      "title": "Mao",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Mao.jpg",
-      "episodes": "16",
-      "animeId": "mao-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mao-sub-indo/"
-    },
-    {
-      "title": "Tenmaku no Jaadugar",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158227.jpg",
-      "episodes": "4",
-      "animeId": "tenmaku-jaadugar-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tenmaku-jaadugar-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-25T17:25:59.481Z"
+  "updatedAt": "2026-07-26T00:29:23.101Z"
 }
