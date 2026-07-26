@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Digimon Beatbreak",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
+      "episodes": "40",
+      "animeId": "digimon-bb-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
+    },
+    {
       "title": "Futsutsuka na Akujo dewa Gozaimasu ga",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158341-1.jpg",
       "episodes": "3",
@@ -1099,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-26T10:50:33.502Z"
+  "updatedAt": "2026-07-26T10:56:26.219Z"
 }
