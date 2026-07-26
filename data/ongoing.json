@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Futsutsuka na Akujo dewa Gozaimasu ga",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158341-1.jpg",
+      "episodes": "3",
+      "animeId": "futsutsuka-akujo-gozaimasu-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/futsutsuka-akujo-gozaimasu-sub-indo/"
+    },
+    {
       "title": "Oni no Hanayome",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Oni-no-Hanayome.jpg",
       "episodes": "4",
@@ -440,15 +449,6 @@
       "latestReleaseDate": "19 Jul",
       "releaseDay": "Minggu",
       "otakudesuUrl": "https://otakudesu.blog/anime/sekai-saikyou-kouei-sub-indo/"
-    },
-    {
-      "title": "Digimon Beatbreak",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
-      "episodes": "39",
-      "animeId": "digimon-bb-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1099,5 +1099,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-26T10:44:41.122Z"
+  "updatedAt": "2026-07-26T10:50:33.502Z"
 }
