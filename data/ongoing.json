@@ -1,13 +1,67 @@
 {
   "animeList": [
     {
-      "title": "Digimon Beatbreak",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
-      "episodes": "40",
-      "animeId": "digimon-bb-sub-indo",
+      "title": "Seihantai na Kimi to Boku Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Seihantai-na-Kimi-to-Boku-Season-2-Sub.jpg",
+      "episodes": "4",
+      "animeId": "seihantai-kimi-boku-s2-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/seihantai-kimi-boku-s2-sub-indo/"
+    },
+    {
+      "title": "Kuroneko to Majo no Kyoushitsu",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Kuroneko-to-Majo-no-Kyoushitsu.jpg",
+      "episodes": "16",
+      "animeId": "kuroneko-to-majo-no-kyoushitsu-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/kuroneko-to-majo-no-kyoushitsu-sub-indo/"
+    },
+    {
+      "title": "Nijusseiki Denki Mokuroku",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158475.jpg",
+      "episodes": "4",
+      "animeId": "nijusseiki-denki-mokuroku-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/nijusseiki-denki-mokuroku-sub-indo/"
+    },
+    {
+      "title": "Sekai Saikyou no Kouei",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sekai-Saikyou-no-Kouei-Sub.jpg",
+      "episodes": "4",
+      "animeId": "sekai-saikyou-kouei-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/sekai-saikyou-kouei-sub-indo/"
+    },
+    {
+      "title": "One Piece",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2021/05/One-Piece-Sub-Indo.jpg",
+      "episodes": "1171",
+      "animeId": "1piece-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/1piece-sub-indo/"
+    },
+    {
+      "title": "Mushoku Tensei : Isekai Ittara Honki Dasu Season 3",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158340.jpg",
+      "episodes": "5",
+      "animeId": "mushoku-ni-tensei-s3-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/mushoku-ni-tensei-s3-sub-indo/"
+    },
+    {
+      "title": "Hyakkano Season 3",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157174.jpg",
+      "episodes": "4",
+      "animeId": "hyakkano-s3-sub-ind",
       "latestReleaseDate": "26 Jul",
       "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
+      "otakudesuUrl": "https://otakudesu.blog/anime/hyakkano-s3-sub-ind/"
     },
     {
       "title": "Futsutsuka na Akujo dewa Gozaimasu ga",
@@ -17,6 +71,15 @@
       "latestReleaseDate": "26 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/futsutsuka-akujo-gozaimasu-sub-indo/"
+    },
+    {
+      "title": "Digimon Beatbreak",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2025/10/Digimon-Beatbreak.jpg",
+      "episodes": "40",
+      "animeId": "digimon-bb-sub-indo",
+      "latestReleaseDate": "26 Jul",
+      "releaseDay": "Minggu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/digimon-bb-sub-indo/"
     },
     {
       "title": "Oni no Hanayome",
@@ -395,69 +458,6 @@
       "latestReleaseDate": "20 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/sayonara-lara-sub-indo/"
-    },
-    {
-      "title": "Kuroneko to Majo no Kyoushitsu",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/04/Kuroneko-to-Majo-no-Kyoushitsu.jpg",
-      "episodes": "15",
-      "animeId": "kuroneko-to-majo-no-kyoushitsu-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/kuroneko-to-majo-no-kyoushitsu-sub-indo/"
-    },
-    {
-      "title": "Nijusseiki Denki Mokuroku",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158475.jpg",
-      "episodes": "3",
-      "animeId": "nijusseiki-denki-mokuroku-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/nijusseiki-denki-mokuroku-sub-indo/"
-    },
-    {
-      "title": "Mushoku Tensei : Isekai Ittara Honki Dasu Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158340.jpg",
-      "episodes": "4",
-      "animeId": "mushoku-ni-tensei-s3-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/mushoku-ni-tensei-s3-sub-indo/"
-    },
-    {
-      "title": "Seihantai na Kimi to Boku Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Seihantai-na-Kimi-to-Boku-Season-2-Sub.jpg",
-      "episodes": "3",
-      "animeId": "seihantai-kimi-boku-s2-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/seihantai-kimi-boku-s2-sub-indo/"
-    },
-    {
-      "title": "One Piece",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2021/05/One-Piece-Sub-Indo.jpg",
-      "episodes": "1170",
-      "animeId": "1piece-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/1piece-sub-indo/"
-    },
-    {
-      "title": "Hyakkano Season 3",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/157174.jpg",
-      "episodes": "3",
-      "animeId": "hyakkano-s3-sub-ind",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/hyakkano-s3-sub-ind/"
-    },
-    {
-      "title": "Sekai Saikyou no Kouei",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sekai-Saikyou-no-Kouei-Sub.jpg",
-      "episodes": "3",
-      "animeId": "sekai-saikyou-kouei-sub-indo",
-      "latestReleaseDate": "19 Jul",
-      "releaseDay": "Minggu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sekai-saikyou-kouei-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-26T14:23:06.183Z"
+  "updatedAt": "2026-07-27T01:50:03.107Z"
 }
