@@ -451,15 +451,6 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
     },
     {
-      "title": "Sayonara Lara",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sayonara-Lara.jpg",
-      "episodes": "3",
-      "animeId": "sayonara-lara-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/sayonara-lara-sub-indo/"
-    },
-    {
       "title": "Hanazakari no Kimitachi e Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/158523.jpg",
       "episodes": "4",
@@ -1108,5 +1099,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T02:25:31.238Z"
+  "updatedAt": "2026-07-27T02:31:23.628Z"
 }
