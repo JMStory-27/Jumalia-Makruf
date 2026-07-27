@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Buchigire-Reijou-wa-Houfuku-wo-Chikaimashita-Sub.jpg",
+      "episodes": "4",
+      "animeId": "buchigire-reijou-chikaimashita-sub-indo",
+      "latestReleaseDate": "28 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/buchigire-reijou-chikaimashita-sub-indo/"
+    },
+    {
       "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
       "episodes": "4",
@@ -449,15 +458,6 @@
       "latestReleaseDate": "21 Jul",
       "releaseDay": "Selasa",
       "otakudesuUrl": "https://otakudesu.blog/anime/grand-blue-s3-sub-indo/"
-    },
-    {
-      "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Buchigire-Reijou-wa-Houfuku-wo-Chikaimashita-Sub.jpg",
-      "episodes": "3",
-      "animeId": "buchigire-reijou-chikaimashita-sub-indo",
-      "latestReleaseDate": "21 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/buchigire-reijou-chikaimashita-sub-indo/"
     },
     {
       "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T17:21:49.548Z"
+  "updatedAt": "2026-07-27T17:27:55.762Z"
 }
