@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
+      "episodes": "4",
+      "animeId": "saikyou-anyaku-arasoi-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
+    },
+    {
       "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
       "episodes": "4",
@@ -458,15 +467,6 @@
       "latestReleaseDate": "20 Jul",
       "releaseDay": "Selasa",
       "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
-    },
-    {
-      "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
-      "episodes": "3",
-      "animeId": "saikyou-anyaku-arasoi-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T15:54:53.006Z"
+  "updatedAt": "2026-07-27T16:07:41.062Z"
 }
