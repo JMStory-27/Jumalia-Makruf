@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "World Is Dancing",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158709.jpg",
+      "episodes": "4",
+      "animeId": "world-dancing-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/world-dancing-sub-indo/"
+    },
+    {
       "title": "Sayonara Lara",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sayonara-Lara.jpg",
       "episodes": "4",
@@ -467,15 +476,6 @@
       "latestReleaseDate": "16 Jul",
       "releaseDay": "Kamis",
       "otakudesuUrl": "https://otakudesu.blog/anime/hanazakari-kimitachi-s2-sub-indo/"
-    },
-    {
-      "title": "World Is Dancing",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158709.jpg",
-      "episodes": "3",
-      "animeId": "world-dancing-sub-indo",
-      "latestReleaseDate": "13 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/world-dancing-sub-indo/"
     },
     {
       "title": "Snowball Earth",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T11:56:29.729Z"
+  "updatedAt": "2026-07-27T13:49:49.579Z"
 }
