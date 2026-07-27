@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
+      "episodes": "4",
+      "animeId": "gaikotsu-kishi-s2-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Sabtu",
+      "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
+    },
+    {
       "title": "World Is Dancing",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/06/158709.jpg",
       "episodes": "5",
@@ -458,15 +467,6 @@
       "latestReleaseDate": "20 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/saikyou-anyaku-arasoi-sub-indo/"
-    },
-    {
-      "title": "Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu Season 2",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Gaikotsu-Kishi-sama-Tadaima-Isekai-e-Odekakechuu-Season-2-Sub-Indo.jpg",
-      "episodes": "3",
-      "animeId": "gaikotsu-kishi-s2-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Sabtu",
-      "otakudesuUrl": "https://otakudesu.blog/anime/gaikotsu-kishi-s2-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T15:15:19.630Z"
+  "updatedAt": "2026-07-27T15:21:35.686Z"
 }
