@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Sayonara Lara",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Sayonara-Lara.jpg",
+      "episodes": "4",
+      "animeId": "sayonara-lara-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/sayonara-lara-sub-indo/"
+    },
+    {
       "title": "Seihantai na Kimi to Boku Season 2",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Seihantai-na-Kimi-to-Boku-Season-2-Sub.jpg",
       "episodes": "4",
@@ -1099,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T02:31:23.628Z"
+  "updatedAt": "2026-07-27T02:37:13.830Z"
 }
