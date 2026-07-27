@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
+      "episodes": "4",
+      "animeId": "toumei-yoru-kakeru-kimi-sub-indo",
+      "latestReleaseDate": "27 Jul",
+      "releaseDay": "Selasa",
+      "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
+    },
+    {
       "title": "Saikyou Degarashi Ouji no Anyaku Teii Arasoi",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Saikyou-Degarashi-Ouji-no-Anyaku-Teii-Arasoi.jpg",
       "episodes": "4",
@@ -458,15 +467,6 @@
       "latestReleaseDate": "21 Jul",
       "releaseDay": "Senin",
       "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
-    },
-    {
-      "title": "Toumei na Yoru ni Kakeru Kimi to, Me ni Mienai Koi wo Shita.",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Toumei-na-Yoru-ni-Kakeru-Kimi-to-Me-ni-Mienai-Koi-wo-Shita.-Sub.jpg",
-      "episodes": "3",
-      "animeId": "toumei-yoru-kakeru-kimi-sub-indo",
-      "latestReleaseDate": "20 Jul",
-      "releaseDay": "Selasa",
-      "otakudesuUrl": "https://otakudesu.blog/anime/toumei-yoru-kakeru-kimi-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T16:57:50.465Z"
+  "updatedAt": "2026-07-27T17:03:54.082Z"
 }
