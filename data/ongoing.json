@@ -1,6 +1,15 @@
 {
   "animeList": [
     {
+      "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
+      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tenkou-saki-no-Seiso-Karen-na-Bishoujo-ga-Mukashi-Danshi-to-Omotte-Issho-ni-Asonda-Osananajimi-Datta-Ken.jpg",
+      "episodes": "4",
+      "animeId": "tenkouno-seiso-karen-bishoujo-sub-indo",
+      "latestReleaseDate": "28 Jul",
+      "releaseDay": "Senin",
+      "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
+    },
+    {
       "title": "Buchigire Reijou wa Houfuku wo Chikaimashita",
       "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Buchigire-Reijou-wa-Houfuku-wo-Chikaimashita-Sub.jpg",
       "episodes": "4",
@@ -458,15 +467,6 @@
       "latestReleaseDate": "21 Jul",
       "releaseDay": "Selasa",
       "otakudesuUrl": "https://otakudesu.blog/anime/grand-blue-s3-sub-indo/"
-    },
-    {
-      "title": "Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken",
-      "poster": "https://otakudesu.blog/wp-content/uploads/2026/07/Tenkou-saki-no-Seiso-Karen-na-Bishoujo-ga-Mukashi-Danshi-to-Omotte-Issho-ni-Asonda-Osananajimi-Datta-Ken.jpg",
-      "episodes": "3",
-      "animeId": "tenkouno-seiso-karen-bishoujo-sub-indo",
-      "latestReleaseDate": "21 Jul",
-      "releaseDay": "Senin",
-      "otakudesuUrl": "https://otakudesu.blog/anime/tenkouno-seiso-karen-bishoujo-sub-indo/"
     },
     {
       "title": "Hanazakari no Kimitachi e Season 2",
@@ -1108,5 +1108,5 @@
       "otakudesuUrl": "https://otakudesu.blog/anime/spy-family-s3-sub-indo/"
     }
   ],
-  "updatedAt": "2026-07-27T17:33:56.462Z"
+  "updatedAt": "2026-07-27T17:39:58.662Z"
 }
