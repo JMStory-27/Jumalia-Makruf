@@ -1,0 +1,4 @@
+- [Artifact build environment](artifact-build-environment.md) — Vite artifact builds require managed PORT/BASE_PATH values and a workspace install after restoring source.
+- [api-server port quirk](api-server-port.md) — api-server listens on PORT (8080 in this workspace), NOT 8000; anisub vite proxy must target the actual port or all `/api` calls 500.
+- [JIKAN upstream fragility](jikan-upstream-fragility.md) — JIKAN v4 returns 504 when MyAnimeList backend is down; page-level per-call try/catch + stale fallback is required.
+- [Musim page machinery](musim-page-notes.md) — ani-sub Musim page: visual layer, JIKAN+AniList data flow, sort/filter chain, dedup, rate-limit, per-season color theming. Full inside artian from in-place docs.

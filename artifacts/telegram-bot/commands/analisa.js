@@ -7,7 +7,7 @@ const path = require('path');
 
 /** Escape semua reserved chars untuk Telegram MarkdownV2 */
 function esc(s) {
-  return String(s).replace(/([_*[\]()~`>#+\-=|{}.!\\])/g, '\\$1');
+  return String(s).replace(/([_*[\]()~`>#+\-=|{}.!\\<])/g, '\\$1');
 }
 
 const execAsync = promisify(exec);
