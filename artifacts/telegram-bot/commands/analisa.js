@@ -27,20 +27,61 @@ function sessGet(chatId) {
 }
 function sessDelete(chatId) { sessions.delete(String(chatId)); }
 
-/* ── Restore session storage (pending "Pulihkan" button) ─────────────────────── */
-// restoreId → { tmpDir, oldRoot, onlyInOld, chatId }
-const restoreSessions = new Map();
+/* ── Restore session storage — persisted ke disk agar survive bot restart ──── */
+const RESTORE_STORE_PATH = path.join(__dirname, '../data/restore_sessions.json');
 const RESTORE_TTL = 30 * 60 * 1000; // 30 menit
 
+function _loadRestoreSessions() {
+  try {
+    const raw = fs.readFileSync(RESTORE_STORE_PATH, 'utf8');
+    const obj = JSON.parse(raw);
+    const now = Date.now();
+    let changed = false;
+    for (const id of Object.keys(obj)) {
+      const s = obj[id];
+      // Buang yang kadaluarsa atau oldRoot-nya sudah hilang dari /tmp
+      if (now - s.ts > RESTORE_TTL || !fs.existsSync(s.oldRoot)) {
+        try { fs.rmSync(s.tmpDir, { recursive: true, force: true }); } catch {}
+        delete obj[id];
+        changed = true;
+      }
+    }
+    if (changed) _saveRestoreSessions(obj);
+    return obj;
+  } catch { return {}; }
+}
+
+function _saveRestoreSessions(obj) {
+  try {
+    fs.mkdirSync(path.dirname(RESTORE_STORE_PATH), { recursive: true });
+    fs.writeFileSync(RESTORE_STORE_PATH, JSON.stringify(obj, null, 2), 'utf8');
+  } catch {}
+}
+
 function storeRestoreSession(id, data) {
-  restoreSessions.set(id, data);
+  const obj = _loadRestoreSessions();
+  obj[id] = { ...data, ts: Date.now() };
+  _saveRestoreSessions(obj);
   setTimeout(() => {
-    const s = restoreSessions.get(id);
-    if (s) {
-      try { fs.rmSync(s.tmpDir, { recursive: true, force: true }); } catch {}
-      restoreSessions.delete(id);
+    const cur = _loadRestoreSessions();
+    if (cur[id]) {
+      try { fs.rmSync(cur[id].tmpDir, { recursive: true, force: true }); } catch {}
+      delete cur[id];
+      _saveRestoreSessions(cur);
     }
   }, RESTORE_TTL);
+}
+
+function getRestoreSession(id) {
+  return _loadRestoreSessions()[id] || null;
+}
+
+function deleteRestoreSession(id) {
+  const obj = _loadRestoreSessions();
+  if (obj[id]) {
+    delete obj[id];
+    _saveRestoreSessions(obj);
+  }
 }
 
 /* ── Helpers ─────────────────────────────────────────────────────────────────── */
@@ -334,17 +375,17 @@ function registerAnalisaCommand(bot) {
     // Selalu jawab callback supaya loading spinner hilang
     await bot.answerCallbackQuery(query.id, { text: '⏳ Memulai pemulihan...' }).catch(() => {});
 
-    const sess = restoreSessions.get(restoreId);
+    const sess = getRestoreSession(restoreId);
     if (!sess) {
       await bot.sendMessage(query.message.chat.id,
-        '⚠️ Sesi restore sudah kadaluarsa \\(>30 menit\\)\\. Jalankan */analisa* ulang\\.',
+        '⚠️ Sesi restore sudah kadaluarsa \\(\\>30 menit\\)\\. Jalankan */analisa* ulang\\.',
         { parse_mode: 'MarkdownV2' }
       );
       return;
     }
 
-    // Hapus dari map supaya tombol tidak bisa diklik dua kali
-    restoreSessions.delete(restoreId);
+    // Hapus dari disk supaya tombol tidak bisa diklik dua kali
+    deleteRestoreSession(restoreId);
 
     // Nonaktifkan tombol di pesan lama
     await bot.editMessageReplyMarkup(
