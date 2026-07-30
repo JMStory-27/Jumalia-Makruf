@@ -397,7 +397,7 @@ function registerAnalisaCommand(bot) {
       const oldUrl = text.trim();
       sessDelete(chatId);
 
-      const progMsg = await bot.sendMessage(chatId, '⏳ Sedang mengunduh workspace terbaru...');
+      const progMsg = await bot.sendMessage(chatId, '⏳ Mengunduh kedua workspace secara paralel...');
 
       try {
         const tmpDir = `/tmp/analisa_${Date.now()}`;
@@ -408,17 +408,13 @@ function registerAnalisaCommand(bot) {
         const newExtDir = path.join(tmpDir, 'new');
         const oldExtDir = path.join(tmpDir, 'old');
 
-        /* 1. Download workspace terbaru */
-        await downloadFile(newUrl, newTar);
+        /* 1. Download KEDUA workspace secara paralel (hemat ~50% waktu) */
+        await Promise.all([
+          downloadFile(newUrl, newTar),
+          downloadFile(oldUrl, oldTar),
+        ]);
+
         const newSizeMB = (fs.statSync(newTar).size / 1024 / 1024).toFixed(1);
-
-        await bot.editMessageText(
-          `✅ Workspace terbaru diunduh (${newSizeMB} MB).\n\n⏳ Sedang mengunduh workspace lama...`,
-          { chat_id: chatId, message_id: progMsg.message_id }
-        ).catch(() => {});
-
-        /* 2. Download workspace lama */
-        await downloadFile(oldUrl, oldTar);
         const oldSizeMB = (fs.statSync(oldTar).size / 1024 / 1024).toFixed(1);
 
         await bot.editMessageText(
@@ -426,7 +422,7 @@ function registerAnalisaCommand(bot) {
           { chat_id: chatId, message_id: progMsg.message_id }
         ).catch(() => {});
 
-        /* 3. Ekstrak secara paralel */
+        /* 2. Ekstrak secara paralel */
         await Promise.all([
           extractTar(newTar, newExtDir),
           extractTar(oldTar, oldExtDir),
