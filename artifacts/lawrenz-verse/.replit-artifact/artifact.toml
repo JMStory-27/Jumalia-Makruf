@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/lawrenz-verse/"
+title = "Lawrenz Verse"
+version = "1.0.0"
+id = "artifacts/lawrenz-verse"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/lawrenz-verse/" ]
+localPort = 19925
+
+[services.development]
+run = "pnpm --filter @workspace/lawrenz-verse run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/lawrenz-verse", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/lawrenz-verse/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19925"
+BASE_PATH = "/lawrenz-verse/"

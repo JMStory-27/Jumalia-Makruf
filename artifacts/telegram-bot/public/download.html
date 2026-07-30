@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Album Abadi Chess</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#1a1a2e;color:#f0f0f0;font-family:Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+    .card{background:#16213e;border-radius:20px;padding:32px 24px;max-width:420px;width:100%;border:1px solid #c9a22740;text-align:center}
+    .icon{width:120px;height:120px;margin:0 auto 20px;border-radius:24px;overflow:hidden;box-shadow:0 8px 32px #000a}
+    .icon img{width:100%;height:100%}
+    h1{font-size:1.6rem;color:#c9a227;margin-bottom:6px}
+    .sub{font-size:.95rem;color:#aaa;margin-bottom:24px}
+    .btn{display:block;background:linear-gradient(135deg,#c9a227,#f5d020);color:#1a1a2e;text-decoration:none;font-weight:700;font-size:1.1rem;padding:16px 24px;border-radius:14px;margin-bottom:12px;border:none;cursor:pointer;width:100%}
+    .btn:hover{opacity:.9}
+    .btn.secondary{background:#0f3460;color:#f0d9b5;font-size:1rem;padding:14px}
+    .divider{height:1px;background:#ffffff15;margin:24px 0}
+    .steps{text-align:left;margin-top:16px}
+    .step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+    .num{background:#c9a227;color:#1a1a2e;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0;margin-top:2px}
+    .step-text{font-size:.9rem;line-height:1.5;color:#ddd}
+    .step-text strong{color:#f5d020}
+    .os-tabs{display:flex;gap:8px;margin-bottom:20px}
+    .tab{flex:1;padding:10px;border-radius:10px;border:1px solid #c9a22750;cursor:pointer;font-size:.85rem;background:transparent;color:#aaa;transition:.2s}
+    .tab.active{background:#c9a22720;border-color:#c9a227;color:#c9a227;font-weight:700}
+    .steps-android,.steps-ios{display:none}
+    .steps-android.show,.steps-ios.show{display:block}
+    .badge{display:inline-block;background:#c9a22720;color:#c9a227;border-radius:20px;padding:4px 12px;font-size:.8rem;margin-bottom:16px}
+    .features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0;text-align:left}
+    .feat{background:#ffffff08;border-radius:10px;padding:10px 12px;font-size:.82rem;color:#ccc}
+    .feat span{display:block;font-size:1.1rem;margin-bottom:4px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">
+      <img src="icon.svg" alt="Chess Abadi Icon" onerror="this.style.background='#c9a22720';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center';this.innerText='♟'">
+    </div>
+    <div class="badge">♟ Game Catur Premium • Gratis</div>
+    <h1>Album Abadi Chess</h1>
+    <p class="sub">AI Stockfish • Offline • Tanpa install dari PlayStore</p>
+
+    <a href="./" class="btn">🎮 Mainkan Sekarang</a>
+    <button class="btn secondary" onclick="installPWA()" id="installBtn" style="display:none">📲 Install sebagai App</button>
+
+    <div class="divider"></div>
+
+    <div class="features">
+      <div class="feat"><span>🤖</span>AI Stockfish depth-20</div>
+      <div class="feat"><span>📵</span>Main offline</div>
+      <div class="feat"><span>🎵</span>Musik & suara</div>
+      <div class="feat"><span>👥</span>2 pemain & online</div>
+    </div>
+
+    <div class="divider"></div>
+    <p style="font-size:.9rem;color:#aaa;margin-bottom:16px">📲 <strong style="color:#f0f0f0">Install di HP kamu</strong> — gratis, tanpa PlayStore!</p>
+
+    <div class="os-tabs">
+      <button class="tab active" onclick="showOS('android')">🤖 Android</button>
+      <button class="tab" onclick="showOS('ios')">🍎 iPhone</button>
+    </div>
+
+    <div class="steps-android show" id="steps-android">
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div class="step-text">Buka halaman ini di <strong>Google Chrome</strong></div></div>
+        <div class="step"><div class="num">2</div><div class="step-text">Tap <strong>⋮ tiga titik</strong> di sudut kanan atas Chrome</div></div>
+        <div class="step"><div class="num">3</div><div class="step-text">Pilih <strong>"Tambahkan ke layar utama"</strong> atau <strong>"Install App"</strong></div></div>
+        <div class="step"><div class="num">4</div><div class="step-text">Tap <strong>"Tambahkan"</strong> — selesai! Icon chess muncul di home screen 🎉</div></div>
+      </div>
+    </div>
+
+    <div class="steps-ios" id="steps-ios">
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div class="step-text">Buka halaman ini di <strong>Safari</strong> (bukan Chrome)</div></div>
+        <div class="step"><div class="num">2</div><div class="step-text">Tap tombol <strong>↑ Share</strong> di bawah layar</div></div>
+        <div class="step"><div class="num">3</div><div class="step-text">Scroll ke bawah, pilih <strong>"Add to Home Screen"</strong></div></div>
+        <div class="step"><div class="num">4</div><div class="step-text">Tap <strong>"Add"</strong> — icon chess langsung muncul! 🎉</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'block';
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+      }
+    }
+
+    function showOS(os) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.steps-android,.steps-ios').forEach(s => s.classList.remove('show'));
+      event.target.classList.add('active');
+      document.getElementById('steps-' + os).classList.add('show');
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilih Tema Papan Catur</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#07070f;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:16px}
+  h1{text-align:center;font-size:clamp(18px,5vw,28px);font-weight:800;
+    background:linear-gradient(135deg,#F59E0B,#EF4444,#EC4899);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+  .sub{text-align:center;color:#64748b;font-size:12px;margin-bottom:4px}
+  .progress{text-align:center;font-size:12px;color:#94a3b8;margin-bottom:18px}
+  .progress span{color:#F59E0B;font-weight:700}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+  @media(max-width:400px){.grid{grid-template-columns:1fr 1fr}}
+
+  .card{border-radius:14px;overflow:hidden;border:2px solid #1e1e3a;cursor:pointer;
+    transition:all 0.25s;background:#0f0f1e}
+  .card:hover{border-color:#4B5563;transform:translateY(-2px)}
+  .card.selected{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 24px var(--glow)}
+
+  .board-wrap{padding:10px;display:flex;justify-content:center;background:#111120}
+  .mini-board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;max-width:160px;
+    border:2px solid var(--border);border-radius:4px;overflow:hidden;box-shadow:inset 0 0 8px rgba(0,0,0,.4)}
+  .sq{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    font-size:clamp(11px,2.5vw,16px);line-height:1;user-select:none}
+  .sq.light{background:var(--light)}
+  .sq.dark{background:var(--dark)}
+  .sq .piece{font-size:clamp(10px,2.2vw,14px);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+
+  .card-info{padding:10px}
+  .card-name{font-size:13px;font-weight:700;color:#e2e8f0;margin-bottom:3px}
+  .card-desc{font-size:10px;color:#64748b;margin-bottom:8px}
+  .swatches{display:flex;gap:4px;margin-bottom:8px}
+  .swatch{flex:1;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,.1)}
+  .card-btns{display:flex;gap:5px}
+  .btn-pick{flex:1;border:none;border-radius:6px;padding:6px;font-size:11px;
+    font-weight:700;cursor:pointer;transition:all 0.15s;
+    background:rgba(255,255,255,.08);color:#94a3b8}
+  .card.selected .btn-pick{background:var(--accent);color:#000}
+  .sel-badge{display:none;margin-top:5px;text-align:center;font-size:10px;
+    font-weight:700;color:var(--accent)}
+  .card.selected .sel-badge{display:block}
+
+  .summary{background:#0f0f1e;border:1px solid #1e1e3a;border-radius:14px;padding:16px;margin-top:4px}
+  .summary h3{font-size:14px;color:#e2e8f0;margin-bottom:10px}
+  .sel-preview{display:none}
+  .sel-preview.show{display:block}
+  .sel-preview .big-board-wrap{display:flex;justify-content:center;margin:10px 0}
+  .big-board{display:grid;grid-template-columns:repeat(8,1fr);width:min(72vw,300px);
+    border:3px solid var(--sel-border);border-radius:6px;overflow:hidden;
+    box-shadow:0 0 20px var(--sel-glow)}
+  .big-sq{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,4vw,22px)}
+  .big-sq.l{background:var(--sel-light)}
+  .big-sq.d{background:var(--sel-dark)}
+  .sel-name{text-align:center;font-size:16px;font-weight:800;color:#e2e8f0;margin-bottom:4px}
+  .sel-meta{text-align:center;font-size:12px;color:#94a3b8;margin-bottom:12px}
+  .done-box{background:linear-gradient(135deg,#0c2e1e,#0a2518);border:1px solid #10B981;
+    border-radius:10px;padding:12px;color:#10B981;font-size:12px;font-weight:700;line-height:1.6;margin-top:10px;display:none}
+  .copy-btn{display:block;margin-top:8px;background:#10B981;color:#000;border:none;
+    border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:700;font-size:12px;width:100%}
+</style>
+</head>
+<body>
+<h1>🎨 Pilih Tema Papan Catur</h1>
+<p class="sub">10 tema dari berbagai web catur populer — klik untuk preview besar</p>
+<p class="progress">Dipilih: <span id="cnt">–</span></p>
+
+<div class="grid" id="theme-grid"></div>
+
+<div class="summary">
+  <h3>👁 Preview Tema Pilihan</h3>
+  <div id="sel-preview" class="sel-preview">
+    <div class="sel-name" id="sel-name"></div>
+    <div class="sel-meta" id="sel-meta"></div>
+    <div class="big-board-wrap">
+      <div class="big-board" id="big-board"></div>
+    </div>
+    <div class="done-box" id="done-box">
+      ✅ Tema dipilih!<br>
+      <span id="result-txt" style="font-family:monospace;font-size:11px;color:#6EE7B7"></span>
+      <button class="copy-btn" onclick="copyResult()">📋 Copy & Kasih Tau Aku</button>
+    </div>
+  </div>
+  <div id="no-sel" style="text-align:center;color:#475569;font-size:12px;padding:10px 0">
+    Belum ada yang dipilih — klik "Pilih" pada tema yang kamu suka!
+  </div>
+</div>
+
+<script>
+// ── Starting position ──────────────────────────────────
+const POS=[
+  ['♜','♞','♝','♛','♚','♝','♞','♜'],
+  ['♟','♟','♟','♟','♟','♟','♟','♟'],
+  [ '','','','','','','','' ],
+  [ '','','','','','','','' ],
+  [ '','','','','','','','' ],
+  [ '','','','','','','','' ],
+  ['♙','♙','♙','♙','♙','♙','♙','♙'],
+  ['♖','♘','♗','♕','♔','♗','♘','♖'],
+];
+
+// ── Themes ────────────────────────────────────────────
+const THEMES=[
+  {
+    id:'classic-green',name:'Hijau Klasik',src:'chess.com',
+    desc:'Warna standar chess.com — hijau alami elegan',
+    light:'#EEEED2',dark:'#769656',bg:'#28231D',border:'#5D4037',
+    accent:'#4CAF50',glow:'#4CAF5040',
+    css:{sqLight:'#EEEED2',sqDark:'#769656',boardBorder:'#5D4037',appBg:'#28231D'}
+  },
+  {
+    id:'walnut',name:'Kayu Walnut',src:'lichess.org',
+    desc:'Coklat hangat klasik a la lichess',
+    light:'#F0D9B5',dark:'#B58863',bg:'#1a1208',border:'#8B4513',
+    accent:'#F59E0B',glow:'#F59E0B40',
+    css:{sqLight:'#F0D9B5',sqDark:'#B58863',boardBorder:'#8B4513',appBg:'#1a1208'}
+  },
+  {
+    id:'ocean-blue',name:'Samudra Biru',src:'chess24.com',
+    desc:'Biru laut dalam yang menenangkan',
+    light:'#C6DCF5',dark:'#4A7FC1',bg:'#0a1628',border:'#1E3A5F',
+    accent:'#38BDF8',glow:'#38BDF840',
+    css:{sqLight:'#C6DCF5',sqDark:'#4A7FC1',boardBorder:'#1E3A5F',appBg:'#0a1628'}
+  },
+  {
+    id:'purple-galaxy',name:'Galaksi Ungu',src:'chessbase',
+    desc:'Ruang angkasa ungu misterius',
+    light:'#D8B4FE',dark:'#6D28D9',bg:'#0a0014',border:'#4C1D95',
+    accent:'#A855F7',glow:'#A855F740',
+    css:{sqLight:'#D8B4FE',sqDark:'#6D28D9',boardBorder:'#4C1D95',appBg:'#0a0014'}
+  },
+  {
+    id:'teak-wood',name:'Kayu Jati',src:'chesscafe',
+    desc:'Kayu jati oranye hangat & premium',
+    light:'#F9C97C',dark:'#C2612B',bg:'#1a0800',border:'#8B3A0F',
+    accent:'#F97316',glow:'#F9731640',
+    css:{sqLight:'#F9C97C',sqDark:'#C2612B',boardBorder:'#8B3A0F',appBg:'#1a0800'}
+  },
+  {
+    id:'stone-grey',name:'Batu Abu',src:'sparkchess',
+    desc:'Minimalis abu-abu batu elegan',
+    light:'#E8E8E8',dark:'#7A7A7A',bg:'#111111',border:'#444444',
+    accent:'#9CA3AF',glow:'#9CA3AF40',
+    css:{sqLight:'#E8E8E8',sqDark:'#7A7A7A',boardBorder:'#444444',appBg:'#111111'}
+  },
+  {
+    id:'mint-candy',name:'Mint Candy',src:'playchess',
+    desc:'Segar hijau mint yang ceria',
+    light:'#C8FFF0',dark:'#00897B',bg:'#001a14',border:'#00695C',
+    accent:'#2DD4BF',glow:'#2DD4BF40',
+    css:{sqLight:'#C8FFF0',sqDark:'#00897B',boardBorder:'#00695C',appBg:'#001a14'}
+  },
+  {
+    id:'rose-gold',name:'Rose Gold',src:'chess.com dark',
+    desc:'Elegan pink keemasan mewah',
+    light:'#FFE4E1',dark:'#C2436B',bg:'#1a0010',border:'#8B1A3A',
+    accent:'#F472B6',glow:'#F472B640',
+    css:{sqLight:'#FFE4E1',sqDark:'#C2436B',boardBorder:'#8B1A3A',appBg:'#1a0010'}
+  },
+  {
+    id:'black-gold',name:'Hitam Emas',src:'premium dark',
+    desc:'Mewah hitam & emas bergaya',
+    light:'#F5D060',dark:'#1A1A1A',bg:'#000000',border:'#B8860B',
+    accent:'#FFD700',glow:'#FFD70050',
+    css:{sqLight:'#F5D060',sqDark:'#1A1A1A',boardBorder:'#B8860B',appBg:'#000000'}
+  },
+  {
+    id:'cherry-red',name:'Cherry Merah',src:'gameknot',
+    desc:'Merah ceri tajam & penuh semangat',
+    light:'#FFE0CC',dark:'#B71C1C',bg:'#1a0000',border:'#7f0000',
+    accent:'#EF4444',glow:'#EF444440',
+    css:{sqLight:'#FFE0CC',sqDark:'#B71C1C',boardBorder:'#7f0000',appBg:'#1a0000'}
+  },
+];
+
+let chosen=null;
+
+function makeBoard(theme,size='mini'){
+  const isSmall=size==='mini';
+  const rows=[];
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const isLight=(r+c)%2===0;
+      const piece=POS[r][c]||'';
+      const cls=isSmall?'sq '+(isLight?'light':'dark'):'big-sq '+(isLight?'l':'d');
+      const style=isSmall
+        ?`background:${isLight?theme.light:theme.dark}`
+        :`background:${isLight?theme.light:theme.dark}`;
+      rows.push(`<div class="${cls}" style="${style}"><span class="piece">${piece}</span></div>`);
+    }
+  }
+  return rows.join('');
+}
+
+function renderThemes(){
+  const grid=document.getElementById('theme-grid');
+  grid.innerHTML='';
+  THEMES.forEach(t=>{
+    const isSelected=chosen&&chosen.id===t.id;
+    const card=document.createElement('div');
+    card.className='card'+(isSelected?' selected':'');
+    card.style.cssText=`--accent:${t.accent};--glow:${t.glow};--border:${t.border};--light:${t.light};--dark:${t.dark}`;
+    card.id='card-'+t.id;
+    card.innerHTML=`
+      <div class="board-wrap" style="background:${t.bg}">
+        <div class="mini-board" style="--light:${t.light};--dark:${t.dark};--border:${t.border}">
+          ${makeBoard(t,'mini')}
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-name">${t.name}</div>
+        <div class="card-desc">${t.desc}</div>
+        <div class="swatches">
+          <div class="swatch" style="background:${t.light}" title="Kotak terang"></div>
+          <div class="swatch" style="background:${t.dark}" title="Kotak gelap"></div>
+          <div class="swatch" style="background:${t.bg}" title="Background"></div>
+          <div class="swatch" style="background:${t.border}" title="Border"></div>
+        </div>
+        <div class="card-btns">
+          <button class="btn-pick" onclick="pickTheme('${t.id}',event)">
+            ${isSelected?'✓ Dipilih':'Pilih'}
+          </button>
+        </div>
+        <div class="sel-badge" style="color:${t.accent}">✓ Tema aktif</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function pickTheme(id,e){
+  if(e)e.stopPropagation();
+  chosen=THEMES.find(t=>t.id===id);
+  renderThemes();
+  showPreview();
+  document.getElementById('cnt').textContent=chosen.name;
+}
+
+function showPreview(){
+  if(!chosen)return;
+  const t=chosen;
+  document.getElementById('no-sel').style.display='none';
+  const prev=document.getElementById('sel-preview');
+  prev.classList.add('show');
+  prev.style.cssText=`--sel-light:${t.light};--sel-dark:${t.dark};--sel-border:${t.border};--sel-glow:${t.glow}`;
+  document.getElementById('sel-name').textContent=t.name;
+  document.getElementById('sel-meta').textContent=`Sumber: ${t.src} • Kotak: ${t.light} / ${t.dark}`;
+  document.getElementById('big-board').innerHTML=makeBoard(t,'big');
+  document.getElementById('result-txt').textContent=
+    `Tema: ${t.name}\nsqLight: ${t.light}\nsqDark: ${t.dark}\nboardBorder: ${t.border}\nappBg: ${t.bg}`;
+  document.getElementById('done-box').style.display='block';
+}
+
+function copyResult(){
+  const txt=document.getElementById('result-txt').textContent;
+  navigator.clipboard?.writeText(txt).then(()=>alert('Disalin!')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Disalin!');
+  });
+}
+
+renderThemes();
+</script>
+</body>
+</html>

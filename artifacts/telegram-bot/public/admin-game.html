@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>🛡️ Admin Panel — Ular Tangga V2</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0a1f 0%, #1a0f33 60%, #2a1452 100%);
+    color: #fff; min-height: 100vh; padding-bottom: 30px;
+  }
+  /* ===== LOGIN ===== */
+  .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .login-card { background: rgba(255,255,255,.06); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px; padding: 36px 28px; max-width: 380px; width: 100%; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .login-card h1 { font-size: 28px; margin-bottom: 8px; }
+  .login-card p { color: #a78fd0; font-size: 14px; margin-bottom: 22px; }
+  .login-card input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid rgba(255,255,255,.15);
+    background: rgba(0,0,0,.3); color: #fff; font-size: 16px; margin-bottom: 14px;
+  }
+  .login-card input:focus { outline: none; border-color: #ffd86e; }
+  .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; cursor: pointer;
+    font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #ffd86e 0%, #ff8a3d 100%);
+    color: #1a0f33; transition: transform .1s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-sm { padding: 8px 14px; font-size: 13px; width: auto; border-radius: 8px; }
+  .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: #fff; }
+  .btn-info   { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #fff; }
+  .btn-ghost  { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.2); }
+  /* ===== DASHBOARD ===== */
+  .hide { display: none !important; }
+  header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(0,0,0,.3); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 50;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  header h1 { font-size: 18px; }
+  header .meta { font-size: 11px; color: #a78fd0; }
+  main { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  /* Stats cards */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .stat-card { background: linear-gradient(135deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.02) 100%);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 18px;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(255,216,110,.15), transparent 70%); border-radius: 50%;
+  }
+  .stat-icon { font-size: 28px; margin-bottom: 8px; }
+  .stat-num { font-size: 36px; font-weight: 900; color: #ffd86e; line-height: 1; }
+  .stat-label { font-size: 12px; color: #c4b5e0; margin-top: 6px; text-transform: uppercase; letter-spacing: .5px; }
+  /* Section */
+  .section { margin-bottom: 32px; }
+  .section h2 { font-size: 18px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section .count-pill { background: rgba(255,216,110,.2); color: #ffd86e; padding: 2px 10px;
+    border-radius: 999px; font-size: 12px; font-weight: 700; }
+  /* Room cards */
+  .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+  .room-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
+    padding: 16px; transition: border-color .15s;
+  }
+  .room-card:hover { border-color: rgba(255,216,110,.4); }
+  .room-card.status-playing  { border-left: 4px solid #22c55e; }
+  .room-card.status-lobby    { border-left: 4px solid #38bdf8; }
+  .room-card.status-done     { border-left: 4px solid #888; }
+  .room-card.status-challenge{ border-left: 4px solid #ec4899; }
+  .room-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .room-code { font-size: 22px; font-weight: 900; color: #ffd86e; letter-spacing: 2px; font-family: monospace; }
+  .room-status { font-size: 10px; padding: 3px 8px; border-radius: 999px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .ss-lobby    { background: rgba(56,189,248,.25); color: #7dd3fc; }
+  .ss-playing  { background: rgba(34,197,94,.25); color: #86efac; }
+  .ss-done     { background: rgba(156,163,175,.25); color: #d1d5db; }
+  .ss-challenge{ background: rgba(236,72,153,.25); color: #f9a8d4; }
+  .room-meta { font-size: 11px; color: #a78fd0; margin-bottom: 10px; }
+  .room-players { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .rp { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 6px 8px;
+    background: rgba(0,0,0,.25); border-radius: 8px;
+  }
+  .rp-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; border: 1.5px solid rgba(255,255,255,.4); }
+  .rp-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rp-tag  { font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+  .tag-host { background: rgba(255,216,110,.3); color: #ffd86e; }
+  .tag-turn { background: rgba(34,197,94,.4); color: #fff; animation: pulse 1.2s ease-in-out infinite; }
+  .tag-off  { background: rgba(239,68,68,.3); color: #f87171; }
+  .tag-admin{ background: rgba(168,85,247,.4); color: #d8b4fe; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+  .rp-pos { font-size: 10px; color: #a78fd0; font-family: monospace; }
+  .room-actions { display: flex; gap: 8px; }
+  .room-actions .btn { padding: 9px 12px; font-size: 12px; border-radius: 8px; }
+  /* Users table */
+  .users-table { background: rgba(255,255,255,.04); border-radius: 12px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .users-table .row { display: grid; grid-template-columns: 1.5fr .8fr .8fr .8fr 60px;
+    gap: 10px; padding: 10px 14px; align-items: center; border-bottom: 1px solid rgba(255,255,255,.06);
+    font-size: 13px;
+  }
+  .users-table .row.head { background: rgba(0,0,0,.3); font-size: 11px; color: #a78fd0;
+    text-transform: uppercase; letter-spacing: .5px; font-weight: 700;
+  }
+  .users-table .row:last-child { border-bottom: none; }
+  .users-table .row .live { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: #22c55e; box-shadow: 0 0 8px #22c55e; margin-right: 6px;
+  }
+  .users-table .row .live.off { background: #6b7280; box-shadow: none; }
+  /* Empty / loading */
+  .empty { text-align: center; padding: 40px 20px; color: #a78fd0; font-size: 14px;
+    background: rgba(0,0,0,.2); border-radius: 12px; border: 1px dashed rgba(255,255,255,.15);
+  }
+  /* Modal */
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: none;
+    align-items: center; justify-content: center; z-index: 100; padding: 20px;
+  }
+  .modal-bg.show { display: flex; }
+  .modal { background: linear-gradient(135deg, #1a0f33, #2a1452); padding: 24px; border-radius: 16px;
+    max-width: 400px; width: 100%; border: 1px solid rgba(255,255,255,.15); text-align: center;
+  }
+  .modal h3 { font-size: 18px; margin-bottom: 8px; }
+  .modal p { color: #c4b5e0; margin-bottom: 18px; }
+  .modal .row { display: flex; gap: 10px; }
+  .modal .row .btn { flex: 1; }
+  /* Toast */
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120%);
+    background: rgba(34,197,94,.95); color: #fff; padding: 12px 20px; border-radius: 10px;
+    font-weight: 700; z-index: 200; transition: transform .3s ease; box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  /* Responsive */
+  @media (max-width: 600px){
+    header h1 { font-size: 16px; }
+    main { padding: 14px; }
+    .stat-num { font-size: 28px; }
+    .users-table .row { grid-template-columns: 1.3fr .6fr .6fr 50px; font-size: 12px; }
+    .users-table .row .col-ua { display: none; }
+  }
+  /* Footer info */
+  .foot { text-align: center; padding: 20px; color: #6b5b8a; font-size: 11px; }
+  .foot a { color: #a78fd0; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginScreen" class="login-wrap">
+  <div class="login-card">
+    <div style="font-size:54px;margin-bottom:6px">🛡️</div>
+    <h1>Admin Panel</h1>
+    <p>Ular Tangga By Lawrenz V2</p>
+    <input id="passInput" type="password" placeholder="Password admin" autocomplete="off">
+    <button class="btn" onclick="login()">Masuk</button>
+    <p style="margin-top:18px;font-size:11px;color:#6b5b8a">Akses terbatas — buat owner aja.</p>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="hide">
+  <header>
+    <div>
+      <h1>🛡️ Admin Panel</h1>
+      <div class="meta" id="lastUpdate">Connecting…</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-sm btn-ghost" onclick="location.reload()">↻ Refresh</button>
+      <button class="btn btn-sm btn-danger" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Stat cards -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">👥</div>
+        <div class="stat-num" id="sUsers">0</div>
+        <div class="stat-label">Total user pernah main</div>
+      </div>
+      <div class="stat-card"><div class="stat-icon">🟢</div>
+        <div class="stat-num" id="sActive">0</div>
+        <div class="stat-label">Aktif sekarang (5 menit terakhir)</div>
+      </div>
+      <div class="stat-card"><div class="stat-icon">🎮</div>
+        <div class="stat-num" id="sGames">0</div>
+        <div class="stat-label">Total game dimainkan</div>
+      </div>
+      <div class="stat-card"><div class="stat-icon">🏠</div>
+        <div class="stat-num" id="sRoomsTotal">0</div>
+        <div class="stat-label">Total room dibuat</div>
+      </div>
+      <div class="stat-card"><div class="stat-icon">⚡</div>
+        <div class="stat-num" id="sRoomsActive">0</div>
+        <div class="stat-label">Room aktif sekarang</div>
+      </div>
+      <div class="stat-card"><div class="stat-icon">🎯</div>
+        <div class="stat-num" id="sPlaying">0</div>
+        <div class="stat-label">Pemain lagi bertanding</div>
+      </div>
+    </div>
+
+    <!-- Active rooms -->
+    <div class="section">
+      <h2>🏠 Room Aktif <span class="count-pill" id="roomCountPill">0</span></h2>
+      <div id="roomsList"></div>
+    </div>
+
+    <!-- Users -->
+    <div class="section">
+      <h2>👥 User Terbaru <span class="count-pill" id="userCountPill">0</span></h2>
+      <div class="users-table" id="usersTable">
+        <div class="row head">
+          <div>Nama</div>
+          <div>Total Game</div>
+          <div>Pertama Main</div>
+          <div>Terakhir</div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk actions -->
+    <div class="section">
+      <h2>🧹 Maintenance</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-ghost" onclick="bulkCleanStale()">Hapus room tdk aktif &gt; 1 jam</button>
+        <button class="btn btn-sm btn-ghost" onclick="bulkCleanFinished()">Hapus room status "done"</button>
+        <button class="btn btn-sm btn-danger" onclick="bulkResetStats()">Reset counter total</button>
+      </div>
+    </div>
+
+    <div class="foot">
+      Admin Panel · Realtime via Firebase RTDB · 
+      <a href="../" target="_blank">← Kembali ke game</a>
+    </div>
+  </main>
+</div>
+
+<!-- Confirm modal -->
+<div class="modal-bg" id="confirmBg">
+  <div class="modal">
+    <h3 id="confirmTitle">Konfirmasi</h3>
+    <p id="confirmMsg">Yakin?</p>
+    <div class="row">
+      <button class="btn btn-ghost" onclick="closeConfirm(false)">Batal</button>
+      <button class="btn btn-danger" onclick="closeConfirm(true)">Iya, lanjut</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* =========================================================
+   Admin Panel — Ular Tangga V2
+   ========================================================= */
+
+// ⚠️ GANTI password ini sesuai keinginan kamu (jangan kasih tau orang lain).
+const ADMIN_PASSWORD = 'lawrenz2026';
+
+const FIREBASE_CONFIG = {"apiKey":"AIzaSyAAJniLnjwHVd5DEDg4zHpWqF0fnJMoB0Y","authDomain":"ular-tangga-jm.firebaseapp.com","databaseURL":"https://ular-tangga-jm-default-rtdb.asia-southeast1.firebasedatabase.app","projectId":"ular-tangga-jm","storageBucket":"ular-tangga-jm.firebasestorage.app","messagingSenderId":"16689505417","appId":"1:16689505417:web:6f479f831063e2978d1258","measurementId":"G-R3CKKXGLL5"};
+firebase.initializeApp(FIREBASE_CONFIG);
+const db = firebase.database();
+
+const $ = id => document.getElementById(id);
+const escHtml = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+let allRooms = {};
+let allUsers = {};
+let _confirmCb = null;
+
+function toast(msg, ms){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), ms || 2400);
+}
+function confirmAsk(title, msg, cb){
+  $('confirmTitle').textContent = title;
+  $('confirmMsg').textContent = msg;
+  _confirmCb = cb;
+  $('confirmBg').classList.add('show');
+}
+function closeConfirm(yes){
+  $('confirmBg').classList.remove('show');
+  if (yes && _confirmCb) _confirmCb();
+  _confirmCb = null;
+}
+
+/* ---------- LOGIN ---------- */
+function login(){
+  const p = $('passInput').value;
+  if (p !== ADMIN_PASSWORD){ alert('Password salah'); return; }
+  try { sessionStorage.setItem('ut_admin_auth', '1'); } catch(_){}
+  showDashboard();
+}
+function logout(){
+  try { sessionStorage.removeItem('ut_admin_auth'); } catch(_){}
+  location.reload();
+}
+$('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+function showDashboard(){
+  $('loginScreen').classList.add('hide');
+  $('dashboard').classList.remove('hide');
+  startListeners();
+}
+
+if (sessionStorage.getItem('ut_admin_auth') === '1') showDashboard();
+else $('passInput').focus();
+
+/* ---------- LIVE LISTENERS ---------- */
+function startListeners(){
+  db.ref('rooms').on('value', snap => {
+    allRooms = snap.val() || {};
+    renderRooms();
+    renderTopStats();
+  });
+  db.ref('stats/users').on('value', snap => {
+    allUsers = snap.val() || {};
+    renderUsers();
+    renderTopStats();
+  });
+  db.ref('stats/totals').on('value', snap => {
+    const t = snap.val() || {};
+    if (typeof t.users === 'number') $('sUsers').textContent = t.users;
+    if (typeof t.games === 'number') $('sGames').textContent = t.games;
+    if (typeof t.rooms === 'number') $('sRoomsTotal').textContent = t.rooms;
+  });
+  // Tick last-update
+  setInterval(() => {
+    $('lastUpdate').textContent = 'Live · update terakhir ' + new Date().toLocaleTimeString('id-ID');
+    renderTopStats(); // re-eval activeNow window
+    renderUsers();    // re-eval rel times
+    renderRooms();    // re-eval rel times
+  }, 10000);
+  $('lastUpdate').textContent = 'Live · ' + new Date().toLocaleTimeString('id-ID');
+}
+
+/* ---------- TOP STATS ---------- */
+function renderTopStats(){
+  // active users (lastSeen < 5 min)
+  const now = Date.now();
+  const ACTIVE_MS = 5 * 60 * 1000;
+  let active = 0;
+  for (const u of Object.values(allUsers)){
+    if (u && u.lastSeen && (now - u.lastSeen) < ACTIVE_MS) active++;
+  }
+  $('sActive').textContent = active;
+  // active rooms + players currently playing
+  let aRooms = 0, playing = 0;
+  for (const r of Object.values(allRooms)){
+    if (!r) continue;
+    aRooms++;
+    if (r.status === 'playing' || r.status === 'challenge'){
+      const ps = r.players || {};
+      for (const p of Object.values(ps)) if (p && p.online !== false) playing++;
+    }
+  }
+  $('sRoomsActive').textContent = aRooms;
+  $('sPlaying').textContent = playing;
+  // user count card (fallback if totals.users not set)
+  if (!Number($('sUsers').textContent)) $('sUsers').textContent = Object.keys(allUsers).length;
+}
+
+/* ---------- ROOMS ---------- */
+function relTime(ts){
+  if (!ts) return '–';
+  const d = Date.now() - ts;
+  if (d < 60_000) return Math.max(1, Math.floor(d/1000))+' dtk lalu';
+  if (d < 3600_000) return Math.floor(d/60_000)+' mnt lalu';
+  if (d < 86400_000) return Math.floor(d/3600_000)+' jam lalu';
+  return Math.floor(d/86400_000)+' hari lalu';
+}
+function timeFull(ts){
+  if (!ts) return '–';
+  return new Date(ts).toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+}
+
+function renderRooms(){
+  const container = $('roomsList');
+  const codes = Object.keys(allRooms);
+  $('roomCountPill').textContent = codes.length;
+  if (!codes.length){
+    container.innerHTML = '<div class="empty">😴 Belum ada room aktif</div>';
+    return;
+  }
+  // Sort: lobby+playing first (by createdAt desc), done last
+  const sorted = codes.slice().sort((a,b) => {
+    const ra = allRooms[a], rb = allRooms[b];
+    const stRank = s => s === 'playing' ? 0 : s === 'challenge' ? 1 : s === 'lobby' ? 2 : 3;
+    const sa = stRank(ra?.status), sb = stRank(rb?.status);
+    if (sa !== sb) return sa - sb;
+    return (rb?.createdAt || 0) - (ra?.createdAt || 0);
+  });
+  let html = '<div class="rooms-grid">';
+  for (const code of sorted){
+    html += renderRoomCard(code, allRooms[code]);
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderRoomCard(code, room){
+  if (!room) return '';
+  const status = room.status || 'unknown';
+  const statusLabel = { lobby: 'Lobby', playing: 'Bertanding', done: 'Selesai', challenge: 'Tantangan' }[status] || status;
+  const players = room.players || {};
+  const slots = [];
+  for (let i=0; i<4; i++){
+    if (players[i]) slots.push({ idx: i, ...players[i] });
+  }
+  const turnIdx = room.currentTurn ?? 0;
+
+  let playersHtml = '';
+  if (slots.length === 0){
+    playersHtml = '<div style="font-size:12px;color:#a78fd0;text-align:center;padding:8px">Kosong</div>';
+  } else {
+    for (const p of slots){
+      const c1 = p.color1 || '#888';
+      const c2 = p.color2 || c1;
+      const isOff = p.online === false;
+      let tags = '';
+      if (p.idx === 0) tags += '<span class="rp-tag tag-host">HOST</span>';
+      if (p.idx === turnIdx && (status === 'playing' || status === 'challenge')) tags += '<span class="rp-tag tag-turn">GILIRAN</span>';
+      if (p.isAdmin) tags += '<span class="rp-tag tag-admin">ADMIN</span>';
+      if (isOff) tags += '<span class="rp-tag tag-off">OFFLINE</span>';
+      playersHtml += `
+        <div class="rp">
+          <div class="rp-dot" style="background:linear-gradient(135deg, ${c1}, ${c2})"></div>
+          <div class="rp-name">${escHtml(p.name || 'Pemain')}</div>
+          ${tags}
+          <div class="rp-pos">📍${p.position||0}</div>
+        </div>`;
+    }
+  }
+  // Slot kosong indicator
+  const empty = 4 - slots.length;
+  if (empty > 0){
+    playersHtml += `<div style="font-size:11px;color:#6b5b8a;text-align:center">+${empty} slot kosong</div>`;
+  }
+
+  const created = room.createdAt;
+  const winner = room.winner != null && players[room.winner] ? players[room.winner].name : null;
+
+  return `
+    <div class="room-card status-${status}">
+      <div class="room-head">
+        <div class="room-code">${escHtml(code)}</div>
+        <span class="room-status ss-${status}">${statusLabel}</span>
+      </div>
+      <div class="room-meta">
+        🕐 Dibuat ${relTime(created)} · ${slots.length}/4 pemain
+        ${winner ? '<br>🏆 Menang: <strong>'+escHtml(winner)+'</strong>' : ''}
+        ${room.gameMode ? '<br>🎯 Mode: '+escHtml(room.gameMode) : ''}
+      </div>
+      <div class="room-players">${playersHtml}</div>
+      <div class="room-actions">
+        <button class="btn btn-info btn-sm" onclick="adminJoinRoom('${code}')">🚪 Masuk</button>
+        <button class="btn btn-ghost btn-sm" onclick="viewRoomJSON('${code}')">📋 Detail</button>
+        <button class="btn btn-danger btn-sm" onclick="adminDeleteRoom('${code}')">🗑️ Hapus</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- USERS ---------- */
+function renderUsers(){
+  const list = Object.entries(allUsers)
+    .map(([id, u]) => ({ id, ...(u||{}) }))
+    .filter(u => u.clientId || u.name)
+    .sort((a,b) => (b.lastSeen||0) - (a.lastSeen||0))
+    .slice(0, 50);
+  $('userCountPill').textContent = Object.keys(allUsers).length;
+  const tbl = $('usersTable');
+  // Keep header, replace rows
+  let html = `
+    <div class="row head">
+      <div>Nama</div>
+      <div>Total Game</div>
+      <div>Pertama Main</div>
+      <div>Terakhir Aktif</div>
+      <div></div>
+    </div>`;
+  if (!list.length){
+    html += '<div class="empty">Belum ada user terdata</div>';
+  } else {
+    const now = Date.now();
+    for (const u of list){
+      const isLive = u.lastSeen && (now - u.lastSeen) < 5*60*1000;
+      html += `
+        <div class="row">
+          <div><span class="live ${isLive?'':'off'}"></span>${escHtml(u.name || '(tanpa nama)')}</div>
+          <div>${u.totalGames || 0}</div>
+          <div>${timeFull(u.firstSeen)}</div>
+          <div>${relTime(u.lastSeen)}</div>
+          <div><button class="btn btn-sm btn-danger" title="Hapus dari catatan" onclick="adminDeleteUser('${u.id}')">×</button></div>
+        </div>`;
+    }
+  }
+  tbl.innerHTML = html;
+}
+
+/* ---------- ACTIONS ---------- */
+function adminJoinRoom(code){
+  // Buka game di tab baru dengan flag admin
+  const url = '../?join=' + encodeURIComponent(code) + '&admin=1';
+  window.open(url, '_blank');
+}
+
+function adminDeleteRoom(code){
+  confirmAsk('Hapus Room ' + code, 'Yakin hapus room ini? Pemain di dalamnya bakal kelempar keluar.', async () => {
+    try {
+      await db.ref('rooms/'+code).remove();
+      toast('✓ Room ' + code + ' dihapus');
+    } catch(e){ toast('Gagal: ' + e.message); }
+  });
+}
+
+function adminDeleteUser(id){
+  confirmAsk('Hapus user', 'Hapus catatan user ini?', async () => {
+    try { await db.ref('stats/users/'+id).remove(); toast('✓ User dihapus'); }
+    catch(e){ toast('Gagal: ' + e.message); }
+  });
+}
+
+function viewRoomJSON(code){
+  const data = allRooms[code];
+  const w = window.open('', '_blank');
+  w.document.write('<title>Room '+code+' — JSON</title><pre style="font:13px monospace;padding:20px;background:#0f0a1f;color:#fff;min-height:100vh;margin:0">'+
+    escHtml(JSON.stringify(data, null, 2)) + '</pre>');
+}
+
+async function bulkCleanStale(){
+  confirmAsk('Hapus Room Tidak Aktif', 'Hapus semua room yg dibuat > 1 jam lalu & tidak ada pemain online?', async () => {
+    const now = Date.now();
+    let n = 0;
+    for (const [code, room] of Object.entries(allRooms)){
+      if (!room) continue;
+      const age = now - (room.createdAt || 0);
+      if (age < 3600_000) continue;
+      const players = room.players || {};
+      const anyOnline = Object.values(players).some(p => p && p.online !== false);
+      if (!anyOnline){
+        await db.ref('rooms/'+code).remove();
+        n++;
+      }
+    }
+    toast('✓ ' + n + ' room dihapus');
+  });
+}
+async function bulkCleanFinished(){
+  confirmAsk('Hapus Room Selesai', 'Hapus semua room yg statusnya "done"?', async () => {
+    let n = 0;
+    for (const [code, room] of Object.entries(allRooms)){
+      if (room && room.status === 'done'){ await db.ref('rooms/'+code).remove(); n++; }
+    }
+    toast('✓ ' + n + ' room dihapus');
+  });
+}
+async function bulkResetStats(){
+  confirmAsk('RESET COUNTER', 'Reset semua counter (totalUsers, totalGames, totalRooms) ke 0? User & room asli ga terhapus, cuma angka totalnya yg di-nol-in.', async () => {
+    try {
+      await db.ref('stats/totals').remove();
+      toast('✓ Counter di-reset');
+    } catch(e){ toast('Gagal: ' + e.message); }
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "Lawrenz Anime ID",
+  "short_name": "Lawnime ID",
+  "description": "Nonton anime Sub Indo terlengkap. Semua anime ongoing & completed, update otomatis.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07070e",
+  "theme_color": "#FF6B00",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "video"],
+  "lang": "id"
+}

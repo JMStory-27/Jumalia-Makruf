@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Anisub"
+version = "1.0.0"
+id = "artifacts/anisub"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23014
+
+[services.development]
+run = "pnpm --filter @workspace/anisub run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/anisub", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/anisub/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23014"
+BASE_PATH = "/"

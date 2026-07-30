@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎨 Preview Tema Title</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#d4af37;--bg:#06060f;--txt:#f0eaff;--txt2:#8a82aa;--rad:14px}
+body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ─── HEADER ─── */
+.hdr{text-align:center;padding:28px 16px 16px;position:relative;z-index:10}
+.hdr h1{font-size:clamp(20px,5vw,36px);font-weight:900;background:linear-gradient(135deg,#d4af37,#ec4899,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+.hdr p{color:var(--txt2);font-size:13px;margin-top:6px}
+
+/* ─── VARIANT TABS ─── */
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 12px 16px;position:relative;z-index:10}
+.tab{padding:8px 18px;border-radius:20px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--txt2);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab.active{border-color:var(--gold);background:rgba(212,175,55,.15);color:var(--gold)}
+
+/* ─── VARIANT SECTIONS ─── */
+.variant{display:none;animation:fadeIn .3s ease}
+.variant.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── TITLE GRID ─── */
+.title-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:0 12px 80px;max-width:1100px;margin:0 auto}
+
+/* ─── TITLE CARD BASE ─── */
+.tc{border-radius:18px;padding:16px 12px 14px;cursor:pointer;transition:transform .22s,box-shadow .22s;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;border:1.5px solid transparent}
+.tc:hover{transform:translateY(-4px) scale(1.03)}
+.tc-num{position:absolute;top:8px;left:10px;font-size:10px;opacity:.5;font-weight:700}
+.tc-icon{font-size:36px;line-height:1;position:relative;z-index:2}
+.tc-name{font-size:11px;font-weight:800;text-align:center;line-height:1.2;position:relative;z-index:2}
+.tc-label{font-size:10px;text-align:center;opacity:.65;position:relative;z-index:2}
+.tc-bar{width:80%;height:3px;border-radius:2px;margin-top:2px;position:relative;z-index:2}
+.tc-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.particle{position:absolute;border-radius:50%;pointer-events:none}
+
+/* ─── FULLSCREEN PREVIEW OVERLAY ─── */
+.preview-ov{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:0;overflow-y:auto}
+.preview-ov.show{display:flex}
+.pov-close{position:fixed;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.6);border:1.5px solid rgba(255,255,255,.2);color:#fff;font-size:18px;cursor:pointer;z-index:600;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.pov-phone{width:100%;max-width:400px;min-height:100vh;padding:20px 16px 40px;display:flex;flex-direction:column;gap:12px;position:relative}
+
+/* ─── MOCK PROFILE COMPONENTS ─── */
+.mock-header{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.1)}
+.mock-av{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;border:3px solid;position:relative}
+.mock-av-ring{position:absolute;inset:-4px;border-radius:50%;border:2px solid;animation:ringPulse 2s ease-in-out infinite}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.1);opacity:1}}
+.mock-info{flex:1}
+.mock-name{font-size:15px;font-weight:800;margin-bottom:3px}
+.mock-title-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:4px}
+.mock-elo{font-size:11px;opacity:.6}
+.mock-card{border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,.08)}
+.mock-card-title{font-size:11px;font-weight:700;opacity:.6;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.mock-stat-row{display:flex;justify-content:space-around}
+.mock-stat{text-align:center}
+.mock-stat-val{font-size:20px;font-weight:900}
+.mock-stat-lbl{font-size:9px;opacity:.5;text-transform:uppercase}
+.mock-xp-bar{height:8px;border-radius:4px;overflow:hidden;margin-top:8px;background:rgba(255,255,255,.08)}
+.mock-xp-fill{height:100%;border-radius:4px;width:68%}
+.mock-btn{padding:14px;border-radius:12px;border:none;font-size:13px;font-weight:700;cursor:pointer;text-align:center;margin-top:4px}
+
+/* ─── PICK BAR ─── */
+.pick-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(6,6,15,.95);border-top:1px solid rgba(255,255,255,.08);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(12px)}
+.pick-bar span{font-size:12px;color:var(--txt2);flex:1}
+.pick-btn{padding:11px 24px;border-radius:12px;border:none;background:var(--gold);color:#000;font-weight:900;font-size:14px;cursor:pointer;white-space:nowrap}
+
+/* ══════════════════════════════════════
+   VARIANT A — ELEMENTAL REALM
+══════════════════════════════════════ */
+.va-1{background:linear-gradient(135deg,#0d0a06,#1a1208);border-color:#5a3e1b}
+.va-2{background:linear-gradient(135deg,#0a0e06,#121808);border-color:#3a5a1a}
+.va-3{background:linear-gradient(135deg,#0a0e08,#0f1a0a);border-color:#4a7a2a}
+.va-4{background:linear-gradient(135deg,#0c100a,#142010);border-color:#5a8a3a}
+.va-5{background:linear-gradient(135deg,#120c06,#201408);border-color:#8a4a1a;box-shadow:0 0 20px rgba(180,80,20,.2)}
+.va-6{background:linear-gradient(135deg,#140a04,#261208);border-color:#c06020;box-shadow:0 0 25px rgba(200,100,30,.25)}
+.va-7{background:linear-gradient(135deg,#180806,#2a100a);border-color:#e04020;animation:vaFirePulse 2s ease-in-out infinite}
+.va-8{background:linear-gradient(135deg,#1a0604,#300808);border-color:#ff3010;animation:vaFirePulse 1.8s ease-in-out infinite}
+@keyframes vaFirePulse{0%,100%{box-shadow:0 0 20px rgba(255,60,20,.3)}50%{box-shadow:0 0 40px rgba(255,80,20,.6)}}
+.va-9{background:linear-gradient(135deg,#060a18,#0a1230);border-color:#2060e0;box-shadow:0 0 25px rgba(40,100,220,.3)}
+.va-10{background:linear-gradient(135deg,#040818,#081228);border-color:#4080ff;box-shadow:0 0 30px rgba(60,120,255,.35);animation:vaStormPulse 2s ease-in-out infinite}
+@keyframes vaStormPulse{0%,100%{box-shadow:0 0 25px rgba(60,120,255,.3)}50%{box-shadow:0 0 50px rgba(80,150,255,.6)}}
+.va-11{background:linear-gradient(135deg,#080618,#100a2a);border-color:#8040ff;animation:vaStormPulse 1.8s ease-in-out infinite}
+.va-12{background:linear-gradient(135deg,#080418,#0e0830);border-color:#a060ff;animation:vaLightning 1.5s ease-in-out infinite}
+@keyframes vaLightning{0%,90%,100%{box-shadow:0 0 30px rgba(160,96,255,.4)}91%,93%{box-shadow:0 0 80px rgba(200,150,255,.9)}}
+.va-13{background:linear-gradient(135deg,#08060a,#14080a);border-color:#c060a0;box-shadow:0 0 35px rgba(200,96,160,.4)}
+.va-14{background:linear-gradient(135deg,#100408,#200610);border-color:#e080c0;animation:vaCosmicPulse 2s ease-in-out infinite}
+@keyframes vaCosmicPulse{0%,100%{box-shadow:0 0 40px rgba(220,120,180,.45)}50%{box-shadow:0 0 70px rgba(240,140,200,.7)}}
+.va-15{background:linear-gradient(135deg,#0a0408,#1a0610,#0a0408);border-color:#ffd700;animation:vaGoldPulse 1.5s ease-in-out infinite}
+@keyframes vaGoldPulse{0%,100%{box-shadow:0 0 40px rgba(255,215,0,.5),0 0 0 1px rgba(255,215,0,.2)}50%{box-shadow:0 0 80px rgba(255,215,0,.8),0 0 0 2px rgba(255,215,0,.4)}}
+.va-16{background:linear-gradient(135deg,#060208,#100418);border-color:#e0d0ff;animation:vaDiaPulse 1.2s ease-in-out infinite}
+@keyframes vaDiaPulse{0%,100%{box-shadow:0 0 50px rgba(224,208,255,.5),0 0 0 2px rgba(200,180,255,.3)}50%{box-shadow:0 0 90px rgba(224,208,255,.8),0 0 0 3px rgba(220,200,255,.5)}}
+.va-17{background:conic-gradient(from 0deg,#06060f,#1a0030,#0a1040,#06060f);border-color:#c0a0ff;animation:vaGalaxy 3s linear infinite}
+@keyframes vaGalaxy{from{border-color:#c0a0ff}25%{border-color:#80d0ff}50%{border-color:#ffd0ff}75%{border-color:#80ffff}to{border-color:#c0a0ff}}
+.va-18{background:radial-gradient(circle at 50% 50%,#2a0040,#06060f);border:2px solid transparent;background-clip:padding-box;animation:vaDivinePulse .8s ease-in-out infinite;position:relative}
+.va-18::before{content:'';position:absolute;inset:-2px;border-radius:20px;background:conic-gradient(from 0deg,#ff0080,#ffd700,#00ff80,#0080ff,#ff0080);z-index:-1;animation:vaRainbow 2s linear infinite}
+@keyframes vaRainbow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes vaDivinePulse{0%,100%{box-shadow:0 0 60px rgba(255,100,255,.6),0 0 120px rgba(255,200,0,.4)}50%{box-shadow:0 0 100px rgba(255,150,255,.9),0 0 200px rgba(255,220,100,.6)}}
+
+/* ══════════════════════════════════════
+   VARIANT B — RPG TIER
+══════════════════════════════════════ */
+.vb-common{background:linear-gradient(160deg,#1a1a1a,#0f0f0f);border-color:#555}
+.vb-uncommon{background:linear-gradient(160deg,#0a1a0a,#050f05);border-color:#22c55e;box-shadow:0 0 15px rgba(34,197,94,.2)}
+.vb-rare{background:linear-gradient(160deg,#080a20,#040618);border-color:#3b82f6;box-shadow:0 0 20px rgba(59,130,246,.3);animation:vbRarePulse 2.5s ease-in-out infinite}
+@keyframes vbRarePulse{0%,100%{box-shadow:0 0 20px rgba(59,130,246,.25)}50%{box-shadow:0 0 40px rgba(59,130,246,.5)}}
+.vb-epic{background:linear-gradient(160deg,#100820,#060410);border-color:#a855f7;box-shadow:0 0 25px rgba(168,85,247,.35);animation:vbEpicPulse 2s ease-in-out infinite}
+@keyframes vbEpicPulse{0%,100%{box-shadow:0 0 25px rgba(168,85,247,.35)}50%{box-shadow:0 0 55px rgba(168,85,247,.65)}}
+.vb-legendary{background:linear-gradient(160deg,#201008,#0f0804);border-color:#f59e0b;box-shadow:0 0 30px rgba(245,158,11,.4);animation:vbLegPulse 1.8s ease-in-out infinite}
+@keyframes vbLegPulse{0%,100%{box-shadow:0 0 30px rgba(245,158,11,.4)}50%{box-shadow:0 0 65px rgba(245,158,11,.75)}}
+.vb-mythic{background:radial-gradient(circle at 50% 50%,#150020,#080010);border:2px solid transparent;animation:vbMythicBorder 2s linear infinite;position:relative}
+.vb-mythic::before{content:'';position:absolute;inset:-2px;border-radius:20px;background:conic-gradient(#ff6ec7,#ffd700,#7cffcb,#ff6ec7);z-index:-1;animation:vaRainbow 3s linear infinite}
+
+/* ══════════════════════════════════════
+   VARIANT C — CYBER NEON
+══════════════════════════════════════ */
+.vc-1{background:#0a0a0a;border-color:#333}
+.vc-2{background:#080810;border-color:#1a1a3a}
+.vc-3{background:#060812;border-color:#002244}
+.vc-4{background:#050812;border-color:#003366}
+.vc-5{background:#060a14;border-color:#0044aa;box-shadow:0 0 12px rgba(0,68,170,.2)}
+.vc-6{background:#040a10;border-color:#0066cc;box-shadow:0 0 18px rgba(0,102,204,.3)}
+.vc-7{background:#040c14;border-color:#0088ff;box-shadow:0 0 22px rgba(0,136,255,.35);animation:vcNeonPulse 2s ease-in-out infinite}
+@keyframes vcNeonPulse{0%,100%{box-shadow:0 0 20px rgba(0,136,255,.3)}50%{box-shadow:0 0 45px rgba(0,150,255,.6)}}
+.vc-8{background:#06040e;border-color:#4400cc;animation:vcPurPulse 2s ease-in-out infinite}
+@keyframes vcPurPulse{0%,100%{box-shadow:0 0 25px rgba(68,0,204,.4)}50%{box-shadow:0 0 55px rgba(100,0,255,.7)}}
+.vc-9{background:#080410;border-color:#6600ff;animation:vcPurPulse 1.8s ease-in-out infinite}
+.vc-10{background:#0a0410;border-color:#cc00ff;box-shadow:0 0 30px rgba(204,0,255,.4);animation:vcMagPulse 1.8s ease-in-out infinite}
+@keyframes vcMagPulse{0%,100%{box-shadow:0 0 30px rgba(204,0,255,.4)}50%{box-shadow:0 0 65px rgba(220,0,255,.75)}}
+.vc-11{background:#0c0410;border-color:#ff00cc;animation:vcPinkPulse 1.6s ease-in-out infinite}
+@keyframes vcPinkPulse{0%,100%{box-shadow:0 0 35px rgba(255,0,204,.5)}50%{box-shadow:0 0 75px rgba(255,50,220,.85)}}
+.vc-12{background:#0c0408;border-color:#ff0066;animation:vcRedPulse 1.5s ease-in-out infinite}
+@keyframes vcRedPulse{0%,100%{box-shadow:0 0 35px rgba(255,0,102,.5)}50%{box-shadow:0 0 80px rgba(255,0,120,.9)}}
+.vc-13{background:#100202;border-color:#ff3300;animation:vcOranPulse 1.4s ease-in-out infinite}
+@keyframes vcOranPulse{0%,100%{box-shadow:0 0 40px rgba(255,51,0,.55)}50%{box-shadow:0 0 85px rgba(255,80,0,.9)}}
+.vc-14{background:#120800;border-color:#ff6600;animation:vcOranPulse 1.3s ease-in-out infinite}
+.vc-15{background:#100800;border-color:#ffaa00;animation:vcGoldPulse 1.2s ease-in-out infinite}
+@keyframes vcGoldPulse{0%,100%{box-shadow:0 0 45px rgba(255,170,0,.6)}50%{box-shadow:0 0 100px rgba(255,200,0,.95)}}
+.vc-16{background:#080808;border-color:#ffffff;animation:vcWhitePulse 1s ease-in-out infinite}
+@keyframes vcWhitePulse{0%,100%{box-shadow:0 0 30px rgba(255,255,255,.3)}50%{box-shadow:0 0 80px rgba(255,255,255,.7)}}
+.vc-17{background:#000000;border:2px solid transparent;position:relative;animation:vcRainbowBorder 1.5s linear infinite}
+.vc-17::before{content:'';position:absolute;inset:-2px;border-radius:20px;background:linear-gradient(90deg,#ff0080,#ffd700,#00ff80,#0080ff,#ff0080);background-size:400% 100%;z-index:-1;animation:vcRainbowShift 1.5s linear infinite}
+@keyframes vcRainbowShift{from{background-position:0% center}to{background-position:400% center}}
+.vc-18{background:radial-gradient(circle,#ffffff08,#000000);border:3px solid #fff;animation:vcUltimate .6s ease-in-out infinite alternate}
+@keyframes vcUltimate{from{box-shadow:0 0 60px #fff,0 0 120px #ff0080,0 0 200px #ffd700}to{box-shadow:0 0 80px #fff,0 0 160px #0080ff,0 0 250px #00ff80}}
+
+/* ══════════════════════════════════════
+   VARIANT D — ROYAL DYNASTY
+══════════════════════════════════════ */
+.vd-1{background:linear-gradient(160deg,#1a1008,#100a04);border-color:#5a3a1a}
+.vd-2{background:linear-gradient(160deg,#1a140a,#100e06);border-color:#7a5a2a}
+.vd-3{background:linear-gradient(160deg,#181612,#100e0a);border-color:#8a7a5a}
+.vd-4{background:linear-gradient(160deg,#1a1818,#121010);border-color:#8a8888}
+.vd-5{background:linear-gradient(160deg,#181820,#101018);border-color:#9090b0;box-shadow:0 0 10px rgba(144,144,176,.15)}
+.vd-6{background:linear-gradient(160deg,#141420,#0c0c18);border-color:#b0b0d0;box-shadow:0 0 15px rgba(176,176,208,.2)}
+.vd-7{background:linear-gradient(160deg,#181820,#101020);border-color:#c0c0e0;box-shadow:0 0 20px rgba(192,192,224,.25);animation:vdSilverPulse 2.5s ease-in-out infinite}
+@keyframes vdSilverPulse{0%,100%{box-shadow:0 0 20px rgba(192,192,224,.25)}50%{box-shadow:0 0 45px rgba(200,200,240,.5)}}
+.vd-8{background:linear-gradient(160deg,#1a1820,#12101c);border-color:#d0d0f0;animation:vdSilverPulse 2s ease-in-out infinite}
+.vd-9{background:linear-gradient(160deg,#1c1408,#120e04);border-color:#c09020;box-shadow:0 0 20px rgba(192,144,32,.25)}
+.vd-10{background:linear-gradient(160deg,#1c1204,#120c02);border-color:#d4a030;box-shadow:0 0 25px rgba(212,160,48,.35);animation:vdGoldPulse 2s ease-in-out infinite}
+@keyframes vdGoldPulse{0%,100%{box-shadow:0 0 25px rgba(212,160,48,.35)}50%{box-shadow:0 0 55px rgba(212,175,55,.65)}}
+.vd-11{background:linear-gradient(160deg,#1a1004,#100a02);border-color:#d4af37;animation:vdGoldPulse 1.8s ease-in-out infinite}
+.vd-12{background:linear-gradient(160deg,#160c02,#0c0802);border-color:#ffd700;animation:vdGold2Pulse 1.6s ease-in-out infinite}
+@keyframes vdGold2Pulse{0%,100%{box-shadow:0 0 30px rgba(255,215,0,.45)}50%{box-shadow:0 0 65px rgba(255,215,0,.75)}}
+.vd-13{background:linear-gradient(160deg,#140208,#0c0204);border-color:#e8b4d0;box-shadow:0 0 30px rgba(232,180,208,.3);animation:vdRubyPulse 1.8s ease-in-out infinite}
+@keyframes vdRubyPulse{0%,100%{box-shadow:0 0 30px rgba(232,120,180,.35)}50%{box-shadow:0 0 65px rgba(240,140,190,.65)}}
+.vd-14{background:linear-gradient(160deg,#0e0214,#060008);border-color:#d090f0;animation:vdPurpPulse 1.6s ease-in-out infinite}
+@keyframes vdPurpPulse{0%,100%{box-shadow:0 0 35px rgba(208,144,240,.4)}50%{box-shadow:0 0 75px rgba(220,160,255,.7)}}
+.vd-15{background:radial-gradient(circle at 50% 30%,#200428,#080010);border-color:#ff80ff;animation:vdEmpPulse 1.4s ease-in-out infinite}
+@keyframes vdEmpPulse{0%,100%{box-shadow:0 0 40px rgba(255,128,255,.5),inset 0 0 30px rgba(200,0,200,.15)}50%{box-shadow:0 0 80px rgba(255,150,255,.8),inset 0 0 50px rgba(220,0,220,.25)}}
+.vd-16{background:radial-gradient(circle at 50% 40%,#0a0818,#020408);border-color:#e0e8ff;animation:vdDiaPulse 1.2s ease-in-out infinite}
+@keyframes vdDiaPulse{0%,100%{box-shadow:0 0 45px rgba(200,220,255,.5),0 0 0 1px rgba(220,230,255,.2)}50%{box-shadow:0 0 90px rgba(220,235,255,.8),0 0 0 3px rgba(230,240,255,.4)}}
+.vd-17{background:radial-gradient(circle,#100018,#03000a);border:2px solid transparent;position:relative}
+.vd-17::before{content:'';position:absolute;inset:-2px;border-radius:20px;background:conic-gradient(from 0deg,#ffd700,#ff80ff,#80d0ff,#ffd700);z-index:-1;animation:vaRainbow 3s linear infinite}
+.vd-18{background:radial-gradient(circle at 50% 40%,#200830,#04000a);position:relative;overflow:visible;border:3px solid #ffd700;animation:vdGodPulse .9s ease-in-out infinite}
+@keyframes vdGodPulse{0%,100%{box-shadow:0 0 50px #ffd700,0 0 100px rgba(255,100,255,.6),0 0 200px rgba(100,180,255,.4)}50%{box-shadow:0 0 80px #ffd700,0 0 160px rgba(255,150,255,.9),0 0 300px rgba(150,200,255,.6)}}
+
+/* ══════════════════════════════════════
+   VARIANT E — COSMIC EVOLUTION
+══════════════════════════════════════ */
+.ve-1{background:radial-gradient(circle at 50% 80%,#1a1008,#06060e);border-color:#5a4020}
+.ve-2{background:radial-gradient(circle at 50% 70%,#0a1418,#06060e);border-color:#204060}
+.ve-3{background:radial-gradient(circle at 60% 60%,#0c1820,#06060e);border-color:#2060a0}
+.ve-4{background:radial-gradient(circle at 60% 50%,#0a1830,#06060e);border-color:#2080c0;box-shadow:0 0 15px rgba(32,128,192,.2)}
+.ve-5{background:radial-gradient(circle at 50% 40%,#0a1440,#06060e);border-color:#3060e0;box-shadow:0 0 20px rgba(48,96,224,.25);animation:veOrbitPulse 3s ease-in-out infinite}
+@keyframes veOrbitPulse{0%,100%{box-shadow:0 0 20px rgba(48,96,224,.25)}50%{box-shadow:0 0 45px rgba(64,120,255,.5)}}
+.ve-6{background:radial-gradient(circle at 50% 40%,#080e40,#06060e);border-color:#4080ff;animation:veOrbitPulse 2.5s ease-in-out infinite}
+.ve-7{background:radial-gradient(circle at 50% 30%,#10083a,#06060e);border-color:#6040e0;animation:veAstPulse 2.5s ease-in-out infinite}
+@keyframes veAstPulse{0%,100%{box-shadow:0 0 25px rgba(96,64,224,.35)}50%{box-shadow:0 0 55px rgba(120,80,255,.65)}}
+.ve-8{background:radial-gradient(circle at 50% 30%,#180640,#06060e);border-color:#9040e0;animation:veAstPulse 2s ease-in-out infinite}
+.ve-9{background:radial-gradient(ellipse at 50% 60%,#200040,#06060e);border-color:#c060ff;box-shadow:0 0 30px rgba(192,96,255,.35);animation:veNebPulse 2s ease-in-out infinite}
+@keyframes veNebPulse{0%,100%{box-shadow:0 0 30px rgba(192,96,255,.35)}50%{box-shadow:0 0 65px rgba(210,110,255,.7)}}
+.ve-10{background:radial-gradient(ellipse at 50% 50%,#300060,#06060e);border-color:#e080ff;animation:veNebPulse 1.8s ease-in-out infinite}
+.ve-11{background:radial-gradient(ellipse at 50% 50%,#200840,#ff006008);border-color:#ff80c0;animation:veNebPulse2 1.8s ease-in-out infinite}
+@keyframes veNebPulse2{0%,100%{box-shadow:0 0 35px rgba(255,128,192,.4)}50%{box-shadow:0 0 75px rgba(255,150,210,.75)}}
+.ve-12{background:radial-gradient(ellipse at 50% 40%,#280640,#ff006010,#06060e);border-color:#ff60e0;animation:veNovaPulse 1.6s ease-in-out infinite}
+@keyframes veNovaPulse{0%,100%{box-shadow:0 0 40px rgba(255,96,224,.5)}50%{box-shadow:0 0 85px rgba(255,120,240,.85)}}
+.ve-13{background:radial-gradient(ellipse at 50% 40%,#300820,#ffd70008,#06060e);border-color:#ffd700;animation:veNovaPulse2 1.4s ease-in-out infinite}
+@keyframes veNovaPulse2{0%,100%{box-shadow:0 0 45px rgba(255,215,0,.55)}50%{box-shadow:0 0 95px rgba(255,215,0,.9)}}
+.ve-14{background:radial-gradient(ellipse at 50% 50%,#000000,#ffd70012,#06060e);border-color:#ffe080;animation:veBlackHole 1.2s ease-in-out infinite}
+@keyframes veBlackHole{0%,100%{box-shadow:0 0 40px rgba(255,224,128,.5),inset 0 0 20px rgba(0,0,0,.8)}50%{box-shadow:0 0 80px rgba(255,215,0,.8),inset 0 0 40px rgba(0,0,0,.9)}}
+.ve-15{background:radial-gradient(ellipse at 50% 50%,#060008,#ffffff08,#06060e);border-color:#ffffff;animation:veQuasar 1s ease-in-out infinite}
+@keyframes veQuasar{0%,100%{box-shadow:0 0 50px rgba(255,255,255,.5),0 0 0 2px rgba(255,255,255,.1)}50%{box-shadow:0 0 100px rgba(255,255,255,.9),0 0 0 4px rgba(255,255,255,.3)}}
+.ve-16{background:radial-gradient(ellipse at 50% 50%,#030010,#0a0030,#06060e);border:2px solid transparent;position:relative}
+.ve-16::before{content:'';position:absolute;inset:-2px;border-radius:20px;background:conic-gradient(from 0deg,#8080ff,#ff80ff,#ffd700,#80ffff,#8080ff);z-index:-1;animation:vaRainbow 4s linear infinite}
+.ve-17{background:radial-gradient(ellipse at 50% 50%,#060030,#000010);border:2px solid transparent;position:relative}
+.ve-17::before{content:'';position:absolute;inset:-2px;border-radius:20px;background:conic-gradient(from 0deg,#ffd700,#ffffff,#ffd700,#ffffff,#ffd700);z-index:-1;animation:vaRainbow 2s linear infinite}
+.ve-18{background:radial-gradient(circle at 50% 50%,#ffffff,#8800ff,#000000);border:3px solid transparent;position:relative;animation:veGod .7s ease-in-out infinite}
+.ve-18::before{content:'';position:absolute;inset:-3px;border-radius:22px;background:conic-gradient(from 0deg,#ff0080,#ffd700,#00ff80,#0080ff,#ff00ff,#ff0080);z-index:-1;animation:vaRainbow 1s linear infinite}
+@keyframes veGod{0%,100%{box-shadow:0 0 80px rgba(255,255,255,.8),0 0 200px rgba(200,0,255,.6)}50%{box-shadow:0 0 150px rgba(255,255,255,1),0 0 300px rgba(255,0,200,.8)}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>🎨 5 Variasi Tema Title</h1>
+  <p>Klik kartu untuk preview halaman profil lengkap · Pilih variasi favorit kamu</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('a',this)">🌿 A — Elemental</button>
+  <button class="tab" onclick="switchTab('b',this)">⚔️ B — RPG Tier</button>
+  <button class="tab" onclick="switchTab('c',this)">💡 C — Cyber Neon</button>
+  <button class="tab" onclick="switchTab('d',this)">👑 D — Royal Dynasty</button>
+  <button class="tab" onclick="switchTab('e',this)">🌌 E — Cosmic</button>
+</div>
+
+<div id="va" class="variant show"><div class="title-grid" id="grid-a"></div></div>
+<div id="vb" class="variant"><div class="title-grid" id="grid-b"></div></div>
+<div id="vc" class="variant"><div class="title-grid" id="grid-c"></div></div>
+<div id="vd" class="variant"><div class="title-grid" id="grid-d"></div></div>
+<div id="ve" class="variant"><div class="title-grid" id="grid-e"></div></div>
+
+<!-- FULLSCREEN PREVIEW -->
+<div class="preview-ov" id="previewOv">
+  <button class="pov-close" onclick="closePreview()">✕</button>
+  <div class="pov-phone" id="povPhone"></div>
+</div>
+
+<div class="pick-bar" id="pickBar" style="display:none">
+  <span id="pickBarTxt">Variasi dipilih</span>
+  <button class="pick-btn" onclick="confirmPick()">✅ Pilih Variasi Ini!</button>
+</div>
+
+<script>
+const TITLES=[
+  {name:'🐣 Kroco',lv:1},{name:'🐥 Bocah Catur',lv:2},{name:'👣 Pemula',lv:3},{name:'🎮 Amatir',lv:4},
+  {name:'♟ Pion Sejati',lv:5},{name:'🎯 Pemain',lv:6},{name:'🔥 Pemain Aktif',lv:7},{name:'⚔️ Pemain Tangguh',lv:8},
+  {name:'🏅 Semi Pro',lv:9},{name:'💼 Profesional',lv:10},{name:'🦁 Pro Elite',lv:11},{name:'🧠 Ahli Strategi',lv:12},
+  {name:'🏆 Expert',lv:13},{name:'👨‍🎓 Master Muda',lv:14},{name:'👑 Master',lv:15},
+  {name:'💎 Master Elite',lv:16},{name:'🌠 Grandmaster',lv:17},{name:'⚡ Dewa Catur',lv:18}
+];
+
+// Colors per title per variant
+const COLORS={
+  a:[
+    {bg:'#3d2505',accent:'#a07040',txt:'#d4b07a',bar:'#a07040'},
+    {bg:'#1a3a08',accent:'#5aaa30',txt:'#90d060',bar:'#5aaa30'},
+    {bg:'#1a3a10',accent:'#70cc40',txt:'#a0e070',bar:'#70cc40'},
+    {bg:'#1c4010',accent:'#80dd50',txt:'#b0ee80',bar:'#80dd50'},
+    {bg:'#3a1a05',accent:'#e06020',txt:'#f09050',bar:'#e06020'},
+    {bg:'#401004',accent:'#f07030',txt:'#ffa060',bar:'#f07030'},
+    {bg:'#480a02',accent:'#ff5020',txt:'#ff8055',bar:'#ff5020'},
+    {bg:'#500604',accent:'#ff3010',txt:'#ff7040',bar:'#ff3010'},
+    {bg:'#060a28',accent:'#3080ff',txt:'#70b0ff',bar:'#3080ff'},
+    {bg:'#04082a',accent:'#4090ff',txt:'#80c0ff',bar:'#4090ff'},
+    {bg:'#080428',accent:'#7050ff',txt:'#a080ff',bar:'#7050ff'},
+    {bg:'#060428',accent:'#9060ff',txt:'#c090ff',bar:'#9060ff'},
+    {bg:'#100428',accent:'#c060c0',txt:'#e090e0',bar:'#c060c0'},
+    {bg:'#1a0428',accent:'#e080d0',txt:'#f0b0f0',bar:'#e080d0'},
+    {bg:'#100408',accent:'#ffd700',txt:'#ffe566',bar:'#ffd700'},
+    {bg:'#060210',accent:'#c0b0ff',txt:'#e0d4ff',bar:'#c0b0ff'},
+    {bg:'#040010',accent:'#e0c0ff',txt:'#f0e0ff',bar:'#e0c0ff'},
+    {bg:'#100020',accent:'#ffffff',txt:'#ffffff',bar:'linear-gradient(90deg,#ffd700,#ff80ff,#80ffff)'},
+  ],
+  b:[
+    {bg:'#1a1a1a',accent:'#888',txt:'#ccc',bar:'#666'},{bg:'#1a1a1a',accent:'#999',txt:'#ccc',bar:'#777'},
+    {bg:'#1a1a1a',accent:'#aaa',txt:'#ddd',bar:'#888'},{bg:'#0a1a0a',accent:'#22c55e',txt:'#80ff80',bar:'#22c55e'},
+    {bg:'#0a1a0a',accent:'#30dd70',txt:'#90ffaa',bar:'#30dd70'},{bg:'#080a20',accent:'#3b82f6',txt:'#80c0ff',bar:'#3b82f6'},
+    {bg:'#080a20',accent:'#4a9aff',txt:'#90d0ff',bar:'#4a9aff'},{bg:'#080a20',accent:'#60b0ff',txt:'#a0d8ff',bar:'#60b0ff'},
+    {bg:'#100820',accent:'#a855f7',txt:'#c090ff',bar:'#a855f7'},{bg:'#100820',accent:'#c070ff',txt:'#d8a8ff',bar:'#c070ff'},
+    {bg:'#100820',accent:'#d090ff',txt:'#e8c0ff',bar:'#d090ff'},{bg:'#100820',accent:'#e0a0ff',txt:'#f0d0ff',bar:'#e0a0ff'},
+    {bg:'#201008',accent:'#f59e0b',txt:'#ffd060',bar:'#f59e0b'},{bg:'#201008',accent:'#ffb020',txt:'#ffe080',bar:'#ffb020'},
+    {bg:'#201008',accent:'#ffd700',txt:'#fff080',bar:'#ffd700'},{bg:'#201008',accent:'#ffe040',txt:'#ffffc0',bar:'#ffe040'},
+    {bg:'#150020',accent:'#ff6ec7',txt:'#ffaaee',bar:'linear-gradient(90deg,#ff6ec7,#ffd700,#7cffcb)'},{bg:'#150020',accent:'#ffffff',txt:'#ffffff',bar:'linear-gradient(90deg,#ff6ec7,#ffd700,#7cffcb,#60b0ff)'},
+  ],
+  c:[
+    {bg:'#0a0a0a',accent:'#444',txt:'#888',bar:'#333'},{bg:'#08080e',accent:'#1a1a4a',txt:'#5050a0',bar:'#1a1a4a'},
+    {bg:'#06080e',accent:'#004488',txt:'#0066cc',bar:'#004488'},{bg:'#040810',accent:'#005599',txt:'#0088cc',bar:'#005599'},
+    {bg:'#040a12',accent:'#0066bb',txt:'#0099ff',bar:'#0066bb'},{bg:'#030a0e',accent:'#0080cc',txt:'#00aaff',bar:'#0080cc'},
+    {bg:'#030c12',accent:'#0099ff',txt:'#55ccff',bar:'#0099ff'},{bg:'#04020a',accent:'#5500dd',txt:'#8844ff',bar:'#5500dd'},
+    {bg:'#06020e',accent:'#7700ff',txt:'#aa66ff',bar:'#7700ff'},{bg:'#080210',accent:'#cc00ff',txt:'#ee88ff',bar:'#cc00ff'},
+    {bg:'#0a0210',accent:'#ee00dd',txt:'#ff88ee',bar:'#ee00dd'},{bg:'#0c0208',accent:'#ff0077',txt:'#ff77bb',bar:'#ff0077'},
+    {bg:'#100206',accent:'#ff3300',txt:'#ff8866',bar:'#ff3300'},{bg:'#120800',accent:'#ff6600',txt:'#ffaa44',bar:'#ff6600'},
+    {bg:'#100800',accent:'#ffbb00',txt:'#ffdd66',bar:'#ffbb00'},{bg:'#060606',accent:'#ffffff',txt:'#ffffff',bar:'#cccccc'},
+    {bg:'#000000',accent:'#ff00ff',txt:'#ff88ff',bar:'linear-gradient(90deg,#ff0080,#ffd700,#00ff80,#0080ff)'},{bg:'#000000',accent:'#ffffff',txt:'#ffffff',bar:'linear-gradient(90deg,#ff0080,#ffd700,#00ff80,#0080ff,#ff00ff)'},
+  ],
+  d:[
+    {bg:'#1a1008',accent:'#7a5020',txt:'#b08040',bar:'#7a5020'},{bg:'#1a1408',accent:'#9a7040',txt:'#c0a060',bar:'#9a7040'},
+    {bg:'#181614',accent:'#b09070',txt:'#d0b890',bar:'#b09070'},{bg:'#1a1818',accent:'#b0a8a0',txt:'#d8d0cc',bar:'#b0a8a0'},
+    {bg:'#181820',accent:'#b0b0d0',txt:'#d8d8f0',bar:'#b0b0d0'},{bg:'#141420',accent:'#c0c0e0',txt:'#e0e0ff',bar:'#c0c0e0'},
+    {bg:'#181820',accent:'#d0d0ee',txt:'#e8e8ff',bar:'#d0d0ee'},{bg:'#1a1820',accent:'#e0e0ff',txt:'#f0f0ff',bar:'#e0e0ff'},
+    {bg:'#1c1408',accent:'#c09020',txt:'#e0c060',bar:'#c09020'},{bg:'#1c1204',accent:'#d4a030',txt:'#ead060',bar:'#d4a030'},
+    {bg:'#1a1004',accent:'#d4af37',txt:'#f0d460',bar:'#d4af37'},{bg:'#160c02',accent:'#ffd700',txt:'#ffe566',bar:'#ffd700'},
+    {bg:'#140208',accent:'#e890c0',txt:'#f8c0e0',bar:'#e890c0'},{bg:'#0e0214',accent:'#d890f0',txt:'#ecc0ff',bar:'#d890f0'},
+    {bg:'#100428',accent:'#ff80ff',txt:'#ffbbff',bar:'#ff80ff'},{bg:'#080210',accent:'#c0d8ff',txt:'#e0eeff',bar:'#c0d8ff'},
+    {bg:'#040008',accent:'#e8c0ff',txt:'#f8e8ff',bar:'linear-gradient(90deg,#ffd700,#ff80ff,#c0d8ff)'},{bg:'#200828',accent:'#ffd700',txt:'#fff0aa',bar:'linear-gradient(90deg,#ffd700,#ffffff,#ffd700)'},
+  ],
+  e:[
+    {bg:'#1a1008',accent:'#806040',txt:'#c09060',bar:'#806040'},{bg:'#0a1218',accent:'#204060',txt:'#507090',bar:'#204060'},
+    {bg:'#0a1620',accent:'#2060a0',txt:'#5090d0',bar:'#2060a0'},{bg:'#081830',accent:'#2080c0',txt:'#60b0e0',bar:'#2080c0'},
+    {bg:'#081440',accent:'#3060e0',txt:'#7090ff',bar:'#3060e0'},{bg:'#060e40',accent:'#4080ff',txt:'#80b0ff',bar:'#4080ff'},
+    {bg:'#100838',accent:'#6040e0',txt:'#9070ff',bar:'#6040e0'},{bg:'#180640',accent:'#9040e0',txt:'#c080ff',bar:'#9040e0'},
+    {bg:'#200040',accent:'#c060ff',txt:'#e0a0ff',bar:'#c060ff'},{bg:'#300060',accent:'#e080ff',txt:'#f0c0ff',bar:'#e080ff'},
+    {bg:'#200840',accent:'#ff80c0',txt:'#ffb8e0',bar:'#ff80c0'},{bg:'#280640',accent:'#ff60e0',txt:'#ffaaf0',bar:'#ff60e0'},
+    {bg:'#300820',accent:'#ffd700',txt:'#ffe566',bar:'#ffd700'},{bg:'#000000',accent:'#ffe080',txt:'#fff0b0',bar:'#ffe080'},
+    {bg:'#060008',accent:'#ffffff',txt:'#ffffff',bar:'#cccccc'},{bg:'#030010',accent:'#c0c0ff',txt:'#e0e0ff',bar:'linear-gradient(90deg,#8080ff,#ffd700,#80ffff)'},
+    {bg:'#060030',accent:'#ffd700',txt:'#fff0aa',bar:'linear-gradient(90deg,#ffd700,#ffffff,#ffd700)'},{bg:'#ffffff',accent:'#8800ff',txt:'#ffffff',bar:'linear-gradient(90deg,#ff0080,#ffd700,#00ff80,#0080ff,#ff00ff)'},
+  ]
+};
+
+// Variant classes per title
+const VARCLS={
+  a:['va-1','va-2','va-3','va-4','va-5','va-6','va-7','va-8','va-9','va-10','va-11','va-12','va-13','va-14','va-15','va-16','va-17','va-18'],
+  b:['vb-common','vb-common','vb-common','vb-uncommon','vb-uncommon','vb-rare','vb-rare','vb-rare','vb-epic','vb-epic','vb-epic','vb-epic','vb-legendary','vb-legendary','vb-legendary','vb-legendary','vb-mythic','vb-mythic'],
+  c:['vc-1','vc-2','vc-3','vc-4','vc-5','vc-6','vc-7','vc-8','vc-9','vc-10','vc-11','vc-12','vc-13','vc-14','vc-15','vc-16','vc-17','vc-18'],
+  d:['vd-1','vd-2','vd-3','vd-4','vd-5','vd-6','vd-7','vd-8','vd-9','vd-10','vd-11','vd-12','vd-13','vd-14','vd-15','vd-16','vd-17','vd-18'],
+  e:['ve-1','ve-2','ve-3','ve-4','ve-5','ve-6','ve-7','ve-8','ve-9','ve-10','ve-11','ve-12','ve-13','ve-14','ve-15','ve-16','ve-17','ve-18'],
+};
+
+const VARLABELS={a:'🌿 Elemental Realm',b:'⚔️ RPG Tier',c:'💡 Cyber Neon',d:'👑 Royal Dynasty',e:'🌌 Cosmic Evolution'};
+const VARDESCS={
+  a:'Setiap title punya "elemen" sendiri — bumi, api, petir, kosmik, hingga ilahi ✨',
+  b:'Sistem tier RPG klasik dari Common abu-abu sampai Mythic pelangi 🌈',
+  c:'Neon gelap yang makin bersinar, dari redup sampai menyilaukan saat Dewa Catur ⚡',
+  d:'Tema kerajaan dari rakyat jelata sampai Raja → Emperor → God 👑',
+  e:'Evolusi kosmik dari permukaan planet sampai wujud ilahi bercahaya 🌌'
+};
+
+const BIGICONS=['🌱','🌿','🍃','🍀','🔥','🔥','🌋','💢','⚡','🌪️','🌊','💎','🌸','🔮','👑','💎','🌌','⚡'];
+const VARICONS={
+  a:BIGICONS,
+  b:['🩶','🩶','🩶','💚','💚','💙','💙','💙','💜','💜','💜','💜','🧡','🧡','🧡','🧡','🌈','🌈'],
+  c:['⬛','🔹','🔷','💠','🔵','🔵','🌀','🔮','🟣','🟣','🟣','🔴','🔴','🟠','🟡','⬜','🌈','⚡'],
+  d:['⛏️','🪓','🪚','🔧','🗡️','⚔️','🛡️','🏹','🥇','🥇','👑','👑','💎','💎','🏛️','🌺','🪄','⚡'],
+  e:['🪨','🌊','🌍','🪐','🌙','⭐','☄️','🌌','🌌','🌠','✨','🌟','💫','🌞','🌕','🌈','👼','⚡']
+};
+
+let currentVariant='a';
+
+function buildGrid(v){
+  const grid=document.getElementById('grid-'+v);
+  grid.innerHTML='';
+  TITLES.forEach((t,i)=>{
+    const c=COLORS[v][i];
+    const cls=VARCLS[v][i];
+    const icon=VARICONS[v][i];
+    const div=document.createElement('div');
+    div.className='tc '+cls;
+    div.innerHTML=`
+      <span class="tc-num">#${String(i+1).padStart(2,'0')}</span>
+      <span class="tc-icon">${icon}</span>
+      <div class="tc-name" style="color:${c.txt}">${t.name}</div>
+      <div class="tc-label" style="color:${c.accent}">Level ${(i*10)+1}–${(i+1)*10}</div>
+      <div class="tc-bar" style="background:${c.bar.includes('gradient')?c.bar:'linear-gradient(90deg,'+c.accent+'88,'+c.accent+')'}"></div>
+    `;
+    div.onclick=()=>openPreview(v,i);
+    grid.appendChild(div);
+  });
+}
+
+function openPreview(v,idx){
+  const t=TITLES[idx];
+  const c=COLORS[v][idx];
+  const cls=VARCLS[v][idx];
+  const icon=VARICONS[v][idx];
+  const ov=document.getElementById('previewOv');
+  const phone=document.getElementById('povPhone');
+
+  // Build mock profile page
+  const isHighTier=idx>=12;
+  const particles=idx>=8?buildParticles(c.accent,idx):'';
+
+  phone.innerHTML='';
+  phone.style.cssText=`background:${c.bg};`;
+
+  phone.innerHTML=`
+    ${particles}
+    <div style="text-align:center;padding:12px 0 8px;color:${c.txt};font-size:11px;opacity:.5;font-weight:700;letter-spacing:2px">⚙️ PENGATURAN PROFIL</div>
+
+    <!-- TITLE BANNER -->
+    <div style="text-align:center;padding:14px;border-radius:16px;border:1.5px solid ${c.accent}22;background:${c.accent}10;margin-bottom:4px">
+      <div style="font-size:40px;margin-bottom:6px">${icon}</div>
+      <div style="font-size:22px;font-weight:900;color:${c.txt};text-shadow:0 0 20px ${c.accent};letter-spacing:1px">${t.name}</div>
+      <div style="font-size:10px;color:${c.accent};margin-top:4px;letter-spacing:2px;text-transform:uppercase">Level ${(idx*10)+1} / ${(idx+1)*10}</div>
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="mock-card" style="background:${c.accent}0d;border-color:${c.accent}33">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="mock-av" style="background:${c.accent}22;border-color:${c.accent}">
+          <span style="font-size:28px">😊</span>
+          <div class="mock-av-ring" style="border-color:${c.accent}88"></div>
+        </div>
+        <div style="flex:1">
+          <div class="mock-name" style="color:${c.txt}">NamaKamu</div>
+          <div class="mock-title-badge" style="background:${c.accent}20;border:1px solid ${c.accent}44;color:${c.accent}">${t.name}</div>
+          <div class="mock-elo" style="color:${c.txt}">⭐ 1200 ELO &nbsp;·&nbsp; 🇮🇩 Indonesia</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS CARD -->
+    <div class="mock-card" style="background:${c.accent}08;border-color:${c.accent}22">
+      <div class="mock-card-title" style="color:${c.accent}">Statistik Bermain</div>
+      <div class="mock-stat-row">
+        <div class="mock-stat"><div class="mock-stat-val" style="color:${c.txt}">142</div><div class="mock-stat-lbl" style="color:${c.accent}88">Games</div></div>
+        <div class="mock-stat"><div class="mock-stat-val" style="color:#4ade80">84</div><div class="mock-stat-lbl" style="color:${c.accent}88">Menang</div></div>
+        <div class="mock-stat"><div class="mock-stat-val" style="color:#f87171">42</div><div class="mock-stat-lbl" style="color:${c.accent}88">Kalah</div></div>
+        <div class="mock-stat"><div class="mock-stat-val" style="color:${c.accent}">59%</div><div class="mock-stat-lbl" style="color:${c.accent}88">Win Rate</div></div>
+      </div>
+      <div class="mock-xp-bar">
+        <div class="mock-xp-fill" style="background:${c.bar.includes('gradient')?c.bar:c.accent}"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:${c.accent}88">
+        <span>Level ${(idx*10)+5} / ${(idx+1)*10}</span><span>68% ke level berikutnya</span>
+      </div>
+    </div>
+
+    <!-- BORDER PREVIEW -->
+    <div class="mock-card" style="background:${c.accent}06;border-color:${c.accent}22">
+      <div class="mock-card-title" style="color:${c.accent}">Bingkai Avatar Aktif</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:56px;height:56px;border-radius:50%;background:${c.accent}15;border:3px solid ${c.accent};display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px ${c.accent}66;flex-shrink:0">😊</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:${c.txt}">Border ${t.name}</div>
+          <div style="font-size:11px;color:${c.accent}">Tier ${idx+1} / 18 — ${idx>=16?'Legendary':idx>=12?'Epic':idx>=8?'Rare':idx>=4?'Uncommon':'Common'}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <button class="mock-btn" style="background:${c.accent};color:${idx>=14?'#000':'#fff'};font-size:14px;padding:14px">💾 Simpan Profil</button>
+    <button class="mock-btn" style="background:${c.accent}15;border:1.5px solid ${c.accent}44;color:${c.accent}">🎮 Mulai Bermain</button>
+
+    <div style="text-align:center;margin-top:16px;padding:12px;border-radius:12px;background:${c.accent}08;border:1px solid ${c.accent}20">
+      <div style="font-size:11px;color:${c.accent}88">Variasi yang sedang dilihat</div>
+      <div style="font-size:15px;font-weight:800;color:${c.accent};margin-top:4px">${VARLABELS[v]}</div>
+      <div style="font-size:11px;color:${c.txt}88;margin-top:4px;line-height:1.4">${VARDESCS[v]}</div>
+    </div>
+
+    <button onclick="selectVariant('${v}')" style="margin-top:16px;width:100%;padding:16px;border-radius:14px;border:none;background:${c.accent};color:${idx>=14?'#000':'#fff'};font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 4px 20px ${c.accent}66">
+      ✅ Pilih Variasi ${v.toUpperCase()} - ${VARLABELS[v]}
+    </button>
+  `;
+
+  ov.classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function buildParticles(accent,idx){
+  const count=Math.min(6+idx*2,30);
+  let html='<div class="tc-particles" style="inset:0;position:fixed;pointer-events:none;z-index:0;overflow:hidden">';
+  for(let i=0;i<count;i++){
+    const x=Math.random()*100,y=Math.random()*100;
+    const sz=2+Math.random()*4;
+    const dur=3+Math.random()*6;
+    const delay=Math.random()*5;
+    html+=`<div class="particle" style="left:${x}%;top:${y}%;width:${sz}px;height:${sz}px;background:${accent};opacity:${0.3+Math.random()*0.5};box-shadow:0 0 ${sz*2}px ${accent};animation:partFloat ${dur}s ${delay}s ease-in-out infinite"></div>`;
+  }
+  html+='</div>';
+  return html;
+}
+
+function closePreview(){
+  document.getElementById('previewOv').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+let pickedVariant=null;
+function selectVariant(v){
+  pickedVariant=v;
+  closePreview();
+  const bar=document.getElementById('pickBar');
+  bar.style.display='flex';
+  document.getElementById('pickBarTxt').textContent='Kamu memilih: '+VARLABELS[v]+' 🎨';
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('active');});
+  document.querySelector(`[onclick="switchTab('${v}',this)"]`)?.classList.add('active');
+}
+
+function confirmPick(){
+  if(!pickedVariant) return;
+  const txt=`Pilihanku: Variasi ${pickedVariant.toUpperCase()} — ${VARLABELS[pickedVariant]}\n\nKirim ke aku untuk dipasang di game!`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.querySelector('.pick-btn');const orig=btn.textContent;
+    btn.textContent='✅ Disalin!';setTimeout(()=>btn.textContent=orig,2000);
+  }).catch(()=>alert(txt));
+}
+
+function switchTab(v,btn){
+  currentVariant=v;
+  document.querySelectorAll('.variant').forEach(el=>el.classList.remove('show'));
+  document.getElementById('v'+v).classList.add('show');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ESC to close
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePreview();});
+
+// Add particle float animation
+const s=document.createElement('style');
+s.textContent=`@keyframes partFloat{0%,100%{transform:translateY(0) scale(1);opacity:.4}50%{transform:translateY(-20px) scale(1.5);opacity:.8}}`;
+document.head.appendChild(s);
+
+// Build all grids
+['a','b','c','d','e'].forEach(buildGrid);
+</script>
+</body>
+</html>

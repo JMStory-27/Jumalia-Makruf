@@ -73,6 +73,15 @@ onlyBuiltDependencies:
   - esbuild
   - msw
   - unrs-resolver
+  - '@whiskeysockets/baileys'
+  - bufferutil
+  - es5-ext
+  - utf-8-validate
+  - sharp
+  - '@firebase/util'
+  - protobufjs
+  - playwright
+  - playwright-core
 
 overrides:
   # replit uses linux-x64 only, we can exclude all other platforms

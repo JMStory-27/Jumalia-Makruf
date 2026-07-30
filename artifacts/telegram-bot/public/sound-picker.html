@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilih Suara Catur</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#080812;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:16px}
+  h1{text-align:center;font-size:clamp(18px,5vw,28px);font-weight:800;
+    background:linear-gradient(135deg,#38BDF8,#818CF8,#F472B6);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+  .sub{text-align:center;color:#64748b;font-size:12px;margin-bottom:18px}
+  .progress{text-align:center;font-size:12px;color:#94a3b8;margin-bottom:20px}
+  .progress span{color:#38BDF8;font-weight:700}
+
+  .section{background:#0f0f1e;border:1px solid #1e1e3a;border-radius:14px;
+    padding:14px;margin-bottom:14px}
+  .section-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .section-icon{font-size:24px}
+  .section-title{font-size:15px;font-weight:700;color:#e2e8f0}
+  .section-desc{font-size:11px;color:#64748b}
+  .selected-badge{display:none;background:#38BDF8;color:#000;font-size:9px;
+    font-weight:800;border-radius:8px;padding:2px 8px;margin-left:auto}
+
+  .variants{display:flex;gap:8px;flex-wrap:wrap}
+  .variant{background:#13132a;border:2px solid #1e1e3a;border-radius:10px;
+    padding:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;
+    gap:6px;transition:all 0.2s;flex:1;min-width:100px;max-width:160px}
+  .variant:hover{border-color:#334155}
+  .variant.selected{border-color:#38BDF8;background:#38BDF822;transform:translateY(-3px);
+    box-shadow:0 6px 20px #38BDF840}
+  .variant.playing{border-color:#F472B6;background:#F472B622;animation:pulse 0.4s ease-in-out}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .v-num{width:28px;height:28px;border-radius:50%;background:#1e1e3a;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#64748b}
+  .variant.selected .v-num{background:#38BDF8;color:#000}
+  .v-name{font-size:11px;font-weight:700;color:#94a3b8;text-align:center}
+  .variant.selected .v-name{color:#38BDF8}
+  .v-desc{font-size:10px;color:#475569;text-align:center;line-height:1.3}
+  .v-btns{display:flex;gap:5px;width:100%}
+  .btn-play{flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;
+    color:#94a3b8;font-size:11px;padding:5px 0;cursor:pointer;transition:all 0.15s}
+  .btn-play:hover{background:#334155;color:white}
+  .btn-pick{flex:1;background:transparent;border:1px solid #1e3a5f;border-radius:6px;
+    color:#38BDF8;font-size:11px;padding:5px 0;cursor:pointer;transition:all 0.15s}
+  .btn-pick:hover{background:#38BDF822}
+  .variant.selected .btn-pick{background:#38BDF8;color:#000;border-color:#38BDF8;font-weight:700}
+
+  .summary{background:#0f0f1e;border:1px solid #1e1e3a;border-radius:14px;padding:16px;margin-top:10px}
+  .summary h3{font-size:14px;color:#e2e8f0;margin-bottom:12px}
+  .sum-grid{display:flex;flex-wrap:wrap;gap:8px}
+  .sum-item{border:1px solid #1e1e3a;border-radius:8px;padding:7px 12px;font-size:11px;background:#080812}
+  .done-box{margin-top:14px;background:linear-gradient(135deg,#0c2e1e,#0a2518);
+    border:1px solid #10B981;border-radius:10px;padding:14px;color:#10B981;
+    font-weight:700;font-size:12px;display:none;line-height:1.6}
+  .copy-btn{display:block;margin-top:10px;background:#10B981;color:#000;border:none;
+    border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:700;font-size:12px;width:100%}
+</style>
+</head>
+<body>
+<h1>🔊 Pilih Suara Game Catur</h1>
+<p class="sub">Test & pilih 1 variasi suara untuk setiap aksi • Klik ▶ untuk dengar</p>
+<p class="progress">Sudah dipilih: <span id="cnt">0</span>/7 kategori</p>
+
+<div id="board"></div>
+
+<div class="summary">
+  <h3>📋 Pilihan Suara Kamu</h3>
+  <div class="sum-grid" id="sum-grid"></div>
+  <div class="done-box" id="done-box">
+    ✅ Semua suara sudah dipilih!<br>
+    Kasih tau gue hasilnya biar langsung diterapkan ke game:
+    <div id="result-text" style="margin-top:8px;font-family:monospace;font-size:11px;color:#6EE7B7;word-break:break-all"></div>
+    <button class="copy-btn" onclick="copyResult()">📋 Copy Hasil Pilihan</button>
+  </div>
+</div>
+
+<script>
+let ac=null;
+function ctx(){if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();return ac;}
+
+// Core synthesizers
+function noise(t,freqHz,Q,vol,dur){
+  const a=ctx(),len=Math.ceil(a.sampleRate*(dur+0.06)),buf=a.createBuffer(1,len,a.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const src=a.createBufferSource();src.buffer=buf;
+  const f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=freqHz;f.Q.value=Q;
+  const g=a.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  src.connect(f);f.connect(g);g.connect(a.destination);src.start(t);src.stop(t+dur+0.07);
+}
+function noiseHP(t,freqHz,vol,dur){
+  const a=ctx(),len=Math.ceil(a.sampleRate*(dur+0.06)),buf=a.createBuffer(1,len,a.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const src=a.createBufferSource();src.buffer=buf;
+  const f=a.createBiquadFilter();f.type='highpass';f.frequency.value=freqHz;
+  const g=a.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  src.connect(f);f.connect(g);g.connect(a.destination);src.start(t);src.stop(t+dur+0.07);
+}
+function noiseLow(t,vol,dur){
+  const a=ctx(),len=Math.ceil(a.sampleRate*(dur+0.1)),buf=a.createBuffer(1,len,a.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const src=a.createBufferSource();src.buffer=buf;
+  const f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=200;
+  const g=a.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  src.connect(f);f.connect(g);g.connect(a.destination);src.start(t);src.stop(t+dur+0.1);
+}
+function tone(freq,type,vol,dur,t,attack=0.006){
+  const a=ctx(),o=a.createOscillator(),g=a.createGain();
+  o.connect(g);g.connect(a.destination);o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+attack);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.05);
+}
+function woodHit(t,cHz,bHz,vol,dur){
+  noise(t,cHz,2.2,vol,dur);
+  tone(bHz,'sine',vol*0.28,dur*1.6,t);
+}
+function metalPing(t,freq,vol,dur){
+  tone(freq,'sine',vol,dur,t,0.002);
+  tone(freq*2.76,'sine',vol*0.3,dur*0.6,t,0.001);
+}
+
+// ─── SOUND DEFINITIONS ────────────────────────────────────────
+const SOUNDS=[
+  {
+    id:'move',icon:'♟',title:'Gerak Pion',desc:'Suara saat pion berpindah ke kotak baru',
+    variants:[
+      {name:'Kayu Klasik',desc:'Ketukan kayu hangat (default)',play(){
+        const t=ctx().currentTime;woodHit(t,3400,260,0.58,0.072);}},
+      {name:'Marmer Berat',desc:'Hentakan batu berat & dalam',play(){
+        const t=ctx().currentTime;noise(t,800,1.5,0.65,0.12);tone(80,'sine',0.4,0.22,t);}},
+      {name:'Kristal Nyaring',desc:'Dentingan kristal cerah',play(){
+        const t=ctx().currentTime;noise(t,8000,4,0.3,0.04);tone(1800,'sine',0.18,0.35,t,0.002);tone(3600,'sine',0.07,0.22,t,0.001);}},
+      {name:'Logam Tipis',desc:'Ping logam tajam & panjang',play(){
+        const t=ctx().currentTime;metalPing(t,2200,0.22,0.45);}},
+      {name:'Bambu Kering',desc:'Klik bambu kering & cepat',play(){
+        const t=ctx().currentTime;noise(t,5000,3,0.45,0.048);tone(400,'triangle',0.12,0.08,t);}},
+    ]
+  },
+  {
+    id:'capture',icon:'💥',title:'Ambil Pion',desc:'Suara saat pion mengambil pion lawan',
+    variants:[
+      {name:'Kayu Ganda',desc:'Dua hentakan kayu (default)',play(){
+        const t=ctx().currentTime;noise(t,1900,2,0.72,0.095);tone(170,'sine',0.2,0.2,t);
+        noise(t+0.008,4000,2,0.32,0.05);}},
+      {name:'Ledakan Drama',desc:'Crash keras & dramatik',play(){
+        const t=ctx().currentTime;noise(t,1500,1,0.9,0.18);noiseLow(t,0.6,0.25);tone(60,'sine',0.5,0.3,t);}},
+      {name:'Kaca Pecah',desc:'Suara kaca berserakan',play(){
+        const t=ctx().currentTime;
+        noiseHP(t,5000,0.5,0.15);noise(t,8000,3,0.4,0.08);noise(t+0.04,6000,2,0.25,0.1);}},
+      {name:'Tumbukan Keras',desc:'Benturan berat & dalam',play(){
+        const t=ctx().currentTime;noise(t,600,1.2,0.85,0.16);tone(55,'sine',0.7,0.35,t);tone(110,'sine',0.3,0.2,t);}},
+      {name:'Snap Tajam',desc:'Tepukan keras & cepat',play(){
+        const t=ctx().currentTime;noise(t,3000,1.8,0.9,0.06);noise(t,800,1,0.5,0.04);tone(200,'sine',0.3,0.07,t);}},
+    ]
+  },
+  {
+    id:'castle',icon:'🏰',title:'Rokade',desc:'Suara saat melakukan rokade (Raja+Benteng)',
+    variants:[
+      {name:'Dua Ketukan',desc:'Dua klak kayu (default)',play(){
+        const t=ctx().currentTime;woodHit(t,3200,255,0.52,0.072);woodHit(t+0.14,3500,270,0.52,0.072);}},
+      {name:'Kilat Cepat',desc:'Dua ketukan supercepat',play(){
+        const t=ctx().currentTime;woodHit(t,3400,260,0.55,0.065);woodHit(t+0.06,3600,270,0.5,0.065);}},
+      {name:'Gema Kayu',desc:'Dua ketukan dengan gema',play(){
+        const t=ctx().currentTime;
+        woodHit(t,3400,260,0.55,0.072);woodHit(t+0.14,3400,260,0.55,0.072);
+        woodHit(t+0.28,3200,240,0.2,0.05);woodHit(t+0.38,3200,240,0.12,0.04);}},
+      {name:'Logam Ganda',desc:'Dua ping logam elegan',play(){
+        const t=ctx().currentTime;metalPing(t,1800,0.28,0.5);metalPing(t+0.18,2100,0.22,0.45);}},
+      {name:'Tiga Tap',desc:'Tiga ketukan dramatis',play(){
+        const t=ctx().currentTime;
+        woodHit(t,3200,255,0.5,0.068);woodHit(t+0.1,3500,270,0.5,0.068);woodHit(t+0.2,3800,290,0.55,0.068);}},
+    ]
+  },
+  {
+    id:'select',icon:'👆',title:'Pilih Pion',desc:'Suara saat pion diangkat/dipilih',
+    variants:[
+      {name:'Klik Halus',desc:'Klik lembut & tipis (default)',play(){
+        const t=ctx().currentTime;woodHit(t,5800,480,0.20,0.038);}},
+      {name:'Bisikan',desc:'Hampir tak terdengar',play(){
+        const t=ctx().currentTime;noise(t,6000,3,0.1,0.025);}},
+      {name:'Letup Kecil',desc:'Pop kecil yang imut',play(){
+        const t=ctx().currentTime;const a=ctx();
+        const o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);
+        o.frequency.setValueAtTime(400,t);o.frequency.exponentialRampToValueAtTime(100,t+0.04);
+        g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.05);
+        o.start(t);o.stop(t+0.06);}},
+      {name:'Gesek Udara',desc:'Swoosh udara pelan',play(){
+        const t=ctx().currentTime;noise(t,3000,0.8,0.15,0.08);noise(t+0.02,5000,1.5,0.08,0.06);}},
+      {name:'Ketuk Bulat',desc:'Ketukan bundar & hangat',play(){
+        const t=ctx().currentTime;woodHit(t,4000,350,0.28,0.05);tone(320,'sine',0.08,0.1,t);}},
+    ]
+  },
+  {
+    id:'check',icon:'⚠️',title:'Skak!',desc:'Suara peringatan saat Raja dalam ancaman',
+    variants:[
+      {name:'Lonceng Peringatan',desc:'Dua lonceng 880Hz (default)',play(){
+        const t=ctx().currentTime;tone(880,0.15,0.48,t);tone(1320,0.07,0.36,t);tone(880,0.09,0.36,t+0.22);}},
+      {name:'Alarm Dua Nada',desc:'Sirene dua nada mendesak',play(){
+        const t=ctx().currentTime;
+        [0,0.16,0.32,0.48].forEach((dt,i)=>tone(i%2===0?1046:880,'square',0.08,0.16,t+dt));}},
+      {name:'Gemuruh Rendah',desc:'Peringatan dalam & berat',play(){
+        const t=ctx().currentTime;noiseLow(t,0.5,0.4);tone(110,'sine',0.3,0.45,t);tone(220,'sine',0.12,0.3,t+0.1);}},
+      {name:'Sirine Tinggi',desc:'Peringatan nyaring & tajam',play(){
+        const t=ctx().currentTime;
+        const a=ctx(),o=a.createOscillator(),g=a.createGain();
+        o.connect(g);g.connect(a.destination);o.type='sine';
+        o.frequency.setValueAtTime(1760,t);o.frequency.setValueAtTime(2200,t+0.12);
+        o.frequency.setValueAtTime(1760,t+0.24);o.frequency.setValueAtTime(2200,t+0.36);
+        g.gain.setValueAtTime(0.14,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.48);
+        o.start(t);o.stop(t+0.5);}},
+      {name:'Trio Lonceng',desc:'Tiga lonceng cepat',play(){
+        const t=ctx().currentTime;
+        tone(1047,0.14,0.35,t);tone(1319,0.12,0.35,t+0.1);tone(1047,0.16,0.4,t+0.2);}},
+    ]
+  },
+  {
+    id:'promote',icon:'👑',title:'Promosi!',desc:'Suara saat pion mencapai baris akhir & dipromosikan',
+    variants:[
+      {name:'Ding Naik 3',desc:'Tiga ding naik (default)',play(){
+        const t=ctx().currentTime;
+        tone(1047,0.12,0.40,t);tone(1319,0.11,0.42,t+0.13);tone(1568,0.15,0.60,t+0.27);}},
+      {name:'Arpeggio 5 Nada',desc:'Lima nada naik cepat',play(){
+        const t=ctx().currentTime;
+        [[523,0],[659,0.09],[784,0.18],[988,0.27],[1047,0.36]].forEach(([f,dt])=>tone(f,'sine',0.12,0.45,t+dt));}},
+      {name:'Fanfare Terompet',desc:'Nada-nada mirip terompet',play(){
+        const t=ctx().currentTime;
+        [[523,0],[523,0.08],[659,0.17],[784,0.28],[1047,0.4]].forEach(([f,dt])=>{
+          tone(f,'sawtooth',0.06,0.12,t+dt);tone(f,'sine',0.08,0.2,t+dt);});}},
+      {name:'Mahkota Raja',desc:'Lonceng kerajaan mewah',play(){
+        const t=ctx().currentTime;
+        [[1047,0,0.15,0.7],[1319,0.15,0.13,0.6],[1568,0.3,0.16,0.8],[2093,0.48,0.18,1.0]].forEach(([f,dt,v,dur])=>tone(f,'sine',v,dur,t+dt));}},
+      {name:'Kemenangan Besar',desc:'Chord kemenangan penuh',play(){
+        const t=ctx().currentTime;
+        [523,659,784,1047].forEach(f=>tone(f,'sine',0.1,0.8,t,0.02));
+        setTimeout(()=>{ const t2=ctx().currentTime;[1047,1319,1568].forEach(f=>tone(f,'sine',0.09,0.6,t2,0.01)); },300);}},
+    ]
+  },
+  {
+    id:'end',icon:'🏆',title:'Game Over',desc:'Suara akhir permainan (menang/seri/kalah)',
+    variants:[
+      {name:'Arpeggio Triumfan',desc:'Arpeggio kemenangan (default)',play(){
+        const t=ctx().currentTime;
+        [[523,0],[659,0.14],[784,0.29],[1047,0.47]].forEach(([f,dt])=>{tone(f,'sine',0.11,0.55,t+dt);tone(f*2,'sine',0.04,0.38,t+dt);});}},
+      {name:'Melodi Indah',desc:'Melodi penutup yang merdu',play(){
+        const t=ctx().currentTime;
+        [[784,0,0.12,0.5],[880,0.15,0.11,0.45],[988,0.3,0.13,0.5],[1047,0.48,0.14,0.7],[880,0.68,0.1,0.6]].forEach(([f,dt,v,dur])=>tone(f,'sine',v,dur,t+dt));}},
+      {name:'Chord Megah',desc:'Akord besar yang megah',play(){
+        const t=ctx().currentTime;
+        [261,330,392,523,659].forEach(f=>tone(f,'sine',0.08,1.2,t,0.04));
+        setTimeout(()=>{const t2=ctx().currentTime;[523,659,784,1047].forEach(f=>tone(f,'sine',0.06,0.8,t2,0.02));},600);}},
+      {name:'Finale Elegan',desc:'Satu nada panjang & bersih',play(){
+        const t=ctx().currentTime;
+        tone(523,'sine',0.15,0.5,t,0.01);tone(659,'sine',0.12,0.7,t+0.1,0.01);tone(784,'sine',0.18,1.0,t+0.25,0.02);}},
+      {name:'Epic Kemenangan',desc:'Fanfare epik full orkestra',play(){
+        const t=ctx().currentTime;
+        [[261,0],[330,0.08],[392,0.17],[523,0.27],[659,0.38],[784,0.5],[1047,0.64]].forEach(([f,dt])=>{
+          tone(f,'sine',0.1,0.6,t+dt,0.01);
+          if(dt>0.3)tone(f*2,'sine',0.04,0.4,t+dt,0.01);
+        });
+        setTimeout(()=>{const t2=ctx().currentTime;[523,659,784,1047].forEach(f=>tone(f,'sine',0.1,1.0,t2,0.05));},800);}},
+    ]
+  },
+];
+
+// ─── State & Rendering ─────────────────────────────────────────
+const chosen={};
+
+function render(){
+  const board=document.getElementById('board');
+  board.innerHTML='';
+  SOUNDS.forEach(cat=>{
+    const sec=document.createElement('div');sec.className='section';
+    sec.innerHTML=`<div class="section-header">
+      <div class="section-icon">${cat.icon}</div>
+      <div><div class="section-title">${cat.title}</div><div class="section-desc">${cat.desc}</div></div>
+      <div class="selected-badge" id="badge-${cat.id}">${chosen[cat.id]?'Var '+chosen[cat.id]:''}</div>
+    </div>
+    <div class="variants" id="vars-${cat.id}"></div>`;
+    board.appendChild(sec);
+    const varsDiv=document.getElementById('vars-'+cat.id);
+    cat.variants.forEach((v,i)=>{
+      const vn=i+1;const isChosen=chosen[cat.id]===vn;
+      const card=document.createElement('div');
+      card.className='variant'+(isChosen?' selected':'');
+      card.id=`v-${cat.id}-${vn}`;
+      card.innerHTML=`<div class="v-num">${vn}</div>
+        <div class="v-name">${v.name}</div>
+        <div class="v-desc">${v.desc}</div>
+        <div class="v-btns">
+          <button class="btn-play" onclick="testSound('${cat.id}',${vn})">▶ Test</button>
+          <button class="btn-pick" onclick="pickSound('${cat.id}',${vn})">Pilih</button>
+        </div>`;
+      varsDiv.appendChild(card);
+    });
+    if(chosen[cat.id]){document.getElementById('badge-'+cat.id).style.display='inline-block';}
+  });
+  updateSummary();
+}
+
+function testSound(catId,vn){
+  const cat=SOUNDS.find(c=>c.id===catId);if(!cat)return;
+  const v=cat.variants[vn-1];if(!v)return;
+  // Flash playing
+  const card=document.getElementById(`v-${catId}-${vn}`);
+  if(card){card.classList.add('playing');setTimeout(()=>card.classList.remove('playing'),400);}
+  try{v.play();}catch(e){console.error(e);}
+}
+
+function pickSound(catId,vn){
+  chosen[catId]=vn;
+  // Update cards for this category
+  const cat=SOUNDS.find(c=>c.id===catId);
+  if(!cat)return;
+  cat.variants.forEach((_,i)=>{
+    const card=document.getElementById(`v-${catId}-${i+1}`);
+    if(card){
+      const isSelected=chosen[catId]===(i+1);
+      card.classList.toggle('selected',isSelected);
+      const num=card.querySelector('.v-num');
+      const name=card.querySelector('.v-name');
+      if(num)num.style.background=isSelected?'#38BDF8':'#1e1e3a';
+      if(num)num.style.color=isSelected?'#000':'#64748b';
+      if(name)name.style.color=isSelected?'#38BDF8':'#94a3b8';
+      if(isSelected){card.style.borderColor='#38BDF8';card.style.background='#38BDF822';card.style.transform='translateY(-3px)';card.style.boxShadow='0 6px 20px #38BDF840';}
+      else{card.style.borderColor='#1e1e3a';card.style.background='#13132a';card.style.transform='';card.style.boxShadow='';}
+    }
+  });
+  const badge=document.getElementById('badge-'+catId);
+  if(badge){badge.style.display='inline-block';badge.textContent='Var '+vn;}
+  // Test the sound automatically when picking
+  testSound(catId,vn);
+  updateSummary();
+}
+
+function updateSummary(){
+  const cnt=Object.keys(chosen).length;
+  document.getElementById('cnt').textContent=cnt;
+  const grid=document.getElementById('sum-grid');grid.innerHTML='';
+  SOUNDS.forEach(cat=>{
+    const vn=chosen[cat.id];
+    const vname=vn?cat.variants[vn-1].name:null;
+    const item=document.createElement('div');
+    item.className='sum-item';
+    item.style.borderColor=vn?'#38BDF8':'#1e1e3a';
+    item.innerHTML=`${cat.icon} <strong>${cat.title}</strong>: <span style="color:${vn?'#38BDF8':'#475569'};font-weight:700">${vn?vname+' (Var '+vn+')':'Belum dipilih'}</span>`;
+    grid.appendChild(item);
+  });
+  const done=document.getElementById('done-box');
+  if(cnt===7){
+    done.style.display='block';
+    const lines=SOUNDS.map(c=>`${c.id}: Variasi ${chosen[c.id]} - ${c.variants[chosen[c.id]-1].name}`).join('\n');
+    document.getElementById('result-text').textContent=lines;
+  }else{done.style.display='none';}
+}
+
+function copyResult(){
+  const txt=document.getElementById('result-text').textContent;
+  navigator.clipboard?.writeText(txt).then(()=>alert('Disalin!')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Disalin!');
+  });
+}
+
+render();
+</script>
+</body>
+</html>

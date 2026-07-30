@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/fix-merah/"
+title = "Fix Merah"
+version = "1.0.0"
+id = "artifacts/fix-merah"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/fix-merah/" ]
+localPort = 24260
+
+[services.development]
+run = "pnpm --filter @workspace/fix-merah run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/fix-merah", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/fix-merah/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24260"
+BASE_PATH = "/fix-merah/"
