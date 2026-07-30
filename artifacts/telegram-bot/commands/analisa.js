@@ -12,7 +12,7 @@ function esc(s) {
 
 const execAsync = promisify(exec);
 
-/* ── Session management ─────────────────────────────────────────────────────── */
+/* ── Session management (alur /analisa) ─────────────────────────────────────── */
 const sessions = new Map(); // chatId → { step, newUrl, ts }
 const SESSION_TTL = 20 * 60 * 1000; // 20 menit
 
@@ -26,6 +26,22 @@ function sessGet(chatId) {
   return v;
 }
 function sessDelete(chatId) { sessions.delete(String(chatId)); }
+
+/* ── Restore session storage (pending "Pulihkan" button) ─────────────────────── */
+// restoreId → { tmpDir, oldRoot, onlyInOld, chatId }
+const restoreSessions = new Map();
+const RESTORE_TTL = 30 * 60 * 1000; // 30 menit
+
+function storeRestoreSession(id, data) {
+  restoreSessions.set(id, data);
+  setTimeout(() => {
+    const s = restoreSessions.get(id);
+    if (s) {
+      try { fs.rmSync(s.tmpDir, { recursive: true, force: true }); } catch {}
+      restoreSessions.delete(id);
+    }
+  }, RESTORE_TTL);
+}
 
 /* ── Helpers ─────────────────────────────────────────────────────────────────── */
 function isValidUrl(str) {
@@ -106,7 +122,6 @@ function buildReport({ newUrl, oldUrl, newSizeMB, oldSizeMB, newFiles, oldFiles,
   lines.push(bar);
   lines.push('');
 
-  // Info kedua workspace
   lines.push('📦 WORKSPACE TERBARU (NEW)');
   lines.push(`   URL  : ${newUrl}`);
   lines.push(`   Size : ${newSizeMB} MB`);
@@ -118,7 +133,6 @@ function buildReport({ newUrl, oldUrl, newSizeMB, oldSizeMB, newFiles, oldFiles,
   lines.push(`   Total: ${oldFiles.length} file`);
   lines.push('');
 
-  // Ringkasan
   lines.push(bar);
   lines.push('  RINGKASAN');
   lines.push(bar);
@@ -130,7 +144,6 @@ function buildReport({ newUrl, oldUrl, newSizeMB, oldSizeMB, newFiles, oldFiles,
   lines.push(`  Total file OLD                        : ${String(oldFiles.length).padStart(5)} file`);
   lines.push('');
 
-  // ── SECTION 1: File hilang di NEW ──
   lines.push(bar);
   lines.push(`  ❌ FILE YANG HILANG DI NEW`);
   lines.push(`     (Ada di OLD, tidak ada di NEW) — Total: ${onlyInOld.length} file`);
@@ -153,7 +166,6 @@ function buildReport({ newUrl, oldUrl, newSizeMB, oldSizeMB, newFiles, oldFiles,
   }
   lines.push('');
 
-  // ── SECTION 2: File baru di NEW ──
   lines.push(bar);
   lines.push(`  ✅ FILE BARU DI NEW`);
   lines.push(`     (Ada di NEW, tidak ada di OLD) — Total: ${onlyInNew.length} file`);
@@ -176,7 +188,6 @@ function buildReport({ newUrl, oldUrl, newSizeMB, oldSizeMB, newFiles, oldFiles,
   }
   lines.push('');
 
-  // ── SECTION 3: File di keduanya ──
   lines.push(bar);
   lines.push(`  🔵 FILE YANG ADA DI KEDUANYA`);
   lines.push(`     Total: ${inBoth.length} file`);
@@ -207,6 +218,95 @@ function buildReport({ newUrl, oldUrl, newSizeMB, oldSizeMB, newFiles, oldFiles,
   return lines.join('\n');
 }
 
+/* ── Restore logic ───────────────────────────────────────────────────────────── */
+async function runRestore(bot, chatId, progMsgId, restoreData) {
+  const { tmpDir, oldRoot, onlyInOld } = restoreData;
+  const WORKSPACE = '/home/runner/workspace';
+
+  let copied  = 0;
+  let skipped = 0;
+  const failed = [];
+
+  for (const f of onlyInOld) {
+    // Lewati file internal Replit
+    if (f.includes('.replit-artifact') || f === '.replit') {
+      skipped++;
+      continue;
+    }
+
+    const src = path.join(oldRoot, f);
+    const dst = path.join(WORKSPACE, f);
+
+    // Hanya tambahkan file yang BELUM ADA di workspace sekarang — jangan overwrite
+    if (fs.existsSync(dst)) {
+      skipped++;
+      continue;
+    }
+
+    try {
+      fs.mkdirSync(path.dirname(dst), { recursive: true });
+      fs.copyFileSync(src, dst);
+      copied++;
+    } catch (e) {
+      failed.push(f);
+    }
+  }
+
+  // Cleanup tmp setelah copy
+  try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch {}
+
+  // Git commit + push supaya file ikut ke GitHub remix
+  let gitStatus = '';
+  if (copied > 0) {
+    try {
+      await execAsync(`cd "${WORKSPACE}" && git add -A`, { timeout: 30_000 });
+      await execAsync(
+        `cd "${WORKSPACE}" && git commit -m "restore: tambahkan ${copied} file dari workspace lama"`,
+        { timeout: 30_000 }
+      );
+      gitStatus += '✅ Git commit berhasil\n';
+
+      const githubToken = process.env.GITHUB_TOKEN;
+      const githubOwner = process.env.GITHUB_OWNER;
+      const githubRepo  = process.env.GITHUB_REPO;
+
+      if (githubToken && githubOwner && githubRepo) {
+        await execAsync(
+          `cd "${WORKSPACE}" && git push https://${githubToken}@github.com/${githubOwner}/${githubRepo}.git HEAD`,
+          { timeout: 60_000 }
+        );
+        gitStatus += `✅ Push ke github\\.com/${esc(githubOwner)}/${esc(githubRepo)} berhasil\n`;
+      } else {
+        gitStatus += '⚠️ GITHUB\\_TOKEN/OWNER/REPO belum di\\-set, push dilewati\n';
+      }
+    } catch (e) {
+      const msg = (e.message || '').slice(0, 150).replace(/https?:\/\/[^@]+@/g, 'https://***@');
+      gitStatus += `⚠️ Git error: ${esc(msg)}\n`;
+    }
+  } else {
+    gitStatus = '_Tidak ada file baru yang disalin, tidak perlu commit\\_\n';
+  }
+
+  const failedLine = failed.length > 0
+    ? `❌ Gagal disalin: *${failed.length}* file\n`
+    : '';
+
+  const summary =
+    `✅ *Pemulihan Selesai\\!*\n\n` +
+    `📁 File berhasil ditambahkan: *${esc(String(copied))}*\n` +
+    `⏭️ Dilewati \\(sudah ada / internal\\): *${esc(String(skipped))}*\n` +
+    failedLine +
+    `\n${gitStatus}`;
+
+  await bot.editMessageText(summary, {
+    chat_id: chatId,
+    message_id: progMsgId,
+    parse_mode: 'MarkdownV2',
+  }).catch(() =>
+    bot.sendMessage(chatId, summary, { parse_mode: 'MarkdownV2' })
+  );
+}
+
 /* ── Main registration ──────────────────────────────────────────────────────── */
 function registerAnalisaCommand(bot) {
   /* /analisa — mulai alur analisa */
@@ -224,7 +324,44 @@ function registerAnalisaCommand(bot) {
     );
   });
 
-  /* Handler pesan teks untuk menangkap URL */
+  /* ── Handler tombol inline "Pulihkan" ─────────────────────────────────────── */
+  bot.on('callback_query', async (query) => {
+    const data = query.data || '';
+    if (!data.startsWith('pulihkan_')) return;
+
+    const restoreId = data.slice('pulihkan_'.length);
+
+    // Selalu jawab callback supaya loading spinner hilang
+    await bot.answerCallbackQuery(query.id, { text: '⏳ Memulai pemulihan...' }).catch(() => {});
+
+    const sess = restoreSessions.get(restoreId);
+    if (!sess) {
+      await bot.sendMessage(query.message.chat.id,
+        '⚠️ Sesi restore sudah kadaluarsa \\(>30 menit\\)\\. Jalankan */analisa* ulang\\.',
+        { parse_mode: 'MarkdownV2' }
+      );
+      return;
+    }
+
+    // Hapus dari map supaya tombol tidak bisa diklik dua kali
+    restoreSessions.delete(restoreId);
+
+    // Nonaktifkan tombol di pesan lama
+    await bot.editMessageReplyMarkup(
+      { inline_keyboard: [] },
+      { chat_id: query.message.chat.id, message_id: query.message.message_id }
+    ).catch(() => {});
+
+    const progMsg = await bot.sendMessage(
+      query.message.chat.id,
+      `⏳ Sedang memulihkan *${esc(String(sess.onlyInOld.length))}* file ke workspace\\.\\.\\.\n_Hanya file yang belum ada yang akan ditambahkan_`,
+      { parse_mode: 'MarkdownV2' }
+    );
+
+    await runRestore(bot, query.message.chat.id, progMsg.message_id, sess);
+  });
+
+  /* ── Handler pesan teks untuk menangkap URL ──────────────────────────────── */
   bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const sess   = sessGet(chatId);
@@ -266,8 +403,8 @@ function registerAnalisaCommand(bot) {
         const tmpDir = `/tmp/analisa_${Date.now()}`;
         fs.mkdirSync(tmpDir, { recursive: true });
 
-        const newTar = path.join(tmpDir, 'new.tar.gz');
-        const oldTar = path.join(tmpDir, 'old.tar.gz');
+        const newTar    = path.join(tmpDir, 'new.tar.gz');
+        const oldTar    = path.join(tmpDir, 'old.tar.gz');
         const newExtDir = path.join(tmpDir, 'new');
         const oldExtDir = path.join(tmpDir, 'old');
 
@@ -289,7 +426,7 @@ function registerAnalisaCommand(bot) {
           { chat_id: chatId, message_id: progMsg.message_id }
         ).catch(() => {});
 
-        /* 3. Ekstrak keduanya secara paralel */
+        /* 3. Ekstrak secara paralel */
         await Promise.all([
           extractTar(newTar, newExtDir),
           extractTar(oldTar, oldExtDir),
@@ -347,8 +484,34 @@ function registerAnalisaCommand(bot) {
           contentType: 'text/plain',
         });
 
-        /* 8. Cleanup tmp */
-        try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch {}
+        /* 8. Tampilkan tombol "Pulihkan" jika ada file hilang */
+        if (onlyInOld.length > 0) {
+          const restoreId = `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
+          // Simpan data untuk restore — tmpDir TIDAK dihapus dulu
+          storeRestoreSession(restoreId, { tmpDir, oldRoot, onlyInOld });
+
+          await bot.sendMessage(chatId,
+            `🔁 Ditemukan *${esc(String(onlyInOld.length))} file* yang ada di OLD tapi tidak ada di NEW\\.\n\n` +
+            `Klik *Pulihkan* untuk menambahkan file\\-file tersebut ke workspace sekarang\\.\n\n` +
+            `⚠️ _Hanya file yang belum ada di workspace yang akan ditambahkan\\. File yang sudah ada tidak akan diubah sama sekali\\._`,
+            {
+              parse_mode: 'MarkdownV2',
+              reply_markup: {
+                inline_keyboard: [[
+                  { text: '🔁 Pulihkan File Hilang', callback_data: `pulihkan_${restoreId}` },
+                ]],
+              },
+            }
+          );
+        } else {
+          // Tidak ada file hilang — langsung cleanup
+          try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch {}
+          await bot.sendMessage(chatId,
+            '✅ Tidak ada file yang hilang\\. Workspace terbaru sudah lengkap\\!',
+            { parse_mode: 'MarkdownV2' }
+          );
+        }
 
       } catch (e) {
         console.error('[analisa] error:', e.message);
